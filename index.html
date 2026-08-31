@@ -1,1 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YKS Takip">
+    <meta name="theme-color" content="#0f172a">
 
+    <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/isometric/512/graduation-cap.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/isometric/512/graduation-cap.png">
+
+    <title>YKS Hazırlık ve Takip</title>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            padding: calc(env(safe-area-inset-top) + 15px) 15px calc(env(safe-area-inset-bottom) + 20px) 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Soru Sayacı */
+        .counter-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0f172a;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+
+        .counter-btn {
+            background: #0284c7;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .counter-btn:active {
+            transform: scale(0.95);
+            background: #0369a1;
+        }
+
+        .count-display {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        /* Konu Listesi */
+        .topic-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+            font-size: 0.95rem;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #38bdf8;
+        }
+
+        /* Not Defteri */
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: #f8fafc;
+            padding: 10px;
+            font-family: inherit;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: 1px solid #38bdf8;
+        }
+
+        /* İlerleme Çubuğu */
+        .progress-bar {
+            width: 100%;
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #38bdf8;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>YKS Çalışma Takibi</h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Günlük Soru Sayacı -->
+        <div class="card">
+            <h2>Günlük Çözülen Soru</h2>
+            <div class="counter-box">
+                <button class="counter-btn" onclick="updateQuestions(-10)">-10</button>
+                <span class="count-display" id="questionCount">0</span>
+                <button class="counter-btn" onclick="updateQuestions(10)">+10</button>
+            </div>
+        </div>
+
+        <!-- Genel İlerleme -->
+        <div class="card">
+            <h2>AYT Matematik İlerleme</h2>
+            <div id="progressText" style="font-size: 0.9rem; color: #94a3b8;">0 / 5 Konu Tamamlandı</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- AYT Matematik Konu Takibi -->
+        <div class="card full-width">
+            <h2>AYT Matematik Hedef Konular</h2>
+            <ul class="topic-list">
+                <li class="topic-item"><input type="checkbox" onchange="checkTopic()" class="topic-cb"> Fonksiyonlar & Parabol</li>
+                <li class="topic-item"><input type="checkbox" onchange="checkTopic()" class="topic-cb"> Polinomlar</li>
+                <li class="topic-item"><input type="checkbox" onchange="checkTopic()" class="topic-cb"> Trigonometri</li>
+                <li class="topic-item"><input type="checkbox" onchange="checkTopic()" class="topic-cb"> Türev</li>
+                <li class="topic-item"><input type="checkbox" onchange="checkTopic()" class="topic-cb"> İntegral</li>
+            </ul>
+        </div>
+
+        <!-- Hızlı Notlar -->
+        <div class="card full-width">
+            <h2>Bugünün Notları & Unutulmaması Gerekenler</h2>
+            <textarea id="dailyNotes" placeholder="Formülleri veya yapacaklarını buraya not al..." oninput="saveNotes()"></textarea>
+        </div>
+
+    </div>
+
+    <script>
+        // Verileri Hafızada Tutma (LocalStorage)
+        let qCount = parseInt(localStorage.getItem('yks_questions')) || 0;
+        document.getElementById('questionCount').innerText = qCount;
+
+        function updateQuestions(val) {
+            qCount = Math.max(0, qCount + val);
+            document.getElementById('questionCount').innerText = qCount;
+            localStorage.setItem('yks_questions', qCount);
+        }
+
+        // Konu Takibi & İlerleme Çubuğu
+        function checkTopic() {
+            const checkboxes = document.querySelectorAll('.topic-cb');
+            let checkedCount = 0;
+            checkboxes.forEach((cb, index) => {
+                if(cb.checked) checkedCount++;
+                localStorage.setItem('yks_topic_' + index, cb.checked);
+            });
+
+            const percent = (checkedCount / checkboxes.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').innerText = checkedCount + ' / ' + checkboxes.length + ' Konu Tamamlandı';
+        }
+
+        // Sayfa Açıldığında Kutucukları Yükle
+        window.onload = function() {
+            const checkboxes = document.querySelectorAll('.topic-cb');
+            checkboxes.forEach((cb, index) => {
+                const saved = localStorage.getItem('yks_topic_' + index);
+                if(saved === 'true') cb.checked = true;
+            });
+            checkTopic();
+
+            const savedNotes = localStorage.getItem('yks_notes');
+            if(savedNotes) document.getElementById('dailyNotes').value = savedNotes;
+        };
+
+        // Not Kaydetme
+        function saveNotes() {
+            const notes = document.getElementById('dailyNotes').value;
+            localStorage.setItem('yks_notes', notes);
+        }
+    </script>
+
+</body>
+</html>
