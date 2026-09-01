@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YKS (TYT-AYT) Takip & Performans Sistemi - Ultra Edition</title>
+    <title>YKS Takip & Performans Portalı - Minimal Edition</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,11 +12,16 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbg: '#0f0f17',
-                        cardbg: '#1e1e2e',
-                        cardbgLight: '#ffffff',
-                        accent: '#89b4fa',
-                        accentHover: '#b4befe',
+                        softbg: '#f8fafc',
+                        cardbg: '#ffffff',
+                        cardbgDark: '#0f172a',
+                        softBorder: '#e2e8f0',
+                        brand: '#6366f1',
+                        brandHover: '#4f46e5',
+                        brandLight: '#eef2ff',
+                        accentGreen: '#10b981',
+                        accentBlue: '#0284c7',
+                        accentPurple: '#8b5cf6'
                     },
                     animation: {
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -25,7 +30,7 @@
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' },
+                            '50%': { transform: 'translateY(-6px)' },
                         }
                     }
                 }
@@ -37,23 +42,26 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        * { transition: background-color 0.2s ease, border-color 0.2s ease; }
-        .glass-card {
-            background: rgba(30, 30, 46, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+        body { background-color: #f8fafc; color: #334155; }
+        .dark body { background-color: #090d16; color: #cbd5e1; }
+        
+        .soft-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(148, 163, 184, 0.08);
         }
-        .light .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.08);
+        .dark .soft-card {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
         }
         .hover-lift {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .hover-lift:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(137, 180, 250, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.12);
         }
         @keyframes slideInRight {
             from { transform: translateX(100%); opacity: 0; }
@@ -66,212 +74,261 @@
         .toast-exit { animation: fadeOut 0.3s ease forwards; }
     </style>
 </head>
-<body class="bg-darkbg text-gray-200 font-sans min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300">
+<body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden">
 
-    <div class="fixed top-[-100px] left-[-100px] w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-float"></div>
-    <div class="fixed bottom-[-100px] right-[-100px] w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -3s;"></div>
+    <!-- Subtle Ambient Background Glows -->
+    <div class="fixed top-[-120px] left-[-120px] w-96 h-96 bg-indigo-200/40 dark:bg-indigo-900/15 rounded-full blur-3xl pointer-events-none animate-float"></div>
+    <div class="fixed bottom-[-120px] right-[-120px] w-96 h-96 bg-sky-200/40 dark:bg-sky-900/15 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -3s;"></div>
 
+    <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col space-y-2 pointer-events-none"></div>
 
-    <div id="commandModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] hidden flex items-start justify-center pt-20 px-4">
-        <div class="glass-card w-full max-w-xl rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
-            <div class="p-4 border-b border-gray-700 flex items-center space-x-3">
-                <i data-lucide="search" class="w-5 h-5 text-gray-400"></i>
-                <input type="text" id="cmdInput" oninput="handleCommandSearch()" placeholder="Ders, konu, deneme veya sayfa ara... (ESC ile kapat)" class="w-full bg-transparent border-none text-white focus:outline-none text-sm">
-                <kbd class="px-2 py-1 bg-gray-800 text-gray-400 rounded text-xs">ESC</kbd>
+    <!-- Command Palette / Search Modal -->
+    <div id="commandModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[90] hidden flex items-start justify-center pt-20 px-4">
+        <div class="soft-card w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden">
+            <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center space-x-3">
+                <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                <input type="text" id="cmdInput" oninput="handleCommandSearch()" placeholder="Ders, konu, oynatma listesi veya deneme ara... (ESC ile kapat)" class="w-full bg-transparent border-none text-slate-800 dark:text-slate-100 focus:outline-none text-sm">
+                <kbd class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded text-xs">ESC</kbd>
             </div>
             <div id="cmdResults" class="max-h-80 overflow-y-auto p-2 space-y-1"></div>
         </div>
     </div>
 
-    <header class="glass-card sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+    <!-- Header -->
+    <header class="soft-card sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
             <div class="flex items-center space-x-3">
-                <div class="p-2 bg-accent/20 rounded-xl text-accent">
-                    <i data-lucide="target" class="w-7 h-7"></i>
+                <div class="p-2.5 bg-brandLight dark:bg-indigo-950/50 rounded-xl text-brand">
+                    <i data-lucide="compass" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">
-                        YKS Takip Sistemi
-                        <span class="text-[10px] bg-accent/20 text-accent font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">v2.0 Pro</span>
+                    <h1 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-tight flex items-center gap-2">
+                        YKS Çalışma Portalı
+                        <span class="text-[10px] bg-indigo-50 dark:bg-indigo-950 text-brand font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider border border-indigo-100 dark:border-indigo-900">Soft & Minimal</span>
                     </h1>
-                    <p id="greetingText" class="text-xs text-gray-400">Hoş geldin!</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Günlük İlerleme ve Video Oynatma Listesi Yönetimi</p>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button onclick="toggleCommandPalette()" class="hidden md:flex items-center space-x-2 bg-gray-800/60 hover:bg-gray-700/60 px-3 py-1.5 rounded-lg border border-gray-700 text-xs text-gray-400 transition">
+                <button onclick="toggleCommandPalette()" class="hidden md:flex items-center space-x-2 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 px-3.5 py-2 rounded-xl text-xs text-slate-600 dark:text-slate-300 transition">
                     <i data-lucide="search" class="w-3.5 h-3.5"></i>
-                    <span>Hızlı Ara...</span>
-                    <kbd class="bg-gray-900 px-1.5 py-0.5 rounded text-[10px] text-gray-300">Ctrl+K</kbd>
+                    <span>Arama...</span>
+                    <kbd class="bg-white dark:bg-slate-700 px-1.5 py-0.5 rounded text-[10px] text-slate-500 dark:text-slate-300 border border-slate-200 dark:border-slate-600">Ctrl+K</kbd>
                 </button>
 
-                <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-gray-800/60 hover:bg-gray-700 text-gray-300 hover:text-white transition hover-lift" title="Karanlık/Aydınlık Mod">
-                    <i data-lucide="sun" id="themeIconSun" class="w-4 h-4 hidden"></i>
-                    <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4"></i>
+                <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-brand transition hover-lift" title="Karanlık/Aydınlık Mod">
+                    <i data-lucide="sun" id="themeIconSun" class="w-4 h-4"></i>
+                    <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4 hidden"></i>
                 </button>
 
-                <div class="text-xs text-gray-400 font-medium hidden sm:block bg-gray-800/40 px-3 py-2 rounded-xl border border-gray-700/50" id="headerDate">--/--/----</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block bg-slate-100 dark:bg-slate-800 px-3.5 py-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60" id="headerDate">--/--/----</div>
             </div>
         </div>
     </header>
 
-    <div class="glass-card border-t-0 border-x-0 border-b border-gray-800 sticky top-[73px] z-40">
-        <div class="max-w-7xl mx-auto flex space-x-2 p-2 overflow-x-auto scrollbar-none">
-            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm bg-accent text-gray-900 hover-lift">
+    <!-- Navigation Bar -->
+    <div class="soft-card border-t-0 border-x-0 border-b border-slate-200 dark:border-slate-800 sticky top-[73px] z-40">
+        <div class="max-w-7xl mx-auto flex space-x-2 px-6 py-2 overflow-x-auto scrollbar-none">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 transition text-xs bg-brand text-white shadow-sm hover-lift">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                 <span>Kontrol Paneli</span>
             </button>
-            <button onclick="switchTab('exams')" id="tab-exams" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 hover-lift">
+            <button onclick="switchTab('exams')" id="tab-exams" class="tab-btn px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 transition text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 hover-lift">
                 <i data-lucide="file-text" class="w-4 h-4"></i>
                 <span>Deneme Takibi</span>
             </button>
-            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 hover-lift">
+            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 transition text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 hover-lift">
                 <i data-lucide="pie-chart" class="w-4 h-4"></i>
                 <span>Analiz & Grafikler</span>
             </button>
-            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 hover-lift">
+            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-xl font-semibold flex items-center space-x-2 transition text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 hover-lift">
                 <i data-lucide="settings" class="w-4 h-4"></i>
-                <span>Takvim & Yedekleme</span>
+                <span>Hedefler & Ayarlar</span>
             </button>
         </div>
     </div>
 
-    <main class="max-w-7xl mx-auto p-4 md:p-6 flex-grow w-full z-10">
+    <!-- Main Content Layout -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full z-10">
+        
         <!-- TAB 1: DASHBOARD -->
         <section id="content-dashboard" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    <span>Günlük Aktivite Ekle</span>
-                </h2>
-                <form id="activityForm" onsubmit="handleActivitySubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Tarih</label>
-                        <input type="date" id="actDate" required class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
+            
+            <!-- Activity Input Card -->
+            <div class="soft-card p-6 rounded-2xl shadow-sm hover-lift flex flex-col justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                        <i data-lucide="plus-circle" class="w-5 h-5 text-brand"></i>
+                        <span>Yeni Aktivite Ekle</span>
+                    </h2>
+                    <form id="activityForm" onsubmit="handleActivitySubmit(event)" class="space-y-3.5">
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Sınav Türü</label>
-                            <select id="actExamType" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                                <option value="TYT">TYT</option>
-                                <option value="AYT">AYT</option>
+                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Tarih</label>
+                            <input type="date" id="actDate" required class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Sınav Türü</label>
+                                <select id="actExamType" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand">
+                                    <option value="AYT">AYT</option>
+                                    <option value="TYT">TYT</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Ders</label>
+                                <select id="actSubject" onchange="handleSubjectChange()" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand">
+                                    <option value="Matematik">AYT Matematik</option>
+                                    <option value="Edebiyat">AYT Edebiyat</option>
+                                    <option value="Coğrafya">AYT Coğrafya</option>
+                                    <option value="Tarih">AYT Tarih</option>
+                                    <option value="Türkçe">Türkçe</option>
+                                    <option value="Fizik">Fizik</option>
+                                    <option value="Kimya">Kimya</option>
+                                    <option value="Biyoloji">Biyoloji</option>
+                                    <option value="Geometri">Geometri</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Aktivite Tipi</label>
+                            <select id="actType" onchange="handleActivityTypeChange()" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand">
+                                <option value="Soru Çözümü">Soru Çözümü</option>
+                                <option value="Video İzleme">Video İzleme</option>
+                                <option value="Konu Anlatımı">Konu Anlatımı</option>
+                                <option value="Fasikül Çözümü">Fasikül Çözümü</option>
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Ders</label>
-                            <select id="actSubject" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                                <option value="Matematik">Matematik</option>
-                                <option value="Türkçe">Türkçe</option>
-                                <option value="Fizik">Fizik</option>
-                                <option value="Kimya">Kimya</option>
-                                <option value="Biyoloji">Biyoloji</option>
-                                <option value="Edebiyat">Edebiyat</option>
-                                <option value="Tarih">Tarih</option>
-                                <option value="Coğrafya">Coğrafya</option>
-                                <option value="Geometri">Geometri</option>
+
+                        <!-- Dynamic YouTube Playlist Dropdown -->
+                        <div id="playlistContainer" class="hidden bg-indigo-50/50 dark:bg-indigo-950/30 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/50 transition">
+                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-brand mb-1 flex items-center gap-1.5">
+                                <i data-lucide="youtube" class="w-3.5 h-3.5"></i>
+                                <span>Oynatma Listesi Videosu</span>
+                            </label>
+                            <select id="actVideoTitle" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand">
+                                <!-- Options will be populated dynamically -->
                             </select>
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Konu</label>
-                        <input type="text" id="actTopic" placeholder="Örn: Türev / Paragraf" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Aktivite Tipi</label>
-                        <select id="actType" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                            <option value="Soru Çözümü">Soru Çözümü</option>
-                            <option value="Konu Anlatımı">Konu Anlatımı</option>
-                            <option value="Video İzleme">Video İzleme</option>
-                            <option value="Fasikül Çözümü">Fasikül Çözümü</option>
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
+
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Soru</label>
-                            <input type="number" id="actQuestions" min="0" value="50" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white text-center font-bold">
+                            <label class="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1">Konu Başlığı</label>
+                            <input type="text" id="actTopic" placeholder="Örn: Türev / Paragraf" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand">
                         </div>
+
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Soru</label>
+                                <input type="number" id="actQuestions" min="0" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100 text-center font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mb-1">Doğru</label>
+                                <input type="number" id="actCorrect" min="0" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100 text-center font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-rose-500 dark:text-rose-400 mb-1">Yanlış</label>
+                                <input type="number" id="actWrong" min="0" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100 text-center font-bold">
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-xs font-semibold text-green-400 mb-1">Doğru</label>
-                            <input type="number" id="actCorrect" min="0" value="45" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white text-center font-bold">
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Çalışma Süresi (Dakika)</label>
+                            <input type="number" id="actDuration" min="0" value="45" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-red-400 mb-1">Yanlış</label>
-                            <input type="number" id="actWrong" min="0" value="5" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white text-center font-bold">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Çalışma Süresi (Dakika)</label>
-                        <input type="number" id="actDuration" min="0" value="45" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                    </div>
-                    <button type="submit" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-3 rounded-xl transition shadow-lg active:scale-95 flex items-center justify-center space-x-2">
-                        <i data-lucide="check-circle" class="w-5 h-5"></i>
-                        <span>Aktiviteyi Kaydet</span>
-                    </button>
-                </form>
+
+                        <button type="submit" class="w-full bg-brand hover:bg-brandHover text-white font-semibold py-3 rounded-xl transition shadow-md hover:shadow-indigo-500/20 active:scale-98 flex items-center justify-center space-x-2 text-xs">
+                            <i data-lucide="check-circle" class="w-4 h-4"></i>
+                            <span>Aktiviteyi Kaydet</span>
+                        </button>
+                    </form>
+                </div>
             </div>
 
+            <!-- Right Column: Dual Progress Goals & Activity Logs -->
             <div class="lg:col-span-2 space-y-6">
-                <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="trending-up" class="w-5 h-5"></i>
-                        <span>İlerleme & Hedef Tamamlama</span>
+                
+                <!-- Dual Goal Progress Cards -->
+                <div class="soft-card p-6 rounded-2xl shadow-sm hover-lift">
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-5 flex items-center justify-between">
+                        <span class="flex items-center space-x-2">
+                            <i data-lucide="target" class="w-5 h-5 text-brand"></i>
+                            <span>Günlük & Haftalık Hedef Durumu</span>
+                        </span>
+                        <span class="text-xs font-normal text-slate-400">Canlı Metrikler</span>
                     </h2>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between text-sm font-medium mb-1">
-                                <span id="lblDailyGoal">Günlük Soru Hedefi: 0 / 200</span>
-                                <span id="pctDaily" class="font-bold text-green-400">0%</span>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Questions Goal Group -->
+                        <div class="space-y-3 p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div class="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-200">
+                                <span class="flex items-center gap-1.5"><i data-lucide="help-circle" class="w-4 h-4 text-brand"></i> Günlük Soru</span>
+                                <span id="pctDailyQ" class="text-brand font-bold">0%</span>
                             </div>
-                            <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden p-0.5">
-                                <div id="barDaily" class="bg-gradient-to-r from-green-500 to-emerald-400 h-2 rounded-full transition-all duration-700 shadow-md" style="width: 0%"></div>
+                            <div class="text-xs text-slate-500 flex justify-between" id="lblDailyGoalQ">0 / 200 Soru</div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                                <div id="barDailyQ" class="bg-brand h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+
+                            <div class="pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
+                                <div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                                    <span>Haftalık Soru</span>
+                                    <span id="pctWeeklyQ" class="font-bold text-emerald-600 dark:text-emerald-400">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                                    <div id="barWeeklyQ" class="bg-emerald-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <div class="flex justify-between text-sm font-medium mb-1">
-                                <span id="lblWeeklyGoal">Haftalık Soru Hedefi: 0 / 1200</span>
-                                <span id="pctWeekly" class="font-bold text-blue-400">0%</span>
+
+                        <!-- Hours Goal Group -->
+                        <div class="space-y-3 p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <div class="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-200">
+                                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-4 h-4 text-sky-500"></i> Günlük Süre</span>
+                                <span id="pctDailyH" class="text-sky-500 font-bold">0%</span>
                             </div>
-                            <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden p-0.5">
-                                <div id="barWeekly" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-2 rounded-full transition-all duration-700 shadow-md" style="width: 0%"></div>
+                            <div class="text-xs text-slate-500 flex justify-between" id="lblDailyGoalH">0 / 4.0 Saat</div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                                <div id="barDailyH" class="bg-sky-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between text-sm font-medium mb-1">
-                                <span id="lblMonthlyGoal">Aylık Soru Hedefi: 0 / 5000</span>
-                                <span id="pctMonthly" class="font-bold text-purple-400">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden p-0.5">
-                                <div id="barMonthly" class="bg-gradient-to-r from-purple-500 to-pink-400 h-2 rounded-full transition-all duration-700 shadow-md" style="width: 0%"></div>
+
+                            <div class="pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
+                                <div class="flex justify-between text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
+                                    <span>Haftalık Süre</span>
+                                    <span id="pctWeeklyH" class="font-bold text-purple-500">0%</span>
+                                </div>
+                                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                                    <div id="barWeeklyH" class="bg-purple-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <!-- Daily Activity Table -->
+                <div class="soft-card p-6 rounded-2xl shadow-sm">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                        <h2 class="text-lg font-bold text-accent flex items-center space-x-2">
-                            <i data-lucide="list" class="w-5 h-5"></i>
+                        <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center space-x-2">
+                            <i data-lucide="list" class="w-5 h-5 text-brand"></i>
                             <span>Seçili Tarihteki Çalışmalar</span>
                         </h2>
-                        <div class="flex items-center space-x-2 w-full sm:w-auto">
-                            <input type="text" id="tableFilter" oninput="filterDailyLogs()" placeholder="Ders/Konu Filtrele..." class="bg-gray-800/60 border border-gray-700 text-xs text-white px-3 py-1.5 rounded-lg focus:outline-none focus:border-accent w-full sm:w-48">
-                        </div>
+                        <input type="text" id="tableFilter" oninput="filterDailyLogs()" placeholder="Ders/Konu Arama..." class="bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-100 px-3 py-1.5 rounded-xl focus:outline-none focus:border-brand w-full sm:w-48">
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-800/80 text-accent font-semibold uppercase text-xs">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-100/70 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
                                 <tr>
-                                    <th class="p-3">Sınav</th>
+                                    <th class="p-3 rounded-l-lg">Sınav</th>
                                     <th class="p-3">Ders</th>
-                                    <th class="p-3">Konu</th>
-                                    <th class="p-3">Aktivite</th>
+                                    <th class="p-3">Konu / Video</th>
+                                    <th class="p-3">Tip</th>
                                     <th class="p-3">Soru</th>
                                     <th class="p-3">D/Y</th>
                                     <th class="p-3">Süre</th>
-                                    <th class="p-3 text-right">İşlem</th>
+                                    <th class="p-3 text-right rounded-r-lg">İşlem</th>
                                 </tr>
                             </thead>
-                            <tbody id="dailyTableBody" class="divide-y divide-gray-800/50"></tbody>
+                            <tbody id="dailyTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
                         </table>
                     </div>
                 </div>
@@ -280,73 +337,73 @@
 
         <!-- TAB 2: EXAMS -->
         <section id="content-exams" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="award" class="w-5 h-5"></i>
+            <div class="soft-card p-6 rounded-2xl shadow-sm hover-lift">
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                    <i data-lucide="award" class="w-5 h-5 text-brand"></i>
                     <span>Deneme Sonucu Ekle</span>
                 </h2>
                 <form id="examForm" onsubmit="handleExamSubmit(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Tarih</label>
-                        <input type="date" id="examDate" required class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
+                        <label class="block text-[11px] font-semibold text-slate-500 mb-1">Tarih</label>
+                        <input type="date" id="examDate" required class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Deneme Türü</label>
-                        <select id="examType" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
+                        <label class="block text-[11px] font-semibold text-slate-500 mb-1">Deneme Türü</label>
+                        <select id="examType" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                             <option value="TYT">TYT</option>
                             <option value="AYT">AYT</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Deneme Adı / Yayın</label>
-                        <input type="text" id="examName" placeholder="Örn: Özdebir 1. Genel Deneme" required class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
+                        <label class="block text-[11px] font-semibold text-slate-500 mb-1">Deneme Adı / Yayın</label>
+                        <input type="text" id="examName" placeholder="Örn: Özdebir 1. Genel Deneme" required class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Türkçe Net</label>
-                            <input type="number" step="0.25" id="netTr" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Türkçe Net</label>
+                            <input type="number" step="0.25" id="netTr" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Matematik Net</label>
-                            <input type="number" step="0.25" id="netMat" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Matematik Net</label>
+                            <input type="number" step="0.25" id="netMat" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Fen / Sos2 Net</label>
-                            <input type="number" step="0.25" id="netFen" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Fen / Sos2 Net</label>
+                            <input type="number" step="0.25" id="netFen" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Sosyal / Edeb Net</label>
-                            <input type="number" step="0.25" id="netSos" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Sosyal / Edeb Net</label>
+                            <input type="number" step="0.25" id="netSos" value="0" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-3 rounded-xl transition shadow-lg active:scale-95 flex items-center justify-center space-x-2">
-                        <i data-lucide="save" class="w-5 h-5"></i>
+                    <button type="submit" class="w-full bg-brand hover:bg-brandHover text-white font-semibold py-3 rounded-xl transition shadow-md text-xs flex items-center justify-center space-x-2">
+                        <i data-lucide="save" class="w-4 h-4"></i>
                         <span>Denemeyi Kaydet</span>
                     </button>
                 </form>
             </div>
 
-            <div class="lg:col-span-2 glass-card p-6 rounded-2xl shadow-xl">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="history" class="w-5 h-5"></i>
+            <div class="lg:col-span-2 soft-card p-6 rounded-2xl shadow-sm">
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                    <i data-lucide="history" class="w-5 h-5 text-brand"></i>
                     <span>Deneme Geçmişi</span>
                 </h2>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-gray-800/80 text-accent font-semibold uppercase text-xs">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100/70 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">
                             <tr>
-                                <th class="p-3">Tarih</th>
+                                <th class="p-3 rounded-l-lg">Tarih</th>
                                 <th class="p-3">Tür</th>
                                 <th class="p-3">Deneme Adı</th>
                                 <th class="p-3">TR</th>
                                 <th class="p-3">MAT</th>
                                 <th class="p-3">FEN</th>
                                 <th class="p-3">SOS</th>
-                                <th class="p-3 text-accent font-bold">Toplam Net</th>
-                                <th class="p-3 text-right">İşlem</th>
+                                <th class="p-3 text-brand font-bold">Toplam Net</th>
+                                <th class="p-3 text-right rounded-r-lg">İşlem</th>
                             </tr>
                         </thead>
-                        <tbody id="examTableBody" class="divide-y divide-gray-800/50"></tbody>
+                        <tbody id="examTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/60"></tbody>
                     </table>
                 </div>
             </div>
@@ -355,20 +412,20 @@
         <!-- TAB 3: ANALYTICS -->
         <section id="content-analytics" class="tab-content hidden space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="line-chart" class="w-5 h-5"></i>
-                        <span>Deneme Net Değişimi (Zaman İçinde)</span>
+                <div class="soft-card p-6 rounded-2xl shadow-sm hover-lift">
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                        <i data-lucide="line-chart" class="w-5 h-5 text-brand"></i>
+                        <span>Deneme Net Değişimi</span>
                     </h2>
                     <div class="relative h-72">
                         <canvas id="chartExams"></canvas>
                     </div>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="pie-chart" class="w-5 h-5"></i>
-                        <span>Derslere Göre Toplam Soru Dağılımı</span>
+                <div class="soft-card p-6 rounded-2xl shadow-sm hover-lift">
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                        <i data-lucide="pie-chart" class="w-5 h-5 text-brand"></i>
+                        <span>Derslere Göre Soru Dağılımı</span>
                     </h2>
                     <div class="relative h-72 flex items-center justify-center">
                         <canvas id="chartDistribution"></canvas>
@@ -377,41 +434,45 @@
             </div>
         </section>
 
-        <!-- TAB 4: SETTINGS & BACKUP -->
+        <!-- TAB 4: SETTINGS -->
         <section id="content-settings" class="tab-content hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="glass-card p-6 rounded-2xl shadow-xl space-y-6 hover-lift">
+            <div class="soft-card p-6 rounded-2xl shadow-sm space-y-6 hover-lift">
                 <div>
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="sliders" class="w-5 h-5"></i>
-                        <span>Hedef Parametreleri</span>
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                        <i data-lucide="sliders" class="w-5 h-5 text-brand"></i>
+                        <span>Günlük Hedef Ayarları</span>
                     </h2>
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Varsayılan Günlük Soru Hedefi</label>
-                            <input type="number" id="cfgDailyGoal" min="10" max="1000" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Günlük Soru Hedefi</label>
+                            <input type="number" id="cfgDailyGoal" min="10" max="1000" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                         </div>
-                        <button onclick="saveGoalSetting()" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-2.5 rounded-xl transition shadow">
-                            Hedefi Güncelle
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Günlük Çalışma Saati Hedefi (Saat)</label>
+                            <input type="number" id="cfgDailyHoursGoal" min="0.5" max="20" step="0.5" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                        <button onclick="saveGoalSettings()" class="w-full bg-brand hover:bg-brandHover text-white font-semibold py-2.5 rounded-xl transition text-xs shadow-md">
+                            Hedefleri Güncelle
                         </button>
                     </div>
                 </div>
 
-                <hr class="border-gray-800">
+                <hr class="border-slate-200 dark:border-slate-800">
 
                 <div>
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="download-cloud" class="w-5 h-5"></i>
+                    <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                        <i data-lucide="download-cloud" class="w-5 h-5 text-brand"></i>
                         <span>Veri Yedekleme & Geri Yükleme</span>
                     </h2>
-                    <p class="text-xs text-gray-400 mb-4">
-                        Verileriniz otomatik olarak tarayıcınızda saklanır. Başka cihaza aktarmak veya güvenceye almak için aşağıdaki butonları kullanabilirsiniz.
+                    <p class="text-xs text-slate-500 mb-4">
+                        Verileriniz tarayıcınızda (LocalStorage) güvendedir. Farklı cihazlara aktarmak için dışa aktarabilirsiniz.
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button onclick="exportData()" class="bg-emerald-500 hover:bg-emerald-600 text-gray-900 font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 shadow">
+                        <button onclick="exportData()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 text-xs shadow-sm">
                             <i data-lucide="download" class="w-4 h-4"></i>
                             <span>Verileri İndir (JSON)</span>
                         </button>
-                        <label class="bg-purple-500 hover:bg-purple-600 text-gray-900 font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 cursor-pointer shadow">
+                        <label class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 text-xs shadow-sm cursor-pointer">
                             <i data-lucide="upload" class="w-4 h-4"></i>
                             <span>Yedek Yükle</span>
                             <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
@@ -420,43 +481,119 @@
                 </div>
             </div>
 
-            <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="calendar" class="w-5 h-5"></i>
+            <div class="soft-card p-6 rounded-2xl shadow-sm hover-lift">
+                <h2 class="text-base font-bold text-slate-800 dark:text-slate-100 mb-4 flex items-center space-x-2">
+                    <i data-lucide="calendar" class="w-5 h-5 text-brand"></i>
                     <span>Çalışma Takvimi & Pas (Off-Day) Gün Ayarları</span>
                 </h2>
                 <div class="space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Tarih Seç</label>
-                            <input type="date" id="cfgDate" onchange="loadDayStatus()" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Tarih Seç</label>
+                            <input type="date" id="cfgDate" onchange="loadDayStatus()" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Gün Durumu</label>
-                            <select id="cfgStatus" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">Gün Durumu</label>
+                            <select id="cfgStatus" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                                 <option value="Aktif">Aktif Çalışma Günü</option>
-                                <option value="Pas/Off">Pas / İstirahat Günü (Off-Day)</option>
+                                <option value="Pas/Off">Pas / Dinlenme Günü (Off-Day)</option>
                             </select>
                         </div>
                     </div>
-                    <button onclick="saveDayStatus()" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-2.5 rounded-xl transition shadow">
+                    <button onclick="saveDayStatus()" class="w-full bg-brand hover:bg-brandHover text-white font-semibold py-2.5 rounded-xl transition text-xs shadow-md">
                         Seçili Günün Durumunu Kaydet
                     </button>
-                    <p class="text-xs text-gray-400 mt-2">
-                        💡 <b>Bilgi:</b> Pas/Off olarak işaretlediğiniz günler haftalık ve aylık soru hedef ortalamanızı düşürmez. Pazar günleri varsayılan olarak Pas gün kabul edilir.
+                    <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                        💡 <b>Bilgi:</b> Dinlenme günü (Off-Day) olarak işaretlediğiniz günler haftalık çalışma performansınızın ortalamasını olumsuz etkilemez.
                     </p>
                 </div>
             </div>
         </section>
+
     </main>
 
-    <footer class="glass-card border-t border-x-0 border-b-0 border-gray-800 p-4 text-center text-xs text-gray-500 mt-auto z-10">
-        YKS Hazırlık & Performans Portalı &bull; Tüm verileriniz tarayıcınızda (LocalStorage) güvendedir.
+    <footer class="soft-card border-t border-x-0 border-b-0 border-slate-200 dark:border-slate-800 p-4 text-center text-xs text-slate-400 mt-auto z-10">
+        YKS Hazırlık & Performans Portalı &bull; Minimalist & Soft Tasarım &bull; Yerel Veri Depolama
     </footer>
 
-    <!-- Core JavaScript Logic -->
+    <!-- Application Script -->
     <script>
-        // Web Audio & Haptic Feedback API
+        // --- PLAYLIST DATA CONFIGURATION ---
+        const PLAYLISTS = {
+            "Matematik": [
+                "01 - Fonksiyonlar 1 (Mert Hoca)",
+                "02 - Fonksiyonlar 2 (Mert Hoca)",
+                "03 - Parabol 1 (Mert Hoca)",
+                "04 - Parabol 2 (Mert Hoca)",
+                "05 - Polinomlar 1 (Mert Hoca)",
+                "06 - Polinomlar 2 (Mert Hoca)",
+                "07 - II. Dereceden Denklemler",
+                "08 - Karmaşık Sayılar",
+                "09 - Eşitsizlikler 1",
+                "10 - Eşitsizlikler 2",
+                "11 - Trigonometri 1 (Giriş)",
+                "12 - Trigonometri 2 (Toplam-Fark)",
+                "13 - Trigonometri 3 (Yarım Açı)",
+                "14 - Trigonometri 4 (Denklemler)",
+                "15 - Logaritma 1",
+                "16 - Logaritma 2",
+                "17 - Diziler 1 (Aritmetik)",
+                "18 - Diziler 2 (Geometrik)",
+                "19 - Limit ve Süreklilik 1",
+                "20 - Limit ve Süreklilik 2",
+                "21 - Türev 1 (Tanım ve Kurallar)",
+                "22 - Türev 2 (Teğet ve Normal)",
+                "23 - Türev 3 (Artan-Azalan / Ekstremum)",
+                "24 - Türev 4 (Maksimum-Minimum)",
+                "25 - İntegral 1 (Belirsiz İntegral)",
+                "26 - İntegral 2 (Belirli İntegral)",
+                "27 - İntegral 3 (Alan Hesabı)"
+            ],
+            "Edebiyat": [
+                "01 - Şiir Bilgisi & Ahenk Unsurları (Kadir Gümüş)",
+                "02 - Edebi Sanatlar (Kadir Gümüş)",
+                "03 - İslamiyet Öncesi Türk Edebiyatı",
+                "04 - Halk Edebiyatı (Anonim, Aşık, Tekke)",
+                "05 - Divan Edebiyatı Nazım Şekilleri",
+                "06 - Divan Edebiyatı Sanatçıları",
+                "07 - Tanzimat Edebiyatı 1. ve 2. Dönem",
+                "08 - Servet-i Fünun Edebiyatı",
+                "09 - Fecr-i Ati Edebiyatı",
+                "10 - Milli Edebiyat Dönemi",
+                "11 - Cumhuriyet Dönemi Şiir Grupları",
+                "12 - Cumhuriyet Dönemi Roman ve Hikaye",
+                "13 - Tiyatro ve Edebi Akımlar"
+            ],
+            "Coğrafya": [
+                "01 - Ekosistem ve Biyoçeşitlilik (Coğrafyanın Kodları)",
+                "02 - Nüfus Politikaları ve Şehirlerin Fonksiyonları",
+                "03 - Türkiye'de Tarım ve Hayvancılık",
+                "04 - Türkiye'de Madenler ve Enerji Kaynakları",
+                "05 - Türkiye'de Sanayi ve Ticaret",
+                "06 - Türkiye'de Ulaşım ve Turizm",
+                "07 - Bölgesel Kalkınma Projeleri (GAP, DAP, ZBK)",
+                "08 - Küresel ve Bölgesel Örgütler",
+                "09 - Çevre Sorunları ve Doğal Afetler"
+            ],
+            "Tarih": [
+                "01 - Tarih Bilimine Giriş & İlk Çağ Uygarlıkları (Benim Hocam)",
+                "02 - İlk ve Orta Çağlarda Türk Dünyası",
+                "03 - İslam Medeniyetinin Doğuşu",
+                "04 - İlk Türk-İslam Devletleri",
+                "05 - Osmanlı Kuruluş ve Yükselme Dönemi",
+                "06 - Osmanlı Kültür ve Medeniyeti",
+                "07 - XVII. ve XVIII. Yüzyılda Osmanlı",
+                "08 - XIX. Yüzyıl En Uzun Yüzyıl (Islahatlar)",
+                "09 - XX. Yüzyıl Başlarında Osmanlı (Trablusgarp, Balkan)",
+                "10 - I. Dünya Savaşı ve Cepheler",
+                "11 - Milli Mücadeleye Hazırlık Dönemi",
+                "12 - Kurtuluş Savaşı Cepheler ve Antlaşmalar",
+                "13 - Atatürk İlke ve İnkılapları",
+                "14 - Çağdaş Türk ve Dünya Tarihi"
+            ]
+        };
+
+        // Web Audio Feedback
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playFeedbackSound(type = 'success') {
             try {
@@ -466,35 +603,33 @@
                 gain.connect(audioCtx.destination);
 
                 if (type === 'success') {
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); // A5
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                } else if (type === 'delete') {
-                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // E5
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
                     osc.start();
                     osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'delete') {
+                    osc.frequency.setValueAtTime(280, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(140, audioCtx.currentTime + 0.08);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.2);
                 }
             } catch(e) {}
-            
-            if (navigator.vibrate) {
-                navigator.vibrate(type === 'success' ? [40, 30, 40] : 60);
-            }
         }
 
-        // --- Toast Notifications ---
+        // Toast Notifications
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            const bgClass = type === 'success' ? 'bg-emerald-500/90 text-gray-950 border-emerald-400' : 'bg-rose-500/90 text-white border-rose-400';
+            const bgClass = type === 'success' 
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-800' 
+                : 'bg-rose-600 text-white border-rose-500';
             const icon = type === 'success' ? 'check-circle' : 'alert-circle';
             
-            toast.className = `toast-enter pointer-events-auto flex items-center space-x-2 px-4 py-3 rounded-xl shadow-2xl border backdrop-blur-md text-xs font-bold ${bgClass}`;
+            toast.className = `toast-enter pointer-events-auto flex items-center space-x-2 px-4 py-3 rounded-xl shadow-xl border text-xs font-medium ${bgClass}`;
             toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i><span>${message}</span>`;
             
             container.appendChild(toast);
@@ -507,21 +642,21 @@
             }, 3000);
         }
 
-        // Global State & Persistent Storage
+        // Storage Keys & State Initialization
         const STORAGE_KEYS = {
-            ACTIVITIES: 'yks_activities_v2',
-            EXAMS: 'yks_exams_v2',
-            SETTINGS: 'yks_settings_v2',
-            OFFDAYS: 'yks_offdays_v2',
-            THEME: 'yks_theme'
+            ACTIVITIES: 'yks_activities_v3',
+            EXAMS: 'yks_exams_v3',
+            SETTINGS: 'yks_settings_v3',
+            OFFDAYS: 'yks_offdays_v3',
+            THEME: 'yks_theme_v3'
         };
 
         let state = {
             activities: [],
             exams: [],
-            settings: { dailyGoal: 200 },
+            settings: { dailyGoal: 200, dailyHoursGoal: 4.0 },
             offDays: {},
-            theme: 'dark'
+            theme: 'light'
         };
 
         let chartExamsInstance = null;
@@ -531,6 +666,8 @@
             loadState();
             setTodayDates();
             applyTheme();
+            handleSubjectChange();
+            handleActivityTypeChange();
             updateUI();
             setupKeyboardShortcuts();
             lucide.createIcons();
@@ -540,11 +677,11 @@
             try {
                 state.activities = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACTIVITIES)) || [];
                 state.exams = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXAMS)) || [];
-                state.settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || { dailyGoal: 200 };
+                state.settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || { dailyGoal: 200, dailyHoursGoal: 4.0 };
                 state.offDays = JSON.parse(localStorage.getItem(STORAGE_KEYS.OFFDAYS)) || {};
-                state.theme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
+                state.theme = localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
             } catch(e) {
-                console.error("Storage parse error:", e);
+                console.error("Storage error:", e);
             }
         }
 
@@ -565,13 +702,14 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
             document.getElementById('headerDate').innerText = new Date().toLocaleDateString('tr-TR', options);
             document.getElementById('cfgDailyGoal').value = state.settings.dailyGoal;
+            document.getElementById('cfgDailyHoursGoal').value = state.settings.dailyHoursGoal || 4.0;
             
             loadDayStatus();
         }
 
         // Theme Toggle
         function toggleTheme() {
-            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
             applyTheme();
             saveState();
         }
@@ -581,48 +719,95 @@
             const sunIcon = document.getElementById('themeIconSun');
             const moonIcon = document.getElementById('themeIconMoon');
             
-            if (state.theme === 'light') {
-                html.classList.remove('dark');
-                html.classList.add('light');
-                sunIcon.classList.remove('hidden');
-                moonIcon.classList.add('hidden');
-            } else {
+            if (state.theme === 'dark') {
                 html.classList.remove('light');
                 html.classList.add('dark');
                 sunIcon.classList.add('hidden');
                 moonIcon.classList.remove('hidden');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
             }
             if (chartExamsInstance) renderCharts();
         }
 
-        // Navigation Tabs
+        // Dynamic Form Logic for Video Playlists
+        function handleSubjectChange() {
+            const subject = document.getElementById('actSubject').value;
+            const playlistContainer = document.getElementById('playlistContainer');
+            const videoSelect = document.getElementById('actVideoTitle');
+            const actType = document.getElementById('actType').value;
+
+            videoSelect.innerHTML = '';
+
+            if (PLAYLISTS[subject]) {
+                PLAYLISTS[subject].forEach(video => {
+                    const opt = document.createElement('option');
+                    opt.value = video;
+                    opt.textContent = video;
+                    videoSelect.appendChild(opt);
+                });
+                if (actType === 'Video İzleme') {
+                    playlistContainer.classList.remove('hidden');
+                }
+            } else {
+                playlistContainer.classList.add('hidden');
+            }
+        }
+
+        function handleActivityTypeChange() {
+            const actType = document.getElementById('actType').value;
+            const subject = document.getElementById('actSubject').value;
+            const playlistContainer = document.getElementById('playlistContainer');
+
+            if (actType === 'Video İzleme' && PLAYLISTS[subject]) {
+                playlistContainer.classList.remove('hidden');
+            } else {
+                playlistContainer.classList.add('hidden');
+            }
+        }
+
+        // Tab Navigation
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-accent', 'text-gray-900');
-                btn.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-gray-800/50');
+                btn.classList.remove('bg-brand', 'text-white', 'shadow-sm');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400');
             });
 
             document.getElementById(`content-${tabId}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`tab-${tabId}`);
-            activeBtn.classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-gray-800/50');
-            activeBtn.classList.add('bg-accent', 'text-gray-900');
+            activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
+            activeBtn.classList.add('bg-brand', 'text-white', 'shadow-sm');
 
             if (tabId === 'analytics') {
                 setTimeout(renderCharts, 50);
             }
         }
 
-        // Activity Handling
+        // Submit Activity
         function handleActivitySubmit(e) {
             e.preventDefault();
+            const actType = document.getElementById('actType').value;
+            const subject = document.getElementById('actSubject').value;
+            
+            let topicName = document.getElementById('actTopic').value || 'Genel Konu';
+            
+            // If Video Watching & Playlist exists, prepend video title
+            if (actType === 'Video İzleme' && PLAYLISTS[subject]) {
+                const selectedVideo = document.getElementById('actVideoTitle').value;
+                topicName = `${selectedVideo} (${topicName})`;
+            }
+
             const activity = {
                 id: Date.now(),
                 date: document.getElementById('actDate').value,
                 examType: document.getElementById('actExamType').value,
                 subject: document.getElementById('actSubject').value,
-                topic: document.getElementById('actTopic').value || 'Genel Tekrar',
-                type: document.getElementById('actType').value,
+                topic: topicName,
+                type: actType,
                 questions: parseInt(document.getElementById('actQuestions').value) || 0,
                 correct: parseInt(document.getElementById('actCorrect').value) || 0,
                 wrong: parseInt(document.getElementById('actWrong').value) || 0,
@@ -633,7 +818,7 @@
             saveState();
             updateUI();
             playFeedbackSound('success');
-            showToast('Aktivite başarıyla kaydedildi!');
+            showToast('Aktivite kaydedildi!');
             document.getElementById('actTopic').value = '';
         }
 
@@ -645,21 +830,21 @@
             showToast('Aktivite silindi.', 'error');
         }
 
-        // Exam Handling
+        // Submit Exam
         function handleExamSubmit(e) {
             e.preventDefault();
             const tr = parseFloat(document.getElementById('netTr').value) || 0;
             const mat = parseFloat(document.getElementById('netMat').value) || 0;
             const fen = parseFloat(document.getElementById('netFen').value) || 0;
             const sos = parseFloat(document.getElementById('netSos').value) || 0;
-            const total = tr + mat + fen + sos;
 
             const exam = {
                 id: Date.now(),
                 date: document.getElementById('examDate').value,
                 type: document.getElementById('examType').value,
                 name: document.getElementById('examName').value,
-                tr, mat, fen, sos, total
+                tr, mat, fen, sos,
+                total: (tr + mat + fen + sos)
             };
 
             state.exams.unshift(exam);
@@ -678,7 +863,7 @@
             showToast('Deneme kaydı silindi.', 'error');
         }
 
-        // Progress & Goal Calculations
+        // UI & Progress Calculations
         function updateUI() {
             renderDailyTable();
             renderExamTable();
@@ -687,44 +872,50 @@
 
         function updateProgressBars() {
             const selectedDate = document.getElementById('actDate').value;
-            const targetDaily = state.settings.dailyGoal;
+            const targetQuestions = state.settings.dailyGoal;
+            const targetHours = state.settings.dailyHoursGoal || 4.0;
 
-            // Daily Total
-            const dailyTotal = state.activities
-                .filter(a => a.date === selectedDate)
-                .reduce((sum, a) => sum + a.questions, 0);
+            // Daily Calculations
+            const dailyLogs = state.activities.filter(a => a.date === selectedDate);
+            const dailyQuestions = dailyLogs.reduce((sum, a) => sum + a.questions, 0);
+            const dailyMinutes = dailyLogs.reduce((sum, a) => sum + a.duration, 0);
+            const dailyHours = (dailyMinutes / 60);
 
-            const pctD = Math.min(100, Math.round((dailyTotal / targetDaily) * 100));
-            document.getElementById('lblDailyGoal').innerText = `Günlük Soru Hedefi: ${dailyTotal} / ${targetDaily}`;
-            document.getElementById('pctDaily').innerText = `${pctD}%`;
-            document.getElementById('barDaily').style.width = `${pctD}%`;
+            // Question Progress
+            const pctDQ = Math.min(100, Math.round((dailyQuestions / targetQuestions) * 100));
+            document.getElementById('lblDailyGoalQ').innerText = `${dailyQuestions} / ${targetQuestions} Soru`;
+            document.getElementById('pctDailyQ').innerText = `${pctDQ}%`;
+            document.getElementById('barDailyQ').style.width = `${pctDQ}%`;
 
-            // Weekly Total
+            // Hour Progress
+            const pctDH = Math.min(100, Math.round((dailyHours / targetHours) * 100));
+            document.getElementById('lblDailyGoalH').innerText = `${dailyHours.toFixed(1)} / ${targetHours.toFixed(1)} Saat (${dailyMinutes} dk)`;
+            document.getElementById('pctDailyH').innerText = `${pctDH}%`;
+            document.getElementById('barDailyH').style.width = `${pctDH}%`;
+
+            // Weekly Calculations
             const currDate = new Date(selectedDate);
             const firstDayOfWeek = new Date(currDate);
-            firstDayOfWeek.setDate(currDate.getDate() - currDate.getDay() + (currDate.getDay() === 0 ? -6 : 1)); // Monday
-            
-            const weeklyTotal = state.activities.filter(a => {
+            firstDayOfWeek.setDate(currDate.getDate() - currDate.getDay() + (currDate.getDay() === 0 ? -6 : 1));
+
+            const weeklyLogs = state.activities.filter(a => {
                 const d = new Date(a.date);
                 return d >= firstDayOfWeek && d <= currDate;
-            }).reduce((sum, a) => sum + a.questions, 0);
+            });
 
-            const targetWeekly = targetDaily * 6; // 6 active study days default
-            const pctW = Math.min(100, Math.round((weeklyTotal / targetWeekly) * 100));
-            document.getElementById('lblWeeklyGoal').innerText = `Haftalık Soru Hedefi: ${weeklyTotal} / ${targetWeekly}`;
-            document.getElementById('pctWeekly').innerText = `${pctW}%`;
-            document.getElementById('barWeekly').style.width = `${pctW}%`;
+            const weeklyQuestions = weeklyLogs.reduce((sum, a) => sum + a.questions, 0);
+            const weeklyHours = weeklyLogs.reduce((sum, a) => sum + a.duration, 0) / 60;
 
-            // Monthly Total
-            const monthlyTotal = state.activities.filter(a => {
-                return a.date.substring(0, 7) === selectedDate.substring(0, 7);
-            }).reduce((sum, a) => sum + a.questions, 0);
+            const targetWeeklyQ = targetQuestions * 6;
+            const targetWeeklyH = targetHours * 6;
 
-            const targetMonthly = targetDaily * 25;
-            const pctM = Math.min(100, Math.round((monthlyTotal / targetMonthly) * 100));
-            document.getElementById('lblMonthlyGoal').innerText = `Aylık Soru Hedefi: ${monthlyTotal} / ${targetMonthly}`;
-            document.getElementById('pctMonthly').innerText = `${pctM}%`;
-            document.getElementById('barMonthly').style.width = `${pctM}%`;
+            const pctWQ = Math.min(100, Math.round((weeklyQuestions / targetWeeklyQ) * 100));
+            document.getElementById('pctWeeklyQ').innerText = `${pctWQ}%`;
+            document.getElementById('barWeeklyQ').style.width = `${pctWQ}%`;
+
+            const pctWH = Math.min(100, Math.round((weeklyHours / targetWeeklyH) * 100));
+            document.getElementById('pctWeeklyH').innerText = `${pctWH}%`;
+            document.getElementById('barWeeklyH').style.width = `${pctWH}%`;
         }
 
         function renderDailyTable() {
@@ -740,23 +931,23 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-gray-500 text-xs">Bu tarih veya arama kriteri için aktivite kaydı bulunamadı.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400 text-xs">Bu tarih için aktivite kaydı bulunamadı.</td></tr>`;
                 return;
             }
 
             filtered.forEach(a => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-800/30 transition border-b border-gray-800/40 text-xs";
+                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition border-b border-slate-100 dark:border-slate-800/60 text-xs";
                 tr.innerHTML = `
-                    <td class="p-3 font-semibold text-accent">${a.examType}</td>
-                    <td class="p-3 font-medium">${a.subject}</td>
-                    <td class="p-3 text-gray-300">${a.topic}</td>
-                    <td class="p-3 text-gray-400">${a.type}</td>
-                    <td class="p-3 font-bold text-white">${a.questions}</td>
-                    <td class="p-3"><span class="text-green-400 font-medium">${a.correct}D</span> / <span class="text-red-400 font-medium">${a.wrong}Y</span></td>
-                    <td class="p-3 text-gray-400">${a.duration} dk</td>
+                    <td class="p-3 font-semibold text-brand">${a.examType}</td>
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${a.subject}</td>
+                    <td class="p-3 text-slate-600 dark:text-slate-300">${a.topic}</td>
+                    <td class="p-3 text-slate-400">${a.type}</td>
+                    <td class="p-3 font-bold text-slate-700 dark:text-slate-100">${a.questions}</td>
+                    <td class="p-3"><span class="text-emerald-600 dark:text-emerald-400 font-medium">${a.correct}D</span> / <span class="text-rose-500 font-medium">${a.wrong}Y</span></td>
+                    <td class="p-3 text-slate-500">${a.duration} dk</td>
                     <td class="p-3 text-right">
-                        <button onclick="deleteActivity(${a.id})" class="p-1 hover:bg-rose-500/20 text-rose-400 rounded-lg transition" title="Sil">
+                        <button onclick="deleteActivity(${a.id})" class="p-1 hover:bg-rose-50 text-rose-500 rounded-lg transition" title="Sil">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
                     </td>
@@ -775,24 +966,24 @@
             tbody.innerHTML = '';
 
             if (state.exams.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-gray-500 text-xs">Henüz kaydolmuş bir deneme sonucu bulunmuyor.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400 text-xs">Henüz kaydolmuş bir deneme sonucu bulunmuyor.</td></tr>`;
                 return;
             }
 
             state.exams.forEach(e => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-800/30 transition border-b border-gray-800/40 text-xs";
+                tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800/40 transition border-b border-slate-100 dark:border-slate-800/60 text-xs";
                 tr.innerHTML = `
-                    <td class="p-3 text-gray-400">${e.date}</td>
-                    <td class="p-3 font-bold text-accent">${e.type}</td>
-                    <td class="p-3 font-medium text-white">${e.name}</td>
+                    <td class="p-3 text-slate-400">${e.date}</td>
+                    <td class="p-3 font-bold text-brand">${e.type}</td>
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${e.name}</td>
                     <td class="p-3">${e.tr}</td>
                     <td class="p-3">${e.mat}</td>
                     <td class="p-3">${e.fen}</td>
                     <td class="p-3">${e.sos}</td>
-                    <td class="p-3 font-bold text-emerald-400">${e.total} Net</td>
+                    <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">${e.total} Net</td>
                     <td class="p-3 text-right">
-                        <button onclick="deleteExam(${e.id})" class="p-1 hover:bg-rose-500/20 text-rose-400 rounded-lg transition" title="Sil">
+                        <button onclick="deleteExam(${e.id})" class="p-1 hover:bg-rose-50 text-rose-500 rounded-lg transition" title="Sil">
                             <i data-lucide="trash-2" class="w-4 h-4"></i>
                         </button>
                     </td>
@@ -802,15 +993,17 @@
             lucide.createIcons();
         }
 
-        // Settings & Off-Days
-        function saveGoalSetting() {
-            const val = parseInt(document.getElementById('cfgDailyGoal').value);
-            if (val && val > 0) {
-                state.settings.dailyGoal = val;
-                saveState();
-                updateProgressBars();
-                showToast('Günlük hedef güncellendi!');
-            }
+        // Save Goal Settings
+        function saveGoalSettings() {
+            const qVal = parseInt(document.getElementById('cfgDailyGoal').value);
+            const hVal = parseFloat(document.getElementById('cfgDailyHoursGoal').value);
+
+            if (qVal && qVal > 0) state.settings.dailyGoal = qVal;
+            if (hVal && hVal > 0) state.settings.dailyHoursGoal = hVal;
+
+            saveState();
+            updateProgressBars();
+            showToast('Soru ve Saat hedefleri güncellendi!');
         }
 
         function loadDayStatus() {
@@ -824,10 +1017,10 @@
             const status = document.getElementById('cfgStatus').value;
             state.offDays[date] = status;
             saveState();
-            showToast(`${date} günü "${status}" olarak güncellendi.`);
+            showToast(`${date} günü "${status}" olarak kaydedildi.`);
         }
 
-        // Export / Import
+        // Export / Import Data
         function exportData() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
             const dlAnchorElem = document.createElement('a');
@@ -848,22 +1041,21 @@
                         initApp();
                         showToast('Yedek başarıyla yüklendi!');
                     } else {
-                        showToast('Geçersiz yedek dosyası formatı!', 'error');
+                        showToast('Geçersiz yedek formatı!', 'error');
                     }
                 } catch (err) {
-                    showToast('Dosya okunurken hata oluştu!', 'error');
+                    showToast('Dosya okuma hatası!', 'error');
                 }
             };
             fileReader.readAsText(event.target.files[0]);
         }
 
-        // Chart Rendering
+        // Render Analytics Charts
         function renderCharts() {
             const isDark = state.theme === 'dark';
-            const textColor = isDark ? '#9ca3af' : '#4b5563';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
             const gridColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
 
-            // Net Evolution Chart
             const ctxExams = document.getElementById('chartExams').getContext('2d');
             const sortedExams = [...state.exams].sort((a, b) => new Date(a.date) - new Date(b.date));
             
@@ -875,12 +1067,11 @@
                     datasets: [{
                         label: 'Toplam Net',
                         data: sortedExams.map(e => e.total),
-                        borderColor: '#89b4fa',
-                        backgroundColor: 'rgba(137, 180, 250, 0.15)',
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
                         fill: true,
-                        tension: 0.35,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
+                        tension: 0.3,
+                        pointRadius: 4
                     }]
                 },
                 options: {
@@ -894,7 +1085,6 @@
                 }
             });
 
-            // Distribution Chart
             const ctxDist = document.getElementById('chartDistribution').getContext('2d');
             const subjectTotals = {};
             state.activities.forEach(a => {
@@ -909,8 +1099,8 @@
                     datasets: [{
                         data: Object.values(subjectTotals),
                         backgroundColor: [
-                            '#89b4fa', '#a6e3a1', '#f9e2af', '#f38ba8', 
-                            '#cba6f7', '#fab387', '#94e2d5', '#74c7ec'
+                            '#6366f1', '#10b981', '#0284c7', '#f59e0b', 
+                            '#8b5cf6', '#ec4899', '#14b8a6', '#64748b'
                         ]
                     }]
                 },
@@ -922,7 +1112,7 @@
             });
         }
 
-        // Command Palette & Global Search (Ctrl+K)
+        // Command Palette Logic
         function toggleCommandPalette() {
             const modal = document.getElementById('commandModal');
             const isHidden = modal.classList.contains('hidden');
@@ -941,27 +1131,14 @@
 
             if (!query) return;
 
-            // Search Activities
             state.activities.filter(a => a.subject.toLowerCase().includes(query) || a.topic.toLowerCase().includes(query)).forEach(a => {
                 const item = document.createElement('div');
-                item.className = "p-2 hover:bg-gray-700/50 rounded-lg cursor-pointer text-xs flex justify-between items-center text-gray-200";
-                item.innerHTML = `<span><b>Aktivite:</b> ${a.subject} - ${a.topic} (${a.date})</span> <span class="text-accent font-bold">${a.questions} Soru</span>`;
+                item.className = "p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer text-xs flex justify-between items-center text-slate-700 dark:text-slate-200";
+                item.innerHTML = `<span><b>Aktivite:</b> ${a.subject} - ${a.topic}</span> <span class="text-brand font-bold">${a.questions} Soru</span>`;
                 item.onclick = () => {
                     document.getElementById('actDate').value = a.date;
                     switchTab('dashboard');
                     updateUI();
-                    toggleCommandPalette();
-                };
-                resultsContainer.appendChild(item);
-            });
-
-            // Search Exams
-            state.exams.filter(e => e.name.toLowerCase().includes(query)).forEach(e => {
-                const item = document.createElement('div');
-                item.className = "p-2 hover:bg-gray-700/50 rounded-lg cursor-pointer text-xs flex justify-between items-center text-gray-200";
-                item.innerHTML = `<span><b>Deneme:</b> ${e.name} (${e.type})</span> <span class="text-emerald-400 font-bold">${e.total} Net</span>`;
-                item.onclick = () => {
-                    switchTab('exams');
                     toggleCommandPalette();
                 };
                 resultsContainer.appendChild(item);
@@ -980,7 +1157,6 @@
             });
         }
 
-        // Initialize App on DOM Load
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
