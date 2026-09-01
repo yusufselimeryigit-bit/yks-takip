@@ -1,1064 +1,314 @@
 <!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YKS (TYT-AYT) Takip & Performans Sistemi - Ultra Edition</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkbg: '#0f0f17',
-                        cardbg: '#1e1e2e',
-                        cardbgLight: '#ffffff',
-                        accent: '#89b4fa',
-                        accentHover: '#b4befe',
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
-                }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YKS Takip">
+    <meta name="theme-color" content="#0f172a">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://img.icons8.com/isometric/512/graduation-cap.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/isometric/512/graduation-cap.png">
+
+    <title>YKS Hazırlık ve Takip</title>
+
+    <!-- Firebase SDK (Bulut Bağlantısı) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            margin: 0;
+            padding: calc(env(safe-area-inset-top) + 15px) 15px calc(env(safe-area-inset-bottom) + 20px) 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            background: #0284c7;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
             }
         }
-    </script>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        /* Smooth transitions */
-        * { transition: background-color 0.2s ease, border-color 0.2s ease; }
-        .glass-card {
-            background: rgba(30, 30, 46, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+
+        .card {
+            background: #1e293b;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
-        .light .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.08);
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: #f1f5f9;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        /* Hover Bounce & Glow */
-        .hover-lift {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        .counter-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0f172a;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-top: 10px;
         }
-        .hover-lift:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(137, 180, 250, 0.3);
+
+        .counter-btn {
+            background: #0284c7;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
         }
-        /* Toast Notification Animations */
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+
+        .counter-btn:active {
+            transform: scale(0.95);
+            background: #0369a1;
         }
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateY(-10px); }
+
+        .count-display {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #38bdf8;
         }
-        .toast-enter { animation: slideInRight 0.3s ease forwards; }
-        .toast-exit { animation: fadeOut 0.3s ease forwards; }
+
+        .topic-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+            font-size: 0.95rem;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #38bdf8;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            color: #f8fafc;
+            padding: 10px;
+            font-family: inherit;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: 1px solid #38bdf8;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: #0f172a;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #38bdf8;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
     </style>
 </head>
-<body class="bg-darkbg text-gray-200 font-sans min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300">
+<body>
 
-    <!-- Glowing Background Orbs -->
-    <div class="fixed top-[-100px] left-[-100px] w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-float"></div>
-    <div class="fixed bottom-[-100px] right-[-100px] w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -3s;"></div>
-
-    <!-- Toast Notifications Container -->
-    <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col space-y-2 pointer-events-none"></div>
-
-    <!-- Command Palette (Ctrl+K) Modal -->
-    <div id="commandModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] hidden flex items-start justify-center pt-20 px-4">
-        <div class="glass-card w-full max-w-xl rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
-            <div class="p-4 border-b border-gray-700 flex items-center space-x-3">
-                <i data-lucide="search" class="w-5 h-5 text-gray-400"></i>
-                <input type="text" id="cmdInput" oninput="handleCommandSearch()" placeholder="Ders, konu, deneme veya sayfa ara... (ESC ile kapat)" class="w-full bg-transparent border-none text-white focus:outline-none text-sm">
-                <kbd class="px-2 py-1 bg-gray-800 text-gray-400 rounded text-xs">ESC</kbd>
-            </div>
-            <div id="cmdResults" class="max-h-80 overflow-y-auto p-2 space-y-1">
-                <!-- Search results injected here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Header / Navbar -->
-    <header class="glass-card sticky top-0 z-50 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center space-x-3">
-                <div class="p-2 bg-accent/20 rounded-xl text-accent">
-                    <i data-lucide="target" class="w-7 h-7"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">
-                        YKS Takip Sistemi
-                        <span class="text-[10px] bg-accent/20 text-accent font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">v2.0 Pro</span>
-                    </h1>
-                    <p id="greetingText" class="text-xs text-gray-400">Yükleniyor...</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3">
-                <!-- Command Palette Button -->
-                <button onclick="toggleCommandPalette()" class="hidden md:flex items-center space-x-2 bg-gray-800/60 hover:bg-gray-700/60 px-3 py-1.5 rounded-lg border border-gray-700 text-xs text-gray-400 transition">
-                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
-                    <span>Hızlı Ara...</span>
-                    <kbd class="bg-gray-900 px-1.5 py-0.5 rounded text-[10px] text-gray-300">Ctrl+K</kbd>
-                </button>
-
-                <!-- Theme Toggle -->
-                <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-gray-800/60 hover:bg-gray-700 text-gray-300 hover:text-white transition hover-lift" title="Karanlık/Aydınlık Mod">
-                    <i data-lucide="sun" id="themeIconSun" class="w-4 h-4 hidden"></i>
-                    <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4"></i>
-                </button>
-
-                <!-- Current Date -->
-                <div class="text-xs text-gray-400 font-medium hidden sm:block bg-gray-800/40 px-3 py-2 rounded-xl border border-gray-700/50" id="headerDate">--/--/----</div>
-            </div>
-        </div>
+    <header>
+        <h1>YKS Çalışma Takibi</h1>
+        <div class="status-badge" id="syncStatus">Bulut Bağlantısı Kuruluyor...</div>
     </header>
 
-    <!-- Main Navigation Tabs -->
-    <div class="glass-card border-t-0 border-x-0 border-b border-gray-800 sticky top-[73px] z-40">
-        <div class="max-w-7xl mx-auto flex space-x-2 p-2 overflow-x-auto scrollbar-none">
-            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm bg-accent text-gray-900 hover-lift">
-                <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
-                <span>Kontrol Paneli</span>
-            </button>
-            <button onclick="switchTab('exams')" id="tab-exams" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 hover-lift">
-                <i data-lucide="file-text" class="w-4 h-4"></i>
-                <span>Deneme Takibi</span>
-            </button>
-            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 hover-lift">
-                <i data-lucide="pie-chart" class="w-4 h-4"></i>
-                <span>Analiz & Grafikler</span>
-            </button>
-            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2.5 rounded-xl font-semibold flex items-center space-x-2 transition text-sm text-gray-400 hover:text-white hover:bg-gray-800/50 hover-lift">
-                <i data-lucide="settings" class="w-4 h-4"></i>
-                <span>Takvim & Yedekleme</span>
-            </button>
+    <div class="container">
+
+        <!-- Günlük Soru Sayacı -->
+        <div class="card">
+            <h2>Günlük Çözülen Soru</h2>
+            <div class="counter-box">
+                <button class="counter-btn" onclick="updateQuestions(-10)">-10</button>
+                <span class="count-display" id="questionCount">0</span>
+                <button class="counter-btn" onclick="updateQuestions(10)">+10</button>
+            </div>
         </div>
+
+        <!-- Genel İlerleme -->
+        <div class="card">
+            <h2>AYT Matematik İlerleme</h2>
+            <div id="progressText" style="font-size: 0.9rem; color: #94a3b8;">0 / 5 Konu Tamamlandı</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- AYT Matematik Konu Takibi -->
+        <div class="card full-width">
+            <h2>AYT Matematik Hedef Konular</h2>
+            <ul class="topic-list">
+                <li class="topic-item"><input type="checkbox" onchange="saveTopics()" class="topic-cb"> Fonksiyonlar & Parabol</li>
+                <li class="topic-item"><input type="checkbox" onchange="saveTopics()" class="topic-cb"> Polinomlar</li>
+                <li class="topic-item"><input type="checkbox" onchange="saveTopics()" class="topic-cb"> Trigonometri</li>
+                <li class="topic-item"><input type="checkbox" onchange="saveTopics()" class="topic-cb"> Türev</li>
+                <li class="topic-item"><input type="checkbox" onchange="saveTopics()" class="topic-cb"> İntegral</li>
+            </ul>
+        </div>
+
+        <!-- Hızlı Notlar -->
+        <div class="card full-width">
+            <h2>Bugünün Notları & Unutulmaması Gerekenler</h2>
+            <textarea id="dailyNotes" placeholder="Formülleri veya yapacaklarını buraya not al..." oninput="saveNotes()"></textarea>
+        </div>
+
     </div>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto p-4 md:p-6 flex-grow w-full z-10">
-
-        <!-- TAB 1: DASHBOARD -->
-        <section id="content-dashboard" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Panel: Input Form -->
-            <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    <span>Günlük Aktivite Ekle</span>
-                </h2>
-                <form id="activityForm" onsubmit="handleActivitySubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Tarih</label>
-                        <input type="date" id="actDate" required class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Sınav Türü</label>
-                            <select id="actExamType" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                                <option value="TYT">TYT</option>
-                                <option value="AYT">AYT</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Ders</label>
-                            <select id="actSubject" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                                <option value="Matematik">Matematik</option>
-                                <option value="Türkçe">Türkçe</option>
-                                <option value="Fizik">Fizik</option>
-                                <option value="Kimya">Kimya</option>
-                                <option value="Biyoloji">Biyoloji</option>
-                                <option value="Edebiyat">Edebiyat</option>
-                                <option value="Tarih">Tarih</option>
-                                <option value="Coğrafya">Coğrafya</option>
-                                <option value="Geometri">Geometri</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Konu</label>
-                        <input type="text" id="actTopic" placeholder="Örn: Türev / Paragraf" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Aktivite Tipi</label>
-                        <select id="actType" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white focus:outline-none focus:border-accent">
-                            <option value="Soru Çözümü">Soru Çözümü</option>
-                            <option value="Konu Anlatımı">Konu Anlatımı</option>
-                            <option value="Video İzleme">Video İzleme</option>
-                            <option value="Fasikül Çözümü">Fasikül Çözümü</option>
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Soru</label>
-                            <input type="number" id="actQuestions" min="0" value="50" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white text-center font-bold">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-green-400 mb-1">Doğru</label>
-                            <input type="number" id="actCorrect" min="0" value="45" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white text-center font-bold">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-red-400 mb-1">Yanlış</label>
-                            <input type="number" id="actWrong" min="0" value="5" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white text-center font-bold">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Çalışma Süresi (Dakika)</label>
-                        <input type="number" id="actDuration" min="0" value="45" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                    </div>
-                    <button type="submit" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-3 rounded-xl transition shadow-lg active:scale-95 flex items-center justify-center space-x-2">
-                        <i data-lucide="check-circle" class="w-5 h-5"></i>
-                        <span>Aktiviteyi Kaydet</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Right Panel: Progress Cards & Daily Logs -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Progress Bars -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="trending-up" class="w-5 h-5"></i>
-                        <span>İlerleme & Hedef Tamamlama</span>
-                    </h2>
-                    
-                    <div class="space-y-4">
-                        <!-- Daily -->
-                        <div>
-                            <div class="flex justify-between text-sm font-medium mb-1">
-                                <span id="lblDailyGoal">Günlük Soru Hedefi: 0 / 200</span>
-                                <span id="pctDaily" class="font-bold text-green-400">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden p-0.5">
-                                <div id="barDaily" class="bg-gradient-to-r from-green-500 to-emerald-400 h-2 rounded-full transition-all duration-700 shadow-md" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        <!-- Weekly -->
-                        <div>
-                            <div class="flex justify-between text-sm font-medium mb-1">
-                                <span id="lblWeeklyGoal">Haftalık Soru Hedefi: 0 / 1200</span>
-                                <span id="pctWeekly" class="font-bold text-blue-400">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden p-0.5">
-                                <div id="barWeekly" class="bg-gradient-to-r from-blue-500 to-indigo-400 h-2 rounded-full transition-all duration-700 shadow-md" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        <!-- Monthly -->
-                        <div>
-                            <div class="flex justify-between text-sm font-medium mb-1">
-                                <span id="lblMonthlyGoal">Aylık Soru Hedefi: 0 / 5000</span>
-                                <span id="pctMonthly" class="font-bold text-purple-400">0%</span>
-                            </div>
-                            <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden p-0.5">
-                                <div id="barMonthly" class="bg-gradient-to-r from-purple-500 to-pink-400 h-2 rounded-full transition-all duration-700 shadow-md" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Daily Table Log with Filtering -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                        <h2 class="text-lg font-bold text-accent flex items-center space-x-2">
-                            <i data-lucide="list" class="w-5 h-5"></i>
-                            <span>Seçili Tarihteki Çalışmalar</span>
-                        </h2>
-                        <!-- Filter / Search bar inside table -->
-                        <div class="flex items-center space-x-2 w-full sm:w-auto">
-                            <input type="text" id="tableFilter" oninput="filterDailyLogs()" placeholder="Ders/Konu Filtrele..." class="bg-gray-800/60 border border-gray-700 text-xs text-white px-3 py-1.5 rounded-lg focus:outline-none focus:border-accent w-full sm:w-48">
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-gray-800/80 text-accent font-semibold uppercase text-xs">
-                                <tr>
-                                    <th class="p-3">Sınav</th>
-                                    <th class="p-3">Ders</th>
-                                    <th class="p-3">Konu</th>
-                                    <th class="p-3">Aktivite</th>
-                                    <th class="p-3">Soru</th>
-                                    <th class="p-3">D/Y</th>
-                                    <th class="p-3">Süre</th>
-                                    <th class="p-3 text-right">İşlem</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dailyTableBody" class="divide-y divide-gray-800/50">
-                                <!-- Skeleton Loading Placeholder (default) -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: EXAMS -->
-        <section id="content-exams" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Exam Entry Form -->
-            <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="award" class="w-5 h-5"></i>
-                    <span>Deneme Sonucu Ekle</span>
-                </h2>
-                <form id="examForm" onsubmit="handleExamSubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Tarih</label>
-                        <input type="date" id="examDate" required class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Deneme Türü</label>
-                        <select id="examType" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                            <option value="TYT">TYT</option>
-                            <option value="AYT">AYT</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 mb-1">Deneme Adı / Yayın</label>
-                        <input type="text" id="examName" placeholder="Örn: Özdebir 1. Genel Deneme" required class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Türkçe Net</label>
-                            <input type="number" step="0.25" id="netTr" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Matematik Net</label>
-                            <input type="number" step="0.25" id="netMat" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Fen / Sos2 Net</label>
-                            <input type="number" step="0.25" id="netFen" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Sosyal / Edeb Net</label>
-                            <input type="number" step="0.25" id="netSos" value="0" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2 text-white">
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-3 rounded-xl transition shadow-lg active:scale-95 flex items-center justify-center space-x-2">
-                        <i data-lucide="save" class="w-5 h-5"></i>
-                        <span>Denemeyi Kaydet</span>
-                    </button>
-                </form>
-            </div>
-
-            <!-- Exam History Table -->
-            <div class="lg:col-span-2 glass-card p-6 rounded-2xl shadow-xl">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="history" class="w-5 h-5"></i>
-                    <span>Deneme Geçmişi</span>
-                </h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-gray-800/80 text-accent font-semibold uppercase text-xs">
-                            <tr>
-                                <th class="p-3">Tarih</th>
-                                <th class="p-3">Tür</th>
-                                <th class="p-3">Deneme Adı</th>
-                                <th class="p-3">TR</th>
-                                <th class="p-3">MAT</th>
-                                <th class="p-3">FEN</th>
-                                <th class="p-3">SOS</th>
-                                <th class="p-3 text-accent font-bold">Toplam Net</th>
-                                <th class="p-3 text-right">İşlem</th>
-                            </tr>
-                        </thead>
-                        <tbody id="examTableBody" class="divide-y divide-gray-800/50">
-                            <!-- Dynamic Rows -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: ANALYTICS -->
-        <section id="content-analytics" class="tab-content hidden space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Net Progress Chart -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="line-chart" class="w-5 h-5"></i>
-                        <span>Deneme Net Değişimi (Zaman İçinde)</span>
-                    </h2>
-                    <div class="relative h-72">
-                        <canvas id="chartExams"></canvas>
-                    </div>
-                </div>
-
-                <!-- Subject Distribution Chart -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="pie-chart" class="w-5 h-5"></i>
-                        <span>Derslere Göre Toplam Soru Dağılımı</span>
-                    </h2>
-                    <div class="relative h-72 flex items-center justify-center">
-                        <canvas id="chartDistribution"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: SETTINGS & BACKUP -->
-        <section id="content-settings" class="tab-content hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Goal & Backup Settings -->
-            <div class="glass-card p-6 rounded-2xl shadow-xl space-y-6 hover-lift">
-                <div>
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="sliders" class="w-5 h-5"></i>
-                        <span>Hedef Parametreleri</span>
-                    </h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Varsayılan Günlük Soru Hedefi</label>
-                            <input type="number" id="cfgDailyGoal" min="10" max="1000" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                        </div>
-                        <button onclick="saveGoalSetting()" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-2.5 rounded-xl transition shadow">
-                            Hedefi Güncelle
-                        </button>
-                    </div>
-                </div>
-
-                <hr class="border-gray-800">
-
-                <div>
-                    <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                        <i data-lucide="download-cloud" class="w-5 h-5"></i>
-                        <span>Veri Yedekleme & Geri Yükleme</span>
-                    </h2>
-                    <p class="text-xs text-gray-400 mb-4">
-                        Verileriniz otomatik olarak tarayıcınızda saklanır. Başka cihaza aktarmak veya güvenceye almak için aşağıdaki butonları kullanabilirsiniz.
-                    </p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button onclick="exportData()" class="bg-emerald-500 hover:bg-emerald-600 text-gray-900 font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 shadow">
-                            <i data-lucide="download" class="w-4 h-4"></i>
-                            <span>Verileri İndir (JSON)</span>
-                        </button>
-                        <label class="bg-purple-500 hover:bg-purple-600 text-gray-900 font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center space-x-2 cursor-pointer shadow">
-                            <i data-lucide="upload" class="w-4 h-4"></i>
-                            <span>Yedek Yükle</span>
-                            <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendar & Off-Day Selector -->
-            <div class="glass-card p-6 rounded-2xl shadow-xl hover-lift">
-                <h2 class="text-lg font-bold text-accent mb-4 flex items-center space-x-2">
-                    <i data-lucide="calendar" class="w-5 h-5"></i>
-                    <span>Çalışma Takvimi & Pas (Off-Day) Gün Ayarları</span>
-                </h2>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Tarih Seç</label>
-                            <input type="date" id="cfgDate" onchange="loadDayStatus()" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-400 mb-1">Gün Durumu</label>
-                            <select id="cfgStatus" class="w-full bg-gray-800/60 border border-gray-700 rounded-xl p-2.5 text-white">
-                                <option value="Aktif">Aktif Çalışma Günü</option>
-                                <option value="Pas/Off">Pas / İstirahat Günü (Off-Day)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button onclick="saveDayStatus()" class="w-full bg-accent hover:bg-accentHover text-gray-900 font-bold py-2.5 rounded-xl transition shadow">
-                        Seçili Günün Durumunu Kaydet
-                    </button>
-                    <p class="text-xs text-gray-400 mt-2">
-                        💡 <b>Bilgi:</b> Pas/Off olarak işaretlediğiniz günler haftalık ve aylık soru hedef ortalamanızı düşürmez. Pazar günleri varsayılan olarak Pas gün kabul edilir.
-                    </p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="glass-card border-t border-x-0 border-b-0 border-gray-800 p-4 text-center text-xs text-gray-500 mt-auto z-10">
-        YKS Hazırlık & Performans Portalı &bull; Tüm verileriniz tarayıcınızda (LocalStorage) güvendedir.
-    </footer>
-
-    <!-- Audio Web API for Haptic/Sound Feedback -->
     <script>
-        // Web Audio API Beeps
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playFeedbackSound(type = 'success') {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                if (type === 'success') {
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                    osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); // A5
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                } else if (type === 'delete') {
-                    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                    osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.25);
-                }
-            } catch(e) { }
-            
-            // Haptic feedback for Mobile
-            if (navigator.vibrate) {
-                navigator.vibrate(type === 'success' ? [40, 30, 40] : 60);
-            }
-        }
-
-        // --- Toast Notifications ---
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast-enter flex items-center space-x-3 px-4 py-3 rounded-xl shadow-2xl text-sm font-semibold text-white pointer-events-auto border border-white/10 ${
-                type === 'success' ? 'bg-emerald-600/90' : type === 'error' ? 'bg-rose-600/90' : 'bg-blue-600/90'
-            }`;
-            
-            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-circle' : 'info';
-            toast.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5"></i><span>${message}</span>`;
-            
-            container.appendChild(toast);
-            lucide.createIcons();
-
-            setTimeout(() => {
-                toast.classList.remove('toast-enter');
-                toast.classList.add('toast-exit');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // --- Skeleton Loading Placeholder ---
-        function showSkeletonLoading() {
-            const tbody = document.getElementById('dailyTableBody');
-            tbody.innerHTML = '';
-            for (let i = 0; i < 3; i++) {
-                const tr = document.createElement('tr');
-                tr.className = "animate-pulse";
-                tr.innerHTML = `
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-12"></div></td>
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-20"></div></td>
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-24"></div></td>
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-20"></div></td>
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-10"></div></td>
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-16"></div></td>
-                    <td class="p-3"><div class="h-4 bg-gray-700/50 rounded w-12"></div></td>
-                    <td class="p-3 text-right"><div class="h-4 bg-gray-700/50 rounded w-8 ml-auto"></div></td>
-                `;
-                tbody.appendChild(tr);
-            }
-        }
-
-        // --- Dynamic Time-based Greeting ---
-        function updateGreeting() {
-            const hour = new Date().getHours();
-            let msg = "";
-            if (hour >= 5 && hour < 12) msg = "Günaydın! Bugünkü hedeflerine odaklanma vakti ☀️";
-            else if (hour >= 12 && hour < 18) msg = "Tünaydın! Çalışma temposunu düşürmeden devam et 💪";
-            else if (hour >= 18 && hour < 23) msg = "İyi akşamlar! Günlük verimliliğini gözden geçirelim 🌙";
-            else msg = "İyi geceler! Gece çalışanların başarısı bir başkadır 🌌";
-            
-            document.getElementById('greetingText').innerText = msg;
-        }
-
-        // --- Dark / Light Theme Toggle ---
-        function toggleTheme() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            document.getElementById('themeIconSun').classList.toggle('hidden', !isDark);
-            document.getElementById('themeIconMoon').classList.toggle('hidden', isDark);
-            localStorage.setItem('yks_theme', isDark ? 'dark' : 'light');
-            showToast(`Sistem teması ${isDark ? 'Karanlık' : 'Aydınlık'} moda alındı`, 'info');
-        }
-
-        // Init Theme
-        if (localStorage.getItem('yks_theme') === 'light') {
-            document.documentElement.classList.remove('dark');
-            document.getElementById('themeIconSun').classList.remove('hidden');
-            document.getElementById('themeIconMoon').classList.add('hidden');
-        }
-
-        // --- Command Palette Shortcuts (Ctrl+K) ---
-        window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                toggleCommandPalette();
-            } else if (e.key === 'Escape') {
-                document.getElementById('commandModal').classList.add('hidden');
-            }
-        });
-
-        function toggleCommandPalette() {
-            const modal = document.getElementById('commandModal');
-            modal.classList.toggle('hidden');
-            if (!modal.classList.contains('hidden')) {
-                document.getElementById('cmdInput').focus();
-                handleCommandSearch();
-            }
-        }
-
-        function handleCommandSearch() {
-            const query = document.getElementById('cmdInput').value.toLowerCase();
-            const resultsContainer = document.getElementById('cmdResults');
-            resultsContainer.innerHTML = '';
-
-            const items = [
-                { title: 'Kontrol Paneline Git', icon: 'layout-dashboard', action: () => { switchTab('dashboard'); toggleCommandPalette(); } },
-                { title: 'Deneme Takibine Git', icon: 'file-text', action: () => { switchTab('exams'); toggleCommandPalette(); } },
-                { title: 'Analiz & Grafiklere Git', icon: 'pie-chart', action: () => { switchTab('analytics'); toggleCommandPalette(); } },
-                { title: 'Takvim & Ayarlara Git', icon: 'settings', action: () => { switchTab('settings'); toggleCommandPalette(); } },
-                { title: 'Verileri İndir (JSON)', icon: 'download', action: () => { exportData(); toggleCommandPalette(); } },
-            ];
-
-            // Add subject logs matching search
-            appData.logs.forEach(log => {
-                if (log.subject.toLowerCase().includes(query) || log.topic.toLowerCase().includes(query)) {
-                    items.push({
-                        title: `Çalışma Kaydı: ${log.subject} - ${log.topic} (${log.questions} Soru)`,
-                        icon: 'book-open',
-                        action: () => {
-                            document.getElementById('actDate').value = log.date;
-                            switchTab('dashboard');
-                            refreshDashboard();
-                            toggleCommandPalette();
-                        }
-                    });
-                }
-            });
-
-            const filtered = items.filter(item => item.title.toLowerCase().includes(query));
-
-            filtered.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "p-3 hover:bg-gray-800/80 rounded-xl cursor-pointer flex items-center space-x-3 text-sm text-gray-200 transition";
-                div.innerHTML = `<i data-lucide="${item.icon}" class="w-4 h-4 text-accent"></i><span>${item.title}</span>`;
-                div.onclick = item.action;
-                resultsContainer.appendChild(div);
-            });
-            lucide.createIcons();
-        }
-
-        // --- Application State Storage ---
-        let appData = {
-            logs: [],
-            exams: [],
-            calendarConfig: {},
-            settings: { dailyGoal: 200 }
+        // Firebase Yapılandırması (Otomatik Aktarıldı)
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_R0bm-zfNMMJngyD91SvqRJAw1ZePY8A",
+            authDomain: "yks-takip-e070d.firebaseapp.com",
+            databaseURL: "https://yks-takip-e070d-default-rtdb.firebaseio.com",
+            projectId: "yks-takip-e070d",
+            storageBucket: "yks-takip-e070d.firebasestorage.app",
+            messagingSenderId: "422766842394",
+            appId: "1:422766842394:web:67f0d0907d5cd33bb637a3"
         };
 
-        let chartExamsInstance = null;
-        let chartDistInstance = null;
+        // Firebase Başlatma
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-        // --- Application Setup ---
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            loadLocalStorage();
-            updateGreeting();
+        let currentQuestionCount = 0;
 
-            const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById('actDate').value = todayStr;
-            document.getElementById('examDate').value = todayStr;
-            document.getElementById('cfgDate').value = todayStr;
-            document.getElementById('headerDate').innerText = new Date().toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            
-            document.getElementById('cfgDailyGoal').value = appData.settings.dailyGoal;
-
-            document.getElementById('actDate').addEventListener('change', () => {
-                showSkeletonLoading();
-                setTimeout(refreshDashboard, 200);
-            });
-
-            showSkeletonLoading();
-            setTimeout(() => {
-                loadDayStatus();
-                refreshDashboard();
-                refreshExams();
-                initCharts();
-            }, 300);
+        // Bulut Verisi Dinleyici (Canlı Senkronizasyon)
+        db.ref('yks_data').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (data.questions !== undefined) {
+                    currentQuestionCount = data.questions;
+                    document.getElementById('questionCount').innerText = currentQuestionCount;
+                }
+                if (data.notes !== undefined && document.activeElement !== document.getElementById('dailyNotes')) {
+                    document.getElementById('dailyNotes').value = data.notes;
+                }
+                if (data.topics) {
+                    const checkboxes = document.querySelectorAll('.topic-cb');
+                    checkboxes.forEach((cb, index) => {
+                        cb.checked = !!data.topics['topic_' + index];
+                    });
+                    updateProgressBar();
+                }
+            }
+            document.getElementById('syncStatus').innerText = "☁️ Canlı Senkronize";
+            document.getElementById('syncStatus').style.background = "#16a34a";
         });
 
-        // --- LocalStorage ---
-        function loadLocalStorage() {
-            const saved = localStorage.getItem('yks_tracker_data');
-            if (saved) {
-                try { appData = JSON.parse(saved); } catch(e) {}
-            }
+        function updateQuestions(val) {
+            currentQuestionCount = Math.max(0, currentQuestionCount + val);
+            document.getElementById('questionCount').innerText = currentQuestionCount;
+            db.ref('yks_data/questions').set(currentQuestionCount);
         }
 
-        function saveLocalStorage() {
-            localStorage.setItem('yks_tracker_data', JSON.stringify(appData));
+        function saveNotes() {
+            const notes = document.getElementById('dailyNotes').value;
+            db.ref('yks_data/notes').set(notes);
         }
 
-        // --- Export / Import ---
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `YKS_Takip_Yedek_${new Date().toISOString().split('T')[0]}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-            showToast("Tüm çalışma verileriniz başarıyla indirildi!", 'success');
-            playFeedbackSound('success');
+        function saveTopics() {
+            const checkboxes = document.querySelectorAll('.topic-cb');
+            let topicData = {};
+            checkboxes.forEach((cb, index) => {
+                topicData['topic_' + index] = cb.checked;
+            });
+            db.ref('yks_data/topics').set(topicData);
+            updateProgressBar();
         }
 
-        function importData(event) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const imported = JSON.parse(e.target.result);
-                    if (imported.logs && imported.exams) {
-                        appData = imported;
-                        saveLocalStorage();
-                        showToast("Yedek dosyası başarıyla yüklendi!", 'success');
-                        playFeedbackSound('success');
-                        refreshDashboard();
-                        refreshExams();
-                        updateCharts();
-                    } else {
-                        showToast("Geçersiz yedek dosyası formatı!", 'error');
-                    }
-                } catch (err) {
-                    showToast("Dosya okunurken bir hata oluştu.", 'error');
-                }
-            };
-            if (event.target.files[0]) {
-                reader.readAsText(event.target.files[0]);
-            }
-        }
-
-        // --- Tab Switch ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-accent', 'text-gray-900');
-                btn.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-gray-800/50');
+        function updateProgressBar() {
+            const checkboxes = document.querySelectorAll('.topic-cb');
+            let checkedCount = 0;
+            checkboxes.forEach((cb) => {
+                if(cb.checked) checkedCount++;
             });
 
-            document.getElementById(`content-${tabId}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`tab-${tabId}`);
-            activeBtn.classList.add('bg-accent', 'text-gray-900');
-            activeBtn.classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-gray-800/50');
-
-            if (tabId === 'analytics') {
-                updateCharts();
-            }
-        }
-
-        // --- Day Status ---
-        function getDayType(dateStr) {
-            if (appData.calendarConfig[dateStr]) return appData.calendarConfig[dateStr];
-            return new Date(dateStr).getDay() === 0 ? 'Pas/Off' : 'Aktif';
-        }
-
-        function loadDayStatus() {
-            const dateStr = document.getElementById('cfgDate').value;
-            if (dateStr) document.getElementById('cfgStatus').value = getDayType(dateStr);
-        }
-
-        function saveDayStatus() {
-            const dateStr = document.getElementById('cfgDate').value;
-            const status = document.getElementById('cfgStatus').value;
-            appData.calendarConfig[dateStr] = status;
-            saveLocalStorage();
-            showToast(`${dateStr} tarihi "${status}" olarak kaydedildi`, 'info');
-            playFeedbackSound('success');
-            refreshDashboard();
-        }
-
-        function saveGoalSetting() {
-            const val = parseInt(document.getElementById('cfgDailyGoal').value);
-            if (val > 0) {
-                appData.settings.dailyGoal = val;
-                saveLocalStorage();
-                showToast("Günlük soru hedefi güncellendi!", 'success');
-                playFeedbackSound('success');
-                refreshDashboard();
-            }
-        }
-
-        // --- Activities ---
-        function handleActivitySubmit(e) {
-            e.preventDefault();
-            const log = {
-                id: Date.now(),
-                date: document.getElementById('actDate').value,
-                examType: document.getElementById('actExamType').value,
-                subject: document.getElementById('actSubject').value,
-                topic: document.getElementById('actTopic').value || '-',
-                actType: document.getElementById('actType').value,
-                questions: parseInt(document.getElementById('actQuestions').value) || 0,
-                correct: parseInt(document.getElementById('actCorrect').value) || 0,
-                wrong: parseInt(document.getElementById('actWrong').value) || 0,
-                duration: parseInt(document.getElementById('actDuration').value) || 0,
-            };
-
-            appData.logs.push(log);
-            saveLocalStorage();
-
-            document.getElementById('actTopic').value = '';
-            showToast("Aktivite başarıyla eklendi!", 'success');
-            playFeedbackSound('success');
-            refreshDashboard();
-        }
-
-        function deleteActivity(id) {
-            appData.logs = appData.logs.filter(l => l.id !== id);
-            saveLocalStorage();
-            showToast("Aktivite kaydı silindi.", 'info');
-            playFeedbackSound('delete');
-            refreshDashboard();
-        }
-
-        function filterDailyLogs() {
-            refreshDashboard();
-        }
-
-        function refreshDashboard() {
-            const selectedDate = document.getElementById('actDate').value;
-            const filterText = (document.getElementById('tableFilter')?.value || '').toLowerCase();
-
-            const tbody = document.getElementById('dailyTableBody');
-            tbody.innerHTML = '';
-            
-            const filteredLogs = appData.logs.filter(l => 
-                l.date === selectedDate && 
-                (l.subject.toLowerCase().includes(filterText) || l.topic.toLowerCase().includes(filterText))
-            );
-            
-            let dailyTotalQuestions = 0;
-
-            if (filteredLogs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-gray-400 text-xs">Bu tarih veya filtreye ait çalışma bulunamadı.</td></tr>`;
-            } else {
-                filteredLogs.forEach(l => {
-                    dailyTotalQuestions += l.questions;
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-gray-800/40 transition";
-                    tr.innerHTML = `
-                        <td class="p-3 font-semibold text-accent">${l.examType}</td>
-                        <td class="p-3">${l.subject}</td>
-                        <td class="p-3 text-gray-400">${l.topic}</td>
-                        <td class="p-3">${l.actType}</td>
-                        <td class="p-3 font-bold">${l.questions}</td>
-                        <td class="p-3"><span class="text-green-400 font-medium">${l.correct}D</span> / <span class="text-red-400 font-medium">${l.wrong}Y</span></td>
-                        <td class="p-3">${l.duration} dk</td>
-                        <td class="p-3 text-right">
-                            <button onclick="deleteActivity(${l.id})" class="text-red-400 hover:text-red-300 p-1.5 hover:bg-red-400/10 rounded-lg transition">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-            lucide.createIcons();
-
-            // Goals Calculation
-            const dayType = getDayType(selectedDate);
-            const dailyGoal = dayType === 'Pas/Off' ? 0 : appData.settings.dailyGoal;
-
-            if (dailyGoal > 0) {
-                const pct = Math.min(Math.round((dailyTotalQuestions / dailyGoal) * 100), 100);
-                document.getElementById('lblDailyGoal').innerText = `Günlük Soru Hedefi (${dayType}): ${dailyTotalQuestions} / ${dailyGoal}`;
-                document.getElementById('pctDaily').innerText = `${pct}%`;
-                document.getElementById('barDaily').style.width = `${pct}%`;
-            } else {
-                document.getElementById('lblDailyGoal').innerText = `Günlük Soru Hedefi (${dayType}): ${dailyTotalQuestions} Soru (Pas Günü)`;
-                document.getElementById('pctDaily').innerText = `100%`;
-                document.getElementById('barDaily').style.width = `100%`;
-            }
-
-            // Weekly
-            const currDateObj = new Date(selectedDate);
-            const dayOfWeek = (currDateObj.getDay() + 6) % 7;
-            const monday = new Date(currDateObj);
-            monday.setDate(currDateObj.getDate() - dayOfWeek);
-
-            let weeklyQuestions = 0, weeklyGoal = 0;
-            for (let i = 0; i < 7; i++) {
-                const d = new Date(monday);
-                d.setDate(monday.getDate() + i);
-                const dStr = d.toISOString().split('T')[0];
-                if (getDayType(dStr) === 'Aktif') weeklyGoal += appData.settings.dailyGoal;
-                appData.logs.filter(l => l.date === dStr).forEach(l => weeklyQuestions += l.questions);
-            }
-
-            if (weeklyGoal > 0) {
-                const wPct = Math.min(Math.round((weeklyQuestions / weeklyGoal) * 100), 100);
-                document.getElementById('lblWeeklyGoal').innerText = `Haftalık Soru Hedefi: ${weeklyQuestions} / ${weeklyGoal}`;
-                document.getElementById('pctWeekly').innerText = `${wPct}%`;
-                document.getElementById('barWeekly').style.width = `${wPct}%`;
-            }
-
-            // Monthly
-            const year = currDateObj.getFullYear();
-            const month = currDateObj.getMonth();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-            let monthlyQuestions = 0, monthlyGoal = 0;
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dStr = new Date(year, month, day).toISOString().split('T')[0];
-                if (getDayType(dStr) === 'Aktif') monthlyGoal += appData.settings.dailyGoal;
-                appData.logs.filter(l => l.date === dStr).forEach(l => monthlyQuestions += l.questions);
-            }
-
-            if (monthlyGoal > 0) {
-                const mPct = Math.min(Math.round((monthlyQuestions / monthlyGoal) * 100), 100);
-                document.getElementById('lblMonthlyGoal').innerText = `Aylık Soru Hedefi: ${monthlyQuestions} / ${monthlyGoal}`;
-                document.getElementById('pctMonthly').innerText = `${mPct}%`;
-                document.getElementById('barMonthly').style.width = `${mPct}%`;
-            }
-        }
-
-        // --- Exams ---
-        function handleExamSubmit(e) {
-            e.preventDefault();
-            const tr = parseFloat(document.getElementById('netTr').value) || 0;
-            const mat = parseFloat(document.getElementById('netMat').value) || 0;
-            const fen = parseFloat(document.getElementById('netFen').value) || 0;
-            const sos = parseFloat(document.getElementById('netSos').value) || 0;
-
-            const exam = {
-                id: Date.now(),
-                date: document.getElementById('examDate').value,
-                type: document.getElementById('examType').value,
-                name: document.getElementById('examName').value,
-                tr, mat, fen, sos,
-                total: tr + mat + fen + sos
-            };
-
-            appData.exams.push(exam);
-            saveLocalStorage();
-            document.getElementById('examName').value = '';
-            showToast("Deneme sonucu kaydedildi!", 'success');
-            playFeedbackSound('success');
-            refreshExams();
-        }
-
-        function deleteExam(id) {
-            appData.exams = appData.exams.filter(e => e.id !== id);
-            saveLocalStorage();
-            showToast("Deneme kaydı silindi.", 'info');
-            playFeedbackSound('delete');
-            refreshExams();
-        }
-
-        function refreshExams() {
-            const tbody = document.getElementById('examTableBody');
-            tbody.innerHTML = '';
-            const sorted = [...appData.exams].sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            sorted.forEach(e => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-800/40 transition";
-                tr.innerHTML = `
-                    <td class="p-3 text-gray-400">${e.date}</td>
-                    <td class="p-3 font-semibold text-accent">${e.type}</td>
-                    <td class="p-3 font-medium">${e.name}</td>
-                    <td class="p-3">${e.tr}</td>
-                    <td class="p-3">${e.mat}</td>
-                    <td class="p-3">${e.fen}</td>
-                    <td class="p-3">${e.sos}</td>
-                    <td class="p-3 font-bold text-accent">${e.total} Net</td>
-                    <td class="p-3 text-right">
-                        <button onclick="deleteExam(${e.id})" class="text-red-400 hover:text-red-300 p-1.5 hover:bg-red-400/10 rounded-lg transition">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-            lucide.createIcons();
-        }
-
-        // --- Charts ---
-        function initCharts() {
-            const ctxExams = document.getElementById('chartExams').getContext('2d');
-            chartExamsInstance = new Chart(ctxExams, {
-                type: 'line',
-                data: { labels: [], datasets: [] },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#cdd6f4' } } },
-                    scales: {
-                        x: { ticks: { color: '#cdd6f4' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                        y: { ticks: { color: '#cdd6f4' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-                    }
-                }
-            });
-
-            const ctxDist = document.getElementById('chartDistribution').getContext('2d');
-            chartDistInstance = new Chart(ctxDist, {
-                type: 'doughnut',
-                data: { labels: [], datasets: [] },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#cdd6f4' } } }
-                }
-            });
-        }
-
-        function updateCharts() {
-            if (!chartExamsInstance || !chartDistInstance) return;
-
-            const sortedExams = [...appData.exams].sort((a, b) => new Date(a.date) - new Date(b.date));
-            const dates = sortedExams.map(e => e.date);
-            const tytNets = sortedExams.filter(e => e.type === 'TYT').map(e => ({ x: e.date, y: e.total }));
-            const aytNets = sortedExams.filter(e => e.type === 'AYT').map(e => ({ x: e.date, y: e.total }));
-
-            chartExamsInstance.data.labels = [...new Set(dates)];
-            chartExamsInstance.data.datasets = [
-                {
-                    label: 'TYT Toplam Net',
-                    data: tytNets,
-                    borderColor: '#89b4fa',
-                    backgroundColor: 'rgba(137, 180, 250, 0.15)',
-                    tension: 0.4,
-                    fill: true
-                },
-                {
-                    label: 'AYT Toplam Net',
-                    data: aytNets,
-                    borderColor: '#a6e3a1',
-                    backgroundColor: 'rgba(166, 227, 161, 0.15)',
-                    tension: 0.4,
-                    fill: true
-                }
-            ];
-            chartExamsInstance.update();
-
-            const subjectTotals = {};
-            appData.logs.forEach(l => {
-                subjectTotals[l.subject] = (subjectTotals[l.subject] || 0) + l.questions;
-            });
-
-            chartDistInstance.data.labels = Object.keys(subjectTotals);
-            chartDistInstance.data.datasets = [{
-                data: Object.values(subjectTotals),
-                backgroundColor: [
-                    '#89b4fa', '#a6e3a1', '#f9e2af', '#f38ba8', '#cba6f7', '#fab387', '#94e2d5', '#89dceb'
-                ]
-            }];
-            chartDistInstance.update();
+            const percent = (checkedCount / checkboxes.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').innerText = checkedCount + ' / ' + checkboxes.length + ' Konu Tamamlandı';
         }
     </script>
+
 </body>
 </html>
