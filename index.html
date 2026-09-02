@@ -80,54 +80,54 @@
         .dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
 
         .soft-card {
-            background: rgba(255,255,255,0.86);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(0,0,0,0.055);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 28px -12px rgba(0,0,0,0.10);
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: 0 1px 1px rgba(0,0,0,0.02), 0 10px 24px -14px rgba(0,0,0,0.06);
         }
         .dark .soft-card {
-            background: rgba(28,28,30,0.78);
-            border: 1px solid rgba(255,255,255,0.07);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 16px 34px -14px rgba(0,0,0,0.55);
+            background: rgba(28,28,30,0.62);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 1px 1px rgba(0,0,0,0.2), 0 12px 28px -16px rgba(0,0,0,0.4);
         }
         .glass-nav {
-            background: rgba(255,255,255,0.72);
-            backdrop-filter: blur(22px) saturate(180%);
-            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(26px) saturate(150%);
+            -webkit-backdrop-filter: blur(26px) saturate(150%);
         }
-        .dark .glass-nav { background: rgba(10,10,12,0.65); }
+        .dark .glass-nav { background: rgba(10,10,12,0.55); }
 
-        .hover-lift { transition: transform 0.45s var(--ease-apple), box-shadow 0.45s var(--ease-apple); }
-        .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 24px 40px -16px rgba(0,113,227,0.18); }
-        .dark .hover-lift:hover { box-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 24px 40px -16px rgba(0,113,227,0.28); }
+        .hover-lift { transition: transform 0.5s var(--ease-apple), box-shadow 0.5s var(--ease-apple); }
+        .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 1px 1px rgba(0,0,0,0.02), 0 18px 32px -18px rgba(0,113,227,0.10); }
+        .dark .hover-lift:hover { box-shadow: 0 1px 1px rgba(0,0,0,0.2), 0 18px 32px -18px rgba(0,113,227,0.18); }
 
         .press-scale { transition: transform 0.15s var(--ease-apple), filter 0.2s ease; }
-        .press-scale:active { transform: scale(0.965); }
+        .press-scale:active { transform: scale(0.975); }
 
         .input-soft {
-            background: rgba(118,118,128,0.07);
+            background: rgba(118,118,128,0.05);
             border: 1px solid transparent;
         }
-        .dark .input-soft { background: rgba(118,118,128,0.22); }
+        .dark .input-soft { background: rgba(118,118,128,0.16); }
         .input-soft:focus {
             background: #ffffff;
-            border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0,113,227,0.14);
+            border-color: rgba(0,113,227,0.5);
+            box-shadow: 0 0 0 3px rgba(0,113,227,0.09);
             outline: none;
         }
         .dark .input-soft:focus {
-            background: rgba(28,28,30,0.9);
-            box-shadow: 0 0 0 4px rgba(0,113,227,0.28);
+            background: rgba(28,28,30,0.85);
+            box-shadow: 0 0 0 3px rgba(0,113,227,0.18);
         }
 
         .btn-primary {
-            background: linear-gradient(180deg, #0a84ff, #0071e3);
-            box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 20px -6px rgba(0,113,227,0.55);
+            background: linear-gradient(180deg, #3d97f5, #2f80e0);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 6px 16px -6px rgba(0,113,227,0.32);
         }
-        .btn-primary:hover { background: linear-gradient(180deg, #1a8fff, #0077ed); }
+        .btn-primary:hover { background: linear-gradient(180deg, #4a9ff7, #3585e6); }
 
-        .bar-fill { transition: width 0.85s var(--ease-apple); background-size: 200% 100%; }
+        .bar-fill { transition: width 1s var(--ease-apple); background-size: 200% 100%; }
         .bar-fill::after { content: ''; }
 
         @keyframes shimmer {
@@ -135,9 +135,9 @@
             100% { background-position: -200% 0; }
         }
         .bar-glow {
-            background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+            background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             background-size: 60% 100%;
-            animation: shimmer 2.4s linear infinite;
+            animation: shimmer 3.2s linear infinite;
         }
 
         @keyframes slideInRight {
@@ -182,14 +182,14 @@
             background-clip: text;
         }
         .stat-num-accent {
-            background: linear-gradient(120deg, #0071e3, #8a3ffc);
+            background: linear-gradient(120deg, #3d97f5, #a78bfa);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
         /* Apple-style hero headline */
-        .hero-title { font-weight: 700; letter-spacing: -0.045em; line-height: 1.05; }
+        .hero-title { font-weight: 600; letter-spacing: -0.04em; line-height: 1.08; }
         .hero-subtitle { letter-spacing: -0.015em; }
 
         @media (prefers-reduced-motion: reduce) {
@@ -212,9 +212,9 @@
 <body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden">
 
     <!-- Ambient background glows -->
-    <div class="fixed top-[-160px] left-[-160px] w-[32rem] h-[32rem] bg-blue-200/35 dark:bg-blue-900/10 rounded-full blur-3xl pointer-events-none animate-float"></div>
-    <div class="fixed bottom-[-160px] right-[-160px] w-[32rem] h-[32rem] bg-purple-200/30 dark:bg-purple-900/10 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -4s;"></div>
-    <div class="fixed top-1/3 right-[-120px] w-80 h-80 bg-teal-200/25 dark:bg-teal-900/10 rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -2s;"></div>
+    <div class="fixed top-[-160px] left-[-160px] w-[32rem] h-[32rem] bg-blue-200/20 dark:bg-blue-900/[0.06] rounded-full blur-3xl pointer-events-none animate-float"></div>
+    <div class="fixed bottom-[-160px] right-[-160px] w-[32rem] h-[32rem] bg-purple-200/[0.15] dark:bg-purple-900/[0.05] rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -4s;"></div>
+    <div class="fixed top-1/3 right-[-120px] w-80 h-80 bg-teal-200/10 dark:bg-teal-900/[0.04] rounded-full blur-3xl pointer-events-none animate-float" style="animation-delay: -2s;"></div>
 
     <!-- Toast Container -->
     <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col space-y-2 pointer-events-none"></div>
@@ -264,40 +264,44 @@
 
     <!-- Navigation Bar -->
     <div class="glass-nav border-t-0 border-x-0 border-b border-black/5 dark:border-white/10 sticky top-[73px] z-40">
-        <div class="max-w-7xl mx-auto flex space-x-2 px-6 py-2.5 overflow-x-auto scrollbar-none">
-            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs bg-brand text-white shadow-md">
+        <div class="max-w-7xl mx-auto flex space-x-2 px-6 py-3 overflow-x-auto scrollbar-none">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs bg-brand text-white shadow-sm">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                 <span>Kontrol Paneli</span>
             </button>
-            <button onclick="switchTab('exams')" id="tab-exams" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('exams')" id="tab-exams" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="file-text" class="w-4 h-4"></i>
                 <span>Deneme Takibi</span>
             </button>
-            <button onclick="switchTab('tekrar')" id="tab-tekrar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('tekrar')" id="tab-tekrar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="book-open" class="w-4 h-4"></i>
                 <span>Yanlış Defteri</span>
             </button>
-            <button onclick="switchTab('konular')" id="tab-konular" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('konular')" id="tab-konular" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="video" class="w-4 h-4"></i>
                 <span>Konu İlerlemesi</span>
             </button>
-            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="pie-chart" class="w-4 h-4"></i>
                 <span>Analiz & Grafikler</span>
             </button>
-            <button onclick="switchTab('mufredat')" id="tab-mufredat" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('mufredat')" id="tab-mufredat" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="list-checks" class="w-4 h-4"></i>
                 <span>Müfredat</span>
             </button>
-            <button onclick="switchTab('plan')" id="tab-plan" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('plan')" id="tab-plan" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                 <span>Plan</span>
             </button>
-            <button onclick="switchTab('liderlik')" id="tab-liderlik" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('liderlik')" id="tab-liderlik" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="trophy" class="w-4 h-4"></i>
                 <span>Liderlik</span>
             </button>
-            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+            <button onclick="switchTab('notlar')" id="tab-notlar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                <i data-lucide="mic" class="w-4 h-4"></i>
+                <span>Notlar</span>
+            </button>
+            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="settings" class="w-4 h-4"></i>
                 <span>Hedefler & Ayarlar</span>
             </button>
@@ -305,10 +309,10 @@
     </div>
 
     <!-- Main Content Layout -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-grow w-full z-10">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-10 flex-grow w-full z-10">
 
         <!-- TAB 1: DASHBOARD -->
-        <section id="content-dashboard" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section id="content-dashboard" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             <!-- Hero Headline -->
             <div class="lg:col-span-3 pt-2 pb-1 px-1 animate-rise">
@@ -317,7 +321,7 @@
             </div>
 
             <!-- YKS Countdown Banner -->
-            <div class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-3xl hover-lift flex flex-col sm:flex-row items-center justify-between gap-4 animate-rise" style="background: linear-gradient(135deg, rgba(0,113,227,0.08), rgba(138,63,252,0.08));">
+            <div class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-3xl hover-lift flex flex-col sm:flex-row items-center justify-between gap-4 animate-rise" style="background: linear-gradient(135deg, rgba(0,113,227,0.04), rgba(138,63,252,0.04));">
                 <div>
                     <div class="text-[11px] font-medium text-brand uppercase tracking-wide mb-1">YKS'ye Kalan Süre</div>
                     <div id="countdownMain" class="stat-num text-4xl sm:text-5xl tabular-nums">— gün</div>
@@ -341,9 +345,9 @@
 
             <!-- Left Column: Activity Input + Pomodoro -->
             <div class="space-y-6">
-            <div class="soft-card p-6 rounded-3xl hover-lift flex flex-col justify-between animate-rise" style="animation-delay:0.02s">
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift flex flex-col justify-between animate-rise" style="animation-delay:0.02s">
                 <div>
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                         <i data-lucide="plus-circle" class="w-5 h-5 text-brand"></i>
                         <span>Yeni Aktivite Ekle</span>
                     </h2>
@@ -423,11 +427,23 @@
                         </div>
 
                         <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Etiketler (virgülle ayır)</label>
+                            <input type="text" id="actTags" placeholder="örn: zor, favori, acil" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+
+                        <div>
                             <label class="block text-[11px] font-medium text-rose-500 dark:text-rose-400 mb-1 flex items-center gap-1.5">
                                 <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
                                 <span>Yanlış Konu Notu (opsiyonel)</span>
                             </label>
                             <textarea id="actWrongNote" rows="2" placeholder="Örn: Üçgende açı-kenar bağıntısını karıştırdım..." class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100 resize-none"></textarea>
+                            <div class="mt-2 flex items-center gap-2">
+                                <label class="press-scale flex-1 flex items-center justify-center gap-1.5 text-[11px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 cursor-pointer">
+                                    <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                                    <span id="actPhotoLabel">Soru Fotoğrafı Ekle</span>
+                                    <input type="file" id="actWrongPhoto" accept="image/*" onchange="handleWrongPhotoSelect(event)" class="hidden">
+                                </label>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition flex items-center justify-center space-x-2 text-xs">
@@ -439,8 +455,8 @@
             </div>
 
             <!-- Pomodoro Focus Timer Card -->
-            <div class="soft-card p-6 rounded-3xl hover-lift animate-rise" style="animation-delay:0.05s">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center justify-between">
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift animate-rise" style="animation-delay:0.05s">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center justify-between">
                     <span class="flex items-center space-x-2">
                         <i data-lucide="timer" class="w-5 h-5 text-brand"></i>
                         <span>Odak Zamanlayıcı</span>
@@ -477,14 +493,23 @@
                     <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-3 text-center leading-relaxed">Tur bitince süre otomatik olarak "Çalışma Süresi" alanına eklenir.</p>
                 </div>
             </div>
+
+            <!-- Achievements / Badges -->
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift animate-rise" style="animation-delay:0.06s">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="medal" class="w-5 h-5 text-amber-500"></i>
+                    <span>Rozetlerim</span>
+                </h2>
+                <div id="badgesContainer" class="grid grid-cols-3 gap-3"></div>
+            </div>
             </div>
 
             <!-- Right Column: Dual Progress Goals & Activity Logs -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-8">
 
                 <!-- Dual Goal Progress Cards -->
-                <div class="soft-card p-6 rounded-3xl hover-lift animate-rise" style="animation-delay:0.08s">
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-5 flex items-center justify-between">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift animate-rise" style="animation-delay:0.08s">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-5 flex items-center justify-between">
                         <span class="flex items-center space-x-2">
                             <i data-lucide="target" class="w-5 h-5 text-brand"></i>
                             <span>Günlük & Haftalık Hedef Durumu</span>
@@ -492,7 +517,7 @@
                         <span class="text-[11px] font-normal text-slate-400">Canlı Metrikler</span>
                     </h2>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Questions Goal Group -->
                         <div class="space-y-3 p-4 bg-black/[0.025] dark:bg-white/[0.04] rounded-2xl border border-black/5 dark:border-white/5">
                             <div class="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-200">
@@ -544,9 +569,9 @@
                 </div>
 
                 <!-- Streak & Heatmap Card -->
-                <div class="soft-card p-6 rounded-3xl hover-lift animate-rise" style="animation-delay:0.11s">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift animate-rise" style="animation-delay:0.11s">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                        <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
                             <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
                             <span>Çalışma Serisi</span>
                         </h2>
@@ -567,9 +592,9 @@
                 </div>
 
                 <!-- Daily Activity Table -->
-                <div class="soft-card p-6 rounded-3xl animate-rise" style="animation-delay:0.14s">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] animate-rise" style="animation-delay:0.14s">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                        <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                        <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
                             <i data-lucide="list" class="w-5 h-5 text-brand"></i>
                             <span>Seçili Tarihteki Çalışmalar</span>
                         </h2>
@@ -597,9 +622,14 @@
         </section>
 
         <!-- TAB 2: EXAMS -->
-        <section id="content-exams" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+        <section id="content-exams" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Deneme Takibi</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Netlerin nereye gidiyor?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Her deneme bir veri noktası — zamanla nereye gittiğini birlikte görelim.</p>
+            </div>
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="award" class="w-5 h-5 text-brand"></i>
                     <span>Deneme Sonucu Ekle</span>
                 </h2>
@@ -644,8 +674,8 @@
                 </form>
             </div>
 
-            <div class="lg:col-span-2 soft-card p-6 rounded-3xl">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+            <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="history" class="w-5 h-5 text-brand"></i>
                     <span>Deneme Geçmişi</span>
                 </h2>
@@ -670,8 +700,8 @@
             </div>
 
             <!-- Exam Trend Comparison -->
-            <div class="lg:col-span-3 soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+            <div class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="trending-up" class="w-5 h-5 text-brand"></i>
                     <span>Son Deneme Karşılaştırması</span>
                 </h2>
@@ -679,13 +709,13 @@
             </div>
 
             <!-- Score / Ranking Estimator -->
-            <div class="lg:col-span-3 soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-2 flex items-center space-x-2">
+            <div class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-2 flex items-center space-x-2">
                     <i data-lucide="gauge" class="w-5 h-5 text-brand"></i>
                     <span>Puan Tahmin Aracı</span>
                 </h2>
                 <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-4">Bu bir kaba tahmindir, ÖSYM'nin resmi hesaplama yöntemini kullanmaz — sadece net gelişimini puana çevirerek fikir verir.</p>
-                <div id="estimatorContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <div id="estimatorContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div class="relative h-56"><canvas id="chartEstimate"></canvas></div>
                     <div id="estimatorSummary" class="space-y-3"></div>
                 </div>
@@ -694,9 +724,14 @@
 
         <!-- TAB: WRONG QUESTION NOTEBOOK -->
         <section id="content-tekrar" class="tab-content hidden grid grid-cols-1 gap-6">
-            <div class="soft-card p-6 rounded-3xl">
+            <div class="pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Yanlış Defteri</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Hatalar öğretmendir.</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Bir kez yanlış yapılan bir soru, tekrar edilirse artık senin bildiğin bir soru olur.</p>
+            </div>
+            <div class="soft-card p-7 sm:p-8 rounded-[28px]">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
                         <i data-lucide="book-open" class="w-5 h-5 text-brand"></i>
                         <span>Yanlış Soru Defteri</span>
                     </h2>
@@ -707,13 +742,25 @@
         </section>
 
         <!-- TAB: PLAYLIST / TOPIC PROGRESS -->
-        <section id="content-konular" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6"></section>
+        <section id="content-konular" class="tab-content hidden space-y-8">
+            <div class="pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Konu İlerlemesi</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Playlist'ler ne kadar bitti?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">İzlediğin her video, müfredatta attığın bir adım.</p>
+            </div>
+            <div id="konularGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        </section>
 
         <!-- TAB: CURRICULUM CHECKLIST -->
-        <section id="content-mufredat" class="tab-content hidden space-y-6">
-            <div class="soft-card p-6 rounded-3xl">
+        <section id="content-mufredat" class="tab-content hidden space-y-8">
+            <div class="pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Müfredat</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Ne kadarı bitti, ne kaldı?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Bir konuya tıklayarak durumunu değiştir.</p>
+            </div>
+            <div class="soft-card p-7 sm:p-8 rounded-[28px]">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-2">
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
                         <i data-lucide="list-checks" class="w-5 h-5 text-brand"></i>
                         <span>Müfredat Takibi</span>
                     </h2>
@@ -727,13 +774,52 @@
                 </div>
                 <p class="text-[11px] text-slate-400 dark:text-slate-500">Bir konuya tıklayarak durumunu değiştir: Eksik → Tekrar Gerekiyor → Öğrenildi</p>
             </div>
-            <div id="mufredatGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <div id="mufredatGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+
+            <!-- Topic Mini-Goals -->
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="crosshair" class="w-5 h-5 text-brand"></i>
+                    <span>Konu Bazlı Mini Hedefler</span>
+                </h2>
+                <form id="topicGoalForm" onsubmit="handleTopicGoalSubmit(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-3 items-end mb-5">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Ders</label>
+                        <select id="goalSubject" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                            <option value="Matematik">AYT Matematik</option>
+                            <option value="Edebiyat">AYT Edebiyat</option>
+                            <option value="Coğrafya">AYT Coğrafya</option>
+                            <option value="Tarih">AYT Tarih</option>
+                            <option value="Türkçe">Türkçe</option>
+                            <option value="Fizik">Fizik</option>
+                            <option value="Kimya">Kimya</option>
+                            <option value="Biyoloji">Biyoloji</option>
+                            <option value="Geometri">Geometri</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Konu</label>
+                        <input type="text" id="goalTopic" required placeholder="Örn: Türev" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Hedef Soru</label>
+                        <input type="number" id="goalTarget" min="1" value="50" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <button type="submit" class="btn-primary press-scale py-2.5 rounded-full transition text-xs text-white font-semibold">Hedef Ekle</button>
+                </form>
+                <div id="topicGoalsContainer" class="space-y-3"></div>
+            </div>
         </section>
 
         <!-- TAB: DAILY/WEEKLY PLAN BUILDER -->
-        <section id="content-plan" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+        <section id="content-plan" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Plan</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Yarını bugünden kur.</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Bloklar halinde planla, tamamladıkça otomatik kayda dönüşsün.</p>
+            </div>
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="calendar-clock" class="w-5 h-5 text-brand"></i>
                     <span>Plan Bloğu Ekle</span>
                 </h2>
@@ -777,9 +863,9 @@
                 </form>
             </div>
 
-            <div class="lg:col-span-2 soft-card p-6 rounded-3xl">
+            <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
                         <i data-lucide="list-ordered" class="w-5 h-5 text-brand"></i>
                         <span id="planListTitle">Günün Planı</span>
                     </h2>
@@ -790,9 +876,14 @@
         </section>
 
         <!-- TAB: LEADERBOARD -->
-        <section id="content-liderlik" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+        <section id="content-liderlik" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Liderlik</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Kiminle yarışıyorsun?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">En büyük rakibin dünkü halin — ama biraz sağlıklı rekabet de motive eder.</p>
+            </div>
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="user-plus" class="w-5 h-5 text-brand"></i>
                     <span>Arkadaş Ekle</span>
                 </h2>
@@ -816,8 +907,8 @@
                 </form>
             </div>
 
-            <div class="lg:col-span-2 soft-card p-6 rounded-3xl">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+            <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="trophy" class="w-5 h-5 text-brand"></i>
                     <span>Haftalık Liderlik Tablosu</span>
                 </h2>
@@ -825,11 +916,51 @@
             </div>
         </section>
 
+        <!-- TAB: QUICK / VOICE NOTES -->
+        <section id="content-notlar" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Notlar</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Aklından geçeni bırak.</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Yazarak ya da konuşarak — fikirler kaybolmasın.</p>
+            </div>
+
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="mic" class="w-5 h-5 text-brand"></i>
+                    <span>Hızlı Not Ekle</span>
+                </h2>
+                <form id="quickNoteForm" onsubmit="handleQuickNoteSubmit(event)" class="space-y-3.5">
+                    <textarea id="quickNoteText" rows="5" placeholder="Bir fikir, bir hatırlatma, tıkandığın bir nokta..." class="input-soft w-full rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100 resize-none" required></textarea>
+                    <button type="button" onclick="toggleVoiceNote()" id="voiceNoteBtn" class="press-scale w-full font-semibold py-2.5 rounded-full transition text-xs bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center gap-2">
+                        <i data-lucide="mic" class="w-4 h-4"></i>
+                        <span>Sesle Yaz</span>
+                    </button>
+                    <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition flex items-center justify-center space-x-2 text-xs">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Notu Kaydet</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="notebook-pen" class="w-5 h-5 text-brand"></i>
+                    <span>Notların</span>
+                </h2>
+                <div id="quickNotesContainer" class="space-y-2"></div>
+            </div>
+        </section>
+
         <!-- TAB 3: ANALYTICS -->
-        <section id="content-analytics" class="tab-content hidden space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="soft-card p-6 rounded-3xl hover-lift">
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+        <section id="content-analytics" class="tab-content hidden space-y-8">
+            <div class="pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Analiz</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Sayılar hikayeni anlatıyor.</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Trendleri gör, güçlü ve zayıf yönlerini netleştir.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                         <i data-lucide="line-chart" class="w-5 h-5 text-brand"></i>
                         <span>Deneme Net Değişimi</span>
                     </h2>
@@ -838,8 +969,8 @@
                     </div>
                 </div>
 
-                <div class="soft-card p-6 rounded-3xl hover-lift">
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                         <i data-lucide="pie-chart" class="w-5 h-5 text-brand"></i>
                         <span>Derslere Göre Soru Dağılımı</span>
                     </h2>
@@ -849,8 +980,25 @@
                 </div>
             </div>
 
-            <div class="soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+            <!-- Period Comparison Chart -->
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
+                        <i data-lucide="split-square-horizontal" class="w-5 h-5 text-brand"></i>
+                        <span>Dönemsel Karşılaştırma</span>
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <button onclick="renderPeriodComparison('week')" id="periodBtnWeek" class="press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-brand text-white">Bu Hafta vs Geçen Hafta</button>
+                        <button onclick="renderPeriodComparison('month')" id="periodBtnMonth" class="press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Bu Ay vs Geçen Ay</button>
+                    </div>
+                </div>
+                <div class="relative h-72">
+                    <canvas id="chartPeriod"></canvas>
+                </div>
+            </div>
+
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="crosshair" class="w-5 h-5 text-brand"></i>
                     <span>Ders Bazlı Doğruluk Analizi</span>
                 </h2>
@@ -881,10 +1029,15 @@
         </section>
 
         <!-- TAB 4: SETTINGS -->
-        <section id="content-settings" class="tab-content hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="soft-card p-6 rounded-3xl space-y-6 hover-lift">
+        <section id="content-settings" class="tab-content hidden grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="lg:col-span-2 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Ayarlar</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Sistemi kendine göre kur.</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Hedefler, hatırlatıcılar ve yedekleme — hepsi burada.</p>
+            </div>
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] space-y-8 hover-lift">
                 <div>
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                         <i data-lucide="sliders" class="w-5 h-5 text-brand"></i>
                         <span>Günlük Hedef Ayarları</span>
                     </h2>
@@ -920,7 +1073,7 @@
                 <hr class="border-black/5 dark:border-white/10">
 
                 <div>
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                         <i data-lucide="bell" class="w-5 h-5 text-brand"></i>
                         <span>Akıllı Hatırlatıcılar</span>
                     </h2>
@@ -941,7 +1094,7 @@
                 <hr class="border-black/5 dark:border-white/10">
 
                 <div>
-                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                         <i data-lucide="download-cloud" class="w-5 h-5 text-brand"></i>
                         <span>Veri Yedekleme & Geri Yükleme</span>
                     </h2>
@@ -949,11 +1102,11 @@
                         Verileriniz tarayıcınızda (LocalStorage) güvendedir. Farklı cihazlara aktarmak için dışa aktarabilirsiniz.
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button onclick="exportData()" class="press-scale bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 px-4 rounded-full transition flex items-center justify-center space-x-2 text-xs shadow-md shadow-emerald-500/25">
+                        <button onclick="exportData()" class="press-scale bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 px-4 rounded-full transition flex items-center justify-center space-x-2 text-xs shadow-sm shadow-emerald-500/10">
                             <i data-lucide="download" class="w-4 h-4"></i>
                             <span>Verileri İndir (JSON)</span>
                         </button>
-                        <label class="press-scale bg-accentPurple hover:opacity-90 text-white font-semibold py-2.5 px-4 rounded-full transition flex items-center justify-center space-x-2 text-xs shadow-md shadow-purple-500/25 cursor-pointer">
+                        <label class="press-scale bg-accentPurple hover:opacity-90 text-white font-semibold py-2.5 px-4 rounded-full transition flex items-center justify-center space-x-2 text-xs shadow-sm shadow-purple-500/10 cursor-pointer">
                             <i data-lucide="upload" class="w-4 h-4"></i>
                             <span>Yedek Yükle</span>
                             <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
@@ -962,8 +1115,8 @@
                 </div>
             </div>
 
-            <div class="soft-card p-6 rounded-3xl hover-lift">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="calendar" class="w-5 h-5 text-brand"></i>
                     <span>Çalışma Takvimi & Pas (Off-Day) Gün Ayarları</span>
                 </h2>
@@ -990,8 +1143,8 @@
                 </div>
             </div>
 
-            <div class="soft-card p-6 rounded-3xl hover-lift lg:col-span-2">
-                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-2">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="file-output" class="w-5 h-5 text-brand"></i>
                     <span>Haftalık / Aylık Rapor</span>
                 </h2>
@@ -1158,7 +1311,9 @@
             WRONGNOTES: 'yks_wrongnotes_v3',
             CURRICULUM: 'yks_curriculum_v3',
             PLANBLOCKS: 'yks_planblocks_v3',
-            FRIENDS: 'yks_friends_v3'
+            FRIENDS: 'yks_friends_v3',
+            QUICKNOTES: 'yks_quicknotes_v3',
+            TOPICGOALS: 'yks_topicgoals_v3'
         };
 
         let state = {
@@ -1170,7 +1325,9 @@
             wrongNotes: [],
             curriculum: {},
             planBlocks: [],
-            friends: []
+            friends: [],
+            quickNotes: [],
+            topicGoals: []
         };
 
         const MOTIVATION_QUOTES = [
@@ -1214,6 +1371,9 @@
                 document.getElementById('reminderStatus').innerText = 'Bildirimler etkin.';
             }
             renderPlanBlocks();
+            renderBadges();
+            renderQuickNotes();
+            renderTopicGoals();
             setInterval(checkReminders, 60000);
             setInterval(initCountdown, 60000);
             setupScrollReveal();
@@ -1253,6 +1413,8 @@
                 state.curriculum = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRICULUM)) || {};
                 state.planBlocks = JSON.parse(localStorage.getItem(STORAGE_KEYS.PLANBLOCKS)) || [];
                 state.friends = JSON.parse(localStorage.getItem(STORAGE_KEYS.FRIENDS)) || [];
+                state.quickNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.QUICKNOTES)) || [];
+                state.topicGoals = JSON.parse(localStorage.getItem(STORAGE_KEYS.TOPICGOALS)) || [];
             } catch(e) {
                 console.error("Storage error:", e);
             }
@@ -1268,6 +1430,8 @@
             localStorage.setItem(STORAGE_KEYS.CURRICULUM, JSON.stringify(state.curriculum));
             localStorage.setItem(STORAGE_KEYS.PLANBLOCKS, JSON.stringify(state.planBlocks));
             localStorage.setItem(STORAGE_KEYS.FRIENDS, JSON.stringify(state.friends));
+            localStorage.setItem(STORAGE_KEYS.QUICKNOTES, JSON.stringify(state.quickNotes));
+            localStorage.setItem(STORAGE_KEYS.TOPICGOALS, JSON.stringify(state.topicGoals));
         }
 
         function setTodayDates() {
@@ -1354,7 +1518,7 @@
             const activate = () => {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
                 document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.remove('bg-brand', 'text-white', 'shadow-md');
+                    btn.classList.remove('bg-brand', 'text-white', 'shadow-sm');
                     btn.classList.add('text-slate-600', 'dark:text-slate-400');
                 });
 
@@ -1366,11 +1530,12 @@
 
                 const activeBtn = document.getElementById(`tab-${tabId}`);
                 activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
-                activeBtn.classList.add('bg-brand', 'text-white', 'shadow-md');
+                activeBtn.classList.add('bg-brand', 'text-white', 'shadow-sm');
 
                 if (tabId === 'analytics') {
                     setTimeout(renderCharts, 50);
                     setTimeout(renderAccuracyAnalysis, 50);
+                    setTimeout(() => renderPeriodComparison('week'), 50);
                 }
                 if (tabId === 'konular') {
                     renderPlaylistProgress();
@@ -1380,12 +1545,19 @@
                 }
                 if (tabId === 'mufredat') {
                     renderMufredat();
+                    renderTopicGoals();
                 }
                 if (tabId === 'plan') {
                     renderPlanBlocks();
                 }
                 if (tabId === 'liderlik') {
                     renderLeaderboard();
+                }
+                if (tabId === 'notlar') {
+                    renderQuickNotes();
+                }
+                if (tabId === 'dashboard') {
+                    renderBadges();
                 }
                 setTimeout(setupScrollReveal, 60);
             };
@@ -1400,6 +1572,18 @@
         }
 
         // Submit Activity
+        let pendingWrongNotePhoto = null;
+        function handleWrongPhotoSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                pendingWrongNotePhoto = e.target.result;
+                document.getElementById('actPhotoLabel').innerText = 'Fotoğraf Eklendi ✓';
+            };
+            reader.readAsDataURL(file);
+        }
+
         function handleActivitySubmit(e) {
             e.preventDefault();
             const actType = document.getElementById('actType').value;
@@ -1413,6 +1597,9 @@
                 topicName = `${selectedVideo} (${topicName})`;
             }
 
+            const tags = (document.getElementById('actTags').value || '')
+                .split(',').map(t => t.trim()).filter(Boolean);
+
             const activity = {
                 id: Date.now(),
                 date: document.getElementById('actDate').value,
@@ -1421,6 +1608,7 @@
                 topic: topicName,
                 video: selectedVideo,
                 type: actType,
+                tags: tags,
                 questions: parseInt(document.getElementById('actQuestions').value) || 0,
                 correct: parseInt(document.getElementById('actCorrect').value) || 0,
                 wrong: parseInt(document.getElementById('actWrong').value) || 0,
@@ -1430,24 +1618,31 @@
             state.activities.unshift(activity);
 
             const wrongNoteText = (document.getElementById('actWrongNote').value || '').trim();
-            if (wrongNoteText) {
+            if (wrongNoteText || pendingWrongNotePhoto) {
                 state.wrongNotes.unshift({
                     id: Date.now() + 1,
                     date: activity.date,
                     examType: activity.examType,
                     subject: activity.subject,
                     topic: document.getElementById('actTopic').value || activity.subject,
-                    note: wrongNoteText,
+                    note: wrongNoteText || '(fotoğraf eklendi)',
+                    photo: pendingWrongNotePhoto,
                     reviewed: false
                 });
             }
 
             saveState();
             updateUI();
+            checkAchievements();
+            renderTopicGoals();
             playFeedbackSound('success');
             showToast('Aktivite kaydedildi!');
             document.getElementById('actTopic').value = '';
             document.getElementById('actWrongNote').value = '';
+            document.getElementById('actTags').value = '';
+            document.getElementById('actWrongPhoto').value = '';
+            document.getElementById('actPhotoLabel').innerText = 'Soru Fotoğrafı Ekle';
+            pendingWrongNotePhoto = null;
         }
 
         function deleteActivity(id) {
@@ -1502,6 +1697,8 @@
             renderScoreEstimator();
             renderAccuracyAnalysis();
             renderLeaderboard();
+            if (document.getElementById('badgesContainer')) renderBadges();
+            if (document.getElementById('topicGoalsContainer')) renderTopicGoals();
         }
 
         function updateProgressBars() {
@@ -1548,6 +1745,13 @@
             document.getElementById('barWeeklyH').style.width = `${pctWH}%`;
         }
 
+        const TAG_COLORS = ['bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400', 'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400', 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400', 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400', 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'];
+        function tagColor(tag) {
+            let hash = 0;
+            for (let i = 0; i < tag.length; i++) hash = tag.charCodeAt(i) + ((hash << 5) - hash);
+            return TAG_COLORS[Math.abs(hash) % TAG_COLORS.length];
+        }
+
         function renderDailyTable() {
             const selectedDate = document.getElementById('actDate').value;
             const filterText = (document.getElementById('tableFilter').value || '').toLowerCase();
@@ -1556,7 +1760,8 @@
 
             const filtered = state.activities.filter(a => {
                 const isDateMatch = a.date === selectedDate;
-                const isSearchMatch = a.subject.toLowerCase().includes(filterText) || a.topic.toLowerCase().includes(filterText);
+                const tagsText = (a.tags || []).join(' ').toLowerCase();
+                const isSearchMatch = a.subject.toLowerCase().includes(filterText) || a.topic.toLowerCase().includes(filterText) || tagsText.includes(filterText);
                 return isDateMatch && isSearchMatch;
             });
 
@@ -1568,10 +1773,11 @@
             filtered.forEach(a => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-black/[0.02] dark:hover:bg-white/[0.04] border-b border-black/5 dark:border-white/5 text-xs";
+                const tagBadges = (a.tags || []).map(t => `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium mr-1 ${tagColor(t)}">${t}</span>`).join('');
                 tr.innerHTML = `
                     <td class="p-3 font-semibold text-brand">${a.examType}</td>
                     <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${a.subject}</td>
-                    <td class="p-3 text-slate-600 dark:text-slate-300">${a.topic}</td>
+                    <td class="p-3 text-slate-600 dark:text-slate-300">${a.topic}${tagBadges ? `<div class="mt-1">${tagBadges}</div>` : ''}</td>
                     <td class="p-3 text-slate-400 dark:text-slate-500">${a.type}</td>
                     <td class="p-3 font-bold text-slate-700 dark:text-slate-100">${a.questions}</td>
                     <td class="p-3"><span class="text-emerald-600 dark:text-emerald-400 font-medium">${a.correct}D</span> / <span class="text-rose-500 font-medium">${a.wrong}Y</span></td>
@@ -1843,6 +2049,7 @@
                     html += `
                     <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-black/[0.025] dark:bg-white/[0.04] border border-black/5 dark:border-white/5">
                         <button onclick="toggleWrongNoteReviewed(${n.id})" class="press-scale mt-0.5 w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 hover:border-brand flex-shrink-0" title="Tekrarlandı olarak işaretle"></button>
+                        ${n.photo ? `<img src="${n.photo}" onclick="window.open('${n.photo.replace(/'/g, "\\'")}', '_blank')" class="w-14 h-14 object-cover rounded-xl border border-black/10 dark:border-white/10 cursor-pointer flex-shrink-0" title="Büyütmek için tıkla">` : ''}
                         <div class="flex-1 min-w-0">
                             <div class="text-xs font-medium text-slate-800 dark:text-slate-200">${n.topic}</div>
                             <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${n.note}</div>
@@ -1956,7 +2163,7 @@
 
         // --- Playlist / Topic Progress ---
         function renderPlaylistProgress() {
-            const section = document.getElementById('content-konular');
+            const section = document.getElementById('konularGrid');
             if (!section) return;
 
             let html = '';
@@ -1977,9 +2184,9 @@
                 }).join('');
 
                 html += `
-                <div class="soft-card p-6 rounded-3xl hover-lift">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50">${subject}</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight">${subject}</h3>
                         <span class="text-xs font-bold text-brand">${watchedCount} / ${total}</span>
                     </div>
                     <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden mb-4">
@@ -2164,6 +2371,7 @@
             state.curriculum[subject][topic] = next;
             saveState();
             renderMufredat();
+            if (document.getElementById('badgesContainer')) renderBadges();
         }
 
         function toggleMufredatFilter() {
@@ -2203,9 +2411,9 @@
 
                 const pct = Math.round((subjectLearned / topics.length) * 100);
                 html += `
-                <div class="soft-card p-6 rounded-3xl hover-lift">
+                <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50">${subject}</h3>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight">${subject}</h3>
                         <span class="text-xs font-bold text-brand">${subjectLearned} / ${topics.length}</span>
                     </div>
                     <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden mb-4">
@@ -2548,6 +2756,230 @@
             if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
                 navigator.serviceWorker.register('sw.js').catch(() => {});
             }
+        }
+
+        // --- Achievements / Badges ---
+        const ACHIEVEMENTS = [
+            { id: 'streak7', icon: 'flame', label: '7 Gün Seri', check: () => computeStreak() >= 7 },
+            { id: 'streak30', icon: 'flame', label: '30 Gün Seri', check: () => computeStreak() >= 30 },
+            { id: 'q1000', icon: 'zap', label: '1000 Soru', check: () => state.activities.reduce((s,a) => s + a.questions, 0) >= 1000 },
+            { id: 'q5000', icon: 'zap', label: '5000 Soru', check: () => state.activities.reduce((s,a) => s + a.questions, 0) >= 5000 },
+            { id: 'exam10', icon: 'award', label: '10 Deneme', check: () => state.exams.length >= 10 },
+            { id: 'perfectday', icon: 'star', label: 'Hedef Tamamlandı', check: () => {
+                const today = new Date().toISOString().split('T')[0];
+                const q = state.activities.filter(a => a.date === today).reduce((s,a) => s + a.questions, 0);
+                return q >= state.settings.dailyGoal && state.settings.dailyGoal > 0;
+            }},
+            { id: 'notebook10', icon: 'book-open', label: '10 Tekrar Notu', check: () => state.wrongNotes.length >= 10 },
+            { id: 'earlybird', icon: 'sunrise', label: 'Erken Kalkan', check: () => state.activities.some(a => a.duration > 0) && state.activities.length >= 5 },
+            { id: 'curriculum50', icon: 'list-checks', label: 'Müfredat %50', check: () => {
+                let total = 0, learned = 0;
+                Object.keys(PLAYLISTS).forEach(s => PLAYLISTS[s].forEach(t => { total++; if (getCurriculumStatus(s,t) === 'ogrenildi') learned++; }));
+                return total > 0 && (learned/total) >= 0.5;
+            }}
+        ];
+
+        function checkAchievements() {
+            renderBadges();
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badgesContainer');
+            if (!container) return;
+            container.innerHTML = ACHIEVEMENTS.map(a => {
+                const earned = a.check();
+                return `<div class="flex flex-col items-center gap-1.5 p-3 rounded-2xl ${earned ? 'bg-amber-50 dark:bg-amber-500/10' : 'bg-black/[0.02] dark:bg-white/[0.03] opacity-40'}" title="${a.label}">
+                    <i data-lucide="${a.icon}" class="w-5 h-5 ${earned ? 'text-amber-500' : 'text-slate-400'}"></i>
+                    <span class="text-[9px] text-center leading-tight ${earned ? 'text-slate-700 dark:text-slate-200 font-semibold' : 'text-slate-400'}">${a.label}</span>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- Quick / Voice Notes ---
+        let recognition = null;
+        let isRecording = false;
+        function toggleVoiceNote() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast('Tarayıcın sesli girişi desteklemiyor.', 'error');
+                return;
+            }
+            const btn = document.getElementById('voiceNoteBtn');
+            if (isRecording) {
+                recognition.stop();
+                return;
+            }
+            recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.continuous = true;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                btn.innerHTML = `<i data-lucide="square" class="w-4 h-4"></i><span>Dinleniyor... (Durdur)</span>`;
+                btn.classList.add('bg-rose-50', 'text-rose-500');
+                lucide.createIcons();
+            };
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) transcript += event.results[i][0].transcript + ' ';
+                document.getElementById('quickNoteText').value = transcript.trim();
+            };
+            recognition.onerror = () => { showToast('Sesli girişte bir sorun oluştu.', 'error'); };
+            recognition.onend = () => {
+                isRecording = false;
+                btn.innerHTML = `<i data-lucide="mic" class="w-4 h-4"></i><span>Sesle Yaz</span>`;
+                btn.classList.remove('bg-rose-50', 'text-rose-500');
+                lucide.createIcons();
+            };
+            recognition.start();
+        }
+
+        function handleQuickNoteSubmit(e) {
+            e.preventDefault();
+            const text = document.getElementById('quickNoteText').value.trim();
+            if (!text) return;
+            state.quickNotes.unshift({ id: Date.now(), text, date: new Date().toISOString() });
+            saveState();
+            renderQuickNotes();
+            playFeedbackSound('success');
+            showToast('Not kaydedildi.');
+            document.getElementById('quickNoteForm').reset();
+        }
+
+        function deleteQuickNote(id) {
+            state.quickNotes = state.quickNotes.filter(n => n.id !== id);
+            saveState();
+            renderQuickNotes();
+            playFeedbackSound('delete');
+        }
+
+        function renderQuickNotes() {
+            const container = document.getElementById('quickNotesContainer');
+            if (!container) return;
+            if (state.quickNotes.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Henüz not yok.</div>`;
+                return;
+            }
+            container.innerHTML = state.quickNotes.map(n => {
+                const d = new Date(n.date);
+                const dateLabel = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+                return `<div class="flex items-start gap-3 p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5">
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap">${n.text}</div>
+                        <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">${dateLabel}</div>
+                    </div>
+                    <button onclick="deleteQuickNote(${n.id})" class="press-scale p-1.5 text-rose-400 flex-shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- Topic Mini-Goals ---
+        function handleTopicGoalSubmit(e) {
+            e.preventDefault();
+            const goal = {
+                id: Date.now(),
+                subject: document.getElementById('goalSubject').value,
+                topic: document.getElementById('goalTopic').value.trim(),
+                target: parseInt(document.getElementById('goalTarget').value) || 50
+            };
+            state.topicGoals.push(goal);
+            saveState();
+            renderTopicGoals();
+            playFeedbackSound('success');
+            showToast('Mini hedef eklendi.');
+            document.getElementById('topicGoalForm').reset();
+            document.getElementById('goalTarget').value = 50;
+        }
+
+        function deleteTopicGoal(id) {
+            state.topicGoals = state.topicGoals.filter(g => g.id !== id);
+            saveState();
+            renderTopicGoals();
+        }
+
+        function renderTopicGoals() {
+            const container = document.getElementById('topicGoalsContainer');
+            if (!container) return;
+            if (state.topicGoals.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-6">Henüz mini hedef eklenmedi.</div>`;
+                return;
+            }
+            container.innerHTML = state.topicGoals.map(g => {
+                const solved = state.activities
+                    .filter(a => a.subject === g.subject && a.topic.toLowerCase().includes(g.topic.toLowerCase()))
+                    .reduce((s,a) => s + a.questions, 0);
+                const pct = Math.min(100, Math.round((solved / g.target) * 100));
+                const done = pct >= 100;
+                return `<div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">${g.subject} — ${g.topic}</div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold ${done ? 'text-emerald-500' : 'text-brand'}">${solved} / ${g.target}${done ? ' ✓' : ''}</span>
+                            <button onclick="deleteTopicGoal(${g.id})" class="press-scale text-rose-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                    </div>
+                    <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden">
+                        <div class="bar-fill h-2 rounded-full ${done ? 'bg-emerald-500' : 'bg-gradient-to-r from-brand to-sky-400'}" style="width:${pct}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- Period Comparison Chart ---
+        let chartPeriodInstance = null;
+        function renderPeriodComparison(mode) {
+            const canvas = document.getElementById('chartPeriod');
+            if (!canvas) return;
+
+            document.getElementById('periodBtnWeek').className = mode === 'week'
+                ? 'press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-brand text-white'
+                : 'press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300';
+            document.getElementById('periodBtnMonth').className = mode === 'month'
+                ? 'press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-brand text-white'
+                : 'press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300';
+
+            const span = mode === 'week' ? 7 : 30;
+            const now = new Date();
+            const dailyQ = {};
+            state.activities.forEach(a => { dailyQ[a.date] = (dailyQ[a.date] || 0) + a.questions; });
+
+            const currentPeriod = [], previousPeriod = [], labels = [];
+            for (let i = span - 1; i >= 0; i--) {
+                const dCurr = new Date(now); dCurr.setDate(now.getDate() - i);
+                const dPrev = new Date(now); dPrev.setDate(now.getDate() - i - span);
+                currentPeriod.push(dailyQ[dCurr.toISOString().split('T')[0]] || 0);
+                previousPeriod.push(dailyQ[dPrev.toISOString().split('T')[0]] || 0);
+                labels.push(`${span - i}. gün`);
+            }
+
+            const isDark = state.theme === 'dark';
+            const textColor = isDark ? '#98989d' : '#6e6e73';
+            const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+
+            if (chartPeriodInstance) chartPeriodInstance.destroy();
+            chartPeriodInstance = new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [
+                        { label: mode === 'week' ? 'Bu Hafta' : 'Bu Ay', data: currentPeriod, borderColor: '#0071e3', backgroundColor: 'rgba(0,113,227,0.1)', fill: true, tension: 0.35, pointRadius: 2, borderWidth: 2.5 },
+                        { label: mode === 'week' ? 'Geçen Hafta' : 'Geçen Ay', data: previousPeriod, borderColor: '#8a3ffc', backgroundColor: 'rgba(138,63,252,0.06)', fill: true, tension: 0.35, pointRadius: 2, borderWidth: 2, borderDash: [5,4] }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: textColor } } },
+                    scales: {
+                        x: { ticks: { color: textColor, font: { size: 9 } }, grid: { display: false } },
+                        y: { ticks: { color: textColor }, grid: { color: gridColor } }
+                    }
+                }
+            });
         }
 
         // Command Palette Logic
