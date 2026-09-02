@@ -1837,6 +1837,7 @@
             quickNotes: [],
             topicGoals: [],
             resources: [],
+            watchedVideos: {},
             schools: [
                 { id: 1, name: 'Boğaziçi Üniversitesi', dept: 'Yönetim Bilişim Sistemleri', targetScore: 0 }
             ]
@@ -2868,6 +2869,26 @@
         }
 
         // --- Playlist / Topic Progress ---
+        function isVideoWatched(subject, video) {
+            const loggedWatched = state.activities.some(a => a.subject === subject && a.type === 'Video İzleme' && a.video === video);
+            const manuallyWatched = !!(state.watchedVideos[subject] && state.watchedVideos[subject][video]);
+            return loggedWatched || manuallyWatched;
+        }
+
+        function toggleVideoWatched(subject, video) {
+            if (!state.watchedVideos[subject]) state.watchedVideos[subject] = {};
+            const loggedWatched = state.activities.some(a => a.subject === subject && a.type === 'Video İzleme' && a.video === video);
+            if (loggedWatched) {
+                showToast('Bu konu bir aktivite kaydından geldiği için buradan kaldırılamıyor. Aktiviteyi silmen gerekir.', 'error');
+                return;
+            }
+            state.watchedVideos[subject][video] = !state.watchedVideos[subject][video];
+            saveState();
+            renderPlaylistProgress();
+            checkAchievements();
+            playFeedbackSound(state.watchedVideos[subject][video] ? 'success' : 'delete');
+        }
+
         function renderPlaylistProgress() {
             const section = document.getElementById('konularGrid');
             if (!section) return;
@@ -2875,26 +2896,24 @@
             let html = '';
             Object.keys(PLAYLISTS).forEach(subject => {
                 const total = PLAYLISTS[subject].length;
-                const watchedSet = new Set(
-                    state.activities.filter(a => a.subject === subject && a.type === 'Video İzleme' && a.video).map(a => a.video)
-                );
-                const watchedCount = PLAYLISTS[subject].filter(v => watchedSet.has(v)).length;
+                const watchedCount = PLAYLISTS[subject].filter(v => isVideoWatched(subject, v)).length;
                 const pct = Math.round((watchedCount / total) * 100);
 
                 const videoRows = PLAYLISTS[subject].map(v => {
-                    const watched = watchedSet.has(v);
-                    return `<div class="flex items-center gap-2 py-1.5 text-xs ${watched ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'}">
+                    const watched = isVideoWatched(subject, v);
+                    return `<button onclick="toggleVideoWatched('${subject.replace(/'/g, "\\'")}', '${v.replace(/'/g, "\\'")}')" class="press-scale w-full flex items-center gap-2 py-1.5 text-left text-xs ${watched ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'}">
                         <i data-lucide="${watched ? 'check-circle-2' : 'circle'}" class="w-3.5 h-3.5 flex-shrink-0 ${watched ? 'text-emerald-500' : 'text-slate-300 dark:text-slate-600'}"></i>
                         <span class="${watched ? 'line-through' : ''} truncate">${v}</span>
-                    </div>`;
+                    </button>`;
                 }).join('');
 
                 html += `
                 <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
-                    <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center justify-between mb-1">
                         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight">${subject}</h3>
                         <span class="text-xs font-bold text-brand">${watchedCount} / ${total}</span>
                     </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">${subject}'ta %${pct} bitirdin.</p>
                     <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden mb-4">
                         <div class="bar-fill h-2 rounded-full bg-gradient-to-r from-brand to-sky-400" style="width:${pct}%"></div>
                     </div>
