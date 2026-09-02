@@ -764,7 +764,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400">Gerçek sınav süresiyle deneme çöz, dikkatini dağıtmadan.</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="startExamSim('TYT')" class="press-scale px-4 py-2.5 rounded-full text-xs font-semibold bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200">TYT (135 dk)</button>
+                    <button onclick="startExamSim('TYT')" class="press-scale px-4 py-2.5 rounded-full text-xs font-semibold bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200">TYT (165 dk)</button>
                     <button onclick="startExamSim('AYT')" class="btn-primary press-scale px-4 py-2.5 rounded-full text-xs font-semibold text-white">AYT (180 dk)</button>
                 </div>
             </div>
@@ -1533,7 +1533,7 @@
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div id="examSimLabel" class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-4">TYT Simülasyonu</div>
-            <div class="stat-num text-7xl tabular-nums mb-6" id="examSimTime">02:15:00</div>
+            <div class="stat-num text-7xl tabular-nums mb-6" id="examSimTime">02:45:00</div>
             <p class="text-xs text-slate-400 dark:text-slate-500 text-center max-w-xs">Gerçek sınav koşullarında çalış. Süre bitince otomatik olarak deneme sonucu giriş ekranına yönlendirileceksin.</p>
         </div>
 
@@ -3873,7 +3873,7 @@
         let examSimInterval = null;
         function startExamSim(type) {
             const overlay = document.getElementById('examSimOverlay');
-            const durationMin = type === 'TYT' ? 135 : 180;
+            const durationMin = type === 'TYT' ? 165 : 180;
             let remaining = durationMin * 60;
             document.getElementById('examSimLabel').innerText = `${type} Simülasyonu`;
             overlay.classList.remove('hidden');
