@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YKS Takip & Performans Portalı</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0071e3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="YKS Takip">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -154,8 +159,41 @@
 
         :focus-visible { outline: 2px solid #0071e3; outline-offset: 2px; border-radius: 6px; }
 
+        /* Scroll-reveal (Apple-style storytelling motion) */
+        .io-reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.8s var(--ease-apple), transform 0.8s var(--ease-apple);
+        }
+        .io-reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* Big Apple-spec-style numerals */
+        .stat-num {
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            background: linear-gradient(180deg, #1d1d1f, #48484a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .dark .stat-num {
+            background: linear-gradient(180deg, #f5f5f7, #a1a1a6);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        .stat-num-accent {
+            background: linear-gradient(120deg, #0071e3, #8a3ffc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Apple-style hero headline */
+        .hero-title { font-weight: 700; letter-spacing: -0.045em; line-height: 1.05; }
+        .hero-subtitle { letter-spacing: -0.015em; }
+
         @media (prefers-reduced-motion: reduce) {
-            *, .toast-enter, .toast-exit, .tab-fade, .animate-float, .bar-glow { animation: none !important; transition: none !important; }
+            *, .toast-enter, .toast-exit, .tab-fade, .animate-float, .bar-glow, .io-reveal { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
         }
 
         @media print {
@@ -247,6 +285,18 @@
                 <i data-lucide="pie-chart" class="w-4 h-4"></i>
                 <span>Analiz & Grafikler</span>
             </button>
+            <button onclick="switchTab('mufredat')" id="tab-mufredat" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+                <i data-lucide="list-checks" class="w-4 h-4"></i>
+                <span>Müfredat</span>
+            </button>
+            <button onclick="switchTab('plan')" id="tab-plan" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+                <i data-lucide="calendar-clock" class="w-4 h-4"></i>
+                <span>Plan</span>
+            </button>
+            <button onclick="switchTab('liderlik')" id="tab-liderlik" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
+                <i data-lucide="trophy" class="w-4 h-4"></i>
+                <span>Liderlik</span>
+            </button>
             <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10">
                 <i data-lucide="settings" class="w-4 h-4"></i>
                 <span>Hedefler & Ayarlar</span>
@@ -259,6 +309,35 @@
 
         <!-- TAB 1: DASHBOARD -->
         <section id="content-dashboard" class="tab-content grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Hero Headline -->
+            <div class="lg:col-span-3 pt-2 pb-1 px-1 animate-rise">
+                <h1 class="hero-title text-3xl sm:text-4xl text-slate-900 dark:text-slate-50">Bugün nereden devam ediyoruz?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Sorularını çöz, süreni takip et, hedeflerine adım adım yaklaş.</p>
+            </div>
+
+            <!-- YKS Countdown Banner -->
+            <div class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-3xl hover-lift flex flex-col sm:flex-row items-center justify-between gap-4 animate-rise" style="background: linear-gradient(135deg, rgba(0,113,227,0.08), rgba(138,63,252,0.08));">
+                <div>
+                    <div class="text-[11px] font-medium text-brand uppercase tracking-wide mb-1">YKS'ye Kalan Süre</div>
+                    <div id="countdownMain" class="stat-num text-4xl sm:text-5xl tabular-nums">— gün</div>
+                    <div id="countdownQuote" class="text-xs text-slate-500 dark:text-slate-400 mt-2 max-w-md">Sınav tarihini Ayarlar sekmesinden belirleyebilirsin.</div>
+                </div>
+                <div class="flex gap-3 text-center">
+                    <div class="bg-white/70 dark:bg-white/5 rounded-2xl px-4 py-3 min-w-[68px]">
+                        <div id="cdDays" class="stat-num-accent text-xl">0</div>
+                        <div class="text-[10px] text-slate-400">gün</div>
+                    </div>
+                    <div class="bg-white/70 dark:bg-white/5 rounded-2xl px-4 py-3 min-w-[68px]">
+                        <div id="cdHours" class="stat-num-accent text-xl">0</div>
+                        <div class="text-[10px] text-slate-400">saat</div>
+                    </div>
+                    <div class="bg-white/70 dark:bg-white/5 rounded-2xl px-4 py-3 min-w-[68px]">
+                        <div id="cdMinutes" class="stat-num-accent text-xl">0</div>
+                        <div class="text-[10px] text-slate-400">dakika</div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Left Column: Activity Input + Pomodoro -->
             <div class="space-y-6">
@@ -471,9 +550,9 @@
                             <i data-lucide="flame" class="w-5 h-5 text-orange-500"></i>
                             <span>Çalışma Serisi</span>
                         </h2>
-                        <div class="flex items-center gap-2 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 px-3.5 py-1.5 rounded-full text-xs font-bold">
-                            <i data-lucide="flame" class="w-3.5 h-3.5"></i>
-                            <span id="streakCount">0 gün</span>
+                        <div class="flex items-center gap-2 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 px-4 py-2 rounded-full text-sm font-bold">
+                            <i data-lucide="flame" class="w-4 h-4"></i>
+                            <span id="streakCount" class="text-base">0 gün</span>
                         </div>
                     </div>
                     <div id="heatmapGrid" class="flex gap-[3px] overflow-x-auto pb-1"></div>
@@ -598,6 +677,19 @@
                 </h2>
                 <div id="examTrendContainer" class="text-xs text-slate-400 dark:text-slate-500">Karşılaştırma için aynı türde en az 2 deneme kaydı gerekiyor.</div>
             </div>
+
+            <!-- Score / Ranking Estimator -->
+            <div class="lg:col-span-3 soft-card p-6 rounded-3xl hover-lift">
+                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-2 flex items-center space-x-2">
+                    <i data-lucide="gauge" class="w-5 h-5 text-brand"></i>
+                    <span>Puan Tahmin Aracı</span>
+                </h2>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-4">Bu bir kaba tahmindir, ÖSYM'nin resmi hesaplama yöntemini kullanmaz — sadece net gelişimini puana çevirerek fikir verir.</p>
+                <div id="estimatorContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="relative h-56"><canvas id="chartEstimate"></canvas></div>
+                    <div id="estimatorSummary" class="space-y-3"></div>
+                </div>
+            </div>
         </section>
 
         <!-- TAB: WRONG QUESTION NOTEBOOK -->
@@ -616,6 +708,122 @@
 
         <!-- TAB: PLAYLIST / TOPIC PROGRESS -->
         <section id="content-konular" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6"></section>
+
+        <!-- TAB: CURRICULUM CHECKLIST -->
+        <section id="content-mufredat" class="tab-content hidden space-y-6">
+            <div class="soft-card p-6 rounded-3xl">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-2">
+                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                        <i data-lucide="list-checks" class="w-5 h-5 text-brand"></i>
+                        <span>Müfredat Takibi</span>
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <span id="mufredatOverallPct" class="stat-num-accent text-base">0%</span>
+                        <button onclick="toggleMufredatFilter()" id="mufredatFilterBtn" class="press-scale text-[11px] font-semibold px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Sadece Eksikleri Göster</button>
+                    </div>
+                </div>
+                <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden mb-2">
+                    <div id="mufredatOverallBar" class="bar-fill h-2 rounded-full bg-gradient-to-r from-brand to-sky-400" style="width:0%"></div>
+                </div>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500">Bir konuya tıklayarak durumunu değiştir: Eksik → Tekrar Gerekiyor → Öğrenildi</p>
+            </div>
+            <div id="mufredatGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </section>
+
+        <!-- TAB: DAILY/WEEKLY PLAN BUILDER -->
+        <section id="content-plan" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="soft-card p-6 rounded-3xl hover-lift">
+                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <i data-lucide="calendar-clock" class="w-5 h-5 text-brand"></i>
+                    <span>Plan Bloğu Ekle</span>
+                </h2>
+                <form id="planForm" onsubmit="handlePlanSubmit(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Tarih</label>
+                        <input type="date" id="planDate" required class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Saat</label>
+                            <input type="time" id="planTime" required class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Süre (dk)</label>
+                            <input type="number" id="planDuration" min="5" value="45" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Ders</label>
+                        <select id="planSubject" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                            <option value="Matematik">AYT Matematik</option>
+                            <option value="Edebiyat">AYT Edebiyat</option>
+                            <option value="Coğrafya">AYT Coğrafya</option>
+                            <option value="Tarih">AYT Tarih</option>
+                            <option value="Türkçe">Türkçe</option>
+                            <option value="Fizik">Fizik</option>
+                            <option value="Kimya">Kimya</option>
+                            <option value="Biyoloji">Biyoloji</option>
+                            <option value="Geometri">Geometri</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Not (opsiyonel)</label>
+                        <input type="text" id="planNote" placeholder="Örn: Türev tekrarı" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition flex items-center justify-center space-x-2 text-xs">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Bloğu Ekle</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 soft-card p-6 rounded-3xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 flex items-center space-x-2">
+                        <i data-lucide="list-ordered" class="w-5 h-5 text-brand"></i>
+                        <span id="planListTitle">Günün Planı</span>
+                    </h2>
+                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Sürükleyerek sırala</span>
+                </div>
+                <div id="planBlocksContainer" class="space-y-2"></div>
+            </div>
+        </section>
+
+        <!-- TAB: LEADERBOARD -->
+        <section id="content-liderlik" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="soft-card p-6 rounded-3xl hover-lift">
+                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <i data-lucide="user-plus" class="w-5 h-5 text-brand"></i>
+                    <span>Arkadaş Ekle</span>
+                </h2>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-3">Verilerin sadece bu cihazda saklandığı için arkadaşlarının haftalık toplamlarını elle girip kendi ilerlemenle kıyaslayabilirsin.</p>
+                <form id="friendForm" onsubmit="handleFriendSubmit(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">İsim</label>
+                        <input type="text" id="friendName" required placeholder="Örn: Ahmet" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Haftalık Soru</label>
+                            <input type="number" id="friendQ" min="0" value="0" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Haftalık Saat</label>
+                            <input type="number" id="friendH" min="0" step="0.5" value="0" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-2.5 rounded-full transition text-xs">Ekle</button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 soft-card p-6 rounded-3xl">
+                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <i data-lucide="trophy" class="w-5 h-5 text-brand"></i>
+                    <span>Haftalık Liderlik Tablosu</span>
+                </h2>
+                <div id="leaderboardContainer" class="space-y-2"></div>
+            </div>
+        </section>
 
         <!-- TAB 3: ANALYTICS -->
         <section id="content-analytics" class="tab-content hidden space-y-6">
@@ -640,6 +848,36 @@
                     </div>
                 </div>
             </div>
+
+            <div class="soft-card p-6 rounded-3xl hover-lift">
+                <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                    <i data-lucide="crosshair" class="w-5 h-5 text-brand"></i>
+                    <span>Ders Bazlı Doğruluk Analizi</span>
+                </h2>
+                <div class="overflow-x-auto mb-5">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-black/[0.03] dark:bg-white/[0.05] text-slate-500 dark:text-slate-400 font-semibold">
+                            <tr>
+                                <th class="p-3 rounded-l-xl">Ders</th>
+                                <th class="p-3">Soru</th>
+                                <th class="p-3">Doğruluk</th>
+                                <th class="p-3 rounded-r-xl">Hız (soru/dk)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accuracyTableBody" class="divide-y divide-black/5 dark:divide-white/5"></tbody>
+                    </table>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10">
+                        <div class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 mb-2 flex items-center gap-1.5"><i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> En Güçlü Konular</div>
+                        <div id="strongTopics" class="space-y-1 text-xs text-slate-600 dark:text-slate-300"></div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10">
+                        <div class="text-[11px] font-semibold text-rose-500 mb-2 flex items-center gap-1.5"><i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i> En Zayıf Konular</div>
+                        <div id="weakTopics" class="space-y-1 text-xs text-slate-600 dark:text-slate-300"></div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- TAB 4: SETTINGS -->
@@ -659,9 +897,44 @@
                             <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Günlük Çalışma Saati Hedefi (Saat)</label>
                             <input type="number" id="cfgDailyHoursGoal" min="0.5" max="20" step="0.5" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                         </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">YKS Sınav Tarihi</label>
+                            <input type="date" id="cfgExamDate" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Hedef TYT Net</label>
+                                <input type="number" id="cfgTargetTyt" min="0" max="120" step="0.5" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Hedef AYT Net</label>
+                                <input type="number" id="cfgTargetAyt" min="0" max="80" step="0.5" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                            </div>
+                        </div>
                         <button onclick="saveGoalSettings()" class="btn-primary press-scale w-full text-white font-semibold py-2.5 rounded-full transition text-xs">
                             Hedefleri Güncelle
                         </button>
+                    </div>
+                </div>
+
+                <hr class="border-black/5 dark:border-white/10">
+
+                <div>
+                    <h2 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mb-4 flex items-center space-x-2">
+                        <i data-lucide="bell" class="w-5 h-5 text-brand"></i>
+                        <span>Akıllı Hatırlatıcılar</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Belirlediğin saatte, o gün hedefine ulaşıp ulaşmadığını tarayıcı bildirimiyle hatırlatır. Sayfanın açık olması gerekir.</p>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">Hatırlatma Saati</label>
+                            <input type="time" id="cfgReminderTime" value="21:00" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                        <button onclick="enableReminders()" id="reminderBtn" class="press-scale w-full font-semibold py-2.5 rounded-full transition text-xs bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center gap-2">
+                            <i data-lucide="bell-ring" class="w-4 h-4"></i>
+                            <span>Bildirimleri Etkinleştir</span>
+                        </button>
+                        <p id="reminderStatus" class="text-[11px] text-slate-400 dark:text-slate-500 text-center"></p>
                     </div>
                 </div>
 
@@ -882,17 +1155,34 @@
             SETTINGS: 'yks_settings_v3',
             OFFDAYS: 'yks_offdays_v3',
             THEME: 'yks_theme_v3',
-            WRONGNOTES: 'yks_wrongnotes_v3'
+            WRONGNOTES: 'yks_wrongnotes_v3',
+            CURRICULUM: 'yks_curriculum_v3',
+            PLANBLOCKS: 'yks_planblocks_v3',
+            FRIENDS: 'yks_friends_v3'
         };
 
         let state = {
             activities: [],
             exams: [],
-            settings: { dailyGoal: 200, dailyHoursGoal: 4.0 },
+            settings: { dailyGoal: 200, dailyHoursGoal: 4.0, examDate: '', targetTyt: 0, targetAyt: 0, reminderTime: '21:00', remindersEnabled: false, lastReminderDate: '' },
             offDays: {},
             theme: 'light',
-            wrongNotes: []
+            wrongNotes: [],
+            curriculum: {},
+            planBlocks: [],
+            friends: []
         };
+
+        const MOTIVATION_QUOTES = [
+            "Bugün attığın her adım, o gün seni bir yıl önce hayal ettiğin yere yaklaştırıyor.",
+            "Küçük ilerlemeler bile ilerlemedir. Devam et.",
+            "Zorlandığın an, tam olarak büyüdüğün andır.",
+            "Bugün çözdüğün her soru, sınav günü kazandığın bir saniyedir.",
+            "Kimse mükemmel başlamadı, önemli olan bırakmamak.",
+            "Yorgunluk geçici, pişmanlık kalıcıdır. Bugünü değerlendir.",
+            "Hedefin büyükse, adımların küçük ama düzenli olsun.",
+            "Bir konu daha, bir soru daha — sen buna değersin."
+        ];
 
         let chartExamsInstance = null;
         let chartDistributionInstance = null;
@@ -906,21 +1196,63 @@
             updateUI();
             setupKeyboardShortcuts();
             initPomodoro();
+            initCountdown();
+            renderMufredat();
+            renderLeaderboard();
+            renderAccuracyAnalysis();
+            registerServiceWorker();
             const todayStr = new Date().toISOString().split('T')[0];
             const monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 29);
             document.getElementById('reportStart').value = monthAgo.toISOString().split('T')[0];
             document.getElementById('reportEnd').value = todayStr;
+            document.getElementById('planDate').value = todayStr;
+            document.getElementById('cfgExamDate').value = state.settings.examDate || '';
+            document.getElementById('cfgTargetTyt').value = state.settings.targetTyt || 0;
+            document.getElementById('cfgTargetAyt').value = state.settings.targetAyt || 0;
+            document.getElementById('cfgReminderTime').value = state.settings.reminderTime || '21:00';
+            if (state.settings.remindersEnabled) {
+                document.getElementById('reminderStatus').innerText = 'Bildirimler etkin.';
+            }
+            renderPlanBlocks();
+            setInterval(checkReminders, 60000);
+            setInterval(initCountdown, 60000);
+            setupScrollReveal();
             lucide.createIcons();
+        }
+
+        // --- Apple-style scroll reveal ---
+        let scrollRevealObserver = null;
+        function setupScrollReveal() {
+            if (!scrollRevealObserver && 'IntersectionObserver' in window) {
+                scrollRevealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            scrollRevealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+            }
+
+            const targets = document.querySelectorAll('.soft-card:not(.animate-rise):not(.io-reveal)');
+            targets.forEach(el => {
+                el.classList.add('io-reveal');
+                if (scrollRevealObserver) scrollRevealObserver.observe(el);
+                else el.classList.add('is-visible');
+            });
         }
 
         function loadState() {
             try {
                 state.activities = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACTIVITIES)) || [];
                 state.exams = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXAMS)) || [];
-                state.settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || { dailyGoal: 200, dailyHoursGoal: 4.0 };
+                state.settings = { ...state.settings, ...(JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || {}) };
                 state.offDays = JSON.parse(localStorage.getItem(STORAGE_KEYS.OFFDAYS)) || {};
                 state.theme = localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
                 state.wrongNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.WRONGNOTES)) || [];
+                state.curriculum = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRICULUM)) || {};
+                state.planBlocks = JSON.parse(localStorage.getItem(STORAGE_KEYS.PLANBLOCKS)) || [];
+                state.friends = JSON.parse(localStorage.getItem(STORAGE_KEYS.FRIENDS)) || [];
             } catch(e) {
                 console.error("Storage error:", e);
             }
@@ -933,6 +1265,9 @@
             localStorage.setItem(STORAGE_KEYS.OFFDAYS, JSON.stringify(state.offDays));
             localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
             localStorage.setItem(STORAGE_KEYS.WRONGNOTES, JSON.stringify(state.wrongNotes));
+            localStorage.setItem(STORAGE_KEYS.CURRICULUM, JSON.stringify(state.curriculum));
+            localStorage.setItem(STORAGE_KEYS.PLANBLOCKS, JSON.stringify(state.planBlocks));
+            localStorage.setItem(STORAGE_KEYS.FRIENDS, JSON.stringify(state.friends));
         }
 
         function setTodayDates() {
@@ -973,6 +1308,7 @@
                 moonIcon.classList.add('hidden');
             }
             if (chartExamsInstance) renderCharts();
+            if (chartEstimateInstance) renderScoreEstimator();
         }
 
         // Dynamic Form Logic for Video Playlists
@@ -1034,10 +1370,24 @@
 
                 if (tabId === 'analytics') {
                     setTimeout(renderCharts, 50);
+                    setTimeout(renderAccuracyAnalysis, 50);
                 }
                 if (tabId === 'konular') {
                     renderPlaylistProgress();
                 }
+                if (tabId === 'exams') {
+                    setTimeout(renderScoreEstimator, 50);
+                }
+                if (tabId === 'mufredat') {
+                    renderMufredat();
+                }
+                if (tabId === 'plan') {
+                    renderPlanBlocks();
+                }
+                if (tabId === 'liderlik') {
+                    renderLeaderboard();
+                }
+                setTimeout(setupScrollReveal, 60);
             };
 
             if (current) {
@@ -1149,6 +1499,9 @@
             renderStreakAndHeatmap();
             renderWrongNotes();
             renderExamTrend();
+            renderScoreEstimator();
+            renderAccuracyAnalysis();
+            renderLeaderboard();
         }
 
         function updateProgressBars() {
@@ -1274,13 +1627,21 @@
         function saveGoalSettings() {
             const qVal = parseInt(document.getElementById('cfgDailyGoal').value);
             const hVal = parseFloat(document.getElementById('cfgDailyHoursGoal').value);
+            const examDateVal = document.getElementById('cfgExamDate').value;
+            const targetTytVal = parseFloat(document.getElementById('cfgTargetTyt').value) || 0;
+            const targetAytVal = parseFloat(document.getElementById('cfgTargetAyt').value) || 0;
 
             if (qVal && qVal > 0) state.settings.dailyGoal = qVal;
             if (hVal && hVal > 0) state.settings.dailyHoursGoal = hVal;
+            state.settings.examDate = examDateVal;
+            state.settings.targetTyt = targetTytVal;
+            state.settings.targetAyt = targetAytVal;
 
             saveState();
             updateProgressBars();
-            showToast('Soru ve Saat hedefleri güncellendi!');
+            initCountdown();
+            renderExamTrend();
+            showToast('Hedefler güncellendi!');
         }
 
         function loadDayStatus() {
@@ -1757,6 +2118,436 @@
             `;
 
             setTimeout(() => window.print(), 100);
+        }
+
+        // --- YKS Countdown ---
+        function initCountdown() {
+            const examDate = state.settings.examDate;
+            if (!examDate) {
+                document.getElementById('countdownMain').innerText = '— gün';
+                document.getElementById('countdownQuote').innerText = 'Sınav tarihini Ayarlar sekmesinden belirleyebilirsin.';
+                document.getElementById('cdDays').innerText = '0';
+                document.getElementById('cdHours').innerText = '0';
+                document.getElementById('cdMinutes').innerText = '0';
+                return;
+            }
+            const target = new Date(examDate + 'T09:00:00');
+            const now = new Date();
+            let diff = target - now;
+            if (diff < 0) diff = 0;
+
+            const days = Math.floor(diff / (1000*60*60*24));
+            const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+            const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+
+            document.getElementById('countdownMain').innerText = `${days} gün kaldı`;
+            document.getElementById('cdDays').innerText = days;
+            document.getElementById('cdHours').innerText = hours;
+            document.getElementById('cdMinutes').innerText = minutes;
+
+            const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000*60*60*24));
+            document.getElementById('countdownQuote').innerText = MOTIVATION_QUOTES[dayOfYear % MOTIVATION_QUOTES.length];
+        }
+
+        // --- Curriculum Checklist ---
+        let mufredatFilterEksik = false;
+
+        function getCurriculumStatus(subject, topic) {
+            return (state.curriculum[subject] && state.curriculum[subject][topic]) || 'eksik';
+        }
+
+        function cycleCurriculumStatus(subject, topic) {
+            const order = ['eksik', 'tekrar', 'ogrenildi'];
+            const current = getCurriculumStatus(subject, topic);
+            const next = order[(order.indexOf(current) + 1) % order.length];
+            if (!state.curriculum[subject]) state.curriculum[subject] = {};
+            state.curriculum[subject][topic] = next;
+            saveState();
+            renderMufredat();
+        }
+
+        function toggleMufredatFilter() {
+            mufredatFilterEksik = !mufredatFilterEksik;
+            document.getElementById('mufredatFilterBtn').classList.toggle('bg-brand', mufredatFilterEksik);
+            document.getElementById('mufredatFilterBtn').classList.toggle('text-white', mufredatFilterEksik);
+            renderMufredat();
+        }
+
+        function renderMufredat() {
+            const grid = document.getElementById('mufredatGrid');
+            if (!grid) return;
+
+            const statusMeta = {
+                eksik: { label: 'Eksik', icon: 'circle', cls: 'text-slate-300 dark:text-slate-600' },
+                tekrar: { label: 'Tekrar Gerekiyor', icon: 'rotate-cw', cls: 'text-amber-500' },
+                ogrenildi: { label: 'Öğrenildi', icon: 'check-circle-2', cls: 'text-emerald-500' }
+            };
+
+            let totalTopics = 0, learnedTopics = 0;
+            let html = '';
+
+            Object.keys(PLAYLISTS).forEach(subject => {
+                const topics = PLAYLISTS[subject];
+                let subjectLearned = 0;
+                const rows = topics.map(topic => {
+                    const status = getCurriculumStatus(subject, topic);
+                    totalTopics++;
+                    if (status === 'ogrenildi') { learnedTopics++; subjectLearned++; }
+                    if (mufredatFilterEksik && status !== 'eksik') return '';
+                    const meta = statusMeta[status];
+                    return `<button onclick="cycleCurriculumStatus('${subject.replace(/'/g,"\\'")}', '${topic.replace(/'/g,"\\'")}')" class="press-scale w-full flex items-center gap-2 py-1.5 text-left text-xs ${status==='ogrenildi' ? 'text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'}">
+                        <i data-lucide="${meta.icon}" class="w-3.5 h-3.5 flex-shrink-0 ${meta.cls}"></i>
+                        <span class="${status==='ogrenildi' ? 'line-through' : ''} truncate">${topic}</span>
+                    </button>`;
+                }).join('');
+
+                const pct = Math.round((subjectLearned / topics.length) * 100);
+                html += `
+                <div class="soft-card p-6 rounded-3xl hover-lift">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-[15px] font-semibold text-slate-900 dark:text-slate-50">${subject}</h3>
+                        <span class="text-xs font-bold text-brand">${subjectLearned} / ${topics.length}</span>
+                    </div>
+                    <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden mb-4">
+                        <div class="bar-fill h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400" style="width:${pct}%"></div>
+                    </div>
+                    <div class="max-h-56 overflow-y-auto pr-1">${rows || '<div class=\'text-[11px] text-slate-400 py-4 text-center\'>Bu derste eksik konu yok 🎉</div>'}</div>
+                </div>`;
+            });
+
+            grid.innerHTML = html;
+            const overallPct = totalTopics ? Math.round((learnedTopics / totalTopics) * 100) : 0;
+            document.getElementById('mufredatOverallPct').innerText = `${overallPct}%`;
+            document.getElementById('mufredatOverallBar').style.width = `${overallPct}%`;
+            lucide.createIcons();
+        }
+
+        // --- Daily/Weekly Plan Builder ---
+        function handlePlanSubmit(e) {
+            e.preventDefault();
+            const block = {
+                id: Date.now(),
+                date: document.getElementById('planDate').value,
+                time: document.getElementById('planTime').value,
+                duration: parseInt(document.getElementById('planDuration').value) || 30,
+                subject: document.getElementById('planSubject').value,
+                note: document.getElementById('planNote').value,
+                completed: false
+            };
+            state.planBlocks.push(block);
+            saveState();
+            renderPlanBlocks();
+            playFeedbackSound('success');
+            showToast('Plan bloğu eklendi.');
+            document.getElementById('planNote').value = '';
+        }
+
+        function deletePlanBlock(id) {
+            state.planBlocks = state.planBlocks.filter(b => b.id !== id);
+            saveState();
+            renderPlanBlocks();
+            playFeedbackSound('delete');
+        }
+
+        function togglePlanComplete(id) {
+            const block = state.planBlocks.find(b => b.id === id);
+            if (!block) return;
+            block.completed = !block.completed;
+            if (block.completed) {
+                state.activities.unshift({
+                    id: Date.now(),
+                    date: block.date,
+                    examType: 'AYT',
+                    subject: block.subject,
+                    topic: block.note || 'Plandan otomatik eklendi',
+                    video: null,
+                    type: 'Konu Anlatımı',
+                    questions: 0,
+                    correct: 0,
+                    wrong: 0,
+                    duration: block.duration
+                });
+                showToast('Blok tamamlandı, aktivite olarak kaydedildi!');
+            }
+            saveState();
+            renderPlanBlocks();
+            updateUI();
+        }
+
+        let dragPlanId = null;
+        function renderPlanBlocks() {
+            const container = document.getElementById('planBlocksContainer');
+            if (!container) return;
+            const date = document.getElementById('planDate').value;
+            document.getElementById('planListTitle').innerText = date ? `${date} Planı` : 'Günün Planı';
+
+            const blocks = state.planBlocks.filter(b => b.date === date).sort((a,b) => a.time.localeCompare(b.time));
+
+            if (blocks.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Bu tarih için henüz plan bloğu yok.</div>`;
+                return;
+            }
+
+            container.innerHTML = blocks.map(b => `
+                <div draggable="true" ondragstart="dragPlanId=${b.id}" ondragover="event.preventDefault()" ondrop="handlePlanDrop(event, ${b.id})"
+                     class="flex items-center gap-3 p-3.5 rounded-2xl border border-black/5 dark:border-white/5 ${b.completed ? 'bg-emerald-50/60 dark:bg-emerald-500/10' : 'bg-black/[0.02] dark:bg-white/[0.03]'} cursor-move">
+                    <i data-lucide="grip-vertical" class="w-4 h-4 text-slate-300 dark:text-slate-600 flex-shrink-0"></i>
+                    <button onclick="togglePlanComplete(${b.id})" class="press-scale w-5 h-5 rounded-full border-2 ${b.completed ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 dark:border-slate-600'} flex items-center justify-center flex-shrink-0">
+                        ${b.completed ? '<i data-lucide="check" class="w-3 h-3 text-white"></i>' : ''}
+                    </button>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 ${b.completed ? 'line-through opacity-60' : ''}">${b.time} — ${b.subject}</div>
+                        ${b.note ? `<div class="text-[11px] text-slate-500 dark:text-slate-400 truncate">${b.note}</div>` : ''}
+                    </div>
+                    <span class="text-[10px] text-slate-400 dark:text-slate-500 flex-shrink-0">${b.duration} dk</span>
+                    <button onclick="deletePlanBlock(${b.id})" class="press-scale p-1 text-rose-400 flex-shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                </div>`).join('');
+            lucide.createIcons();
+        }
+
+        function handlePlanDrop(e, targetId) {
+            e.preventDefault();
+            if (dragPlanId === null || dragPlanId === targetId) return;
+            const fromIdx = state.planBlocks.findIndex(b => b.id === dragPlanId);
+            const toIdx = state.planBlocks.findIndex(b => b.id === targetId);
+            if (fromIdx === -1 || toIdx === -1) return;
+            const [moved] = state.planBlocks.splice(fromIdx, 1);
+            state.planBlocks.splice(toIdx, 0, moved);
+            dragPlanId = null;
+            saveState();
+            renderPlanBlocks();
+        }
+
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.id === 'planDate') renderPlanBlocks();
+        });
+
+        // --- Leaderboard ---
+        function handleFriendSubmit(e) {
+            e.preventDefault();
+            const friend = {
+                id: Date.now(),
+                name: document.getElementById('friendName').value,
+                weeklyQ: parseInt(document.getElementById('friendQ').value) || 0,
+                weeklyH: parseFloat(document.getElementById('friendH').value) || 0
+            };
+            state.friends.push(friend);
+            saveState();
+            renderLeaderboard();
+            playFeedbackSound('success');
+            showToast('Arkadaş eklendi.');
+            document.getElementById('friendForm').reset();
+        }
+
+        function deleteFriend(id) {
+            state.friends = state.friends.filter(f => f.id !== id);
+            saveState();
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboardContainer');
+            if (!container) return;
+
+            const now = new Date();
+            const firstDayOfWeek = new Date(now);
+            firstDayOfWeek.setDate(now.getDate() - now.getDay() + (now.getDay() === 0 ? -6 : 1));
+            const weeklyLogs = state.activities.filter(a => new Date(a.date) >= firstDayOfWeek && new Date(a.date) <= now);
+            const myQ = weeklyLogs.reduce((s,a) => s + a.questions, 0);
+            const myH = Math.round((weeklyLogs.reduce((s,a) => s + a.duration, 0) / 60) * 10) / 10;
+
+            const entries = [{ id: 'me', name: 'Sen', weeklyQ: myQ, weeklyH: myH, isMe: true }, ...state.friends];
+            entries.sort((a,b) => b.weeklyQ - a.weeklyQ);
+
+            container.innerHTML = entries.map((e, idx) => `
+                <div class="flex items-center gap-3 p-3.5 rounded-2xl ${e.isMe ? 'bg-brandLight dark:bg-blue-500/10 border border-blue-200/60 dark:border-blue-900/40' : 'bg-black/[0.02] dark:bg-white/[0.03]'}">
+                    <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${idx===0 ? 'bg-amber-400 text-white' : idx===1 ? 'bg-slate-300 text-white' : idx===2 ? 'bg-orange-300 text-white' : 'bg-black/5 dark:bg-white/10 text-slate-500'}">${idx+1}</span>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">${e.name}${e.isMe ? ' (Sen)' : ''}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs font-bold text-brand">${e.weeklyQ} soru</div>
+                        <div class="text-[10px] text-slate-400">${e.weeklyH} saat</div>
+                    </div>
+                    ${!e.isMe ? `<button onclick="deleteFriend(${e.id})" class="press-scale p-1 text-rose-400"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+                </div>`).join('');
+            lucide.createIcons();
+        }
+
+        // --- Subject Accuracy Analysis ---
+        function renderAccuracyAnalysis() {
+            const tbody = document.getElementById('accuracyTableBody');
+            if (!tbody) return;
+
+            const bySubject = {};
+            state.activities.forEach(a => {
+                if (!bySubject[a.subject]) bySubject[a.subject] = { questions: 0, correct: 0, wrong: 0, duration: 0 };
+                bySubject[a.subject].questions += a.questions;
+                bySubject[a.subject].correct += a.correct;
+                bySubject[a.subject].wrong += a.wrong;
+                bySubject[a.subject].duration += a.duration;
+            });
+
+            const rows = Object.keys(bySubject).map(subject => {
+                const d = bySubject[subject];
+                const answered = d.correct + d.wrong;
+                const accuracy = answered > 0 ? Math.round((d.correct / answered) * 100) : 0;
+                const speed = d.duration > 0 ? Math.round((d.questions / d.duration) * 100) / 100 : 0;
+                const accColor = accuracy >= 75 ? 'text-emerald-600 dark:text-emerald-400' : accuracy >= 50 ? 'text-amber-500' : 'text-rose-500';
+                return `<tr class="text-xs">
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${subject}</td>
+                    <td class="p-3">${d.questions}</td>
+                    <td class="p-3 font-bold ${accColor}">${answered > 0 ? accuracy + '%' : '—'}</td>
+                    <td class="p-3">${speed || '—'}</td>
+                </tr>`;
+            }).join('');
+            tbody.innerHTML = rows || `<tr><td colspan="4" class="p-4 text-center text-slate-400 text-xs">Henüz veri yok.</td></tr>`;
+
+            const byTopic = {};
+            state.activities.forEach(a => {
+                const answered = a.correct + a.wrong;
+                if (answered === 0) return;
+                const key = `${a.subject} — ${a.topic}`;
+                if (!byTopic[key]) byTopic[key] = { correct: 0, total: 0 };
+                byTopic[key].correct += a.correct;
+                byTopic[key].total += answered;
+            });
+            const topicList = Object.keys(byTopic)
+                .filter(k => byTopic[k].total >= 3)
+                .map(k => ({ key: k, acc: Math.round((byTopic[k].correct / byTopic[k].total) * 100) }))
+                .sort((a,b) => b.acc - a.acc);
+
+            const strong = topicList.slice(0, 3);
+            const weak = topicList.slice(-3).reverse();
+
+            document.getElementById('strongTopics').innerHTML = strong.length
+                ? strong.map(t => `<div class="flex justify-between"><span class="truncate">${t.key}</span><span class="font-bold">${t.acc}%</span></div>`).join('')
+                : '<div class="text-slate-400">Yeterli veri yok.</div>';
+            document.getElementById('weakTopics').innerHTML = weak.length
+                ? weak.map(t => `<div class="flex justify-between"><span class="truncate">${t.key}</span><span class="font-bold">${t.acc}%</span></div>`).join('')
+                : '<div class="text-slate-400">Yeterli veri yok.</div>';
+        }
+
+        // --- Score / Ranking Estimator ---
+        let chartEstimateInstance = null;
+        function estimateScore(exam) {
+            const maxNet = exam.type === 'TYT' ? 120 : 80;
+            const pct = Math.max(0, Math.min(1, exam.total / maxNet));
+            return Math.round(100 + pct * 400);
+        }
+
+        function renderScoreEstimator() {
+            const canvas = document.getElementById('chartEstimate');
+            const summary = document.getElementById('estimatorSummary');
+            if (!canvas || !summary) return;
+
+            if (state.exams.length === 0) {
+                summary.innerHTML = `<div class="text-xs text-slate-400 dark:text-slate-500">Tahmin için en az bir deneme sonucu ekle.</div>`;
+                if (chartEstimateInstance) { chartEstimateInstance.destroy(); chartEstimateInstance = null; }
+                return;
+            }
+
+            const sorted = [...state.exams].sort((a,b) => new Date(a.date) - new Date(b.date));
+            const points = sorted.map(e => ({ label: `${e.date} (${e.type})`, score: estimateScore(e) }));
+
+            const isDark = state.theme === 'dark';
+            const textColor = isDark ? '#98989d' : '#6e6e73';
+            const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+
+            if (chartEstimateInstance) chartEstimateInstance.destroy();
+            chartEstimateInstance = new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: points.map(p => p.label),
+                    datasets: [{
+                        label: 'Tahmini Puan',
+                        data: points.map(p => p.score),
+                        borderColor: '#8a3ffc',
+                        backgroundColor: 'rgba(138,63,252,0.12)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        borderWidth: 2.5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: textColor, font: { size: 9 } }, grid: { display: false } },
+                        y: { ticks: { color: textColor }, grid: { color: gridColor }, min: 100, max: 500 }
+                    }
+                }
+            });
+
+            const latestTyt = [...state.exams].filter(e => e.type === 'TYT').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+            const latestAyt = [...state.exams].filter(e => e.type === 'AYT').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+
+            let html = `<div class="stat-num text-3xl">${points[points.length-1].score} puan</div>
+                <div class="text-[11px] text-slate-400 dark:text-slate-500 mb-3">Son deneme baz alınarak</div>`;
+
+            if (latestTyt && state.settings.targetTyt > 0) {
+                const gap = Math.round((state.settings.targetTyt - latestTyt.total) * 100) / 100;
+                html += `<div class="text-xs text-slate-600 dark:text-slate-300">TYT hedefine <b class="${gap > 0 ? 'text-rose-500' : 'text-emerald-500'}">${gap > 0 ? gap + ' net' : 'ulaşıldı 🎉'}</b>${gap > 0 ? ' kaldı' : ''}</div>`;
+            }
+            if (latestAyt && state.settings.targetAyt > 0) {
+                const gap = Math.round((state.settings.targetAyt - latestAyt.total) * 100) / 100;
+                html += `<div class="text-xs text-slate-600 dark:text-slate-300 mt-1">AYT hedefine <b class="${gap > 0 ? 'text-rose-500' : 'text-emerald-500'}">${gap > 0 ? gap + ' net' : 'ulaşıldı 🎉'}</b>${gap > 0 ? ' kaldı' : ''}</div>`;
+            }
+            if ((!latestTyt || !state.settings.targetTyt) && (!latestAyt || !state.settings.targetAyt)) {
+                html += `<div class="text-xs text-slate-400 dark:text-slate-500 mt-1">Hedef net girmek için Ayarlar sekmesine bakabilirsin.</div>`;
+            }
+            summary.innerHTML = html;
+        }
+
+        // --- Smart Reminders ---
+        function enableReminders() {
+            if (!('Notification' in window)) {
+                showToast('Tarayıcın bildirimleri desteklemiyor.', 'error');
+                return;
+            }
+            Notification.requestPermission().then(perm => {
+                if (perm === 'granted') {
+                    state.settings.remindersEnabled = true;
+                    state.settings.reminderTime = document.getElementById('cfgReminderTime').value;
+                    saveState();
+                    document.getElementById('reminderStatus').innerText = 'Bildirimler etkin. Sayfa açıkken hatırlatma alacaksın.';
+                    showToast('Bildirimler etkinleştirildi!');
+                } else {
+                    showToast('Bildirim izni verilmedi.', 'error');
+                }
+            });
+        }
+
+        function checkReminders() {
+            if (!state.settings.remindersEnabled) return;
+            const now = new Date();
+            const hh = now.getHours().toString().padStart(2, '0');
+            const mm = now.getMinutes().toString().padStart(2, '0');
+            const current = `${hh}:${mm}`;
+            const todayStr = now.toISOString().split('T')[0];
+
+            if (current === state.settings.reminderTime && state.settings.lastReminderDate !== todayStr) {
+                const dailyLogs = state.activities.filter(a => a.date === todayStr);
+                const dailyQ = dailyLogs.reduce((s,a) => s + a.questions, 0);
+                const goalMet = dailyQ >= state.settings.dailyGoal;
+
+                if (Notification.permission === 'granted') {
+                    new Notification(goalMet ? 'Harika gidiyorsun! 🎉' : 'Günlük hedefin seni bekliyor', {
+                        body: goalMet ? `Bugün ${dailyQ} soru çözdün, hedefini tamamladın!` : `Bugün ${dailyQ} / ${state.settings.dailyGoal} soru çözdün. Hâlâ vakit var!`
+                    });
+                }
+                state.settings.lastReminderDate = todayStr;
+                saveState();
+            }
+        }
+
+        // --- Service Worker (PWA) ---
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
         }
 
         // Command Palette Logic
