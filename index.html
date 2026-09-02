@@ -301,6 +301,14 @@
                 <i data-lucide="mic" class="w-4 h-4"></i>
                 <span>Notlar</span>
             </button>
+            <button onclick="switchTab('kaynaklar')" id="tab-kaynaklar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                <i data-lucide="library" class="w-4 h-4"></i>
+                <span>Kaynaklar</span>
+            </button>
+            <button onclick="switchTab('hedefokul')" id="tab-hedefokul" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+                <span>Hedef Okul</span>
+            </button>
             <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="settings" class="w-4 h-4"></i>
                 <span>Hedefler & Ayarlar</span>
@@ -376,6 +384,11 @@
                                     <option value="Kimya">Kimya</option>
                                     <option value="Biyoloji">Biyoloji</option>
                                     <option value="Geometri">Geometri</option>
+                                    <option value="TYT Matematik">TYT Matematik</option>
+                                    <option value="TYT Fizik">TYT Fizik</option>
+                                    <option value="TYT Kimya">TYT Kimya</option>
+                                    <option value="TYT Biyoloji">TYT Biyoloji</option>
+                                    <option value="Dil Bilgisi">Dil Bilgisi</option>
                                 </select>
                             </div>
                         </div>
@@ -440,10 +453,11 @@
                             <div class="mt-2 flex items-center gap-2">
                                 <label class="press-scale flex-1 flex items-center justify-center gap-1.5 text-[11px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 cursor-pointer">
                                     <i data-lucide="camera" class="w-3.5 h-3.5"></i>
-                                    <span id="actPhotoLabel">Soru Fotoğrafı Ekle</span>
-                                    <input type="file" id="actWrongPhoto" accept="image/*" onchange="handleWrongPhotoSelect(event)" class="hidden">
+                                    <span id="actPhotoLabel">Soru Fotoğrafı Ekle (birden fazla seçebilirsin)</span>
+                                    <input type="file" id="actWrongPhoto" accept="image/*" multiple onchange="handleWrongPhotoSelect(event)" class="hidden">
                                 </label>
                             </div>
+                            <div id="actPhotoPreview" class="flex flex-wrap gap-2 mt-2"></div>
                         </div>
 
                         <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition flex items-center justify-center space-x-2 text-xs">
@@ -490,8 +504,25 @@
                             <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                         </button>
                     </div>
+                    <button onclick="enterFocusMode()" class="press-scale w-full mt-2 font-semibold py-2.5 rounded-full transition text-xs bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2">
+                        <i data-lucide="focus" class="w-3.5 h-3.5"></i>
+                        <span>Odaklanma Modu</span>
+                    </button>
                     <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-3 text-center leading-relaxed">Tur bitince süre otomatik olarak "Çalışma Süresi" alanına eklenir.</p>
                 </div>
+            </div>
+
+            <!-- Smart Study Suggestion -->
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift animate-rise" style="animation-delay:0.055s">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-3 flex items-center space-x-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-brand"></i>
+                    <span>Bugün Ne Çalışmalıyım?</span>
+                </h2>
+                <div id="suggestionContainer" class="text-xs text-slate-500 dark:text-slate-400 mb-3">Öneri almak için butona tıkla.</div>
+                <button onclick="generateStudySuggestion()" class="btn-primary press-scale w-full text-white font-semibold py-2.5 rounded-full transition text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="wand-2" class="w-4 h-4"></i>
+                    <span>Öneri Al</span>
+                </button>
             </div>
 
             <!-- Achievements / Badges -->
@@ -628,6 +659,22 @@
                 <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Netlerin nereye gidiyor?</h1>
                 <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Her deneme bir veri noktası — zamanla nereye gittiğini birlikte görelim.</p>
             </div>
+
+            <!-- Exam Simulation Launcher -->
+            <div class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-[28px] hover-lift flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2">
+                        <i data-lucide="timer-reset" class="w-5 h-5 text-brand"></i>
+                        <span>Sınav Simülasyon Modu</span>
+                    </h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Gerçek sınav süresiyle deneme çöz, dikkatini dağıtmadan.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="startExamSim('TYT')" class="press-scale px-4 py-2.5 rounded-full text-xs font-semibold bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200">TYT (135 dk)</button>
+                    <button onclick="startExamSim('AYT')" class="btn-primary press-scale px-4 py-2.5 rounded-full text-xs font-semibold text-white">AYT (180 dk)</button>
+                </div>
+            </div>
+
             <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="award" class="w-5 h-5 text-brand"></i>
@@ -714,7 +761,7 @@
                     <i data-lucide="gauge" class="w-5 h-5 text-brand"></i>
                     <span>Puan Tahmin Aracı</span>
                 </h2>
-                <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-4">Bu bir kaba tahmindir, ÖSYM'nin resmi hesaplama yöntemini kullanmaz — sadece net gelişimini puana çevirerek fikir verir.</p>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-4">Bu, netlerini kabaca 100-500 puan aralığına oranlayan basit bir tahmindir — ÖSYM'nin resmi katsayılarını ya da Ertan Sinan Şahin'in hesaplama robotunun verilerini kullanmaz (bunlar her yıl güncellenen, dışarıdan erişilemeyen özel verilerdir). Daha kesin ve güncel bir sonuç için <a href="https://ertansinansahin.com/yks-tyt-ayt-puan-hesaplama-ve-siralama-hesaplama/" target="_blank" class="text-brand underline">ertansinansahin.com</a> üzerindeki hesaplama robotunu kullanabilirsin.</p>
                 <div id="estimatorContainer" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div class="relative h-56"><canvas id="chartEstimate"></canvas></div>
                     <div id="estimatorSummary" class="space-y-3"></div>
@@ -795,6 +842,11 @@
                             <option value="Kimya">Kimya</option>
                             <option value="Biyoloji">Biyoloji</option>
                             <option value="Geometri">Geometri</option>
+                                    <option value="TYT Matematik">TYT Matematik</option>
+                                    <option value="TYT Fizik">TYT Fizik</option>
+                                    <option value="TYT Kimya">TYT Kimya</option>
+                                    <option value="TYT Biyoloji">TYT Biyoloji</option>
+                                    <option value="Dil Bilgisi">Dil Bilgisi</option>
                         </select>
                     </div>
                     <div>
@@ -850,6 +902,11 @@
                             <option value="Kimya">Kimya</option>
                             <option value="Biyoloji">Biyoloji</option>
                             <option value="Geometri">Geometri</option>
+                                    <option value="TYT Matematik">TYT Matematik</option>
+                                    <option value="TYT Fizik">TYT Fizik</option>
+                                    <option value="TYT Kimya">TYT Kimya</option>
+                                    <option value="TYT Biyoloji">TYT Biyoloji</option>
+                                    <option value="Dil Bilgisi">Dil Bilgisi</option>
                         </select>
                     </div>
                     <div>
@@ -864,12 +921,18 @@
             </div>
 
             <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
-                <div class="flex items-center justify-between mb-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
                     <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
                         <i data-lucide="list-ordered" class="w-5 h-5 text-brand"></i>
                         <span id="planListTitle">Günün Planı</span>
                     </h2>
-                    <span class="text-[11px] text-slate-400 dark:text-slate-500">Sürükleyerek sırala</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] text-slate-400 dark:text-slate-500">Sürükleyerek sırala</span>
+                        <button onclick="exportPlanToICS()" class="press-scale flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">
+                            <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i>
+                            <span>Takvime Aktar</span>
+                        </button>
+                    </div>
                 </div>
                 <div id="planBlocksContainer" class="space-y-2"></div>
             </div>
@@ -948,6 +1011,111 @@
                     <span>Notların</span>
                 </h2>
                 <div id="quickNotesContainer" class="space-y-2"></div>
+            </div>
+        </section>
+
+        <!-- TAB: RESOURCE / BOOK TRACKING -->
+        <section id="content-kaynaklar" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Kaynaklar</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Hangi kitaptaydın?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Kaynaklarını ekle, sayfa sayfa ilerlemeni takip et.</p>
+            </div>
+
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="book-plus" class="w-5 h-5 text-brand"></i>
+                    <span>Kaynak Ekle</span>
+                </h2>
+                <form id="resourceForm" onsubmit="handleResourceSubmit(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Ders</label>
+                        <select id="resSubject" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                            <option value="Matematik">AYT Matematik</option>
+                            <option value="Edebiyat">AYT Edebiyat</option>
+                            <option value="Coğrafya">AYT Coğrafya</option>
+                            <option value="Tarih">AYT Tarih</option>
+                            <option value="Türkçe">Türkçe</option>
+                            <option value="Fizik">Fizik</option>
+                            <option value="Kimya">Kimya</option>
+                            <option value="Biyoloji">Biyoloji</option>
+                            <option value="Geometri">Geometri</option>
+                                    <option value="TYT Matematik">TYT Matematik</option>
+                                    <option value="TYT Fizik">TYT Fizik</option>
+                                    <option value="TYT Kimya">TYT Kimya</option>
+                                    <option value="TYT Biyoloji">TYT Biyoloji</option>
+                                    <option value="Dil Bilgisi">Dil Bilgisi</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Kitap / Yayın Adı</label>
+                        <input type="text" id="resName" required placeholder="Örn: Karekök Matematik Soru Bankası" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Toplam Sayfa</label>
+                            <input type="number" id="resTotal" min="1" value="100" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Mevcut Sayfa</label>
+                            <input type="number" id="resCurrent" min="0" value="0" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition flex items-center justify-center space-x-2 text-xs">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Kaynağı Ekle</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="library" class="w-5 h-5 text-brand"></i>
+                    <span>Kaynak Kütüphanem</span>
+                </h2>
+                <div id="resourcesContainer" class="space-y-3"></div>
+            </div>
+        </section>
+
+        <!-- TAB: TARGET UNIVERSITY LIST -->
+        <section id="content-hedefokul" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
+                <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Hedef Okul</div>
+                <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Nereye ulaşmak istiyorsun?</h1>
+                <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Hedeflerini yaz, tahmini puanınla aradaki farkı gör.</p>
+            </div>
+
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="graduation-cap" class="w-5 h-5 text-brand"></i>
+                    <span>Hedef Ekle</span>
+                </h2>
+                <form id="schoolForm" onsubmit="handleSchoolSubmit(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Üniversite</label>
+                        <input type="text" id="schoolName" required placeholder="Örn: Boğaziçi Üniversitesi" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Bölüm</label>
+                        <input type="text" id="schoolDept" required placeholder="Örn: Yönetim Bilişim Sistemleri" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Hedef Puan (0-500)</label>
+                        <input type="number" id="schoolScore" min="0" max="500" value="0" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition flex items-center justify-center space-x-2 text-xs">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Hedefi Ekle</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-2 soft-card p-7 sm:p-8 rounded-[28px]">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="target" class="w-5 h-5 text-brand"></i>
+                    <span>Hedef Listem</span>
+                </h2>
+                <div id="schoolsContainer" class="space-y-3"></div>
             </div>
         </section>
 
@@ -1164,10 +1332,76 @@
                     </button>
                 </div>
             </div>
+
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-2">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-brand"></i>
+                    <span>Dönem Özeti Kartı</span>
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Seçtiğin dönemin özetini görsel bir kart olarak oluştur, indir ya da paylaş.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end mb-4">
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Başlangıç</label>
+                        <input type="date" id="wrappedStart" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Bitiş</label>
+                        <input type="date" id="wrappedEnd" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                    </div>
+                    <button onclick="generateWrappedCard()" class="btn-primary press-scale py-2.5 rounded-full transition text-xs text-white font-semibold flex items-center justify-center gap-2">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        <span>Özet Oluştur</span>
+                    </button>
+                </div>
+                <div id="wrappedResult" class="hidden">
+                    <canvas id="wrappedCanvas" class="w-full rounded-2xl border border-black/5 dark:border-white/10 mb-3"></canvas>
+                    <div class="flex gap-2">
+                        <button onclick="downloadWrappedCard()" class="press-scale flex-1 text-xs font-semibold py-2.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center gap-2">
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            <span>İndir</span>
+                        </button>
+                        <button onclick="shareWrappedCard()" id="wrappedShareBtn" class="hidden press-scale flex-1 text-xs font-semibold py-2.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200 flex items-center justify-center gap-2">
+                            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                            <span>Paylaş</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Print-only report container -->
         <div id="printReport" class="hidden"></div>
+
+        <!-- Focus Mode Overlay -->
+        <div id="focusOverlay" class="hidden fixed inset-0 z-[95] bg-softbg dark:bg-black flex flex-col items-center justify-center px-6">
+            <button onclick="exitFocusMode()" class="absolute top-6 right-6 press-scale p-3 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 dark:text-slate-400">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-4">Odaklanma Modu</div>
+            <div class="relative w-64 h-64 flex items-center justify-center mb-6">
+                <svg class="w-64 h-64 -rotate-90" viewBox="0 0 140 140">
+                    <circle cx="70" cy="70" r="62" fill="none" stroke-width="6" class="stroke-black/5 dark:stroke-white/10"></circle>
+                    <circle id="focusRing" cx="70" cy="70" r="62" fill="none" stroke-width="6" stroke-linecap="round" stroke="#0071e3" stroke-dasharray="389.6" stroke-dashoffset="0" style="transition: stroke-dashoffset 1s linear;"></circle>
+                </svg>
+                <div class="absolute flex flex-col items-center">
+                    <span id="focusTime" class="text-5xl font-semibold text-slate-900 dark:text-slate-50 tabular-nums">25:00</span>
+                </div>
+            </div>
+            <button onclick="pomodoroToggle(); syncFocusButton();" id="focusToggleBtn" class="btn-primary press-scale px-8 py-3 rounded-full transition text-sm text-white font-semibold flex items-center gap-2">
+                <i data-lucide="play" class="w-4 h-4"></i>
+                <span>Başlat</span>
+            </button>
+        </div>
+
+        <!-- Exam Simulation Overlay -->
+        <div id="examSimOverlay" class="hidden fixed inset-0 z-[95] bg-softbg dark:bg-black flex flex-col items-center justify-center px-6">
+            <button onclick="exitExamSim()" class="absolute top-6 right-6 press-scale p-3 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 dark:text-slate-400">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="examSimLabel" class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-4">TYT Simülasyonu</div>
+            <div class="stat-num text-7xl tabular-nums mb-6" id="examSimTime">02:15:00</div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 text-center max-w-xs">Gerçek sınav koşullarında çalış. Süre bitince otomatik olarak deneme sonucu giriş ekranına yönlendirileceksin.</p>
+        </div>
 
     </main>
 
@@ -1249,6 +1483,100 @@
                 "12 - Kurtuluş Savaşı Cepheler ve Antlaşmalar",
                 "13 - Atatürk İlke ve İnkılapları",
                 "14 - Çağdaş Türk ve Dünya Tarihi"
+            ],
+            "TYT Matematik": [
+                "01 - Temel Kavramlar",
+                "02 - Sayı Basamakları",
+                "03 - Bölme ve Bölünebilme",
+                "04 - OBEB - OKEK",
+                "05 - Rasyonel Sayılar",
+                "06 - Basit Eşitsizlikler",
+                "07 - Mutlak Değer",
+                "08 - Üslü Sayılar",
+                "09 - Köklü Sayılar",
+                "10 - Çarpanlara Ayırma",
+                "11 - Oran Orantı",
+                "12 - Denklem Çözme",
+                "13 - Problemler (Sayı-Yaş)",
+                "14 - Problemler (Hareket-Hız)",
+                "15 - Problemler (İşçi-Havuz)",
+                "16 - Problemler (Yüzde-Kar Zarar)",
+                "17 - Problemler (Karışım)",
+                "18 - Kümeler",
+                "19 - Fonksiyonlar (Temel)",
+                "20 - Permütasyon - Kombinasyon",
+                "21 - Olasılık",
+                "22 - Veri - İstatistik",
+                "23 - Temel Geometri (Üçgenler)",
+                "24 - Çokgenler ve Dörtgenler",
+                "25 - Çember ve Daire",
+                "26 - Analitik Geometri (Temel)",
+                "27 - Katı Cisimler"
+            ],
+            "TYT Fizik": [
+                "01 - Fizik Bilimine Giriş",
+                "02 - Madde ve Özellikleri",
+                "03 - Sıvıların Kaldırma Kuvveti",
+                "04 - Basınç",
+                "05 - Isı, Sıcaklık ve Genleşme",
+                "06 - Hareket ve Kuvvet (Giriş)",
+                "07 - Newton'un Hareket Yasaları",
+                "08 - İş, Güç ve Enerji",
+                "09 - Enerji Dönüşümleri ve Çevre Bilimi",
+                "10 - Elektrostatik",
+                "11 - Elektrik Akımı ve Devreler",
+                "12 - Manyetizma",
+                "13 - Dalgalar",
+                "14 - Optik (Aydınlanma ve Gölge)",
+                "15 - Optik (Yansıma ve Aynalar)",
+                "16 - Optik (Kırılma ve Mercekler)"
+            ],
+            "TYT Kimya": [
+                "01 - Kimya Bilimi",
+                "02 - Atom ve Yapısı",
+                "03 - Periyodik Sistem",
+                "04 - Kimyasal Türler Arası Etkileşimler",
+                "05 - Maddenin Halleri",
+                "06 - Doğa ve Kimya",
+                "07 - Kimyanın Temel Kanunları",
+                "08 - Mol Kavramı",
+                "09 - Kimyasal Tepkimeler",
+                "10 - Karışımlar",
+                "11 - Asit, Baz ve Tuz",
+                "12 - Kimya Her Yerde"
+            ],
+            "TYT Biyoloji": [
+                "01 - Canlıların Ortak Özellikleri",
+                "02 - Canlıların Temel Bileşenleri",
+                "03 - Hücre ve Organeller",
+                "04 - Madde Geçişleri",
+                "05 - Canlıların Sınıflandırılması",
+                "06 - Mitoz ve Eşeysiz Üreme",
+                "07 - Mayoz ve Eşeyli Üreme",
+                "08 - Kalıtım (Temel Kavramlar)",
+                "09 - Ekosistem Ekolojisi",
+                "10 - Güncel Çevre Sorunları"
+            ],
+            "Dil Bilgisi": [
+                "01 - Ses Bilgisi",
+                "02 - Yazım (İmla) Kuralları",
+                "03 - Noktalama İşaretleri",
+                "04 - Sözcükte Anlam",
+                "05 - Sözcükte Yapı (Kök-Ek)",
+                "06 - İsimler",
+                "07 - Zamirler",
+                "08 - Sıfatlar",
+                "09 - Zarflar",
+                "10 - Edat, Bağlaç, Ünlem",
+                "11 - Fiiller (Kip ve Kişi Ekleri)",
+                "12 - Ek Fiil",
+                "13 - Fiilimsiler",
+                "14 - Fiilde Çatı",
+                "15 - Cümlenin Öğeleri",
+                "16 - Cümle Türleri",
+                "17 - Anlatım Bozuklukları",
+                "18 - Cümlede Anlam",
+                "19 - Paragrafta Anlam ve Yapı"
             ]
         };
 
@@ -1313,7 +1641,9 @@
             PLANBLOCKS: 'yks_planblocks_v3',
             FRIENDS: 'yks_friends_v3',
             QUICKNOTES: 'yks_quicknotes_v3',
-            TOPICGOALS: 'yks_topicgoals_v3'
+            TOPICGOALS: 'yks_topicgoals_v3',
+            RESOURCES: 'yks_resources_v3',
+            SCHOOLS: 'yks_schools_v3'
         };
 
         let state = {
@@ -1327,7 +1657,11 @@
             planBlocks: [],
             friends: [],
             quickNotes: [],
-            topicGoals: []
+            topicGoals: [],
+            resources: [],
+            schools: [
+                { id: 1, name: 'Boğaziçi Üniversitesi', dept: 'Yönetim Bilişim Sistemleri', targetScore: 0 }
+            ]
         };
 
         const MOTIVATION_QUOTES = [
@@ -1362,6 +1696,8 @@
             const monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 29);
             document.getElementById('reportStart').value = monthAgo.toISOString().split('T')[0];
             document.getElementById('reportEnd').value = todayStr;
+            document.getElementById('wrappedStart').value = monthAgo.toISOString().split('T')[0];
+            document.getElementById('wrappedEnd').value = todayStr;
             document.getElementById('planDate').value = todayStr;
             document.getElementById('cfgExamDate').value = state.settings.examDate || '';
             document.getElementById('cfgTargetTyt').value = state.settings.targetTyt || 0;
@@ -1374,6 +1710,8 @@
             renderBadges();
             renderQuickNotes();
             renderTopicGoals();
+            renderResources();
+            renderSchools();
             setInterval(checkReminders, 60000);
             setInterval(initCountdown, 60000);
             setupScrollReveal();
@@ -1415,6 +1753,8 @@
                 state.friends = JSON.parse(localStorage.getItem(STORAGE_KEYS.FRIENDS)) || [];
                 state.quickNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.QUICKNOTES)) || [];
                 state.topicGoals = JSON.parse(localStorage.getItem(STORAGE_KEYS.TOPICGOALS)) || [];
+                state.resources = JSON.parse(localStorage.getItem(STORAGE_KEYS.RESOURCES)) || [];
+                state.schools = JSON.parse(localStorage.getItem(STORAGE_KEYS.SCHOOLS)) || state.schools;
             } catch(e) {
                 console.error("Storage error:", e);
             }
@@ -1432,6 +1772,8 @@
             localStorage.setItem(STORAGE_KEYS.FRIENDS, JSON.stringify(state.friends));
             localStorage.setItem(STORAGE_KEYS.QUICKNOTES, JSON.stringify(state.quickNotes));
             localStorage.setItem(STORAGE_KEYS.TOPICGOALS, JSON.stringify(state.topicGoals));
+            localStorage.setItem(STORAGE_KEYS.RESOURCES, JSON.stringify(state.resources));
+            localStorage.setItem(STORAGE_KEYS.SCHOOLS, JSON.stringify(state.schools));
         }
 
         function setTodayDates() {
@@ -1556,6 +1898,12 @@
                 if (tabId === 'notlar') {
                     renderQuickNotes();
                 }
+                if (tabId === 'kaynaklar') {
+                    renderResources();
+                }
+                if (tabId === 'hedefokul') {
+                    renderSchools();
+                }
                 if (tabId === 'dashboard') {
                     renderBadges();
                 }
@@ -1572,16 +1920,36 @@
         }
 
         // Submit Activity
-        let pendingWrongNotePhoto = null;
+        let pendingWrongNotePhotos = [];
         function handleWrongPhotoSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                pendingWrongNotePhoto = e.target.result;
-                document.getElementById('actPhotoLabel').innerText = 'Fotoğraf Eklendi ✓';
-            };
-            reader.readAsDataURL(file);
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+            let loaded = 0;
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    pendingWrongNotePhotos.push(e.target.result);
+                    loaded++;
+                    document.getElementById('actPhotoLabel').innerText = `${pendingWrongNotePhotos.length} Fotoğraf Eklendi ✓`;
+                    renderActPhotoPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderActPhotoPreview() {
+            const container = document.getElementById('actPhotoPreview');
+            container.innerHTML = pendingWrongNotePhotos.map((p, idx) => `
+                <div class="relative">
+                    <img src="${p}" class="w-14 h-14 object-cover rounded-xl border border-black/10 dark:border-white/10">
+                    <button type="button" onclick="removePendingPhoto(${idx})" class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] flex items-center justify-center press-scale">✕</button>
+                </div>`).join('');
+        }
+
+        function removePendingPhoto(idx) {
+            pendingWrongNotePhotos.splice(idx, 1);
+            renderActPhotoPreview();
+            document.getElementById('actPhotoLabel').innerText = pendingWrongNotePhotos.length > 0 ? `${pendingWrongNotePhotos.length} Fotoğraf Eklendi ✓` : 'Soru Fotoğrafı Ekle (birden fazla seçebilirsin)';
         }
 
         function handleActivitySubmit(e) {
@@ -1618,7 +1986,7 @@
             state.activities.unshift(activity);
 
             const wrongNoteText = (document.getElementById('actWrongNote').value || '').trim();
-            if (wrongNoteText || pendingWrongNotePhoto) {
+            if (wrongNoteText || pendingWrongNotePhotos.length > 0) {
                 state.wrongNotes.unshift({
                     id: Date.now() + 1,
                     date: activity.date,
@@ -1626,7 +1994,7 @@
                     subject: activity.subject,
                     topic: document.getElementById('actTopic').value || activity.subject,
                     note: wrongNoteText || '(fotoğraf eklendi)',
-                    photo: pendingWrongNotePhoto,
+                    photos: [...pendingWrongNotePhotos],
                     reviewed: false
                 });
             }
@@ -1641,8 +2009,9 @@
             document.getElementById('actWrongNote').value = '';
             document.getElementById('actTags').value = '';
             document.getElementById('actWrongPhoto').value = '';
-            document.getElementById('actPhotoLabel').innerText = 'Soru Fotoğrafı Ekle';
-            pendingWrongNotePhoto = null;
+            document.getElementById('actPhotoLabel').innerText = 'Soru Fotoğrafı Ekle (birden fazla seçebilirsin)';
+            document.getElementById('actPhotoPreview').innerHTML = '';
+            pendingWrongNotePhotos = [];
         }
 
         function deleteActivity(id) {
@@ -1699,6 +2068,7 @@
             renderLeaderboard();
             if (document.getElementById('badgesContainer')) renderBadges();
             if (document.getElementById('topicGoalsContainer')) renderTopicGoals();
+            if (document.getElementById('schoolsContainer')) renderSchools();
         }
 
         function updateProgressBars() {
@@ -2049,7 +2419,7 @@
                     html += `
                     <div class="flex items-start gap-3 p-3.5 rounded-2xl bg-black/[0.025] dark:bg-white/[0.04] border border-black/5 dark:border-white/5">
                         <button onclick="toggleWrongNoteReviewed(${n.id})" class="press-scale mt-0.5 w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600 hover:border-brand flex-shrink-0" title="Tekrarlandı olarak işaretle"></button>
-                        ${n.photo ? `<img src="${n.photo}" onclick="window.open('${n.photo.replace(/'/g, "\\'")}', '_blank')" class="w-14 h-14 object-cover rounded-xl border border-black/10 dark:border-white/10 cursor-pointer flex-shrink-0" title="Büyütmek için tıkla">` : ''}
+                        ${(n.photos && n.photos.length) ? `<div class="flex gap-1 flex-shrink-0">${n.photos.slice(0,3).map(p => `<img src="${p}" onclick="window.open('${p.replace(/'/g, "\\'")}', '_blank')" class="w-14 h-14 object-cover rounded-xl border border-black/10 dark:border-white/10 cursor-pointer" title="Büyütmek için tıkla">`).join('')}</div>` : (n.photo ? `<img src="${n.photo}" onclick="window.open('${n.photo.replace(/'/g, "\\'")}', '_blank')" class="w-14 h-14 object-cover rounded-xl border border-black/10 dark:border-white/10 cursor-pointer flex-shrink-0" title="Büyütmek için tıkla">` : '')}
                         <div class="flex-1 min-w-0">
                             <div class="text-xs font-medium text-slate-800 dark:text-slate-200">${n.topic}</div>
                             <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${n.note}</div>
@@ -2236,6 +2606,7 @@
             const ring = document.getElementById('pomoRing');
             ring.style.strokeDashoffset = `${POMO_CIRCUMFERENCE * (1 - pct)}`;
             ring.setAttribute('stroke', pomo.mode === 'work' ? '#0071e3' : '#06c1a0');
+            if (!document.getElementById('focusOverlay').classList.contains('hidden')) updateFocusDisplay();
         }
 
         function pomodoroToggle() {
@@ -2250,6 +2621,7 @@
                 pomo.interval = setInterval(pomodoroTick, 1000);
             }
             lucide.createIcons();
+            if (!document.getElementById('focusOverlay').classList.contains('hidden')) syncFocusButton();
         }
 
         function pomodoroTick() {
@@ -2979,6 +3351,368 @@
                         y: { ticks: { color: textColor }, grid: { color: gridColor } }
                     }
                 }
+            });
+        }
+
+        // --- Resource / Book Tracking ---
+        function handleResourceSubmit(e) {
+            e.preventDefault();
+            const resource = {
+                id: Date.now(),
+                subject: document.getElementById('resSubject').value,
+                name: document.getElementById('resName').value.trim(),
+                total: parseInt(document.getElementById('resTotal').value) || 100,
+                current: parseInt(document.getElementById('resCurrent').value) || 0
+            };
+            state.resources.push(resource);
+            saveState();
+            renderResources();
+            playFeedbackSound('success');
+            showToast('Kaynak eklendi.');
+            document.getElementById('resourceForm').reset();
+            document.getElementById('resTotal').value = 100;
+            document.getElementById('resCurrent').value = 0;
+        }
+
+        function updateResourcePage(id, delta) {
+            const r = state.resources.find(x => x.id === id);
+            if (!r) return;
+            r.current = Math.max(0, Math.min(r.total, r.current + delta));
+            saveState();
+            renderResources();
+        }
+
+        function deleteResource(id) {
+            state.resources = state.resources.filter(r => r.id !== id);
+            saveState();
+            renderResources();
+            playFeedbackSound('delete');
+        }
+
+        function renderResources() {
+            const container = document.getElementById('resourcesContainer');
+            if (!container) return;
+            if (state.resources.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Henüz kaynak eklenmedi.</div>`;
+                return;
+            }
+            container.innerHTML = state.resources.map(r => {
+                const pct = Math.min(100, Math.round((r.current / r.total) * 100));
+                const done = pct >= 100;
+                return `<div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <div class="min-w-0">
+                            <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">${r.name}</div>
+                            <div class="text-[10px] text-slate-400 dark:text-slate-500">${r.subject}</div>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <button onclick="updateResourcePage(${r.id}, -5)" class="press-scale w-6 h-6 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 text-xs">−</button>
+                            <span class="text-xs font-bold ${done ? 'text-emerald-500' : 'text-brand'} w-16 text-center">${r.current}/${r.total}</span>
+                            <button onclick="updateResourcePage(${r.id}, 5)" class="press-scale w-6 h-6 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 text-xs">+</button>
+                            <button onclick="deleteResource(${r.id})" class="press-scale text-rose-400 ml-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                        </div>
+                    </div>
+                    <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden">
+                        <div class="bar-fill h-2 rounded-full ${done ? 'bg-emerald-500' : 'bg-gradient-to-r from-brand to-sky-400'}" style="width:${pct}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- Target University List ---
+        function handleSchoolSubmit(e) {
+            e.preventDefault();
+            const school = {
+                id: Date.now(),
+                name: document.getElementById('schoolName').value.trim(),
+                dept: document.getElementById('schoolDept').value.trim(),
+                targetScore: parseFloat(document.getElementById('schoolScore').value) || 0
+            };
+            state.schools.push(school);
+            saveState();
+            renderSchools();
+            playFeedbackSound('success');
+            showToast('Hedef eklendi.');
+            document.getElementById('schoolForm').reset();
+        }
+
+        function deleteSchool(id) {
+            state.schools = state.schools.filter(s => s.id !== id);
+            saveState();
+            renderSchools();
+        }
+
+        function getCurrentEstimatedScore() {
+            if (state.exams.length === 0) return null;
+            const latestTyt = [...state.exams].filter(e => e.type === 'TYT').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+            const latestAyt = [...state.exams].filter(e => e.type === 'AYT').sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+            const scores = [];
+            if (latestTyt) scores.push(estimateScore(latestTyt));
+            if (latestAyt) scores.push(estimateScore(latestAyt));
+            if (scores.length === 0) return null;
+            return Math.round(scores.reduce((a,b) => a+b, 0) / scores.length);
+        }
+
+        function renderSchools() {
+            const container = document.getElementById('schoolsContainer');
+            if (!container) return;
+            if (state.schools.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Henüz hedef eklenmedi.</div>`;
+                return;
+            }
+            const currentScore = getCurrentEstimatedScore();
+            container.innerHTML = state.schools.map(s => {
+                let gapHtml = `<span class="text-[11px] text-slate-400 dark:text-slate-500">Tahmini puan için önce bir deneme ekle</span>`;
+                if (currentScore !== null && s.targetScore > 0) {
+                    const gap = Math.round((s.targetScore - currentScore) * 10) / 10;
+                    gapHtml = gap > 0
+                        ? `<span class="text-xs font-bold text-rose-500">${gap} puan kaldı</span>`
+                        : `<span class="text-xs font-bold text-emerald-500">Hedefe ulaşıldı 🎉</span>`;
+                }
+                return `<div class="p-4 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">${s.name}</div>
+                        <div class="text-[11px] text-slate-500 dark:text-slate-400 truncate">${s.dept}</div>
+                        <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Hedef: ${s.targetScore > 0 ? s.targetScore + ' puan' : 'belirtilmedi'}</div>
+                    </div>
+                    <div class="text-right flex-shrink-0">
+                        ${gapHtml}
+                        <button onclick="deleteSchool(${s.id})" class="press-scale text-rose-400 mt-1 block ml-auto"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // --- Focus Mode ---
+        function enterFocusMode() {
+            document.getElementById('focusOverlay').classList.remove('hidden');
+            syncFocusButton();
+            updateFocusDisplay();
+        }
+        function exitFocusMode() {
+            document.getElementById('focusOverlay').classList.add('hidden');
+        }
+        function syncFocusButton() {
+            const btn = document.getElementById('focusToggleBtn');
+            if (!btn) return;
+            btn.innerHTML = pomo.running
+                ? `<i data-lucide="pause" class="w-4 h-4"></i><span>Duraklat</span>`
+                : `<i data-lucide="play" class="w-4 h-4"></i><span>Başlat</span>`;
+            lucide.createIcons();
+        }
+        function updateFocusDisplay() {
+            const timeEl = document.getElementById('focusTime');
+            const ringEl = document.getElementById('focusRing');
+            if (!timeEl) return;
+            timeEl.innerText = document.getElementById('pomoTime').innerText;
+            if (ringEl) ringEl.style.strokeDashoffset = document.getElementById('pomoRing').style.strokeDashoffset;
+        }
+
+        // --- Exam Simulation Mode ---
+        let examSimInterval = null;
+        function startExamSim(type) {
+            const overlay = document.getElementById('examSimOverlay');
+            const durationMin = type === 'TYT' ? 135 : 180;
+            let remaining = durationMin * 60;
+            document.getElementById('examSimLabel').innerText = `${type} Simülasyonu`;
+            overlay.classList.remove('hidden');
+
+            const render = () => {
+                const h = Math.floor(remaining / 3600).toString().padStart(2, '0');
+                const m = Math.floor((remaining % 3600) / 60).toString().padStart(2, '0');
+                const s = (remaining % 60).toString().padStart(2, '0');
+                document.getElementById('examSimTime').innerText = `${h}:${m}:${s}`;
+            };
+            render();
+
+            clearInterval(examSimInterval);
+            examSimInterval = setInterval(() => {
+                remaining--;
+                if (remaining <= 0) {
+                    clearInterval(examSimInterval);
+                    exitExamSim();
+                    playFeedbackSound('success');
+                    showToast('Süre doldu! Sonucunu deneme formuna gir.');
+                    switchTab('exams');
+                    return;
+                }
+                render();
+            }, 1000);
+        }
+        function exitExamSim() {
+            clearInterval(examSimInterval);
+            document.getElementById('examSimOverlay').classList.add('hidden');
+        }
+
+        // --- ICS Calendar Export ---
+        function formatICSDate(dateStr, timeStr) {
+            const [y, m, d] = dateStr.split('-');
+            const [hh, mm] = (timeStr || '09:00').split(':');
+            return `${y}${m}${d}T${hh}${mm}00`;
+        }
+
+        function exportPlanToICS() {
+            if (state.planBlocks.length === 0 && !state.settings.examDate) {
+                showToast('Aktarılacak plan bloğu yok.', 'error');
+                return;
+            }
+            let ics = 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//YKS Takip//TR\r\n';
+            state.planBlocks.forEach(b => {
+                const startDT = formatICSDate(b.date, b.time);
+                const endDate = new Date(`${b.date}T${b.time}:00`);
+                endDate.setMinutes(endDate.getMinutes() + b.duration);
+                const endDT = `${endDate.getFullYear()}${(endDate.getMonth()+1).toString().padStart(2,'0')}${endDate.getDate().toString().padStart(2,'0')}T${endDate.getHours().toString().padStart(2,'0')}${endDate.getMinutes().toString().padStart(2,'0')}00`;
+                ics += `BEGIN:VEVENT\r\nUID:${b.id}@yks-takip\r\nDTSTART:${startDT}\r\nDTEND:${endDT}\r\nSUMMARY:${b.subject} Çalışma${b.note ? ' - ' + b.note : ''}\r\nEND:VEVENT\r\n`;
+            });
+            if (state.settings.examDate) {
+                const d = state.settings.examDate.replace(/-/g, '');
+                ics += `BEGIN:VEVENT\r\nUID:yks-exam-date@yks-takip\r\nDTSTART;VALUE=DATE:${d}\r\nSUMMARY:YKS Sınavı\r\nEND:VEVENT\r\n`;
+            }
+            ics += 'END:VCALENDAR';
+
+            const blob = new Blob([ics], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'yks-plan.ics';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Takvim dosyası indirildi.');
+        }
+
+        // --- Smart Study Suggestion ---
+        function generateStudySuggestion() {
+            const container = document.getElementById('suggestionContainer');
+            const byTopic = {};
+            state.activities.forEach(a => {
+                const answered = a.correct + a.wrong;
+                if (answered === 0) return;
+                const key = `${a.subject}|||${a.topic}`;
+                if (!byTopic[key]) byTopic[key] = { correct: 0, total: 0, subject: a.subject, topic: a.topic };
+                byTopic[key].correct += a.correct;
+                byTopic[key].total += answered;
+            });
+            const weakList = Object.values(byTopic)
+                .filter(t => t.total >= 3)
+                .map(t => ({ ...t, acc: t.correct / t.total }))
+                .sort((a,b) => a.acc - b.acc);
+
+            if (weakList.length === 0) {
+                container.innerHTML = `Henüz yeterli veri yok — birkaç aktivite ekledikten sonra sana özel bir öneri sunabilirim. Şimdilik <b>müfredattaki eksik konulardan</b> birine göz atabilirsin.`;
+                return;
+            }
+
+            const pick = weakList[0];
+            const pct = Math.round(pick.acc * 100);
+            container.innerHTML = `<b class="text-slate-800 dark:text-slate-200">${pick.subject} — ${pick.topic}</b> konusunda doğruluğun %${pct}. Bugün buraya biraz zaman ayırmak iyi olur.
+                <button onclick="applySuggestion('${pick.subject.replace(/'/g,"\\'")}', '${pick.topic.replace(/'/g,"\\'")}')" class="press-scale mt-2 w-full text-[11px] font-semibold py-2 rounded-full bg-brand/10 text-brand">Forma Doldur</button>`;
+            lucide.createIcons();
+        }
+
+        function applySuggestion(subject, topic) {
+            switchTab('dashboard');
+            setTimeout(() => {
+                const subjSelect = document.getElementById('actSubject');
+                if ([...subjSelect.options].some(o => o.value === subject)) subjSelect.value = subject;
+                document.getElementById('actTopic').value = topic.replace(/^.*\(|\)$/g, '').trim() || topic;
+                handleSubjectChange();
+                showToast('Form dolduruldu, çalışmaya hazırsın!');
+            }, 200);
+        }
+
+        // --- Wrapped / Period Summary Card ---
+        if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                this.beginPath();
+                this.moveTo(x + r, y);
+                this.arcTo(x + w, y, x + w, y + h, r);
+                this.arcTo(x + w, y + h, x, y + h, r);
+                this.arcTo(x, y + h, x, y, r);
+                this.arcTo(x, y, x + w, y, r);
+                this.closePath();
+                return this;
+            };
+        }
+
+        function generateWrappedCard() {
+            const start = document.getElementById('wrappedStart').value;
+            const end = document.getElementById('wrappedEnd').value;
+            if (!start || !end) { showToast('Tarih aralığı seçmelisin.', 'error'); return; }
+
+            const acts = state.activities.filter(a => a.date >= start && a.date <= end);
+            const totalQ = acts.reduce((s,a) => s + a.questions, 0);
+            const totalMin = acts.reduce((s,a) => s + a.duration, 0);
+            const subjectTotals = {};
+            acts.forEach(a => { subjectTotals[a.subject] = (subjectTotals[a.subject] || 0) + a.questions; });
+            const topSubject = Object.keys(subjectTotals).sort((a,b) => subjectTotals[b]-subjectTotals[a])[0] || '—';
+            const examsInPeriod = state.exams.filter(e => e.date >= start && e.date <= end);
+
+            const canvas = document.getElementById('wrappedCanvas');
+            const isDark = state.theme === 'dark';
+            const W = 800, H = 450;
+            canvas.width = W; canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            const grad = ctx.createLinearGradient(0, 0, W, H);
+            grad.addColorStop(0, isDark ? '#0f172a' : '#eef2ff');
+            grad.addColorStop(1, isDark ? '#1e1b3a' : '#f3e8ff');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.fillStyle = isDark ? '#f5f5f7' : '#1d1d1f';
+            ctx.font = '600 22px -apple-system, sans-serif';
+            ctx.fillText('YKS Çalışma Özeti', 48, 64);
+            ctx.font = '400 13px -apple-system, sans-serif';
+            ctx.fillStyle = isDark ? '#a1a1a6' : '#6e6e73';
+            ctx.fillText(`${start}  —  ${end}`, 48, 88);
+
+            const stats = [
+                { label: 'Toplam Soru', value: totalQ },
+                { label: 'Toplam Süre', value: (totalMin/60).toFixed(1) + ' sa' },
+                { label: 'En Çok Çalışılan', value: topSubject },
+                { label: 'Deneme Sayısı', value: examsInPeriod.length }
+            ];
+            const boxW = (W - 96 - 3*16) / 4;
+            stats.forEach((s, i) => {
+                const x = 48 + i * (boxW + 16);
+                const y = 140;
+                ctx.fillStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.7)';
+                ctx.beginPath();
+                ctx.roundRect(x, y, boxW, 140, 18);
+                ctx.fill();
+                ctx.fillStyle = '#0071e3';
+                ctx.font = '700 26px -apple-system, sans-serif';
+                ctx.fillText(String(s.value), x + 16, y + 60);
+                ctx.fillStyle = isDark ? '#a1a1a6' : '#6e6e73';
+                ctx.font = '400 12px -apple-system, sans-serif';
+                ctx.fillText(s.label, x + 16, y + 90);
+            });
+
+            ctx.fillStyle = isDark ? '#a1a1a6' : '#8e8e93';
+            ctx.font = '400 11px -apple-system, sans-serif';
+            ctx.fillText('YKS Çalışma Portalı ile oluşturuldu', 48, H - 24);
+
+            document.getElementById('wrappedResult').classList.remove('hidden');
+            if (navigator.share) document.getElementById('wrappedShareBtn').classList.remove('hidden');
+        }
+
+        function downloadWrappedCard() {
+            const canvas = document.getElementById('wrappedCanvas');
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL('image/png');
+            a.download = 'yks-ozet.png';
+            a.click();
+        }
+
+        function shareWrappedCard() {
+            const canvas = document.getElementById('wrappedCanvas');
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], 'yks-ozet.png', { type: 'image/png' });
+                try {
+                    await navigator.share({ files: [file], title: 'YKS Çalışma Özetim' });
+                } catch(e) {}
             });
         }
 
