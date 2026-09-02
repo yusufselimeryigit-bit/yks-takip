@@ -252,11 +252,6 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button onclick="openProfileSwitcher()" class="flex items-center space-x-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 px-3.5 py-2 rounded-full text-xs text-slate-600 dark:text-slate-300 transition press-scale" title="Profil Değiştir">
-                    <i data-lucide="user-circle" class="w-3.5 h-3.5 text-brand"></i>
-                    <span id="activeProfileLabel">Profil</span>
-                </button>
-
                 <button onclick="toggleCommandPalette()" class="hidden md:flex items-center space-x-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 px-3.5 py-2 rounded-full text-xs text-slate-600 dark:text-slate-300 transition press-scale">
                     <i data-lucide="search" class="w-3.5 h-3.5"></i>
                     <span>Ara...</span>
@@ -1537,28 +1532,6 @@
             <p class="text-xs text-slate-400 dark:text-slate-500 text-center max-w-xs">Gerçek sınav koşullarında çalış. Süre bitince otomatik olarak deneme sonucu giriş ekranına yönlendirileceksin.</p>
         </div>
 
-        <!-- Profile Picker Overlay -->
-        <div id="profileOverlay" class="hidden fixed inset-0 z-[99] bg-softbg dark:bg-black flex flex-col items-center justify-center px-6 py-10 overflow-y-auto">
-            <div class="w-full max-w-sm">
-                <div class="text-center mb-6">
-                    <div class="inline-flex p-3 bg-brandLight dark:bg-blue-500/15 rounded-2xl text-brand mb-3">
-                        <i data-lucide="user-circle" class="w-7 h-7"></i>
-                    </div>
-                    <h1 class="hero-title text-2xl text-slate-900 dark:text-slate-50">Kimsin?</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2" id="profileSyncNote">Kontrol ediliyor...</p>
-                </div>
-
-                <div id="profileList" class="space-y-2 mb-5 max-h-52 overflow-y-auto"></div>
-
-                <form onsubmit="handleNewProfileSubmit(event)" class="flex items-center gap-2">
-                    <input type="text" id="newProfileName" placeholder="Yeni profil adı (örn: Ahmet)" required class="input-soft flex-1 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100">
-                    <button type="submit" class="btn-primary press-scale px-4 py-3 rounded-xl text-xs text-white font-semibold flex items-center gap-1.5">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-
         <!-- Wrong Notes Quiz / Flashcard Overlay -->
         <div id="quizOverlay" class="hidden fixed inset-0 z-[95] bg-softbg dark:bg-black flex flex-col items-center justify-center px-6">
             <button onclick="exitQuiz()" class="absolute top-6 right-6 press-scale p-3 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 dark:text-slate-400">
@@ -1858,82 +1831,11 @@
         let chartDistributionInstance = null;
 
         // --- Multi-Profile & Cross-Device Storage ---
-        let currentProfile = null;
-        const hasCloudStorage = typeof window.storage !== 'undefined';
-
-        async function storageGet(key) {
-            if (hasCloudStorage) {
-                try { const r = await window.storage.get(key, true); return r ? r.value : null; }
-                catch(e) { return null; }
-            }
-            return localStorage.getItem(key);
-        }
-        async function storageSet(key, value) {
-            if (hasCloudStorage) {
-                try { await window.storage.set(key, value, true); return true; }
-                catch(e) { return false; }
-            }
-            localStorage.setItem(key, value);
-            return true;
-        }
-        async function storageListProfiles() {
-            if (hasCloudStorage) {
-                try {
-                    const r = await window.storage.list('yksprofile_', true);
-                    return r ? r.keys.map(k => decodeURIComponent(k.replace('yksprofile_', ''))) : [];
-                } catch(e) { return []; }
-            }
-            const profiles = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const k = localStorage.key(i);
-                if (k && k.startsWith('yksprofile_')) profiles.push(decodeURIComponent(k.replace('yksprofile_', '')));
-            }
-            return profiles;
-        }
-
-        async function showProfilePicker() {
-            const overlay = document.getElementById('profileOverlay');
-            overlay.classList.remove('hidden');
-            document.getElementById('profileSyncNote').innerText = hasCloudStorage
-                ? '☁️ Bu profiller herhangi bir cihazdan aynı isimle girildiğinde görünür.'
-                : '💾 Bu dosya şu an yerel olarak açıldığı için profiller sadece bu tarayıcıda saklanır.';
-            const listEl = document.getElementById('profileList');
-            listEl.innerHTML = `<div class="text-xs text-slate-400 dark:text-slate-500 text-center py-3">Profiller yükleniyor...</div>`;
-            const profiles = await storageListProfiles();
-            if (profiles.length === 0) {
-                listEl.innerHTML = `<div class="text-xs text-slate-400 dark:text-slate-500 text-center py-3">Henüz profil yok. Aşağıdan ilk profilini oluştur.</div>`;
-            } else {
-                listEl.innerHTML = profiles.map(p => `
-                    <button onclick="chooseProfile('${p.replace(/'/g, "\\'")}')" class="press-scale w-full flex items-center justify-between p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 text-left">
-                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="user-circle" class="w-4 h-4 text-brand"></i>${p}</span>
-                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-                    </button>`).join('');
-            }
-            lucide.createIcons();
-        }
-
-        function handleNewProfileSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('newProfileName').value.trim();
-            if (!name) return;
-            chooseProfile(name);
-        }
-
-        async function chooseProfile(name) {
-            if (!name || !name.trim()) return;
-            currentProfile = name.trim();
-            document.getElementById('profileOverlay').classList.add('hidden');
-            document.getElementById('activeProfileLabel').innerText = currentProfile;
-            document.getElementById('newProfileName').value = '';
-            await startApp();
-        }
-
-        function openProfileSwitcher() {
-            showProfilePicker();
-        }
+        // --- Local Storage (single fixed key, no profiles) ---
+        const STORAGE_KEY = 'yks_takip_data_v1';
 
         async function initApp() {
-            await showProfilePicker();
+            await startApp();
         }
 
         async function startApp() {
@@ -2005,7 +1907,17 @@
 
         async function loadState() {
             try {
-                const raw = await storageGet(`yksprofile_${encodeURIComponent(currentProfile)}`);
+                let raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) {
+                    // Migrate data from the old profile-based storage system, if any exists.
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const k = localStorage.key(i);
+                        if (k && k.startsWith('yksprofile_')) {
+                            raw = localStorage.getItem(k);
+                            break;
+                        }
+                    }
+                }
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     state = {
@@ -2013,6 +1925,7 @@
                         ...parsed,
                         settings: { ...state.settings, ...(parsed.settings || {}) }
                     };
+                    localStorage.setItem(STORAGE_KEY, raw);
                 }
             } catch(e) {
                 console.error("Storage error:", e);
@@ -2021,7 +1934,7 @@
 
         async function saveState() {
             try {
-                await storageSet(`yksprofile_${encodeURIComponent(currentProfile)}`, JSON.stringify(state));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
             } catch(e) {
                 console.error("Save error:", e);
             }
