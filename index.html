@@ -134,6 +134,10 @@
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
         .bar-glow {
             background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             background-size: 60% 100%;
@@ -153,6 +157,8 @@
         .tab-fade { animation: rise 0.5s var(--ease-apple) both; }
 
         .tab-btn { transition: background-color 0.35s var(--ease-apple), color 0.35s var(--ease-apple), transform 0.2s var(--ease-apple), box-shadow 0.35s var(--ease-apple); }
+        .side-tab-btn { transition: background-color 0.3s var(--ease-apple), color 0.3s var(--ease-apple); }
+        .side-tab-btn:active { transform: scale(0.98); }
         .tab-btn:active { transform: scale(0.96); }
 
         table tr { transition: background-color 0.25s var(--ease-apple); }
@@ -246,6 +252,11 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
+                <button onclick="openProfileSwitcher()" class="flex items-center space-x-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 px-3.5 py-2 rounded-full text-xs text-slate-600 dark:text-slate-300 transition press-scale" title="Profil Değiştir">
+                    <i data-lucide="user-circle" class="w-3.5 h-3.5 text-brand"></i>
+                    <span id="activeProfileLabel">Profil</span>
+                </button>
+
                 <button onclick="toggleCommandPalette()" class="hidden md:flex items-center space-x-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 px-3.5 py-2 rounded-full text-xs text-slate-600 dark:text-slate-300 transition press-scale">
                     <i data-lucide="search" class="w-3.5 h-3.5"></i>
                     <span>Ara...</span>
@@ -262,54 +273,122 @@
         </div>
     </header>
 
-    <!-- Navigation Bar -->
-    <div class="glass-nav border-t-0 border-x-0 border-b border-black/5 dark:border-white/10 sticky top-[73px] z-40">
+    <!-- Navigation Bar (mobile/tablet) + Sidebar (desktop) wrapper -->
+    <div class="lg:flex lg:items-start">
+
+        <!-- Sidebar (desktop only) -->
+        <aside class="hidden lg:flex lg:flex-col w-60 shrink-0 sticky top-[73px] self-start h-[calc(100vh-73px)] overflow-y-auto border-r border-black/5 dark:border-white/10 px-4 py-6 space-y-6">
+            <div>
+                <div class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.12em] px-3 mb-2">Çalışma</div>
+                <div class="space-y-0.5">
+                    <button onclick="switchTab('dashboard')" data-tab="dashboard" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left bg-brand text-white">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i><span>Kontrol Paneli</span>
+                    </button>
+                    <button onclick="switchTab('exams')" data-tab="exams" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="file-text" class="w-4 h-4"></i><span>Deneme Takibi</span>
+                    </button>
+                    <button onclick="switchTab('tekrar')" data-tab="tekrar" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="book-open" class="w-4 h-4"></i><span>Yanlış Defteri</span>
+                    </button>
+                    <button onclick="switchTab('konular')" data-tab="konular" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="video" class="w-4 h-4"></i><span>Konu İlerlemesi</span>
+                    </button>
+                    <button onclick="switchTab('mufredat')" data-tab="mufredat" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="list-checks" class="w-4 h-4"></i><span>Müfredat</span>
+                    </button>
+                    <button onclick="switchTab('plan')" data-tab="plan" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="calendar-clock" class="w-4 h-4"></i><span>Plan</span>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.12em] px-3 mb-2">Analiz & Motivasyon</div>
+                <div class="space-y-0.5">
+                    <button onclick="switchTab('analytics')" data-tab="analytics" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="pie-chart" class="w-4 h-4"></i><span>Analiz & Grafikler</span>
+                    </button>
+                    <button onclick="switchTab('liderlik')" data-tab="liderlik" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="trophy" class="w-4 h-4"></i><span>Liderlik</span>
+                    </button>
+                    <button onclick="switchTab('notlar')" data-tab="notlar" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="mic" class="w-4 h-4"></i><span>Notlar</span>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.12em] px-3 mb-2">Kaynaklar & Hedefler</div>
+                <div class="space-y-0.5">
+                    <button onclick="switchTab('kaynaklar')" data-tab="kaynaklar" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="library" class="w-4 h-4"></i><span>Kaynaklar</span>
+                    </button>
+                    <button onclick="switchTab('hedefokul')" data-tab="hedefokul" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i><span>Hedef Okul</span>
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <div class="text-[10px] font-medium text-slate-400 dark:text-slate-500 uppercase tracking-[0.12em] px-3 mb-2">Sistem</div>
+                <div class="space-y-0.5">
+                    <button onclick="switchTab('settings')" data-tab="settings" class="side-tab-btn nav-tab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-left text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10">
+                        <i data-lucide="settings" class="w-4 h-4"></i><span>Hedefler & Ayarlar</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1 min-w-0">
+
+    <!-- Navigation Bar (mobile/tablet) -->
+    <div class="lg:hidden glass-nav border-t-0 border-x-0 border-b border-black/5 dark:border-white/10 sticky top-[73px] z-40">
         <div class="max-w-7xl mx-auto flex space-x-2 px-6 py-3 overflow-x-auto scrollbar-none">
-            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs bg-brand text-white shadow-sm">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" data-tab="dashboard" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs bg-brand text-white shadow-sm">
                 <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
                 <span>Kontrol Paneli</span>
             </button>
-            <button onclick="switchTab('exams')" id="tab-exams" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('exams')" id="tab-exams" data-tab="exams" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="file-text" class="w-4 h-4"></i>
                 <span>Deneme Takibi</span>
             </button>
-            <button onclick="switchTab('tekrar')" id="tab-tekrar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('tekrar')" id="tab-tekrar" data-tab="tekrar" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="book-open" class="w-4 h-4"></i>
                 <span>Yanlış Defteri</span>
             </button>
-            <button onclick="switchTab('konular')" id="tab-konular" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('konular')" id="tab-konular" data-tab="konular" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="video" class="w-4 h-4"></i>
                 <span>Konu İlerlemesi</span>
             </button>
-            <button onclick="switchTab('analytics')" id="tab-analytics" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('analytics')" id="tab-analytics" data-tab="analytics" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="pie-chart" class="w-4 h-4"></i>
                 <span>Analiz & Grafikler</span>
             </button>
-            <button onclick="switchTab('mufredat')" id="tab-mufredat" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('mufredat')" id="tab-mufredat" data-tab="mufredat" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="list-checks" class="w-4 h-4"></i>
                 <span>Müfredat</span>
             </button>
-            <button onclick="switchTab('plan')" id="tab-plan" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('plan')" id="tab-plan" data-tab="plan" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="calendar-clock" class="w-4 h-4"></i>
                 <span>Plan</span>
             </button>
-            <button onclick="switchTab('liderlik')" id="tab-liderlik" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('liderlik')" id="tab-liderlik" data-tab="liderlik" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="trophy" class="w-4 h-4"></i>
                 <span>Liderlik</span>
             </button>
-            <button onclick="switchTab('notlar')" id="tab-notlar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('notlar')" id="tab-notlar" data-tab="notlar" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="mic" class="w-4 h-4"></i>
                 <span>Notlar</span>
             </button>
-            <button onclick="switchTab('kaynaklar')" id="tab-kaynaklar" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('kaynaklar')" id="tab-kaynaklar" data-tab="kaynaklar" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="library" class="w-4 h-4"></i>
                 <span>Kaynaklar</span>
             </button>
-            <button onclick="switchTab('hedefokul')" id="tab-hedefokul" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('hedefokul')" id="tab-hedefokul" data-tab="hedefokul" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="graduation-cap" class="w-4 h-4"></i>
                 <span>Hedef Okul</span>
             </button>
-            <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+            <button onclick="switchTab('settings')" id="tab-settings" data-tab="settings" class="tab-btn nav-tab-btn px-4 py-2 rounded-full font-semibold flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
                 <i data-lucide="settings" class="w-4 h-4"></i>
                 <span>Hedefler & Ayarlar</span>
             </button>
@@ -508,6 +587,21 @@
                         <i data-lucide="focus" class="w-3.5 h-3.5"></i>
                         <span>Odaklanma Modu</span>
                     </button>
+
+                    <div class="w-full mt-4 pt-4 border-t border-black/5 dark:border-white/10">
+                        <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5">
+                            <i data-lucide="waves" class="w-3.5 h-3.5"></i>
+                            <span>Odaklanma Sesleri</span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1.5">
+                            <button onclick="setAmbientSound('off')" id="ambientBtnoff" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-brand text-white">Kapalı</button>
+                            <button onclick="setAmbientSound('white')" id="ambientBtnwhite" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Beyaz</button>
+                            <button onclick="setAmbientSound('rain')" id="ambientBtnrain" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Yağmur</button>
+                            <button onclick="setAmbientSound('cafe')" id="ambientBtncafe" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Kafe</button>
+                        </div>
+                        <input type="range" id="ambientVolume" min="0" max="100" value="35" oninput="setAmbientVolume(this.value)" class="w-full mt-2 accent-brand">
+                    </div>
+
                     <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-3 text-center leading-relaxed">Tur bitince süre otomatik olarak "Çalışma Süresi" alanına eklenir.</p>
                 </div>
             </div>
@@ -714,6 +808,14 @@
                             <input type="number" step="0.25" id="netSos" value="0" class="input-soft w-full rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
                         </div>
                     </div>
+                    <div>
+                        <label class="press-scale w-full flex items-center justify-center gap-1.5 text-[11px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 cursor-pointer">
+                            <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                            <span id="examPhotoLabel">Optik/Karne Fotoğrafı Ekle</span>
+                            <input type="file" id="examPhotoInput" accept="image/*" multiple onchange="handleExamPhotoSelect(event)" class="hidden">
+                        </label>
+                        <div id="examPhotoPreview" class="flex flex-wrap gap-2 mt-2"></div>
+                    </div>
                     <button type="submit" class="btn-primary press-scale w-full text-white font-semibold py-3 rounded-full transition text-xs flex items-center justify-center space-x-2">
                         <i data-lucide="save" class="w-4 h-4"></i>
                         <span>Denemeyi Kaydet</span>
@@ -782,7 +884,13 @@
                         <i data-lucide="book-open" class="w-5 h-5 text-brand"></i>
                         <span>Yanlış Soru Defteri</span>
                     </h2>
-                    <span class="text-xs text-slate-400 dark:text-slate-500" id="tekrarSummary">0 tekrar bekleniyor</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-slate-400 dark:text-slate-500" id="tekrarSummary">0 tekrar bekleniyor</span>
+                        <button onclick="generateQuizFromWrongNotes()" class="press-scale flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-brand/10 text-brand">
+                            <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
+                            <span>Quiz Oluştur</span>
+                        </button>
+                    </div>
                 </div>
                 <div id="wrongNotesContainer" class="space-y-3"></div>
             </div>
@@ -1165,6 +1273,18 @@
                 </div>
             </div>
 
+            <!-- Weekday Study Intensity -->
+            <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2">
+                    <i data-lucide="calendar-days" class="w-5 h-5 text-brand"></i>
+                    <span>Haftalık Çalışma Yoğunluğu</span>
+                </h2>
+                <p id="weekdayInsight" class="text-xs text-slate-500 dark:text-slate-400 mb-4"></p>
+                <div class="relative h-64">
+                    <canvas id="chartWeekday"></canvas>
+                </div>
+            </div>
+
             <div class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-4 flex items-center space-x-2">
                     <i data-lucide="crosshair" class="w-5 h-5 text-brand"></i>
@@ -1232,6 +1352,13 @@
                                 <input type="number" id="cfgTargetAyt" min="0" max="80" step="0.5" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                             </div>
                         </div>
+                        <label class="flex items-center justify-between p-3 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] cursor-pointer">
+                            <span class="text-xs font-medium text-slate-600 dark:text-slate-300 flex items-center gap-2">
+                                <i data-lucide="moon-star" class="w-4 h-4 text-brand"></i>
+                                Otomatik Tema Geçişi (20:00-07:00 arası koyu mod)
+                            </span>
+                            <input type="checkbox" id="cfgAutoTheme" onchange="toggleAutoTheme()" class="w-4 h-4 accent-brand">
+                        </label>
                         <button onclick="saveGoalSettings()" class="btn-primary press-scale w-full text-white font-semibold py-2.5 rounded-full transition text-xs">
                             Hedefleri Güncelle
                         </button>
@@ -1269,6 +1396,13 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
                         Verileriniz tarayıcınızda (LocalStorage) güvendedir. Farklı cihazlara aktarmak için dışa aktarabilirsiniz.
                     </p>
+                    <div id="backupBanner" class="hidden mb-4 p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200/60 dark:border-amber-900/40 flex items-start gap-2.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                        <div class="flex-1 min-w-0">
+                            <p id="backupBannerText" class="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed"></p>
+                            <button onclick="snoozeBackupReminder()" class="press-scale text-[10px] font-semibold text-amber-600 dark:text-amber-400 underline mt-1">Bu hafta hatırlatma</button>
+                        </div>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <button onclick="exportData()" class="press-scale bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2.5 px-4 rounded-full transition flex items-center justify-center space-x-2 text-xs shadow-sm shadow-emerald-500/10">
                             <i data-lucide="download" class="w-4 h-4"></i>
@@ -1403,7 +1537,51 @@
             <p class="text-xs text-slate-400 dark:text-slate-500 text-center max-w-xs">Gerçek sınav koşullarında çalış. Süre bitince otomatik olarak deneme sonucu giriş ekranına yönlendirileceksin.</p>
         </div>
 
+        <!-- Profile Picker Overlay -->
+        <div id="profileOverlay" class="hidden fixed inset-0 z-[99] bg-softbg dark:bg-black flex flex-col items-center justify-center px-6 py-10 overflow-y-auto">
+            <div class="w-full max-w-sm">
+                <div class="text-center mb-6">
+                    <div class="inline-flex p-3 bg-brandLight dark:bg-blue-500/15 rounded-2xl text-brand mb-3">
+                        <i data-lucide="user-circle" class="w-7 h-7"></i>
+                    </div>
+                    <h1 class="hero-title text-2xl text-slate-900 dark:text-slate-50">Kimsin?</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-2" id="profileSyncNote">Kontrol ediliyor...</p>
+                </div>
+
+                <div id="profileList" class="space-y-2 mb-5 max-h-52 overflow-y-auto"></div>
+
+                <form onsubmit="handleNewProfileSubmit(event)" class="flex items-center gap-2">
+                    <input type="text" id="newProfileName" placeholder="Yeni profil adı (örn: Ahmet)" required class="input-soft flex-1 rounded-xl p-3 text-xs text-slate-800 dark:text-slate-100">
+                    <button type="submit" class="btn-primary press-scale px-4 py-3 rounded-xl text-xs text-white font-semibold flex items-center gap-1.5">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Wrong Notes Quiz / Flashcard Overlay -->
+        <div id="quizOverlay" class="hidden fixed inset-0 z-[95] bg-softbg dark:bg-black flex flex-col items-center justify-center px-6">
+            <button onclick="exitQuiz()" class="absolute top-6 right-6 press-scale p-3 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 dark:text-slate-400">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2" id="quizProgress">1 / 5</div>
+            <div class="soft-card p-8 rounded-[28px] w-full max-w-md min-h-[280px] flex flex-col items-center justify-center text-center">
+                <div class="text-[11px] font-semibold text-brand mb-2" id="quizSubject">Ders</div>
+                <div class="text-lg font-semibold text-slate-900 dark:text-slate-50 mb-4" id="quizTopic">Konu</div>
+                <div id="quizAnswerArea" class="w-full">
+                    <button onclick="revealQuizAnswer()" id="quizRevealBtn" class="btn-primary press-scale px-6 py-3 rounded-full text-xs text-white font-semibold">Notu Göster</button>
+                </div>
+            </div>
+            <div id="quizActionButtons" class="hidden flex items-center gap-3 mt-6">
+                <button onclick="quizNext(false)" class="press-scale px-5 py-2.5 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-500">Hâlâ Zorlanıyorum</button>
+                <button onclick="quizNext(true)" class="press-scale px-5 py-2.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-500">Hatırladım ✓</button>
+            </div>
+        </div>
+
     </main>
+
+        </div>
+    </div>
 
     <footer class="glass-nav border-t border-x-0 border-b-0 border-black/5 dark:border-white/10 p-4 text-center text-xs text-slate-400 dark:text-slate-500 mt-auto z-10">
         YKS Hazırlık & Performans Portalı &bull; Yerel Veri Depolama
@@ -1678,8 +1856,87 @@
         let chartExamsInstance = null;
         let chartDistributionInstance = null;
 
-        function initApp() {
-            loadState();
+        // --- Multi-Profile & Cross-Device Storage ---
+        let currentProfile = null;
+        const hasCloudStorage = typeof window.storage !== 'undefined';
+
+        async function storageGet(key) {
+            if (hasCloudStorage) {
+                try { const r = await window.storage.get(key, true); return r ? r.value : null; }
+                catch(e) { return null; }
+            }
+            return localStorage.getItem(key);
+        }
+        async function storageSet(key, value) {
+            if (hasCloudStorage) {
+                try { await window.storage.set(key, value, true); return true; }
+                catch(e) { return false; }
+            }
+            localStorage.setItem(key, value);
+            return true;
+        }
+        async function storageListProfiles() {
+            if (hasCloudStorage) {
+                try {
+                    const r = await window.storage.list('yksprofile_', true);
+                    return r ? r.keys.map(k => decodeURIComponent(k.replace('yksprofile_', ''))) : [];
+                } catch(e) { return []; }
+            }
+            const profiles = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k && k.startsWith('yksprofile_')) profiles.push(decodeURIComponent(k.replace('yksprofile_', '')));
+            }
+            return profiles;
+        }
+
+        async function showProfilePicker() {
+            const overlay = document.getElementById('profileOverlay');
+            overlay.classList.remove('hidden');
+            document.getElementById('profileSyncNote').innerText = hasCloudStorage
+                ? '☁️ Bu profiller herhangi bir cihazdan aynı isimle girildiğinde görünür.'
+                : '💾 Bu dosya şu an yerel olarak açıldığı için profiller sadece bu tarayıcıda saklanır.';
+            const listEl = document.getElementById('profileList');
+            listEl.innerHTML = `<div class="text-xs text-slate-400 dark:text-slate-500 text-center py-3">Profiller yükleniyor...</div>`;
+            const profiles = await storageListProfiles();
+            if (profiles.length === 0) {
+                listEl.innerHTML = `<div class="text-xs text-slate-400 dark:text-slate-500 text-center py-3">Henüz profil yok. Aşağıdan ilk profilini oluştur.</div>`;
+            } else {
+                listEl.innerHTML = profiles.map(p => `
+                    <button onclick="chooseProfile('${p.replace(/'/g, "\\'")}')" class="press-scale w-full flex items-center justify-between p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5 text-left">
+                        <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2"><i data-lucide="user-circle" class="w-4 h-4 text-brand"></i>${p}</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+                    </button>`).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function handleNewProfileSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('newProfileName').value.trim();
+            if (!name) return;
+            chooseProfile(name);
+        }
+
+        async function chooseProfile(name) {
+            if (!name || !name.trim()) return;
+            currentProfile = name.trim();
+            document.getElementById('profileOverlay').classList.add('hidden');
+            document.getElementById('activeProfileLabel').innerText = currentProfile;
+            document.getElementById('newProfileName').value = '';
+            await startApp();
+        }
+
+        function openProfileSwitcher() {
+            showProfilePicker();
+        }
+
+        async function initApp() {
+            await showProfilePicker();
+        }
+
+        async function startApp() {
+            await loadState();
             setTodayDates();
             applyTheme();
             handleSubjectChange();
@@ -1692,6 +1949,7 @@
             renderLeaderboard();
             renderAccuracyAnalysis();
             registerServiceWorker();
+            checkBackupReminder();
             const todayStr = new Date().toISOString().split('T')[0];
             const monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 29);
             document.getElementById('reportStart').value = monthAgo.toISOString().split('T')[0];
@@ -1703,17 +1961,21 @@
             document.getElementById('cfgTargetTyt').value = state.settings.targetTyt || 0;
             document.getElementById('cfgTargetAyt').value = state.settings.targetAyt || 0;
             document.getElementById('cfgReminderTime').value = state.settings.reminderTime || '21:00';
+            document.getElementById('cfgAutoTheme').checked = !!state.settings.autoTheme;
             if (state.settings.remindersEnabled) {
                 document.getElementById('reminderStatus').innerText = 'Bildirimler etkin.';
             }
+            applyAutoTheme();
             renderPlanBlocks();
             renderBadges();
+            earnedBadgeIds = new Set(ACHIEVEMENTS.filter(a => a.check()).map(a => a.id));
             renderQuickNotes();
             renderTopicGoals();
             renderResources();
             renderSchools();
             setInterval(checkReminders, 60000);
             setInterval(initCountdown, 60000);
+            setInterval(applyAutoTheme, 60000);
             setupScrollReveal();
             lucide.createIcons();
         }
@@ -1740,40 +2002,28 @@
             });
         }
 
-        function loadState() {
+        async function loadState() {
             try {
-                state.activities = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACTIVITIES)) || [];
-                state.exams = JSON.parse(localStorage.getItem(STORAGE_KEYS.EXAMS)) || [];
-                state.settings = { ...state.settings, ...(JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || {}) };
-                state.offDays = JSON.parse(localStorage.getItem(STORAGE_KEYS.OFFDAYS)) || {};
-                state.theme = localStorage.getItem(STORAGE_KEYS.THEME) || 'light';
-                state.wrongNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.WRONGNOTES)) || [];
-                state.curriculum = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRICULUM)) || {};
-                state.planBlocks = JSON.parse(localStorage.getItem(STORAGE_KEYS.PLANBLOCKS)) || [];
-                state.friends = JSON.parse(localStorage.getItem(STORAGE_KEYS.FRIENDS)) || [];
-                state.quickNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.QUICKNOTES)) || [];
-                state.topicGoals = JSON.parse(localStorage.getItem(STORAGE_KEYS.TOPICGOALS)) || [];
-                state.resources = JSON.parse(localStorage.getItem(STORAGE_KEYS.RESOURCES)) || [];
-                state.schools = JSON.parse(localStorage.getItem(STORAGE_KEYS.SCHOOLS)) || state.schools;
+                const raw = await storageGet(`yksprofile_${encodeURIComponent(currentProfile)}`);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    state = {
+                        ...state,
+                        ...parsed,
+                        settings: { ...state.settings, ...(parsed.settings || {}) }
+                    };
+                }
             } catch(e) {
                 console.error("Storage error:", e);
             }
         }
 
-        function saveState() {
-            localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(state.activities));
-            localStorage.setItem(STORAGE_KEYS.EXAMS, JSON.stringify(state.exams));
-            localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(state.settings));
-            localStorage.setItem(STORAGE_KEYS.OFFDAYS, JSON.stringify(state.offDays));
-            localStorage.setItem(STORAGE_KEYS.THEME, state.theme);
-            localStorage.setItem(STORAGE_KEYS.WRONGNOTES, JSON.stringify(state.wrongNotes));
-            localStorage.setItem(STORAGE_KEYS.CURRICULUM, JSON.stringify(state.curriculum));
-            localStorage.setItem(STORAGE_KEYS.PLANBLOCKS, JSON.stringify(state.planBlocks));
-            localStorage.setItem(STORAGE_KEYS.FRIENDS, JSON.stringify(state.friends));
-            localStorage.setItem(STORAGE_KEYS.QUICKNOTES, JSON.stringify(state.quickNotes));
-            localStorage.setItem(STORAGE_KEYS.TOPICGOALS, JSON.stringify(state.topicGoals));
-            localStorage.setItem(STORAGE_KEYS.RESOURCES, JSON.stringify(state.resources));
-            localStorage.setItem(STORAGE_KEYS.SCHOOLS, JSON.stringify(state.schools));
+        async function saveState() {
+            try {
+                await storageSet(`yksprofile_${encodeURIComponent(currentProfile)}`, JSON.stringify(state));
+            } catch(e) {
+                console.error("Save error:", e);
+            }
         }
 
         function setTodayDates() {
@@ -1859,9 +2109,21 @@
 
             const activate = () => {
                 document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-                document.querySelectorAll('.tab-btn').forEach(btn => {
-                    btn.classList.remove('bg-brand', 'text-white', 'shadow-sm');
-                    btn.classList.add('text-slate-600', 'dark:text-slate-400');
+
+                document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+                    const isActive = btn.dataset.tab === tabId;
+                    if (btn.classList.contains('side-tab-btn')) {
+                        btn.classList.toggle('bg-brand', isActive);
+                        btn.classList.toggle('text-white', isActive);
+                        btn.classList.toggle('text-slate-600', !isActive);
+                        btn.classList.toggle('dark:text-slate-400', !isActive);
+                    } else {
+                        btn.classList.toggle('bg-brand', isActive);
+                        btn.classList.toggle('text-white', isActive);
+                        btn.classList.toggle('shadow-sm', isActive);
+                        btn.classList.toggle('text-slate-500', !isActive);
+                        btn.classList.toggle('dark:text-slate-400', !isActive);
+                    }
                 });
 
                 const nextEl = document.getElementById(`content-${tabId}`);
@@ -1870,14 +2132,11 @@
                 void nextEl.offsetWidth;
                 nextEl.classList.add('tab-fade');
 
-                const activeBtn = document.getElementById(`tab-${tabId}`);
-                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
-                activeBtn.classList.add('bg-brand', 'text-white', 'shadow-sm');
-
                 if (tabId === 'analytics') {
                     setTimeout(renderCharts, 50);
                     setTimeout(renderAccuracyAnalysis, 50);
                     setTimeout(() => renderPeriodComparison('week'), 50);
+                    setTimeout(renderWeekdayChart, 50);
                 }
                 if (tabId === 'konular') {
                     renderPlaylistProgress();
@@ -1954,6 +2213,7 @@
 
         function handleActivitySubmit(e) {
             e.preventDefault();
+            if (!validateActivityForm()) return;
             const actType = document.getElementById('actType').value;
             const subject = document.getElementById('actSubject').value;
 
@@ -2023,8 +2283,39 @@
         }
 
         // Submit Exam
+        let pendingExamPhotos = [];
+        function handleExamPhotoSelect(event) {
+            const files = Array.from(event.target.files || []);
+            if (files.length === 0) return;
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    pendingExamPhotos.push(e.target.result);
+                    document.getElementById('examPhotoLabel').innerText = `${pendingExamPhotos.length} Fotoğraf Eklendi ✓`;
+                    renderExamPhotoPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderExamPhotoPreview() {
+            const container = document.getElementById('examPhotoPreview');
+            container.innerHTML = pendingExamPhotos.map((p, idx) => `
+                <div class="relative">
+                    <img src="${p}" class="w-14 h-14 object-cover rounded-xl border border-black/10 dark:border-white/10">
+                    <button type="button" onclick="removePendingExamPhoto(${idx})" class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] flex items-center justify-center press-scale">✕</button>
+                </div>`).join('');
+        }
+
+        function removePendingExamPhoto(idx) {
+            pendingExamPhotos.splice(idx, 1);
+            renderExamPhotoPreview();
+            document.getElementById('examPhotoLabel').innerText = pendingExamPhotos.length > 0 ? `${pendingExamPhotos.length} Fotoğraf Eklendi ✓` : 'Optik/Karne Fotoğrafı Ekle';
+        }
+
         function handleExamSubmit(e) {
             e.preventDefault();
+            if (!validateExamForm()) return;
             const tr = parseFloat(document.getElementById('netTr').value) || 0;
             const mat = parseFloat(document.getElementById('netMat').value) || 0;
             const fen = parseFloat(document.getElementById('netFen').value) || 0;
@@ -2036,7 +2327,8 @@
                 type: document.getElementById('examType').value,
                 name: document.getElementById('examName').value,
                 tr, mat, fen, sos,
-                total: (tr + mat + fen + sos)
+                total: (tr + mat + fen + sos),
+                photos: [...pendingExamPhotos]
             };
 
             state.exams.unshift(exam);
@@ -2045,6 +2337,10 @@
             playFeedbackSound('success');
             showToast('Deneme sonucu eklendi!');
             document.getElementById('examName').value = '';
+            document.getElementById('examPhotoInput').value = '';
+            document.getElementById('examPhotoLabel').innerText = 'Optik/Karne Fotoğrafı Ekle';
+            document.getElementById('examPhotoPreview').innerHTML = '';
+            pendingExamPhotos = [];
         }
 
         function deleteExam(id) {
@@ -2069,6 +2365,7 @@
             if (document.getElementById('badgesContainer')) renderBadges();
             if (document.getElementById('topicGoalsContainer')) renderTopicGoals();
             if (document.getElementById('schoolsContainer')) renderSchools();
+            checkCelebrationTriggers();
         }
 
         function updateProgressBars() {
@@ -2189,9 +2486,12 @@
                     <td class="p-3">${e.sos}</td>
                     <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">${e.total} Net</td>
                     <td class="p-3 text-right">
-                        <button onclick="deleteExam(${e.id})" class="press-scale p-1.5 hover:bg-rose-50 dark:hover:bg-rose-500/10 text-rose-500 rounded-lg" title="Sil">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
+                        <div class="flex items-center justify-end gap-1">
+                            ${(e.photos && e.photos.length) ? `<button onclick="window.open('${e.photos[0].replace(/'/g, "\\'")}', '_blank')" class="press-scale p-1.5 text-brand" title="${e.photos.length} fotoğrafı görüntüle"><i data-lucide="image" class="w-4 h-4"></i></button>` : ''}
+                            <button onclick="deleteExam(${e.id})" class="press-scale p-1.5 hover:bg-rose-50 dark:hover:bg-rose-500/10 text-rose-500 rounded-lg" title="Sil">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -2220,6 +2520,12 @@
             showToast('Hedefler güncellendi!');
         }
 
+        function toggleAutoTheme() {
+            state.settings.autoTheme = document.getElementById('cfgAutoTheme').checked;
+            saveState();
+            if (state.settings.autoTheme) applyAutoTheme();
+        }
+
         function loadDayStatus() {
             const date = document.getElementById('cfgDate').value;
             const status = state.offDays[date] || 'Aktif';
@@ -2241,7 +2547,37 @@
             dlAnchorElem.setAttribute("href", dataStr);
             dlAnchorElem.setAttribute("download", `YKS_Takip_Yedek_${new Date().toISOString().split('T')[0]}.json`);
             dlAnchorElem.click();
+            state.settings.lastBackupDate = new Date().toISOString().split('T')[0];
+            saveState();
+            hideBackupBanner();
             showToast('Veri yedeği indirildi.');
+        }
+
+        // --- Backup Reminder ---
+        function checkBackupReminder() {
+            const last = state.settings.lastBackupDate;
+            const daysSince = last ? Math.floor((new Date() - new Date(last)) / (1000*60*60*24)) : null;
+            const banner = document.getElementById('backupBanner');
+            if (!banner) return;
+            if (daysSince === null || daysSince >= 7) {
+                document.getElementById('backupBannerText').innerText = last
+                    ? `Son yedeğin ${daysSince} gün önce alınmış. Verilerini güvende tutmak için tekrar yedekle.`
+                    : 'Henüz hiç yedek almadın. Verilerin kaybolmasın diye şimdi bir yedek al.';
+                banner.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+            }
+        }
+
+        function hideBackupBanner() {
+            const banner = document.getElementById('backupBanner');
+            if (banner) banner.classList.add('hidden');
+        }
+
+        function snoozeBackupReminder() {
+            state.settings.lastBackupDate = new Date().toISOString().split('T')[0];
+            saveState();
+            hideBackupBanner();
         }
 
         function importData(event) {
@@ -3151,7 +3487,16 @@
             }}
         ];
 
+        let earnedBadgeIds = new Set();
         function checkAchievements() {
+            const nowEarned = ACHIEVEMENTS.filter(a => a.check()).map(a => a.id);
+            const newOnes = nowEarned.filter(id => !earnedBadgeIds.has(id));
+            if (newOnes.length > 0 && earnedBadgeIds.size > 0) {
+                triggerCelebration();
+                const badge = ACHIEVEMENTS.find(a => a.id === newOnes[0]);
+                showToast(`Yeni rozet kazandın: ${badge.label} 🏅`);
+            }
+            earnedBadgeIds = new Set(nowEarned);
             renderBadges();
         }
 
@@ -3242,10 +3587,24 @@
                         <div class="text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap">${n.text}</div>
                         <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">${dateLabel}</div>
                     </div>
+                    <button onclick="readNoteAloud(${n.id})" class="press-scale p-1.5 text-brand flex-shrink-0" title="Sesli oku"><i data-lucide="volume-2" class="w-3.5 h-3.5"></i></button>
                     <button onclick="deleteQuickNote(${n.id})" class="press-scale p-1.5 text-rose-400 flex-shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                 </div>`;
             }).join('');
             lucide.createIcons();
+        }
+
+        function readNoteAloud(id) {
+            const note = state.quickNotes.find(n => n.id === id);
+            if (!note || !('speechSynthesis' in window)) {
+                showToast('Tarayıcın sesli okumayı desteklemiyor.', 'error');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utter = new SpeechSynthesisUtterance(note.text);
+            utter.lang = 'tr-TR';
+            utter.rate = 1;
+            window.speechSynthesis.speak(utter);
         }
 
         // --- Topic Mini-Goals ---
@@ -3716,6 +4075,132 @@
             });
         }
 
+        // --- Wrong Notes Quiz / Flashcard Review ---
+        let quizQueue = [];
+        let quizIndex = 0;
+
+        function generateQuizFromWrongNotes() {
+            const unreviewed = state.wrongNotes.filter(n => !n.reviewed);
+            quizQueue = (unreviewed.length > 0 ? unreviewed : state.wrongNotes).slice();
+            if (quizQueue.length === 0) {
+                showToast('Yanlış defterinde henüz not yok.', 'error');
+                return;
+            }
+            quizQueue.sort(() => Math.random() - 0.5);
+            quizIndex = 0;
+            document.getElementById('quizOverlay').classList.remove('hidden');
+            showQuizCard();
+        }
+
+        function showQuizCard() {
+            const note = quizQueue[quizIndex];
+            document.getElementById('quizProgress').innerText = `${quizIndex + 1} / ${quizQueue.length}`;
+            document.getElementById('quizSubject').innerText = note.subject;
+            document.getElementById('quizTopic').innerText = note.topic;
+            document.getElementById('quizAnswerArea').innerHTML = `<button onclick="revealQuizAnswer()" id="quizRevealBtn" class="btn-primary press-scale px-6 py-3 rounded-full text-xs text-white font-semibold">Notu Göster</button>`;
+            document.getElementById('quizActionButtons').classList.add('hidden');
+            lucide.createIcons();
+        }
+
+        function revealQuizAnswer() {
+            const note = quizQueue[quizIndex];
+            const photos = (note.photos && note.photos.length) ? note.photos : (note.photo ? [note.photo] : []);
+            document.getElementById('quizAnswerArea').innerHTML = `
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${note.note}</p>
+                ${photos.length ? `<div class="flex justify-center gap-2 mt-3">${photos.slice(0,3).map(p => `<img src="${p}" class="w-16 h-16 object-cover rounded-xl border border-black/10 dark:border-white/10">`).join('')}</div>` : ''}
+            `;
+            document.getElementById('quizActionButtons').classList.remove('hidden');
+        }
+
+        function quizNext(remembered) {
+            const note = quizQueue[quizIndex];
+            if (remembered) {
+                const original = state.wrongNotes.find(n => n.id === note.id);
+                if (original) original.reviewed = true;
+                saveState();
+                renderWrongNotes();
+            }
+            quizIndex++;
+            if (quizIndex >= quizQueue.length) {
+                exitQuiz();
+                showToast('Tekrar turu tamamlandı! 🎉');
+                triggerCelebration();
+                return;
+            }
+            showQuizCard();
+        }
+
+        function exitQuiz() {
+            document.getElementById('quizOverlay').classList.add('hidden');
+        }
+
+        // --- Data Consistency Checks ---
+        function validateActivityForm() {
+            const correct = parseInt(document.getElementById('actCorrect').value) || 0;
+            const wrong = parseInt(document.getElementById('actWrong').value) || 0;
+            const questions = parseInt(document.getElementById('actQuestions').value) || 0;
+            if (correct + wrong > questions && questions > 0) {
+                showToast(`Doğru + yanlış (${correct + wrong}), toplam soru sayısından (${questions}) fazla görünüyor.`, 'error');
+                return false;
+            }
+            return true;
+        }
+
+        function validateExamForm() {
+            const tr = parseFloat(document.getElementById('netTr').value) || 0;
+            const mat = parseFloat(document.getElementById('netMat').value) || 0;
+            const fen = parseFloat(document.getElementById('netFen').value) || 0;
+            const sos = parseFloat(document.getElementById('netSos').value) || 0;
+            const maxNet = 45;
+            if ([tr, mat, fen, sos].some(v => v > maxNet || v < 0)) {
+                showToast(`Bir ders neti alışılmadık görünüyor (0-${maxNet} aralığı beklenir), kontrol eder misin?`, 'error');
+                return false;
+            }
+            return true;
+        }
+
+        // --- Celebration Effect ---
+        function triggerCelebration() {
+            const container = document.createElement('div');
+            container.className = 'fixed inset-0 z-[110] pointer-events-none overflow-hidden';
+            const colors = ['#0071e3', '#34c759', '#ff9f0a', '#8a3ffc', '#ff375f'];
+            for (let i = 0; i < 24; i++) {
+                const piece = document.createElement('div');
+                const color = colors[i % colors.length];
+                const left = Math.random() * 100;
+                const delay = Math.random() * 0.3;
+                const duration = 1.4 + Math.random() * 0.8;
+                piece.style.cssText = `position:absolute; top:-20px; left:${left}%; width:8px; height:8px; background:${color}; border-radius:2px; opacity:0.9; animation: confettiFall ${duration}s ease-in ${delay}s forwards;`;
+                container.appendChild(piece);
+            }
+            document.body.appendChild(container);
+            setTimeout(() => container.remove(), 2600);
+        }
+
+        let celebratedToday = { goal: false };
+        function checkCelebrationTriggers() {
+            const today = new Date().toISOString().split('T')[0];
+            const dailyQ = state.activities.filter(a => a.date === today).reduce((s,a) => s + a.questions, 0);
+            if (dailyQ >= state.settings.dailyGoal && state.settings.dailyGoal > 0 && !celebratedToday.goal) {
+                celebratedToday.goal = true;
+                triggerCelebration();
+                showToast('Günlük hedefine ulaştın! 🎉');
+            }
+        }
+
+        // --- Auto Theme Switching ---
+        function applyAutoTheme() {
+            if (!state.settings.autoTheme) return;
+            const hour = new Date().getHours();
+            const shouldBeDark = hour >= 20 || hour < 7;
+            const newTheme = shouldBeDark ? 'dark' : 'light';
+            if (state.theme !== newTheme) {
+                state.theme = newTheme;
+                applyTheme();
+                saveState();
+            }
+        }
+
         // Command Palette Logic
         function toggleCommandPalette() {
             const modal = document.getElementById('commandModal');
@@ -3757,6 +4242,138 @@
                 }
                 if (e.key === 'Escape') {
                     document.getElementById('commandModal').classList.add('hidden');
+                    exitFocusMode();
+                    exitExamSim();
+                }
+
+                const tag = (e.target.tagName || '').toLowerCase();
+                const isTyping = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+                if (isTyping || e.ctrlKey || e.metaKey || e.altKey) return;
+
+                if (e.key.toLowerCase() === 'a') {
+                    switchTab('dashboard');
+                    setTimeout(() => document.getElementById('actTopic').focus(), 250);
+                }
+                if (e.key.toLowerCase() === 'p') {
+                    pomodoroToggle();
+                }
+                if (e.key.toLowerCase() === 'g') {
+                    switchTab('dashboard');
+                }
+            });
+        }
+
+        // --- Ambient Focus Sounds ---
+        let ambientNodes = null;
+        let ambientCurrentType = 'off';
+        function createNoiseBuffer(ctx) {
+            const bufferSize = 2 * ctx.sampleRate;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            let lastOut = 0;
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                lastOut = (lastOut + 0.02 * white) / 1.02;
+                data[i] = lastOut * 3.5;
+            }
+            return buffer;
+        }
+
+        function stopAmbientSound() {
+            if (ambientNodes) {
+                try { ambientNodes.source.stop(); } catch(e) {}
+                ambientNodes = null;
+            }
+        }
+
+        function setAmbientSound(type) {
+            ['off','white','rain','cafe'].forEach(t => {
+                const btn = document.getElementById('ambientBtn' + t);
+                if (btn) btn.className = t === type
+                    ? 'press-scale text-[10px] font-semibold py-2 rounded-xl bg-brand text-white'
+                    : 'press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300';
+            });
+            ambientCurrentType = type;
+            stopAmbientSound();
+            if (type === 'off') return;
+
+            const source = audioCtx.createBufferSource();
+            source.buffer = createNoiseBuffer(audioCtx);
+            source.loop = true;
+
+            const filter = audioCtx.createBiquadFilter();
+            const gain = audioCtx.createGain();
+            const vol = (document.getElementById('ambientVolume').value || 35) / 100;
+
+            if (type === 'white') {
+                filter.type = 'allpass';
+            } else if (type === 'rain') {
+                filter.type = 'lowpass';
+                filter.frequency.value = 900;
+            } else if (type === 'cafe') {
+                filter.type = 'bandpass';
+                filter.frequency.value = 500;
+                filter.Q.value = 0.6;
+            }
+
+            gain.gain.value = vol * 0.5;
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+            source.start();
+            ambientNodes = { source, filter, gain };
+        }
+
+        function setAmbientVolume(val) {
+            if (ambientNodes) ambientNodes.gain.gain.value = (val / 100) * 0.5;
+        }
+
+        // --- Weekday Study Intensity Chart ---
+        let chartWeekdayInstance = null;
+        function renderWeekdayChart() {
+            const canvas = document.getElementById('chartWeekday');
+            if (!canvas) return;
+            const dayNames = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+            const totals = [0,0,0,0,0,0,0];
+            state.activities.forEach(a => {
+                const d = new Date(a.date);
+                const idx = (d.getDay() + 6) % 7;
+                totals[idx] += a.questions;
+            });
+
+            const maxIdx = totals.indexOf(Math.max(...totals));
+            const minIdx = totals.indexOf(Math.min(...totals));
+            const insight = document.getElementById('weekdayInsight');
+            if (insight) {
+                insight.innerText = totals.some(t => t > 0)
+                    ? `En verimli günün ${dayNames[maxIdx]}, en düşük çalıştığın gün ${dayNames[minIdx]}.`
+                    : 'Henüz yeterli veri yok.';
+            }
+
+            const isDark = state.theme === 'dark';
+            const textColor = isDark ? '#98989d' : '#6e6e73';
+            const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+
+            if (chartWeekdayInstance) chartWeekdayInstance.destroy();
+            chartWeekdayInstance = new Chart(canvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: dayNames.map(d => d.slice(0,3)),
+                    datasets: [{
+                        label: 'Soru Sayısı',
+                        data: totals,
+                        backgroundColor: totals.map((v,i) => i === maxIdx ? '#0071e3' : 'rgba(0,113,227,0.35)'),
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: textColor }, grid: { display: false } },
+                        y: { ticks: { color: textColor }, grid: { color: gridColor } }
+                    }
                 }
             });
         }
