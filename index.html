@@ -264,7 +264,7 @@
                 </button>
 
                 <!-- Bulut senkronizasyon durumu (Firebase) -->
-                <div id="syncStatus" class="flex items-center gap-1.5 bg-black/5 dark:bg-white/10 px-3 py-2 rounded-full text-[11px] font-medium text-slate-500 dark:text-slate-400" title="Bulut senkronizasyon durumu">
+                <div id="syncStatus" onclick="showSyncDiagnostics()" role="button" class="cursor-pointer select-none flex items-center gap-1.5 bg-black/5 dark:bg-white/10 px-3 py-2 rounded-full text-[11px] font-medium text-slate-500 dark:text-slate-400" title="Bulut senkronizasyon durumu">
                     <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
                     <span id="syncLabel" class="hidden sm:inline">Bağlanıyor…</span>
                 </div>
@@ -796,7 +796,7 @@
                     </div>
                     <div>
                         <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Deneme Türü</label>
-                        <select id="examType" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
+                        <select id="examType" onchange="updateExamNetForm()" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                             <option value="TYT">TYT</option>
                             <option value="AYT">AYT</option>
                         </select>
@@ -805,22 +805,12 @@
                         <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Deneme Adı / Yayın</label>
                         <input type="text" id="examName" placeholder="Örn: Özdebir 1. Genel Deneme" required class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Türkçe Net</label>
-                            <input type="number" step="0.25" id="netTr" value="0" class="input-soft w-full rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Matematik Net</label>
-                            <input type="number" step="0.25" id="netMat" value="0" class="input-soft w-full rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Fen / Sos2 Net</label>
-                            <input type="number" step="0.25" id="netFen" value="0" class="input-soft w-full rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Sosyal / Edeb Net</label>
-                            <input type="number" step="0.25" id="netSos" value="0" class="input-soft w-full rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100">
+                    <div class="space-y-2">
+                        <p class="text-[10px] text-slate-400 dark:text-slate-500">Doğru ve yanlışlarını gir, net otomatik hesaplanır (4 yanlış 1 doğruyu götürür).</p>
+                        <div id="examNetRows" class="space-y-2"></div>
+                        <div class="flex items-center justify-between rounded-xl bg-brand/10 px-3 py-2.5">
+                            <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">Toplam Net</span>
+                            <span><span id="examTotalNet" class="text-base font-bold text-brand">0</span><span id="examTotalMax" class="text-[10px] text-slate-400 dark:text-slate-500"> / 120</span></span>
                         </div>
                     </div>
                     <div>
@@ -1940,6 +1930,8 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
+        const APP_VERSION = 'firebase-v2';
+        const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         async function initApp() {
             await startApp();
@@ -2051,6 +2043,34 @@
         }
 
         // --- Senkronizasyon durumu (header'daki küçük gösterge) ---
+        // Göstergeyi gerçek duruma göre çizer: "Canlı" sadece bağlıyken, veri okunabiliyorken
+        // ve son yazma başarılıyken yanar (önceden bağlantı olayı erişim hatasını örtebiliyordu).
+        function refreshSyncPill() {
+            if (syncInfo.readError) return setSyncStatus('offline', 'Erişim reddedildi');
+            if (syncInfo.writeError) return setSyncStatus('offline', 'Kayıt hatası');
+            if (!cloudReady) return setSyncStatus('connecting');
+            if (!syncInfo.connected) return setSyncStatus('offline', 'Çevrimdışı — değişiklikler bağlanınca gönderilecek');
+            setSyncStatus('online');
+        }
+
+        function fmtTime(d) { return d ? d.toLocaleTimeString('tr-TR') : '—'; }
+
+        // Göstergeye dokununca bu cihazın senkron durumunu gösterir (telefonda sorun ayıklamak için).
+        function showSyncDiagnostics() {
+            let host = '—';
+            try { host = new URL(firebaseConfig.databaseURL).host; } catch (e) {}
+            const lines = [
+                `Sürüm: ${APP_VERSION}`,
+                `Veritabanı: ${host}`,
+                `Bağlantı: ${syncInfo.connected ? 'var' : 'yok'} · İlk veri: ${cloudReady ? 'alındı' : 'bekleniyor'}`,
+                `Son gelen güncelleme: ${fmtTime(syncInfo.lastReceived)}`,
+                `Son gönderilen kayıt: ${fmtTime(syncInfo.lastSent)}`
+            ];
+            if (syncInfo.readError) lines.push(`Okuma hatası: ${syncInfo.readError}`);
+            if (syncInfo.writeError) lines.push(`Yazma hatası: ${syncInfo.writeError}`);
+            alert(lines.join('\n'));
+        }
+
         function setSyncStatus(mode, text) {
             const dot = document.getElementById('syncDot');
             const label = document.getElementById('syncLabel');
@@ -2082,48 +2102,55 @@
 
         async function startApp() {
             await loadState();
-            setTodayDates();
-            applyTheme();
-            handleSubjectChange();
-            handleActivityTypeChange();
-            updateUI();
-            setupKeyboardShortcuts();
-            initPomodoro();
-            initCountdown();
-            renderMufredat();
-            renderLeaderboard();
-            renderAccuracyAnalysis();
-            registerServiceWorker();
-            checkBackupReminder();
-            const todayStr = new Date().toISOString().split('T')[0];
-            const monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 29);
-            document.getElementById('reportStart').value = monthAgo.toISOString().split('T')[0];
-            document.getElementById('reportEnd').value = todayStr;
-            document.getElementById('wrappedStart').value = monthAgo.toISOString().split('T')[0];
-            document.getElementById('wrappedEnd').value = todayStr;
-            document.getElementById('planDate').value = todayStr;
-            document.getElementById('cfgExamDate').value = state.settings.examDate || '';
-            document.getElementById('cfgTargetTyt').value = state.settings.targetTyt || 0;
-            document.getElementById('cfgTargetAyt').value = state.settings.targetAyt || 0;
-            document.getElementById('cfgReminderTime').value = state.settings.reminderTime || '21:00';
-            document.getElementById('cfgAutoTheme').checked = !!state.settings.autoTheme;
-            if (state.settings.remindersEnabled) {
-                document.getElementById('reminderStatus').innerText = 'Bildirimler etkin.';
+            try {
+                setTodayDates();
+                applyTheme();
+                handleSubjectChange();
+                handleActivityTypeChange();
+                updateExamNetForm();
+                updateUI();
+                setupKeyboardShortcuts();
+                initPomodoro();
+                initCountdown();
+                renderMufredat();
+                renderLeaderboard();
+                renderAccuracyAnalysis();
+                registerServiceWorker();
+                checkBackupReminder();
+                const todayStr = new Date().toISOString().split('T')[0];
+                const monthAgo = new Date(); monthAgo.setDate(monthAgo.getDate() - 29);
+                document.getElementById('reportStart').value = monthAgo.toISOString().split('T')[0];
+                document.getElementById('reportEnd').value = todayStr;
+                document.getElementById('wrappedStart').value = monthAgo.toISOString().split('T')[0];
+                document.getElementById('wrappedEnd').value = todayStr;
+                document.getElementById('planDate').value = todayStr;
+                document.getElementById('cfgExamDate').value = state.settings.examDate || '';
+                document.getElementById('cfgTargetTyt').value = state.settings.targetTyt || 0;
+                document.getElementById('cfgTargetAyt').value = state.settings.targetAyt || 0;
+                document.getElementById('cfgReminderTime').value = state.settings.reminderTime || '21:00';
+                document.getElementById('cfgAutoTheme').checked = !!state.settings.autoTheme;
+                if (state.settings.remindersEnabled) {
+                    document.getElementById('reminderStatus').innerText = 'Bildirimler etkin.';
+                }
+                applyAutoTheme();
+                renderPlanBlocks();
+                renderBadges();
+                earnedBadgeIds = new Set(ACHIEVEMENTS.filter(a => a.check()).map(a => a.id));
+                renderQuickNotes();
+                renderTopicGoals();
+                renderResources();
+                renderSchools();
+                setInterval(checkReminders, 60000);
+                setInterval(initCountdown, 60000);
+                setInterval(applyAutoTheme, 60000);
+                setupScrollReveal();
+            } catch (e) {
+                // Bir görünüm hata verse bile canlı güncellemeler çalışmaya devam etsin.
+                console.error('Başlatma hatası:', e);
+            } finally {
+                appStarted = true;
             }
-            applyAutoTheme();
-            renderPlanBlocks();
-            renderBadges();
-            earnedBadgeIds = new Set(ACHIEVEMENTS.filter(a => a.check()).map(a => a.id));
-            renderQuickNotes();
-            renderTopicGoals();
-            renderResources();
-            renderSchools();
-            setInterval(checkReminders, 60000);
-            setInterval(initCountdown, 60000);
-            setInterval(applyAutoTheme, 60000);
-            setupScrollReveal();
-            appStarted = true;
-            lucide.createIcons();
+            try { lucide.createIcons(); } catch (e) {}
         }
 
         // --- Apple-style scroll reveal ---
@@ -2185,8 +2212,8 @@
 
             // Bağlantı durumu göstergesi
             sdk.onValue(sdk.ref(fb.db, '.info/connected'), snap => {
-                if (snap.val() === true) setSyncStatus('online');
-                else if (cloudReady) setSyncStatus('offline', 'Çevrimdışı — değişiklikler bağlanınca gönderilecek');
+                syncInfo.connected = snap.val() === true;
+                refreshSyncPill();
             });
 
             // Ana canlı dinleyici: herhangi bir cihazda değişiklik olursa burası tetiklenir.
@@ -2203,12 +2230,20 @@
 
                 sdk.onValue(fb.rootRef, snapshot => {
                     clearTimeout(timer);
-                    handleCloudSnapshot(snapshot);
+                    syncInfo.readError = null;
+                    syncInfo.lastReceived = new Date();
+                    try {
+                        handleCloudSnapshot(snapshot);
+                    } catch (e) {
+                        console.error('Snapshot işleme hatası:', e);
+                    }
+                    refreshSyncPill();
                     done();
                 }, error => {
                     clearTimeout(timer);
                     console.error('Firebase read error:', error);
-                    setSyncStatus('offline', 'Erişim reddedildi');
+                    syncInfo.readError = (error && (error.code || error.message)) || 'bilinmeyen hata';
+                    refreshSyncPill();
                     showCloudWarning('Veritabanına erişim reddedildi',
                         'Firebase konsolunda Realtime Database → Kurallar sekmesinde okuma/yazma iznini aç (kurulum notunun 3. adımı) ve DB_ROOT_PATH ile kuraldaki yolun aynı olduğundan emin ol.');
                     done();
@@ -2260,41 +2295,52 @@
 
         // Başka bir cihazdan gelen değişiklikten sonra tüm görünümleri yeniler.
         function refreshAllViews() {
+            // Her adım ayrı korunur: biri hata verirse diğer görünümler yine güncellenir.
+            const safe = (name, fn) => { try { fn(); } catch (e) { console.error('Yenileme hatası (' + name + '):', e); } };
             const setIfIdle = (id, val) => {
                 const el = document.getElementById(id);
                 if (!el || document.activeElement === el) return;
                 if (el.type === 'checkbox') el.checked = !!val;
                 else el.value = val;
             };
-            setIfIdle('cfgDailyGoal', state.settings.dailyGoal);
-            setIfIdle('cfgDailyHoursGoal', state.settings.dailyHoursGoal || 4.0);
-            setIfIdle('cfgExamDate', state.settings.examDate || '');
-            setIfIdle('cfgTargetTyt', state.settings.targetTyt || 0);
-            setIfIdle('cfgTargetAyt', state.settings.targetAyt || 0);
-            setIfIdle('cfgReminderTime', state.settings.reminderTime || '21:00');
-            setIfIdle('cfgAutoTheme', state.settings.autoTheme);
-            if (document.activeElement !== document.getElementById('cfgStatus')) loadDayStatus();
+            safe('ayarlar', () => {
+                setIfIdle('cfgDailyGoal', state.settings.dailyGoal);
+                setIfIdle('cfgDailyHoursGoal', state.settings.dailyHoursGoal || 4.0);
+                setIfIdle('cfgExamDate', state.settings.examDate || '');
+                setIfIdle('cfgTargetTyt', state.settings.targetTyt || 0);
+                setIfIdle('cfgTargetAyt', state.settings.targetAyt || 0);
+                setIfIdle('cfgReminderTime', state.settings.reminderTime || '21:00');
+                setIfIdle('cfgAutoTheme', state.settings.autoTheme);
+                if (document.activeElement !== document.getElementById('cfgStatus')) loadDayStatus();
+            });
 
-            updateUI();
-            initCountdown();
-            renderMufredat();
-            renderPlanBlocks();
-            renderQuickNotes();
-            renderResources();
-            earnedBadgeIds = new Set(ACHIEVEMENTS.filter(a => a.check()).map(a => a.id));
-            renderBadges();
+            safe('updateUI', updateUI);
+            safe('countdown', initCountdown);
+            safe('mufredat', renderMufredat);
+            safe('plan', renderPlanBlocks);
+            safe('notlar', renderQuickNotes);
+            safe('kaynaklar', renderResources);
+            safe('hedefler', renderTopicGoals);
+            safe('okullar', renderSchools);
+            safe('liderlik', renderLeaderboard);
+            safe('yanlislar', renderWrongNotes);
+            safe('isabet', renderAccuracyAnalysis);
+            safe('rozetler', () => {
+                earnedBadgeIds = new Set(ACHIEVEMENTS.filter(a => a.check()).map(a => a.id));
+                renderBadges();
+            });
 
             const isVisible = id => {
                 const el = document.getElementById(id);
                 return el && !el.classList.contains('hidden');
             };
-            if (isVisible('content-konular')) renderPlaylistProgress();
+            if (isVisible('content-konular')) safe('playlist', renderPlaylistProgress);
             if (isVisible('content-analytics')) {
-                renderCharts();
-                renderPeriodComparison(currentPeriodMode);
-                renderWeekdayChart();
+                safe('grafikler', renderCharts);
+                safe('donem', () => renderPeriodComparison(currentPeriodMode));
+                safe('haftagunu', renderWeekdayChart);
             }
-            lucide.createIcons();
+            safe('ikonlar', () => lucide.createIcons());
         }
 
         // --- Buluta kaydet: sadece değişen koleksiyonlar gönderilir ---
@@ -2320,8 +2366,15 @@
                 if (Object.keys(updates).length === 0) return;
                 await fb.sdk.update(fb.rootRef, updates);
                 storageFailureShown = false;
+                syncInfo.writeError = null;
+                syncInfo.lastSent = new Date();
+                refreshSyncPill();
             } catch (e) {
                 console.error('Save error:', e);
+                syncInfo.writeError = e.code || e.message || 'bilinmeyen hata';
+                refreshSyncPill();
+                // Yazılamayan koleksiyonlar bir sonraki kayıtta tekrar denensin.
+                lastSyncedCanon = {};
                 if (!storageFailureShown) {
                     storageFailureShown = true;
                     showToast('⚠️ Kayıt buluta yazılamadı: ' + (e.code || e.message || 'bilinmeyen hata') + '. Firebase kurallarını kontrol et.', 'error');
@@ -2651,13 +2704,166 @@
             document.getElementById('examPhotoLabel').innerText = pendingExamPhotos.length > 0 ? `${pendingExamPhotos.length} Fotoğraf Eklendi ✓` : 'Optik/Karne Fotoğrafı Ekle';
         }
 
+        // --- Otomatik net hesaplama ---
+        // Net = Doğru − Yanlış / 4.
+        // 'store': dersin netinin eklendiği eski alan (tr, mat, fen, sos) — grafikler ve tablo bozulmasın diye.
+        // 'subs': alt başlıklar; ana dersin neti alt başlıkların toplamıdır.
+        const EXAM_SECTIONS = {
+            TYT: [
+                { key: 'tr',  store: 'tr',  label: 'Türkçe',          max: 40 },
+                { key: 'mat', store: 'mat', label: 'Temel Matematik', max: 40 },
+                { key: 'fen', store: 'fen', label: 'Fen Bilimleri',   max: 20 },
+                { key: 'sos', store: 'sos', label: 'Sosyal Bilimler', subs: [
+                    { key: 'tarih', label: 'Tarih',       max: 5 },
+                    { key: 'cog',   label: 'Coğrafya',    max: 5 },
+                    { key: 'fel',   label: 'Felsefe',     max: 5 },
+                    { key: 'din',   label: 'Din Kültürü', max: 5 }
+                ] }
+            ],
+            // AYT Eşit Ağırlık: Edebiyat 24, Matematik 40, Tarih-1 10, Coğrafya-1 6
+            AYT: [
+                { key: 'edb',   store: 'sos', label: 'Edebiyat',  max: 24 },
+                { key: 'mat',   store: 'mat', label: 'Matematik', max: 40 },
+                { key: 'tarih', store: 'sos', label: 'Tarih',     max: 10 },
+                { key: 'cog',   store: 'sos', label: 'Coğrafya',  max: 6 }
+            ]
+        };
+
+        // Kısa adlar (tablodaki ders dökümü için)
+        const EXAM_SHORT = { tr: 'Tür', mat: 'Mat', fen: 'Fen', tarih: 'Tar', cog: 'Coğ', fel: 'Fel', din: 'Din', edb: 'Edb' };
+
+        function roundNet(n) { return Math.round(n * 100) / 100; }
+
+        function currentExamSections() {
+            const type = document.getElementById('examType').value;
+            return EXAM_SECTIONS[type] || EXAM_SECTIONS.TYT;
+        }
+
+        function sectionMax(sec) {
+            return sec.subs ? sec.subs.reduce((t, x) => t + x.max, 0) : sec.max;
+        }
+
+        function examInputRow(item, isSub) {
+            const inp = 'input-soft w-full rounded-xl p-2 text-xs text-slate-800 dark:text-slate-100';
+            const lab = 'block text-[10px] font-medium text-slate-500 dark:text-slate-400 mb-1';
+            return `
+                <div class="${isSub ? 'pl-2.5 border-l-2 border-brand/25' : ''}">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="${isSub ? 'text-[10.5px] font-medium text-slate-600 dark:text-slate-300' : 'text-[11px] font-semibold text-slate-700 dark:text-slate-200'}">${item.label}</span>
+                        <span id="exInfo-${item.key}" class="text-[10px] text-slate-400 dark:text-slate-500">${item.max} soru · Boş: ${item.max}</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="${lab}">Doğru</label>
+                            <input type="number" min="0" step="1" inputmode="numeric" id="exD-${item.key}" placeholder="0" oninput="calcExamNets()" class="${inp}">
+                        </div>
+                        <div>
+                            <label class="${lab}">Yanlış</label>
+                            <input type="number" min="0" step="1" inputmode="numeric" id="exY-${item.key}" placeholder="0" oninput="calcExamNets()" class="${inp}">
+                        </div>
+                        <div>
+                            <label class="${lab}">Net</label>
+                            <input type="number" id="exNet-${item.key}" value="0" readonly tabindex="-1" class="input-soft w-full rounded-xl p-2 text-xs font-bold text-brand bg-transparent cursor-default">
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        // Deneme türü değişince (TYT/AYT) ders satırlarını yeniden çizer.
+        function updateExamNetForm() {
+            const container = document.getElementById('examNetRows');
+            if (!container) return;
+            const sections = currentExamSections();
+            container.innerHTML = sections.map(sec => {
+                if (!sec.subs) {
+                    return `<div class="rounded-xl bg-black/[0.03] dark:bg-white/[0.05] p-2.5">${examInputRow(sec, false)}</div>`;
+                }
+                return `
+                    <div class="rounded-xl bg-black/[0.03] dark:bg-white/[0.05] p-2.5 space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-semibold text-slate-700 dark:text-slate-200">${sec.label} <span class="font-normal text-slate-400 dark:text-slate-500">· ${sectionMax(sec)} soru</span></span>
+                            <span class="text-[11px] font-bold text-brand">Net: <span id="exNet-${sec.key}">0</span></span>
+                        </div>
+                        ${sec.subs.map(sub => examInputRow(sub, true)).join('')}
+                    </div>`;
+            }).join('');
+            const maxTotal = sections.reduce((t, x) => t + sectionMax(x), 0);
+            document.getElementById('examTotalMax').innerText = ` / ${maxTotal}`;
+            calcExamNets();
+        }
+
+        // Tek bir ders/alt başlık için D-Y okur, neti ve boş sayısını yazar.
+        function calcExamItem(item, result) {
+            const dEl = document.getElementById('exD-' + item.key);
+            const yEl = document.getElementById('exY-' + item.key);
+            if (!dEl || !yEl) return 0;
+            const d = Math.max(0, parseInt(dEl.value) || 0);
+            const y = Math.max(0, parseInt(yEl.value) || 0);
+            const net = roundNet(d - y / 4);
+            const bos = item.max - d - y;
+            document.getElementById('exNet-' + item.key).value = net;
+            const info = document.getElementById('exInfo-' + item.key);
+            if (bos < 0) {
+                info.innerText = `${item.max} soru · ${-bos} fazla girildi!`;
+                info.className = 'text-[10px] font-semibold text-rose-500';
+                result.errors.push(`${item.label}: doğru + yanlış (${d + y}) soru sayısını (${item.max}) aşıyor.`);
+            } else {
+                info.innerText = `${item.max} soru · Boş: ${bos}`;
+                info.className = 'text-[10px] text-slate-400 dark:text-slate-500';
+            }
+            if (d || y) {
+                result.answers[item.key] = { d, y };
+                result.nets[item.key] = net;
+            }
+            return net;
+        }
+
+        // Her tuşa basışta çalışır: ders, alt başlık ve toplam netleri canlı hesaplar.
+        function calcExamNets() {
+            const result = { tr: 0, mat: 0, fen: 0, sos: 0, answers: {}, nets: {}, errors: [], total: 0 };
+            currentExamSections().forEach(sec => {
+                let net;
+                if (sec.subs) {
+                    net = roundNet(sec.subs.reduce((t, sub) => t + calcExamItem(sub, result), 0));
+                    const el = document.getElementById('exNet-' + sec.key);
+                    if (el) el.innerText = net;
+                    if (sec.subs.some(sub => result.answers[sub.key])) result.nets[sec.key] = net;
+                } else {
+                    net = calcExamItem(sec, result);
+                }
+                result[sec.store] = roundNet(result[sec.store] + net);
+                result.total += net;
+            });
+            result.total = roundNet(result.total);
+            const totalEl = document.getElementById('examTotalNet');
+            if (totalEl) totalEl.innerText = result.total;
+            return result;
+        }
+
+        function resetExamNetInputs() {
+            document.querySelectorAll('#examNetRows input[id^="exD-"], #examNetRows input[id^="exY-"]').forEach(el => { el.value = ''; });
+            calcExamNets();
+        }
+
+        // Tabloda deneme adının altında ders ders net dökümü
+        function examBreakdownText(e) {
+            if (!e.nets) return '';
+            const sections = EXAM_SECTIONS[e.type] || [];
+            const parts = [];
+            sections.forEach(sec => {
+                (sec.subs || [sec]).forEach(item => {
+                    if (e.nets[item.key] !== undefined) parts.push(`${EXAM_SHORT[item.key] || item.label} ${e.nets[item.key]}`);
+                });
+            });
+            return parts.join(' · ');
+        }
+
         function handleExamSubmit(e) {
             e.preventDefault();
             if (!validateExamForm()) return;
-            const tr = parseFloat(document.getElementById('netTr').value) || 0;
-            const mat = parseFloat(document.getElementById('netMat').value) || 0;
-            const fen = parseFloat(document.getElementById('netFen').value) || 0;
-            const sos = parseFloat(document.getElementById('netSos').value) || 0;
+            // Kaydet'e basınca netler son kez hesaplanır ve toplam net kaydedilir.
+            const calc = calcExamNets();
+            const { tr, mat, fen, sos } = calc;
 
             const exam = {
                 id: Date.now(),
@@ -2665,7 +2871,9 @@
                 type: document.getElementById('examType').value,
                 name: document.getElementById('examName').value,
                 tr, mat, fen, sos,
-                total: (tr + mat + fen + sos),
+                total: calc.total,
+                answers: calc.answers,
+                nets: calc.nets,
                 photos: [...pendingExamPhotos]
             };
 
@@ -2673,8 +2881,9 @@
             saveState();
             updateUI();
             playFeedbackSound('success');
-            showToast('Deneme sonucu eklendi!');
+            showToast(`Deneme kaydedildi! Toplam net: ${exam.total}`);
             document.getElementById('examName').value = '';
+            resetExamNetInputs();
             document.getElementById('examPhotoInput').value = '';
             document.getElementById('examPhotoLabel').innerText = 'Optik/Karne Fotoğrafı Ekle';
             document.getElementById('examPhotoPreview').innerHTML = '';
@@ -2829,10 +3038,10 @@
                 tr.innerHTML = `
                     <td class="p-3 text-slate-400 dark:text-slate-500">${e.date}</td>
                     <td class="p-3 font-bold text-brand">${e.type}</td>
-                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${e.name}</td>
-                    <td class="p-3">${e.tr}</td>
+                    <td class="p-3 font-medium text-slate-800 dark:text-slate-200">${e.name}${examBreakdownText(e) ? `<div class="text-[10px] font-normal text-slate-400 dark:text-slate-500 mt-0.5">${examBreakdownText(e)}</div>` : ''}</td>
+                    <td class="p-3">${e.type === 'AYT' && !e.tr ? '–' : e.tr}</td>
                     <td class="p-3">${e.mat}</td>
-                    <td class="p-3">${e.fen}</td>
+                    <td class="p-3">${e.type === 'AYT' && !e.fen ? '–' : e.fen}</td>
                     <td class="p-3">${e.sos}</td>
                     <td class="p-3 font-bold text-emerald-600 dark:text-emerald-400">${e.total} Net</td>
                     <td class="p-3 text-right">
@@ -3838,7 +4047,7 @@
         // --- Service Worker (PWA) ---
         function registerServiceWorker() {
             if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-                navigator.serviceWorker.register('sw.js').catch(() => {});
+                navigator.serviceWorker.register('sw.js').then(reg => reg.update()).catch(() => {});
             }
         }
 
@@ -4525,13 +4734,13 @@
         }
 
         function validateExamForm() {
-            const tr = parseFloat(document.getElementById('netTr').value) || 0;
-            const mat = parseFloat(document.getElementById('netMat').value) || 0;
-            const fen = parseFloat(document.getElementById('netFen').value) || 0;
-            const sos = parseFloat(document.getElementById('netSos').value) || 0;
-            const maxNet = 45;
-            if ([tr, mat, fen, sos].some(v => v > maxNet || v < 0)) {
-                showToast(`Bir ders neti alışılmadık görünüyor (0-${maxNet} aralığı beklenir), kontrol eder misin?`, 'error');
+            const calc = calcExamNets();
+            if (calc.errors.length) {
+                showToast(calc.errors[0], 'error');
+                return false;
+            }
+            if (Object.keys(calc.answers).length === 0) {
+                showToast('En az bir derse doğru/yanlış girmelisin.', 'error');
                 return false;
             }
             return true;
