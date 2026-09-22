@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr" class="light">
 <head>
+    <!--
+        YKS Takip & Performans Portalı — Firebase Realtime Database sürümü
+        Kurulum adımları ve firebaseConfig alanı: sayfanın altındaki
+        ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
+    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YKS Takip & Performans Portalı</title>
@@ -258,6 +263,12 @@
                     <kbd class="bg-white dark:bg-slate-700 px-1.5 py-0.5 rounded text-[10px] text-slate-500 dark:text-slate-300 border border-black/5 dark:border-white/10">⌘K</kbd>
                 </button>
 
+                <!-- Bulut senkronizasyon durumu (Firebase) -->
+                <div id="syncStatus" class="flex items-center gap-1.5 bg-black/5 dark:bg-white/10 px-3 py-2 rounded-full text-[11px] font-medium text-slate-500 dark:text-slate-400" title="Bulut senkronizasyon durumu">
+                    <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span id="syncLabel" class="hidden sm:inline">Bağlanıyor…</span>
+                </div>
+
                 <button onclick="toggleTheme()" class="p-2.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-brand transition press-scale" title="Karanlık/Aydınlık Mod">
                     <i data-lucide="sun" id="themeIconSun" class="w-4 h-4"></i>
                     <i data-lucide="moon" id="themeIconMoon" class="w-4 h-4 hidden"></i>
@@ -402,11 +413,11 @@
                 <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Sorularını çöz, süreni takip et, hedeflerine adım adım yaklaş.</p>
             </div>
 
-            <!-- Storage Status Banner (only shows if there's a real problem) -->
+            <!-- Cloud / Storage Status Banner (only shows if there's a real problem) -->
             <div id="storageWarningBanner" class="hidden lg:col-span-3 p-4 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200/60 dark:border-rose-900/40 flex items-start gap-3 animate-rise">
                 <i data-lucide="alert-triangle" class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5"></i>
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1">Veriler bu ortamda kalıcı olarak saklanamıyor</p>
+                    <p id="storageWarningTitle" class="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1">Bulut bağlantısı kurulamadı</p>
                     <p id="storageWarningText" class="text-[11px] text-rose-600 dark:text-rose-400/90 leading-relaxed"></p>
                 </div>
             </div>
@@ -1062,7 +1073,7 @@
                     <i data-lucide="user-plus" class="w-5 h-5 text-brand"></i>
                     <span>Arkadaş Ekle</span>
                 </h2>
-                <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-3">Verilerin sadece bu cihazda saklandığı için arkadaşlarının haftalık toplamlarını elle girip kendi ilerlemenle kıyaslayabilirsin.</p>
+                <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-3">Bu liste tüm cihazlarında canlı olarak senkronize olur. Arkadaşlarının haftalık toplamlarını elle girip kendi ilerlemenle kıyaslayabilirsin.</p>
                 <form id="friendForm" onsubmit="handleFriendSubmit(event)" class="space-y-3.5">
                     <div>
                         <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">İsim</label>
@@ -1398,17 +1409,17 @@
                         <span>Veri Yedekleme & Geri Yükleme</span>
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                        Verileriniz tarayıcınızda (LocalStorage) güvendedir. Farklı cihazlara aktarmak için dışa aktarabilirsiniz.
+                        Verilerin Firebase Realtime Database'de tutulur ve tüm cihazlarında canlı olarak senkronize edilir. Yine de düzenli olarak JSON yedeği almanı öneririz.
                     </p>
                     <div class="mb-4">
                         <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 mb-1.5">
-                            <span>Depolama Kullanımı</span>
+                            <span>Senkronize Veri Boyutu</span>
                             <span id="storageUsageLabel">— MB</span>
                         </div>
                         <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden">
                             <div id="storageUsageBar" class="h-2 rounded-full bg-gradient-to-r from-brand to-sky-400" style="width:0%"></div>
                         </div>
-                        <p id="storageUsageWarning" class="hidden text-[11px] text-rose-500 mt-1.5">Depolama alanı doluyor — çok sayıda fotoğraf eklediysen bazılarını silmen ya da bir yedek alıp bu cihazdaki verileri temizlemen iyi olur.</p>
+                        <p id="storageUsageWarning" class="hidden text-[11px] text-rose-500 mt-1.5">Veri boyutu büyüyor — fotoğraflar senkronizasyonu yavaşlatabilir. Eski fotoğraflı notları silmeyi ya da yedek alıp temizlemeyi düşün.</p>
                     </div>
                     <div id="backupBanner" class="hidden mb-4 p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200/60 dark:border-amber-900/40 flex items-start gap-2.5">
                         <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5"></i>
@@ -1576,8 +1587,17 @@
     </div>
 
     <footer class="glass-nav border-t border-x-0 border-b-0 border-black/5 dark:border-white/10 p-4 text-center text-xs text-slate-400 dark:text-slate-500 mt-auto z-10">
-        YKS Hazırlık & Performans Portalı &bull; Yerel Veri Depolama
+        YKS Hazırlık & Performans Portalı &bull; Firebase Canlı Senkronizasyon
     </footer>
+
+    <!-- Firebase SDK (modüler v10, CDN).
+         Yüklenince window.__firebaseSDK üzerinden aşağıdaki uygulama koduna aktarılır. -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        window.__firebaseSDK = { initializeApp, getDatabase, ref, onValue, update };
+        window.dispatchEvent(new Event('firebase-sdk-ready'));
+    </script>
 
     <!-- Application Script -->
     <script>
@@ -1799,23 +1819,6 @@
             }, 3000);
         }
 
-        // Storage Keys & State Initialization
-        const STORAGE_KEYS = {
-            ACTIVITIES: 'yks_activities_v3',
-            EXAMS: 'yks_exams_v3',
-            SETTINGS: 'yks_settings_v3',
-            OFFDAYS: 'yks_offdays_v3',
-            THEME: 'yks_theme_v3',
-            WRONGNOTES: 'yks_wrongnotes_v3',
-            CURRICULUM: 'yks_curriculum_v3',
-            PLANBLOCKS: 'yks_planblocks_v3',
-            FRIENDS: 'yks_friends_v3',
-            QUICKNOTES: 'yks_quicknotes_v3',
-            TOPICGOALS: 'yks_topicgoals_v3',
-            RESOURCES: 'yks_resources_v3',
-            SCHOOLS: 'yks_schools_v3'
-        };
-
         let state = {
             activities: [],
             exams: [],
@@ -1849,47 +1852,232 @@
         let chartExamsInstance = null;
         let chartDistributionInstance = null;
 
-        // --- Multi-Profile & Cross-Device Storage ---
-        // --- Local Storage (single fixed key, no profiles) ---
-        const STORAGE_KEY = 'yks_takip_data_v1';
+        /* =====================================================================
+           FIREBASE KURULUM REHBERİ (bir kez yapman yeterli)
+           =====================================================================
+           1) https://console.firebase.google.com adresine git → "Proje ekle".
+              Proje adını yaz (örn. yks-takip). Google Analytics'i kapatabilirsin.
+
+           2) Sol menüden  Derleme (Build) → Realtime Database → "Veritabanı oluştur".
+              - Konum: europe-west1 (Belçika) — Türkiye'ye en yakın seçenek.
+              - Güvenlik kuralı: "Kilitli modda başlat" seç (aşağıda değiştireceğiz).
+
+           3) Realtime Database sayfasında "Kurallar" (Rules) sekmesine geç,
+              içeriği şununla değiştir ve "Yayınla"ya bas:
+
+                  {
+                    "rules": {
+                      ".read": true,
+                      ".write": true
+                    }
+                  }
+
+              ⚠️ Bu kural, veritabanı adresini bilen HERKESİN okuma/yazma
+              yapabilmesi demektir. Daha güvenli (önerilen) seçenek:
+              aşağıdaki DB_ROOT_PATH değerini tahmin edilemez bir şeyle değiştir
+              (örn. 'yksTakip_k7Qm2xP9vR') ve kuralı sadece o yola aç:
+
+                  {
+                    "rules": {
+                      "yksTakip_k7Qm2xP9vR": {
+                        ".read": true,
+                        ".write": true
+                      }
+                    }
+                  }
+
+              Böylece kök okunamaz; yolu bilmeyen biri verini bulamaz.
+
+           4) Sol üstteki dişli → Proje ayarları → Genel → "Uygulamalarınız"
+              bölümünde Web simgesine (</>) tıkla, bir takma ad ver, "Uygulamayı
+              kaydet"e bas. Sana gösterilen firebaseConfig nesnesini kopyala ve
+              aşağıdaki firebaseConfig'in yerine yapıştır.
+              - Kopyaladığın config'te "databaseURL" yoksa, Realtime Database
+                sayfasının üstünde yazan adresi (https://...firebasedatabase.app)
+                elle ekle. Bu alan ZORUNLU.
+
+           5) Dosyayı bir yerde yayınla ki telefonundan ve amcanın cihazından da
+              açılabilsin: Firebase Hosting, GitHub Pages veya Netlify (dosyayı
+              sürükle-bırak) ücretsiz ve kolay seçenekler. Tüm cihazlar aynı
+              adresi açtığında aynı veriyi canlı görür.
+
+           6) Bu cihazda eskiden localStorage'da tuttuğun veriler varsa ve bulut
+              boşsa, ilk açılışta otomatik olarak buluta taşınır.
+           ===================================================================== */
+
+        // ---------------------------------------------------------------------
+        //  FIREBASE YAPILANDIRMASI — kendi bilgilerinle değiştir
+        // ---------------------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyA_RObm-zfNMMJngyD91SvqRJAw1ZePY8A",
+            authDomain: "yks-takip-e070d.firebaseapp.com",
+            databaseURL: "https://yks-takip-e070d-default-rtdb.firebaseio.com",
+            projectId: "yks-takip-e070d",
+            storageBucket: "yks-takip-e070d.firebasestorage.app",
+            messagingSenderId: "422766842394",
+            appId: "1:422766842394:web:67f0d0907d5cd33bb637a3",
+            measurementId: "G-XG3QZ27RJV"
+        };
+
+        // Tüm verilerin veritabanında duracağı yol. Aynı yolu kullanan tüm
+        // cihazlar aynı veriyi görür. (Güvenlik için 3. adımdaki nota bak.)
+        const DB_ROOT_PATH = 'yksTakip';
+        // ---------------------------------------------------------------------
+
+        // Cihaza özel tercih: tema her cihazda ayrı kalsın (senkronize edilmez).
+        const THEME_STORAGE_KEY = 'yks_theme_device';
+        // Eski localStorage verisi — sadece ilk açılışta buluta taşımak için okunur.
+        const LEGACY_STORAGE_KEY = 'yks_takip_data_v1';
+
+        const SYNC_KEYS = ['activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
+        const ARRAY_KEYS = ['activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
+        const OBJECT_KEYS = ['offDays', 'curriculum', 'watchedVideos'];
+        const DEFAULT_SETTINGS = JSON.parse(JSON.stringify(state.settings));
+
+        let fb = null;                  // { sdk, db, rootRef }
+        let cloudReady = false;         // İlk veri buluttan geldi mi?
+        let appStarted = false;         // Arayüz ilk kez çizildi mi?
+        let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
+        let saveBlockedToastShown = false;
+        let storageFailureShown = false;
 
         async function initApp() {
             await startApp();
         }
 
-        // --- Storage Diagnostic ---
-        function checkStorageHealth() {
-            const banner = document.getElementById('storageWarningBanner');
-            const textEl = document.getElementById('storageWarningText');
-            if (!banner || !textEl) return;
+        function isFirebaseConfigured() {
+            return !!(firebaseConfig
+                && firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('BURAYA')
+                && firebaseConfig.databaseURL && !firebaseConfig.databaseURL.includes('PROJE-ID'));
+        }
 
-            try {
-                const testKey = '__yks_storage_test__';
-                localStorage.setItem(testKey, '1');
-                const readBack = localStorage.getItem(testKey);
-                localStorage.removeItem(testKey);
+        function waitForFirebaseSDK(timeoutMs) {
+            return new Promise(resolve => {
+                if (window.__firebaseSDK) return resolve(window.__firebaseSDK);
+                const timer = setTimeout(() => resolve(window.__firebaseSDK || null), timeoutMs);
+                window.addEventListener('firebase-sdk-ready', () => {
+                    clearTimeout(timer);
+                    resolve(window.__firebaseSDK);
+                }, { once: true });
+            });
+        }
 
-                if (readBack !== '1') {
-                    throw new Error('read-back mismatch');
-                }
+        // --- Firebase veri dönüşümleri ---
+        // Firebase anahtarlarında . # $ [ ] / kullanılamaz (ör. "XVII. ve XVIII. Yüzyıl"),
+        // bu yüzden anahtarlar yazarken kodlanıp okurken geri çözülür.
+        function encodeKey(k) {
+            return String(k).replace(/[%.#$\[\]\/]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'));
+        }
+        function decodeKey(k) {
+            return String(k).replace(/%([0-9A-Fa-f]{2})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+        }
 
-                // Storage works within this session. Warn only if this looks like a
-                // brand-new/empty state AND we're inside an iframe (e.g. an in-chat
-                // preview), since previews are often re-created in a fresh sandbox
-                // each time they're opened, which looks like "data keeps resetting"
-                // even though nothing is actually wrong with the code itself.
-                const isEmpty = state.activities.length === 0 && state.exams.length === 0 && state.wrongNotes.length === 0;
-                const isInIframe = window.self !== window.top;
-                if (isEmpty && isInIframe) {
-                    textEl.innerText = 'Bu sayfayı bir sohbet önizlemesi/iframe içinde açıyor olabilirsin. Böyle bir ortamda her önizleme yeni bir depolama alanıyla açılabilir ve önceki veriler görünmeyebilir. En güvenlisi: dosyayı bilgisayarına indirip doğrudan tarayıcında (indirilenler klasöründen) açman ve her seferinde aynı dosyayı kullanman.';
-                    banner.classList.remove('hidden');
-                    lucide.createIcons();
-                }
-            } catch (e) {
-                textEl.innerText = 'Tarayıcın bu sayfada yerel depolamaya (localStorage) izin vermiyor — bu genelde gizli/özel pencere modunda ya da sıkı gizlilik ayarlarında olur. Verilerin kalıcı olması için dosyayı normal (gizli olmayan) bir pencerede, doğrudan indirilen dosya üzerinden açmayı dene.';
-                banner.classList.remove('hidden');
-                lucide.createIcons();
+        // Firebase null/undefined ve boş dizi/nesne saklamaz; veriyi buna göre temizler.
+        function sanitizeForFirebase(v) {
+            if (v === undefined || v === null) return null;
+            if (typeof v === 'number') return isFinite(v) ? v : null;
+            if (typeof v === 'function') return null;
+            if (typeof v !== 'object') return v;
+            if (Array.isArray(v)) {
+                const arr = v.map(sanitizeForFirebase).filter(x => x !== null);
+                return arr.length ? arr : null;
             }
+            const out = {};
+            Object.keys(v).forEach(k => {
+                const s = sanitizeForFirebase(v[k]);
+                if (s !== null) out[encodeKey(k)] = s;
+            });
+            return Object.keys(out).length ? out : null;
+        }
+
+        function decodeFromFirebase(v) {
+            if (v === null || v === undefined || typeof v !== 'object') return v;
+            if (Array.isArray(v)) return v.filter(x => x !== null && x !== undefined).map(decodeFromFirebase);
+            const out = {};
+            Object.keys(v).forEach(k => { out[decodeKey(k)] = decodeFromFirebase(v[k]); });
+            return out;
+        }
+
+        function toArray(v) {
+            if (Array.isArray(v)) return v.filter(x => x !== null && x !== undefined);
+            if (v && typeof v === 'object') return Object.values(v).filter(x => x !== null && x !== undefined);
+            return [];
+        }
+
+        // Buluttan gelen ham veriyi uygulamanın beklediği state şekline çevirir.
+        function buildStateFromCloud(raw) {
+            const r = (raw && typeof raw === 'object') ? raw : {};
+            const s = {};
+            ARRAY_KEYS.forEach(k => { s[k] = toArray(r[k]); });
+            OBJECT_KEYS.forEach(k => { s[k] = (r[k] && typeof r[k] === 'object' && !Array.isArray(r[k])) ? r[k] : {}; });
+            s.settings = { ...DEFAULT_SETTINGS, ...((r.settings && typeof r.settings === 'object') ? r.settings : {}) };
+            return s;
+        }
+
+        // Anahtar sırasından bağımsız karşılaştırma (Firebase anahtarları sıralı döndürür).
+        function stableStringify(v) {
+            if (v === null || v === undefined) return 'null';
+            if (typeof v !== 'object') return JSON.stringify(v);
+            if (Array.isArray(v)) return '[' + v.map(stableStringify).join(',') + ']';
+            return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + stableStringify(v[k])).join(',') + '}';
+        }
+
+        function sharedSnapshot() {
+            const out = {};
+            SYNC_KEYS.forEach(k => { out[k] = state[k]; });
+            return out;
+        }
+
+        function readLegacyLocalData() {
+            try {
+                let raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+                if (!raw) {
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const k = localStorage.key(i);
+                        if (k && k.startsWith('yksprofile_')) { raw = localStorage.getItem(k); break; }
+                    }
+                }
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                if (!parsed || typeof parsed !== 'object') return null;
+                return SYNC_KEYS.some(k => parsed[k] !== undefined) ? parsed : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveThemeLocally() {
+            try { localStorage.setItem(THEME_STORAGE_KEY, state.theme); } catch (e) {}
+        }
+
+        // --- Senkronizasyon durumu (header'daki küçük gösterge) ---
+        function setSyncStatus(mode, text) {
+            const dot = document.getElementById('syncDot');
+            const label = document.getElementById('syncLabel');
+            if (!dot || !label) return;
+            const map = {
+                connecting: ['bg-amber-400', 'Bağlanıyor…'],
+                online: ['bg-emerald-500', 'Canlı'],
+                offline: ['bg-rose-500', 'Çevrimdışı']
+            };
+            const [cls, defText] = map[mode] || map.connecting;
+            dot.className = `w-2 h-2 rounded-full ${cls}`;
+            label.innerText = text || defText;
+            document.getElementById('syncStatus').title = text || defText;
+        }
+
+        function showCloudWarning(title, text) {
+            const banner = document.getElementById('storageWarningBanner');
+            if (!banner) return;
+            document.getElementById('storageWarningTitle').innerText = title;
+            document.getElementById('storageWarningText').innerText = text;
+            banner.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function hideCloudWarning() {
+            const banner = document.getElementById('storageWarningBanner');
+            if (banner) banner.classList.add('hidden');
         }
 
         async function startApp() {
@@ -1905,7 +2093,6 @@
             renderMufredat();
             renderLeaderboard();
             renderAccuracyAnalysis();
-            checkStorageHealth();
             registerServiceWorker();
             checkBackupReminder();
             const todayStr = new Date().toISOString().split('T')[0];
@@ -1935,6 +2122,7 @@
             setInterval(initCountdown, 60000);
             setInterval(applyAutoTheme, 60000);
             setupScrollReveal();
+            appStarted = true;
             lucide.createIcons();
         }
 
@@ -1960,53 +2148,192 @@
             });
         }
 
+        // --- Firebase'e bağlan, ilk veriyi al ve canlı dinleyiciyi kur ---
         async function loadState() {
             try {
-                let raw = localStorage.getItem(STORAGE_KEY);
-                if (!raw) {
-                    // Migrate data from the old profile-based storage system, if any exists.
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const k = localStorage.key(i);
-                        if (k && k.startsWith('yksprofile_')) {
-                            raw = localStorage.getItem(k);
-                            break;
-                        }
-                    }
-                }
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    state = {
-                        ...state,
-                        ...parsed,
-                        settings: { ...state.settings, ...(parsed.settings || {}) }
-                    };
-                    localStorage.setItem(STORAGE_KEY, raw);
-                }
-            } catch(e) {
-                console.error("Storage error:", e);
+                const t = localStorage.getItem(THEME_STORAGE_KEY);
+                if (t === 'dark' || t === 'light') state.theme = t;
+            } catch (e) {}
+
+            setSyncStatus('connecting');
+
+            if (!isFirebaseConfigured()) {
+                setSyncStatus('offline', 'Kurulum gerekli');
+                showCloudWarning('Firebase henüz yapılandırılmadı',
+                    'Veriler şu an kaydedilmiyor. index.html içindeki firebaseConfig alanına kendi Firebase bilgilerini yapıştır (adımlar kodun içindeki "FIREBASE KURULUM REHBERİ" notunda).');
+                return;
             }
+
+            const sdk = await waitForFirebaseSDK(10000);
+            if (!sdk) {
+                setSyncStatus('offline', 'SDK yüklenemedi');
+                showCloudWarning('Firebase kütüphanesi yüklenemedi',
+                    'İnternet bağlantını kontrol et ve sayfayı yenile. Reklam/izleyici engelleyici gstatic.com adresini engelliyor olabilir.');
+                return;
+            }
+
+            try {
+                const app = sdk.initializeApp(firebaseConfig);
+                const db = sdk.getDatabase(app);
+                fb = { sdk, db, rootRef: sdk.ref(db, DB_ROOT_PATH) };
+            } catch (e) {
+                console.error('Firebase init error:', e);
+                setSyncStatus('offline', 'Yapılandırma hatası');
+                showCloudWarning('Firebase başlatılamadı', 'firebaseConfig değerlerini (özellikle databaseURL) kontrol et. Hata: ' + (e.message || e));
+                return;
+            }
+
+            // Bağlantı durumu göstergesi
+            sdk.onValue(sdk.ref(fb.db, '.info/connected'), snap => {
+                if (snap.val() === true) setSyncStatus('online');
+                else if (cloudReady) setSyncStatus('offline', 'Çevrimdışı — değişiklikler bağlanınca gönderilecek');
+            });
+
+            // Ana canlı dinleyici: herhangi bir cihazda değişiklik olursa burası tetiklenir.
+            await new Promise(resolve => {
+                let resolved = false;
+                const done = () => { if (!resolved) { resolved = true; resolve(); } };
+                const timer = setTimeout(() => {
+                    if (!cloudReady) {
+                        showCloudWarning('Buluta bağlanılamadı',
+                            'Veriler henüz yüklenemedi. Bağlantı kurulunca sayfa kendiliğinden güncellenecek; o zamana kadar yaptığın değişiklikler kaydedilmez.');
+                    }
+                    done();
+                }, 8000);
+
+                sdk.onValue(fb.rootRef, snapshot => {
+                    clearTimeout(timer);
+                    handleCloudSnapshot(snapshot);
+                    done();
+                }, error => {
+                    clearTimeout(timer);
+                    console.error('Firebase read error:', error);
+                    setSyncStatus('offline', 'Erişim reddedildi');
+                    showCloudWarning('Veritabanına erişim reddedildi',
+                        'Firebase konsolunda Realtime Database → Kurallar sekmesinde okuma/yazma iznini aç (kurulum notunun 3. adımı) ve DB_ROOT_PATH ile kuraldaki yolun aynı olduğundan emin ol.');
+                    done();
+                });
+            });
         }
 
-        let storageFailureShown = false;
+        function handleCloudSnapshot(snapshot) {
+            if (!cloudReady) {
+                cloudReady = true;
+                hideCloudWarning();
+
+                if (!snapshot.exists()) {
+                    // Bulut boş: bu cihazda eski veri varsa taşı, yoksa varsayılanlarla başlat.
+                    const legacy = readLegacyLocalData();
+                    if (legacy) {
+                        const { theme: _t, ...legacyData } = legacy;
+                        state = {
+                            ...state,
+                            ...legacyData,
+                            settings: { ...state.settings, ...(legacyData.settings || {}) },
+                            theme: state.theme
+                        };
+                        showToast('Bu cihazdaki eski veriler buluta taşındı ☁️');
+                    }
+                    lastSyncedCanon = {};
+                    saveState();
+                    if (appStarted) refreshAllViews();
+                    return;
+                }
+            }
+            applyCloudData(snapshot.val());
+        }
+
+        function applyCloudData(raw) {
+            const cloudState = buildStateFromCloud(decodeFromFirebase(raw));
+            let changed = false;
+            SYNC_KEYS.forEach(k => {
+                const c = stableStringify(cloudState[k]);
+                if (c !== lastSyncedCanon[k]) {
+                    lastSyncedCanon[k] = c;
+                    changed = true;
+                }
+            });
+            if (!changed) return; // Kendi yazdığımız verinin yankısı — yeniden çizmeye gerek yok.
+            state = { ...state, ...cloudState, theme: state.theme };
+            if (appStarted) refreshAllViews();
+        }
+
+        // Başka bir cihazdan gelen değişiklikten sonra tüm görünümleri yeniler.
+        function refreshAllViews() {
+            const setIfIdle = (id, val) => {
+                const el = document.getElementById(id);
+                if (!el || document.activeElement === el) return;
+                if (el.type === 'checkbox') el.checked = !!val;
+                else el.value = val;
+            };
+            setIfIdle('cfgDailyGoal', state.settings.dailyGoal);
+            setIfIdle('cfgDailyHoursGoal', state.settings.dailyHoursGoal || 4.0);
+            setIfIdle('cfgExamDate', state.settings.examDate || '');
+            setIfIdle('cfgTargetTyt', state.settings.targetTyt || 0);
+            setIfIdle('cfgTargetAyt', state.settings.targetAyt || 0);
+            setIfIdle('cfgReminderTime', state.settings.reminderTime || '21:00');
+            setIfIdle('cfgAutoTheme', state.settings.autoTheme);
+            if (document.activeElement !== document.getElementById('cfgStatus')) loadDayStatus();
+
+            updateUI();
+            initCountdown();
+            renderMufredat();
+            renderPlanBlocks();
+            renderQuickNotes();
+            renderResources();
+            earnedBadgeIds = new Set(ACHIEVEMENTS.filter(a => a.check()).map(a => a.id));
+            renderBadges();
+
+            const isVisible = id => {
+                const el = document.getElementById(id);
+                return el && !el.classList.contains('hidden');
+            };
+            if (isVisible('content-konular')) renderPlaylistProgress();
+            if (isVisible('content-analytics')) {
+                renderCharts();
+                renderPeriodComparison(currentPeriodMode);
+                renderWeekdayChart();
+            }
+            lucide.createIcons();
+        }
+
+        // --- Buluta kaydet: sadece değişen koleksiyonlar gönderilir ---
         async function saveState() {
+            if (!fb || !cloudReady) {
+                if (!saveBlockedToastShown) {
+                    saveBlockedToastShown = true;
+                    showToast('⚠️ Buluta bağlı değilsin — bu değişiklik kaydedilmedi. Bağlantını / Firebase ayarlarını kontrol et.', 'error');
+                }
+                return;
+            }
             try {
-                const payload = JSON.stringify(state);
-                localStorage.setItem(STORAGE_KEY, payload);
+                const payload = sanitizeForFirebase(sharedSnapshot()) || {};
+                const canon = buildStateFromCloud(decodeFromFirebase(payload));
+                const updates = {};
+                SYNC_KEYS.forEach(k => {
+                    const c = stableStringify(canon[k]);
+                    if (c !== lastSyncedCanon[k]) {
+                        lastSyncedCanon[k] = c;
+                        updates[k] = payload[k] === undefined ? null : payload[k];
+                    }
+                });
+                if (Object.keys(updates).length === 0) return;
+                await fb.sdk.update(fb.rootRef, updates);
                 storageFailureShown = false;
-            } catch(e) {
-                console.error("Save error:", e);
+            } catch (e) {
+                console.error('Save error:', e);
                 if (!storageFailureShown) {
                     storageFailureShown = true;
-                    showToast('⚠️ Kayıt başarısız! Depolama alanı dolu olabilir (genelde çok fazla fotoğraf yüzünden). Ayarlar > Veri Yedekleme bölümünden bir şeyleri temizle veya yedek al.', 'error');
+                    showToast('⚠️ Kayıt buluta yazılamadı: ' + (e.code || e.message || 'bilinmeyen hata') + '. Firebase kurallarını kontrol et.', 'error');
                 }
             }
         }
 
         function estimateStorageUsage() {
             try {
-                const bytes = new Blob([JSON.stringify(state)]).size;
+                const bytes = new Blob([JSON.stringify(sharedSnapshot())]).size;
                 const mb = bytes / (1024 * 1024);
-                const pct = Math.min(100, Math.round((mb / 5) * 100));
+                const pct = Math.min(100, Math.round((mb / 25) * 100));
                 return { mb: Math.round(mb * 10) / 10, pct };
             } catch(e) {
                 return { mb: 0, pct: 0 };
@@ -2027,11 +2354,11 @@
             loadDayStatus();
         }
 
-        // Theme Toggle
+        // Theme Toggle (tema cihaza özel tutulur, buluta gönderilmez)
         function toggleTheme() {
             state.theme = state.theme === 'light' ? 'dark' : 'light';
             applyTheme();
-            saveState();
+            saveThemeLocally();
         }
 
         function applyTheme() {
@@ -2167,7 +2494,7 @@
 
         // Submit Activity
         let pendingWrongNotePhotos = [];
-        // --- Image compression (prevents silent localStorage quota failures) ---
+        // --- Image compression (keeps synced data small) ---
         function compressImageFile(file, maxDim = 900, quality = 0.6) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -2384,7 +2711,7 @@
             const label = document.getElementById('storageUsageLabel');
             if (!label) return;
             const { mb, pct } = estimateStorageUsage();
-            label.innerText = `${mb} MB / ~5 MB`;
+            label.innerText = `${mb} MB`;
             const bar = document.getElementById('storageUsageBar');
             bar.style.width = `${pct}%`;
             bar.className = `h-2 rounded-full ${pct >= 85 ? 'bg-rose-500' : pct >= 60 ? 'bg-amber-400' : 'bg-gradient-to-r from-brand to-sky-400'}`;
@@ -2609,9 +2936,15 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (imported.activities || imported.exams) {
-                        state = { ...state, ...imported };
-                        saveState();
-                        initApp();
+                        const { theme: _ignoredTheme, ...importedData } = imported;
+                        state = {
+                            ...state,
+                            ...importedData,
+                            settings: { ...state.settings, ...(importedData.settings || {}) },
+                            theme: state.theme
+                        };
+                        saveState();          // Buluta yazılır → tüm cihazlara yayılır
+                        refreshAllViews();
                         showToast('Yedek başarıyla yüklendi!');
                     } else {
                         showToast('Geçersiz yedek formatı!', 'error');
@@ -2619,6 +2952,7 @@
                 } catch (err) {
                     showToast('Dosya okuma hatası!', 'error');
                 }
+                event.target.value = '';
             };
             fileReader.readAsText(event.target.files[0]);
         }
@@ -3238,7 +3572,7 @@
             const date = document.getElementById('planDate').value;
             document.getElementById('planListTitle').innerText = date ? `${date} Planı` : 'Günün Planı';
 
-            const blocks = state.planBlocks.filter(b => b.date === date).sort((a,b) => a.time.localeCompare(b.time));
+            const blocks = state.planBlocks.filter(b => b.date === date).sort((a,b) => (a.time || '').localeCompare(b.time || ''));
 
             if (blocks.length === 0) {
                 container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Bu tarih için henüz plan bloğu yok.</div>`;
@@ -3479,6 +3813,7 @@
 
         function checkReminders() {
             if (!state.settings.remindersEnabled) return;
+            if (!('Notification' in window)) return;
             const now = new Date();
             const hh = now.getHours().toString().padStart(2, '0');
             const mm = now.getMinutes().toString().padStart(2, '0');
@@ -3703,7 +4038,9 @@
 
         // --- Period Comparison Chart ---
         let chartPeriodInstance = null;
+        let currentPeriodMode = 'week';
         function renderPeriodComparison(mode) {
+            currentPeriodMode = mode;
             const canvas = document.getElementById('chartPeriod');
             if (!canvas) return;
 
@@ -4229,7 +4566,7 @@
             }
         }
 
-        // --- Auto Theme Switching ---
+        // --- Auto Theme Switching (cihaza özel) ---
         function applyAutoTheme() {
             if (!state.settings.autoTheme) return;
             const hour = new Date().getHours();
@@ -4238,7 +4575,7 @@
             if (state.theme !== newTheme) {
                 state.theme = newTheme;
                 applyTheme();
-                saveState();
+                saveThemeLocally();
             }
         }
 
