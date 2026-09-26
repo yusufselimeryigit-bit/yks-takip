@@ -17,6 +17,8 @@
     <script>
         // Ana ekrandan açıldıysa (uygulama modu) açılış ekranı gösterilir
         try { if ((window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone) document.documentElement.classList.add('standalone'); } catch (e) {}
+        // Metin boyutu (iPhone "Metin Boyutu" gibi): bu cihazda saklanır
+        try { var tsv = [0.88, 0.94, 1, 1.1, 1.22][parseInt(localStorage.getItem('yks_text_size'))]; if (tsv) document.documentElement.style.setProperty('--ts', tsv); } catch (e) {}
     </script>
         <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -559,13 +561,14 @@
         .hover-lift:hover { transform: none !important; box-shadow: none !important; }
 
         /* Yazı ölçeği (Apple: Caption 12 · Footnote 13 · Subhead 15 · Title3 20 · Large Title 34) */
-        html body .text-\[9px\], html body .text-\[10px\] { font-size: 11px !important; }
-        html body .text-\[10\.5px\], html body .text-\[11px\] { font-size: 12px !important; }
-        html body .text-xs { font-size: 13px !important; line-height: 1.38 !important; }
-        html body .text-sm { font-size: 15px !important; }
-        html body h2.text-lg { font-size: 20px !important; font-weight: 700 !important; letter-spacing: -0.02em !important; }
-        html body .hero-title { font-size: 34px !important; font-weight: 700 !important; letter-spacing: -0.022em !important; line-height: 1.12 !important; }
-        @media (min-width: 640px) { html body .hero-title { font-size: 38px !important; } }
+        html body .text-\[9px\], html body .text-\[10px\] { font-size: calc(11px * var(--ts, 1)) !important; }
+        html body .text-\[10\.5px\], html body .text-\[11px\] { font-size: calc(12px * var(--ts, 1)) !important; }
+        html body .text-xs { font-size: calc(13px * var(--ts, 1)) !important; line-height: 1.38 !important; }
+        html body .text-sm { font-size: calc(15px * var(--ts, 1)) !important; }
+        html body .text-base { font-size: calc(16px * var(--ts, 1)) !important; } html body .text-lg { font-size: calc(18px * var(--ts, 1)) !important; } html body .text-xl { font-size: calc(20px * var(--ts, 1)) !important; } html body .text-2xl { font-size: calc(24px * var(--ts, 1)) !important; } html body .text-3xl { font-size: calc(30px * var(--ts, 1)) !important; }
+        html body h2.text-lg { font-size: calc(20px * var(--ts, 1)) !important; font-weight: 700 !important; letter-spacing: -0.02em !important; }
+        html body .hero-title { font-size: calc(34px * var(--ts, 1)) !important; font-weight: 700 !important; letter-spacing: -0.022em !important; line-height: 1.12 !important; }
+        @media (min-width: 640px) { html body .hero-title { font-size: calc(38px * var(--ts, 1)) !important; } }
         .hero-kicker { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; color: var(--ios-label2); margin-bottom: 2px; }
 
         /* Metin renkleri: Apple etiket renkleri */
@@ -672,7 +675,7 @@
         /* ---------- iPhone Ayarları tarzı gruplu liste ---------- */
         .ios-group-title { font-size: 13px; font-weight: 400; text-transform: uppercase; color: var(--ios-label2); padding: 0 16px 6px; letter-spacing: 0; }
         .ios-group { background: var(--ios-card); border-radius: 12px; overflow: hidden; }
-        .ios-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 0 16px; text-align: left; font-size: 16px; color: var(--ios-label); background: none; border: none; cursor: pointer; }
+        .ios-row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 0 16px; text-align: left; font-size: calc(16px * var(--ts, 1)); color: var(--ios-label); background: none; border: none; cursor: pointer; }
         .ios-row:active { background: var(--ios-fill); }
         .ios-row .ios-row-body { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; }
         .ios-row + .ios-row .ios-row-body { border-top: 0.5px solid var(--ios-sep); }
@@ -692,10 +695,155 @@
         #launchScreen.hide { opacity: 0; pointer-events: none; }
         #launchScreen img { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 10px 30px -10px rgba(0,122,255,0.5); }
         #launchScreen span { font-size: 17px; font-weight: 600; color: var(--ios-label); letter-spacing: -0.02em; }
+
+        /* =====================================================================
+           [v26] iPhone hissi: Dinamik Ada, küçülen sekme çubuğu, geçişler, widget'lar…
+           ===================================================================== */
+        /* ---- Dinamik Ada tarzı canlı zamanlayıcı ---- */
+        #liveIsland { position: fixed; z-index: 150; top: calc(env(safe-area-inset-top, 0px) + 8px); left: 50%;
+            transform: translateX(-50%) scale(0.55); opacity: 0; pointer-events: none;
+            background: #000; color: #fff; border-radius: 22px; min-height: 36px; width: 172px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.55); overflow: hidden; cursor: pointer;
+            transition: transform .45s cubic-bezier(.3,1.3,.5,1), opacity .25s ease, width .45s cubic-bezier(.3,1.25,.5,1), border-radius .45s cubic-bezier(.3,1.25,.5,1); }
+        #liveIsland.show { transform: translateX(-50%) scale(1); opacity: 1; pointer-events: auto; }
+        #liveIsland .li-compact { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 36px; padding: 0 14px 0 9px; }
+        #liveIsland .li-time { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+        #liveIsland .li-expanded { display: none; padding: 16px 18px 18px; }
+        #liveIsland.expanded { width: min(370px, calc(100vw - 16px)); border-radius: 36px; cursor: default; }
+        #liveIsland.expanded .li-compact { display: none; }
+        #liveIsland.expanded .li-expanded { display: block; animation: fadeIn .25s ease; }
+        #liveIsland .li-big { font-size: 44px; font-weight: 300; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; }
+        #liveIsland .li-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        #liveIsland .li-btn svg { width: 22px; height: 22px; }
+        body.island-on #toastContainer { top: calc(env(safe-area-inset-top, 0px) + 54px) !important; }
+
+        /* ---- Kaydırınca küçülen sekme çubuğu (iOS 26) ---- */
+        #mobileTabBar .mtab { transition: color .25s ease, transform .35s cubic-bezier(.34,1.56,.64,1), width .38s cubic-bezier(.3,1.1,.4,1), height .38s cubic-bezier(.3,1.1,.4,1), opacity .2s ease; }
+        #tabMoreBtn { transition: width .38s cubic-bezier(.3,1.1,.4,1), height .38s cubic-bezier(.3,1.1,.4,1), color .25s ease; }
+        body.tabbar-min #tabBarInner .mtab:not(.active) { width: 0 !important; opacity: 0; pointer-events: none; overflow: hidden; }
+        body.tabbar-min #tabBarInner .mtab span { display: none; }
+        body.tabbar-min #tabBarInner .mtab.active { width: 50px !important; height: 42px !important; }
+        body.tabbar-min #tabIndicator { opacity: 0 !important; }
+        body.tabbar-min #tabMoreBtn { width: 50px; height: 50px; }
+        body.tabbar-min #tabBarInner:not(:has(.mtab.active)) { display: none; }
+
+        /* ---- Sayfa geçişleri ---- */
+        @keyframes pageBackIn { from { transform: translateX(-24%); opacity: 0.4; } to { transform: none; opacity: 1; } }
+        @keyframes pushIn { from { transform: translateX(100%); } to { transform: none; } }
+        .tab-back { animation: pageBackIn .38s cubic-bezier(.3,1,.4,1) both; }
+        @media (max-width: 639px) {
+            #dayModal { align-items: stretch !important; }
+            #dayModal > .absolute { display: none; }
+            #dayModalCard { max-height: none !important; height: 100% !important; border-radius: 0 !important; padding-top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+                background: var(--ios-bg) !important; animation: pushIn .4s cubic-bezier(.3,1,.4,1) !important; box-shadow: -10px 0 30px rgba(0,0,0,0.15) !important; }
+            #dayModalCard::before { display: none !important; }
+            .day-back-bar { display: flex !important; }
+        }
+        .day-back-bar { display: none; align-items: center; margin: 0 0 8px -6px; }
+        .day-back-bar button { display: flex; align-items: center; gap: 2px; color: rgb(var(--brand-rgb)); font-size: 17px; }
+
+        /* ---- Borsa tarzı deneme grafiği ---- */
+        #stkChart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        #stkChart .stk-cursor { opacity: 0; transition: opacity .12s; }
+        #stkChart.scrubbing .stk-cursor { opacity: 1; }
+
+        /* ---- "Veri Ekle" tam ekran formlar ---- */
+        #formSheet { position: fixed; inset: 0; z-index: 128; }
+        #formSheet.hidden { display: none; }
+        #formSheet .fs-bg { position: absolute; inset: 0; background: rgba(0,0,0,0.35); animation: fadeIn .25s ease; }
+        #formSheet .fs-card { position: absolute; left: 0; right: 0; bottom: 0; top: calc(env(safe-area-inset-top, 0px) + 12px); background: var(--ios-bg);
+            border-radius: 14px 14px 0 0; display: flex; flex-direction: column; overflow: hidden; animation: sheetUp .42s cubic-bezier(.3,1.1,.4,1); }
+        @media (min-width: 640px) { #formSheet .fs-card { left: 50%; right: auto; width: 560px; margin-left: -280px; top: 5vh; bottom: 5vh; border-radius: 14px; } }
+        #formSheet .fs-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 13px 16px; border-bottom: 0.5px solid var(--ios-sep); background: var(--ios-nav); }
+        #formSheet .fs-cancel { justify-self: start; color: rgb(var(--brand-rgb)); font-size: 17px; }
+        #formSheet .fs-title { font-size: 17px; font-weight: 600; color: var(--ios-label); }
+        #formSheet .fs-done { justify-self: end; color: rgb(var(--brand-rgb)); font-size: 17px; font-weight: 600; }
+        #formSheet .fs-body { flex: 1; overflow-y: auto; padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 28px); -webkit-overflow-scrolling: touch; }
+        #formSheet .fs-body form { background: var(--ios-card); border-radius: 12px; padding: 16px; }
+        #formSheet .fs-body form > button[type="submit"] { display: none !important; }
+        .stepper { display: flex; align-items: stretch; gap: 4px; }
+        .stepper input { min-width: 0; flex: 1; text-align: center; }
+        .stepper button { width: 30px; flex-shrink: 0; border-radius: 9px; background: var(--ios-fill); color: rgb(var(--brand-rgb)); font-size: 18px; font-weight: 600; line-height: 1; }
+        .stepper button:active { opacity: 0.6; }
+
+        /* ---- Spotlight arama ("Diğer" panelinde) ---- */
+        .spot-search { display: flex; align-items: center; gap: 8px; background: var(--ios-fill); border-radius: 12px; padding: 0 10px; height: 40px; }
+        .spot-search input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; font-size: 16px; color: var(--ios-label); }
+        .spot-search svg { width: 17px; height: 17px; color: var(--ios-label2); flex-shrink: 0; }
+        #morePanel.searching #moreGrid { display: none; }
+        #spotResults { max-height: 55vh; overflow-y: auto; }
+        .spot-head { font-size: 13px; font-weight: 600; color: var(--ios-label2); padding: 12px 4px 6px; }
+        .spot-item { display: flex; align-items: center; gap: 12px; width: 100%; padding: 9px 6px; border-radius: 10px; text-align: left; color: var(--ios-label); font-size: 15px; }
+        .spot-item:active { background: var(--ios-fill); }
+        .spot-item .spot-ic { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+        .spot-item .spot-ic svg { width: 16px; height: 16px; }
+        .spot-chip { display: inline-flex; padding: 6px 12px; border-radius: 999px; background: var(--ios-fill); font-size: 14px; color: var(--ios-label); margin: 0 6px 6px 0; }
+
+        /* ---- Boş ekranlar ---- */
+        .empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 34px 16px; gap: 6px; }
+        .empty-state .es-ic { width: 54px; height: 54px; color: var(--ios-label3); margin-bottom: 6px; }
+        .empty-state .es-title { font-size: calc(19px * var(--ts, 1)); font-weight: 700; color: var(--ios-label); letter-spacing: -0.01em; }
+        .empty-state .es-text { font-size: calc(14px * var(--ts, 1)); color: var(--ios-label2); max-width: 300px; line-height: 1.4; }
+        .empty-state .es-btn { margin-top: 10px; padding: 8px 18px; border-radius: 999px; background: rgb(var(--brand-rgb) / 0.12); color: rgb(var(--brand-rgb)); font-weight: 600; font-size: 15px; }
+
+        /* ---- Metin boyutu kaydırıcısı ---- */
+        #textSizeRange { width: 120px; accent-color: rgb(var(--brand-rgb)); }
+
+        /* ---- Yenilikler / hoş geldin ekranı ---- */
+        #welcomeSheet { position: fixed; inset: 0; z-index: 170; background: var(--ios-card); display: flex; flex-direction: column; animation: sheetUp .45s cubic-bezier(.3,1.1,.4,1); }
+        #welcomeSheet .wl-body { flex: 1; overflow-y: auto; padding: calc(env(safe-area-inset-top, 0px) + 48px) 30px 20px; max-width: 520px; margin: 0 auto; width: 100%; }
+        #welcomeSheet h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; text-align: center; color: var(--ios-label); margin-bottom: 34px; }
+        #welcomeSheet .wl-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
+        #welcomeSheet .wl-item svg { width: 34px; height: 34px; flex-shrink: 0; }
+        #welcomeSheet .wl-item b { display: block; font-size: 16px; color: var(--ios-label); margin-bottom: 2px; }
+        #welcomeSheet .wl-item span { font-size: 15px; color: var(--ios-label2); line-height: 1.35; }
+        #welcomeSheet .wl-foot { padding: 14px 30px calc(env(safe-area-inset-bottom, 0px) + 24px); max-width: 520px; margin: 0 auto; width: 100%; }
+        #welcomeSheet .wl-btn { width: 100%; padding: 16px; border-radius: 14px; background: rgb(var(--brand-rgb)); color: #fff; font-size: 17px; font-weight: 600; }
+
+        /* ---- Widget boyutları (küçük widget) ---- */
+        .wsm { display: none; }
+        .widget-sm > .wsm { display: flex; flex-direction: column; justify-content: space-between; height: 100%; min-height: 128px; }
+        .widget-sm > *:not(.wsm):not(.lay-handle) { display: none !important; }
+        html body .widget-sm { padding: 15px !important; min-height: 158px; }
+        .wsm-label { display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; letter-spacing: -0.01em; }
+        .wsm-label svg { width: 15px; height: 15px; }
+        .wsm-big { font-size: 38px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--ios-label); font-variant-numeric: tabular-nums; }
+        .wsm-sub { font-size: 13px; color: var(--ios-label2); font-weight: 500; }
+        @media (max-width: 1023px) {
+            #content-dashboard { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; column-gap: 14px !important; }
+            #content-dashboard > * { grid-column: span 2 / span 2; }
+            #content-dashboard > .widget-sm { grid-column: span 1 / span 1; }
+        }
+        @media (min-width: 1024px) { #content-dashboard > .widget-sm { grid-column: span 1 / span 1 !important; } }
+        #dashLeft, #dashRight { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; }
+        #dashLeft { gap: 24px 14px; } #dashRight { gap: 32px 16px; }
+        #dashLeft > *, #dashRight > * { grid-column: span 2 / span 2; margin-top: 0 !important; margin-bottom: 0 !important; }
+        #dashLeft > .widget-sm, #dashRight > .widget-sm { grid-column: span 1 / span 1; }
     </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden is-loading">
     <div id="launchScreen" aria-hidden="true"><img src="apple-touch-icon.png" alt=""><span>YKS Takip</span></div>
+    <div id="liveIsland" role="status" aria-live="polite" onclick="islandTap(event)">
+        <div class="li-compact"><span id="liIcon"></span><span id="liTime" class="li-time">00:00</span></div>
+        <div class="li-expanded">
+            <div class="flex items-center justify-between"><span id="liTitle" class="text-[13px] font-semibold" style="color:#FF9F0A">Odak</span><button type="button" onclick="islandCollapse(event)" class="text-white/60 text-[13px]">Küçült</button></div>
+            <div class="flex items-end justify-between gap-3 mt-2">
+                <div><div id="liBig" class="li-big">00:00</div><div id="liSub" class="text-[13px] text-white/60 mt-1"></div></div>
+                <div class="flex gap-2.5">
+                    <button type="button" id="liToggle" onclick="islandAction(event,'toggle')" class="li-btn" style="background:rgba(255,159,10,.25);color:#FF9F0A" aria-label="Duraklat"></button>
+                    <button type="button" onclick="islandAction(event,'end')" class="li-btn" style="background:rgba(255,255,255,.14)" aria-label="Bitir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                </div>
+            </div>
+            <button type="button" onclick="islandAction(event,'open')" class="mt-3 w-full py-2 rounded-full text-[13px] font-semibold" style="background:rgba(255,255,255,.1)">Zamanlayıcıyı aç</button>
+        </div>
+    </div>
+    <div id="formSheet" class="hidden" role="dialog" aria-modal="true" aria-labelledby="fsTitle">
+        <div class="fs-bg" onclick="closeFormSheet()"></div>
+        <div class="fs-card" id="fsCard">
+            <div class="fs-nav"><button type="button" class="fs-cancel" onclick="closeFormSheet()">Vazgeç</button><div id="fsTitle" class="fs-title"></div><button type="button" id="fsDone" class="fs-done" onclick="formSheetSubmit()">Ekle</button></div>
+            <div id="fsBody" class="fs-body"></div>
+        </div>
+    </div>
     <div id="ctxMenu" role="menu"><div class="ctx-bg" onclick="closeCtxMenu()"></div><div class="ctx-panel" id="ctxPanel"></div></div>
 
     <!-- Ambient background glows -->
@@ -752,6 +900,9 @@
                     <span id="headerCountdownText">— gün</span>
                 </div>
 
+                <button type="button" onclick="openAddMenu()" id="addBtn" class="p-2.5 rounded-full bg-brand text-white press-scale" title="Veri ekle" aria-label="Veri ekle">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
                 <button type="button" onclick="toggleLayoutEdit()" id="layoutEditBtn" class="p-2.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:text-brand transition press-scale" title="Kartların yerini sürükleyerek değiştir" aria-label="Kart düzenini değiştir">
                     <i data-lucide="move" class="w-4 h-4"></i>
                 </button>
@@ -1185,9 +1336,10 @@
                 <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
                 <div class="flex items-center justify-between mt-3 text-[10px] text-slate-400 dark:text-slate-500">
                     <span class="flex items-center gap-2.5">
-                        <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Çalışma</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full" style="background:#FA114F"></span>Soru</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full" style="background:#92E82A"></span>Süre</span>
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full" style="background:#1EEAEF"></span>Tekrar</span>
                         <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>Deneme</span>
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500/20"></span>Hedef</span>
                     </span>
                     <button type="button" onclick="calendarToday()" class="press-scale font-semibold text-brand">Bugün</button>
                 </div>
@@ -1561,6 +1713,20 @@
                 <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Deneme Takibi</div>
                 <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Netlerin nereye gidiyor?</h1>
                 <p class="hero-subtitle text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Her deneme bir veri noktası — zamanla nereye gittiğini birlikte görelim.</p>
+            </div>
+
+            <!-- [YENİ v26] Borsa uygulaması tarzı deneme grafiği -->
+            <div id="stockCard" class="lg:col-span-3 soft-card p-6 sm:p-7 rounded-[28px]">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <div id="stkTitle" class="text-[13px] font-semibold text-slate-500 uppercase">Netlerim</div>
+                        <div class="flex items-baseline gap-2 flex-wrap"><span id="stkBig" class="text-[34px] font-bold tracking-tight tabular-nums text-slate-900 dark:text-slate-50">—</span><span id="stkChg" class="text-[15px] font-semibold tabular-nums"></span></div>
+                        <div id="stkSub" class="text-[13px] text-slate-500 truncate">&nbsp;</div>
+                    </div>
+                    <div id="stkTypeBtns" class="flex gap-1 bg-black/5 dark:bg-white/10 p-1 rounded-full flex-shrink-0"></div>
+                </div>
+                <div id="stkChart" class="relative mt-3 h-52 select-none" style="touch-action: pan-y"></div>
+                <div id="stkRangeBtns" class="grid grid-cols-4 gap-1 bg-black/5 dark:bg-white/10 p-[3px] rounded-[10px] mt-3"></div>
             </div>
 
             <!-- [YENİ v17] Deneme Takibi & Net/Puan Hesaplama (SAY / EA, YKS 2026) -->
@@ -2529,6 +2695,7 @@
                     <div class="ios-group-title">Görünüm</div>
                     <div class="ios-group">
                         <label class="ios-row"><span class="ios-icon" style="background:#1c1c1e"><i data-lucide="moon"></i></span><span class="ios-row-body"><span>Karanlık Görünüm</span><input type="checkbox" id="iosDarkSwitch" onchange="setDarkFromSwitch(this.checked)" aria-label="Karanlık görünüm"></span></label>
+                        <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-gray));font-weight:700;font-size:13px">Aa</span><span class="ios-row-body"><span>Metin Boyutu</span><span class="ios-detail"><span style="font-size:12px">A</span><input type="range" id="textSizeRange" min="0" max="4" step="1" oninput="setTextSize(this.value)" aria-label="Metin boyutu"><span style="font-size:20px">A</span></span></span></div>
                         <button type="button" class="ios-row" onclick="scrollToSettingsCard('Görünüm')"><span class="ios-icon" style="background:rgb(var(--ios-indigo))"><i data-lucide="palette"></i></span><span class="ios-row-body"><span>Tema Rengi</span><span class="ios-detail"><span id="iosAccentName"></span><i data-lucide="chevron-right" class="ios-chev"></i></span></span></button>
                         <button type="button" class="ios-row" onclick="toggleLayoutEdit(true)"><span class="ios-icon" style="background:rgb(var(--ios-teal))"><i data-lucide="move"></i></span><span class="ios-row-body"><span>Kartları Yerleştir</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
                         <button type="button" class="ios-row" onclick="openDashCustomizer()"><span class="ios-icon" style="background:rgb(var(--brand-rgb))"><i data-lucide="layout-grid"></i></span><span class="ios-row-body"><span>Ana Sayfa Kartları</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
@@ -2912,7 +3079,9 @@
     <div id="moreSheet" class="lg:hidden fixed inset-0 z-[86] pointer-events-none">
         <div id="moreBackdrop" class="absolute inset-0 bg-black/30 backdrop-blur-[2px] opacity-0 transition-opacity duration-300" onclick="closeMoreSheet()"></div>
         <div id="morePanel" class="liquid-sheet absolute left-3 right-3 rounded-[32px] p-4" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 86px)">
-            <div class="grid grid-cols-4 gap-1">
+            <div class="spot-search mb-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="moreSearch" type="search" placeholder="Ara: konu, deneme, sayfa…" autocomplete="off" oninput="renderSpotlight()" aria-label="Uygulamada ara"></div>
+            <div id="spotResults" class="hidden"></div>
+            <div id="moreGrid" class="grid grid-cols-4 gap-1">
                 <button type="button" onclick="pickMoreTab('konular')" data-more="konular" class="more-item press-scale flex flex-col items-center gap-1.5 py-3 rounded-2xl">
                     <span class="w-12 h-12 rounded-2xl flex items-center justify-center bg-black/[0.05] dark:bg-white/10"><i data-lucide="video" class="w-5 h-5"></i></span>
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-200 text-center leading-tight">Konu İlerlemesi</span>
@@ -2970,6 +3139,7 @@
     <div id="dayModal" class="hidden fixed inset-0 z-[120] flex items-end sm:items-center justify-center sm:p-4" role="dialog" aria-modal="true">
         <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDayModal()"></div>
         <div id="dayModalCard" class="relative w-full sm:max-w-2xl max-h-[88vh] overflow-y-auto rounded-t-[28px] sm:rounded-[28px] bg-white dark:bg-neutral-900 border border-black/5 dark:border-white/10 shadow-2xl p-6 sm:p-7" style="padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px)">
+            <div class="day-back-bar"><button type="button" onclick="closeDayModal()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>Takvim</button></div>
             <div class="flex items-center justify-between gap-3 mb-5">
                 <button type="button" onclick="shiftDayModal(-1)" class="press-scale p-2 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300" title="Önceki gün"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
                 <div class="text-center min-w-0">
@@ -3373,7 +3543,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v25';
+        const APP_VERSION = 'firebase-v26';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -3624,6 +3794,7 @@
             try { renderAccentPicker(); initCollapsibleCards(); applyDashLayout(); updateTabBar(false); } catch (e) { console.error(e); }
             try { initLayoutSystem(); } catch (e) { console.error('Düzen sistemi:', e); }
             try { initAppleUI(); } catch (e) { console.error('Apple arayüzü:', e); }
+            try { initIphoneUI(); } catch (e) { console.error('iPhone arayüzü:', e); }
         }
 
         // --- Apple-style scroll reveal ---
@@ -3966,8 +4137,12 @@
         }
 
         // Tab Navigation with smooth crossfade
-        function switchTab(tabId) {
+        function switchTab(tabId, opts) {
             const current = document.querySelector('.tab-content:not(.hidden)');
+            const back = opts && opts.back;
+            if (!(opts && opts.fromHistory) && tabId !== currentTabId && !VIEWER_MODE) {
+                try { history.pushState({ tab: tabId }, '', location.href); } catch (e) {}
+            }
             currentTabId = tabId;
             updateTabBar(true);
 
@@ -3992,9 +4167,9 @@
 
                 const nextEl = document.getElementById(`content-${tabId}`);
                 nextEl.classList.remove('hidden');
-                nextEl.classList.remove('tab-fade');
+                nextEl.classList.remove('tab-fade', 'tab-back');
                 void nextEl.offsetWidth;
-                nextEl.classList.add('tab-fade');
+                nextEl.classList.add(back ? 'tab-back' : 'tab-fade');
 
                 if (tabId === 'analytics') {
                     setTimeout(renderCharts, 50);
@@ -4317,6 +4492,7 @@
             renderTopicGoals();
             playFeedbackSound('success');
             showToast('Aktivite kaydedildi!');
+            document.dispatchEvent(new Event('yks-form-saved'));
             document.getElementById('actTopic').value = '';
             document.getElementById('actBlank').value = '';
             updateActivityPreview();
@@ -4478,6 +4654,7 @@
             }
             renderExamTopicPicker();
             calcExamNets();
+            if (typeof fsState !== 'undefined' && fsState) addSteppers(document.getElementById('examForm'));
         }
 
         // Tek bir ders/alt başlık için D-Y okur, neti ve boş sayısını yazar.
@@ -4871,6 +5048,7 @@
             if (marked > 0) msg += ` · ${marked} konu tekrara alındı`;
             showToast(msg);
             resetExamForm();
+            document.dispatchEvent(new Event('yks-form-saved'));
         }
 
         function deleteExam(id) {
@@ -4898,7 +5076,7 @@
             renderDayReviewCard();
             renderReverseCalc();
             renderXP();
-            try { renderRings(); renderHealthChart(); renderIosSettings(); } catch (e) { console.error(e); }
+            try { renderRings(); renderHealthChart(); renderIosSettings(); renderStocks(); applyWidgetSizes(); } catch (e) { console.error(e); }
             renderViewer();
             scheduleDashBalance();
             renderWeeklyReport();
@@ -5874,6 +6052,7 @@
             const tops = topOrder().map(dashEl).filter(el => el && el.parentElement === sec);
             const curTops = [...sec.children].filter(el => tops.includes(el));
             if (tops.some((el, i) => curTops[i] !== el)) tops.forEach(el => sec.insertBefore(el, left));
+            try { applyWidgetSizes(); } catch (e) { console.error(e); }
             const title = document.getElementById('dashHeroTitle');
             if (title) title.innerText = 'Özet';
             moveDashSegPill();
@@ -5951,6 +6130,7 @@
                     <select onchange="setDashCardView('${key}', this.value)" class="input-soft rounded-full px-2 py-1 text-[10px] text-slate-600 dark:text-slate-300">
                         ${['today', 'overview', 'both'].map(o => `<option value="${o}" ${o === v ? 'selected' : ''}>${viewName[o]}</option>`).join('')}
                     </select>
+                    ${DASH_SMALL[key] ? `<select onchange="setDashCardSize('${key}', this.value)" class="input-soft rounded-full px-2 py-1 text-[10px] text-slate-600 dark:text-slate-300" aria-label="Widget boyutu"><option value="M" ${cardSize(key) !== 'S' ? 'selected' : ''}>Normal</option><option value="S" ${cardSize(key) === 'S' ? 'selected' : ''}>Küçük</option></select>` : ''}
                     ${orderable ? `<button type="button" onclick="moveDashCard('${key}', -1)" class="press-scale w-7 h-7 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 flex items-center justify-center" title="Yukarı"><i data-lucide="chevron-up" class="w-3.5 h-3.5"></i></button>
                     <button type="button" onclick="moveDashCard('${key}', 1)" class="press-scale w-7 h-7 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 flex items-center justify-center" title="Aşağı"><i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></button>` : '<span class="w-[60px]"></span>'}
                 </div>`;
@@ -6943,6 +7123,7 @@
             const items = [
                 ['move', 'Taşı', "closeCtxMenu(); toggleLayoutEdit(true)"],
                 [collapsed ? 'unfold-vertical' : 'fold-vertical', collapsed ? 'Genişlet' : 'Daralt', "ctxToggleCollapse()"],
+                onDash && DASH_SMALL[key] ? [cardSize(key) === 'S' ? 'maximize-2' : 'minimize-2', cardSize(key) === 'S' ? 'Normal boyut' : 'Küçük widget', `closeCtxMenu(); setDashCardSize('${key}', '${cardSize(key) === 'S' ? 'M' : 'S'}')`] : null,
                 onDash ? ['eye-off', 'Ana sayfadan gizle', `closeCtxMenu(); toggleDashHidden('${key}'); showToast('Kart gizlendi. Ayarlar → Ana Sayfa Kartları\\'ndan geri açabilirsin.')`, 'danger'] : null
             ].filter(Boolean);
             const panel = document.getElementById('ctxPanel');
@@ -7150,9 +7331,436 @@
             appleizeCharts();
             appleizeHeroes();
             setupSheetGestures('miniModalCard', () => closeMiniModal());
-            setupSheetGestures('dayModalCard', () => closeDayModal());
             updateNavOnScroll();
             renderIosSettings();
+        }
+
+        // =====================================================================
+        // [v26] iPhone hissi — davranışlar
+        // =====================================================================
+        const svgIc = (d, extra) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ${extra || ''}>${d}</svg>`;
+        const IC_PLAY = '<path d="M6 4l14 8-14 8z" fill="currentColor"/>', IC_PAUSE = '<rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/>';
+
+        // ---------- Dinamik Ada ----------
+        let islandExpanded = false;
+        function liveTimerInfo() {
+            try {
+                const total = pomo.mode === 'work' ? pomo.duration * 60 : pomoBreakSecs();
+                const rem = pomo.running ? Math.max(0, Math.ceil((pomo.endAt - Date.now()) / 1000)) : pomo.remaining;
+                const pomoActive = pomo.running || (rem > 0 && rem < total);
+                const ms = swElapsed();
+                const swActive = sw.running || ms >= 1000;
+                if (pomoActive && (pomo.running || !sw.running)) {
+                    const mm = String(Math.floor(rem / 60)).padStart(2, '0'), ss = String(rem % 60).padStart(2, '0');
+                    return { kind: 'pomo', running: pomo.running, time: `${mm}:${ss}`, pct: 1 - rem / total, title: pomo.mode === 'work' ? `Odak · Tur ${pomo.cycle}` : 'Mola', color: pomo.mode === 'work' ? '#FF9F0A' : '#30D158', sub: pomo.running ? 'Çalışıyor' : 'Duraklatıldı' };
+                }
+                if (swActive) {
+                    const t = Math.floor(ms / 1000), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), sec = t % 60;
+                    const time = h ? `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}` : `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+                    return { kind: 'sw', running: sw.running, time, pct: null, title: 'Kronometre', color: '#FF9F0A', sub: sw.running ? 'Çalışıyor' : 'Duraklatıldı' };
+                }
+            } catch (e) {}
+            return null;
+        }
+        function timerCardOnScreen(kind) {
+            const el = document.querySelector(`[data-card="${kind === 'pomo' ? 'pomodoro' : 'stopwatch'}"]`);
+            if (!el || el.offsetParent === null || document.getElementById('content-dashboard').classList.contains('hidden')) return false;
+            const r = el.getBoundingClientRect();
+            return r.bottom > 60 && r.top < window.innerHeight - 90;
+        }
+        function renderIsland() {
+            const isl = document.getElementById('liveIsland');
+            if (!isl || VIEWER_MODE) return;
+            const info = liveTimerInfo();
+            const overlay = !document.getElementById('focusOverlay').classList.contains('hidden') || !document.getElementById('examSimOverlay').classList.contains('hidden');
+            const show = !!info && !overlay && (islandExpanded || !timerCardOnScreen(info.kind));
+            isl.classList.toggle('show', show);
+            document.body.classList.toggle('island-on', show);
+            if (!show) { if (islandExpanded) islandCollapse(); return; }
+            const ring = info.pct === null
+                ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${info.color}" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/></svg>`
+                : `<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="none" stroke="${info.color}" stroke-opacity=".28" stroke-width="3"/><circle cx="10" cy="10" r="7.5" fill="none" stroke="${info.color}" stroke-width="3" stroke-linecap="round" stroke-dasharray="${2 * Math.PI * 7.5}" stroke-dashoffset="${2 * Math.PI * 7.5 * (1 - info.pct)}" transform="rotate(-90 10 10)"/></svg>`;
+            document.getElementById('liIcon').innerHTML = ring;
+            const t = document.getElementById('liTime');
+            t.textContent = info.time; t.style.color = info.running ? info.color : 'rgba(255,255,255,.6)';
+            document.getElementById('liBig').textContent = info.time;
+            const title = document.getElementById('liTitle'); title.textContent = info.title; title.style.color = info.color;
+            document.getElementById('liSub').textContent = info.sub;
+            const tg = document.getElementById('liToggle');
+            const want = info.running ? 'pause' : 'play';
+            if (tg.dataset.state !== want) { tg.dataset.state = want; tg.innerHTML = svgIc(info.running ? IC_PAUSE : IC_PLAY); tg.setAttribute('aria-label', info.running ? 'Duraklat' : 'Devam et'); }
+        }
+        function islandTap(e) {
+            if (islandExpanded) return;
+            e.stopPropagation();
+            islandExpanded = true;
+            document.getElementById('liveIsland').classList.add('expanded');
+            renderIsland();
+        }
+        function islandCollapse(e) {
+            if (e) e.stopPropagation();
+            islandExpanded = false;
+            const isl = document.getElementById('liveIsland');
+            if (isl) isl.classList.remove('expanded');
+        }
+        function islandAction(e, what) {
+            e.stopPropagation();
+            const info = liveTimerInfo();
+            if (!info) return;
+            if (what === 'toggle') { if (info.kind === 'pomo') pomodoroToggle(); else swToggle(); }
+            else if (what === 'end') {
+                islandCollapse();
+                if (info.kind === 'sw') swFinish();
+                else if (confirm('Pomodoro sıfırlansın mı?')) pomodoroReset();
+            } else if (what === 'open') {
+                islandCollapse();
+                switchTab('dashboard');
+                setTimeout(() => { const el = document.querySelector(`[data-card="${info.kind === 'pomo' ? 'pomodoro' : 'stopwatch'}"]`); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 250);
+            }
+            renderIsland();
+        }
+        document.addEventListener('click', e => { if (islandExpanded && !e.target.closest('#liveIsland')) islandCollapse(); });
+        setInterval(renderIsland, 500);
+
+        // ---------- Kaydırınca küçülen sekme çubuğu ----------
+        let tbLastY = 0;
+        window.addEventListener('scroll', () => {
+            const y = window.scrollY;
+            if (window.innerWidth >= 1024 || document.getElementById('moreSheet').classList.contains('open')) { tbLastY = y; return; }
+            const wasMin = document.body.classList.contains('tabbar-min');
+            if (y > tbLastY + 6 && y > 140 && !wasMin) document.body.classList.add('tabbar-min');
+            else if ((y < tbLastY - 6 || y < 80) && wasMin) { document.body.classList.remove('tabbar-min'); setTimeout(() => updateTabBar(false), 380); }
+            if (Math.abs(y - tbLastY) > 6) tbLastY = y;
+        }, { passive: true });
+
+        // ---------- Geçmiş: tarayıcının geri hareketi / sol kenardan kaydırma ----------
+        try { if (!VIEWER_MODE) history.replaceState({ tab: 'dashboard' }, '', location.href); } catch (e) {}
+        window.addEventListener('popstate', e => {
+            // Önce açık panel varsa onu kapat (geri hareketi paneli kapatsın)
+            if (fsState) { closeFormSheet(); try { history.pushState({ tab: currentTabId }, '', location.href); } catch (err) {} return; }
+            if (!document.getElementById('dayModal').classList.contains('hidden')) { closeDayModal(); try { history.pushState({ tab: currentTabId }, '', location.href); } catch (err) {} return; }
+            if (!document.getElementById('miniModal').classList.contains('hidden')) { closeMiniModal(); try { history.pushState({ tab: currentTabId }, '', location.href); } catch (err) {} return; }
+            const tab = e.state && e.state.tab;
+            if (tab && tab !== currentTabId && document.getElementById('content-' + tab)) { closeMoreSheet(); switchTab(tab, { fromHistory: true, back: true }); }
+        });
+        // Ana ekrandan açılan uygulamada tarayıcı hareketi yok: sol kenardan sağa kaydırınca geri git
+        (function setupEdgeBack() {
+            let x0 = null, y0 = 0, target = null, dx = 0, kind = null;
+            document.addEventListener('touchstart', e => {
+                const t = e.touches[0];
+                if (!t || t.clientX > 24 || e.touches.length !== 1) { x0 = null; return; }
+                const dayOpen = !document.getElementById('dayModal').classList.contains('hidden') && window.innerWidth < 640;
+                if (dayOpen) { kind = 'day'; target = document.getElementById('dayModalCard'); }
+                else if (html_isStandalone() && !fsState && document.getElementById('miniModal').classList.contains('hidden')) { kind = 'tab'; target = document.querySelector('main > section.tab-content:not(.hidden)'); }
+                else { x0 = null; return; }
+                x0 = t.clientX; y0 = t.clientY; dx = 0;
+            }, { passive: true });
+            document.addEventListener('touchmove', e => {
+                if (x0 === null || !target) return;
+                const t = e.touches[0];
+                dx = t.clientX - x0;
+                if (Math.abs(t.clientY - y0) > Math.abs(dx) && dx < 30) { x0 = null; target.style.transform = ''; return; }
+                if (dx > 0) { e.preventDefault(); target.style.transition = 'none'; target.style.transform = `translateX(${dx}px)`; }
+            }, { passive: false });
+            document.addEventListener('touchend', () => {
+                if (x0 === null || !target) return;
+                const t = target, w = window.innerWidth;
+                t.style.transition = 'transform .28s cubic-bezier(.3,1,.4,1)';
+                if (dx > w * 0.33) {
+                    t.style.transform = `translateX(${w}px)`;
+                    setTimeout(() => { t.style.transition = ''; t.style.transform = ''; if (kind === 'day') closeDayModal(); else history.back(); }, 240);
+                } else { t.style.transform = ''; setTimeout(() => { t.style.transition = ''; }, 300); }
+                x0 = null;
+            });
+        })();
+        function html_isStandalone() { return document.documentElement.classList.contains('standalone'); }
+
+        // ---------- Borsa tarzı deneme grafiği ----------
+        let stkView = (() => { try { return { type: null, range: '10', ...(JSON.parse(localStorage.getItem('yks_stk_view') || '{}') || {}) }; } catch (e) { return { type: null, range: '10' }; } })();
+        function setStk(k, v) { stkView[k] = v; try { localStorage.setItem('yks_stk_view', JSON.stringify(stkView)); } catch (e) {} renderStocks(); }
+        function renderStocks() {
+            const box = document.getElementById('stkChart');
+            if (!box) return;
+            const type = stkView.type && EXAM_SECTIONS[stkView.type] ? stkView.type : defaultExamType();
+            document.getElementById('stkTypeBtns').innerHTML = typeToggleHtml(type, "(t => setStk('type', t))");
+            document.getElementById('stkRangeBtns').innerHTML = [['5', 'Son 5'], ['10', 'Son 10'], ['20', 'Son 20'], ['all', 'Tümü']].map(([v, l]) =>
+                `<button type="button" onclick="setStk('range','${v}')" class="press-scale py-1.5 rounded-[8px] text-[13px] font-semibold ${stkView.range === v ? 'bg-white dark:bg-white/20 shadow-sm text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400'}">${l}</button>`).join('');
+            document.getElementById('stkTitle').textContent = `${examTypeLabel(type)} netlerim`;
+            let exams = state.exams.filter(e => e.type === type && typeof e.total === 'number').sort((a, b) => (a.date || '').localeCompare(b.date || '') || a.id - b.id);
+            if (stkView.range !== 'all') exams = exams.slice(-parseInt(stkView.range));
+            if (exams.length < 2) {
+                box.innerHTML = emptyState('line-chart', exams.length ? 'Bir deneme daha ekle' : 'Henüz deneme yok', 'Grafik için bu türde en az iki deneme gerekiyor.', 'Deneme Ekle', "openFormSheet('exam')");
+                document.getElementById('stkBig').textContent = exams.length ? String(exams[0].total) : '—';
+                document.getElementById('stkChg').textContent = ''; document.getElementById('stkSub').innerHTML = '&nbsp;';
+                if (window.lucide) lucide.createIcons();
+                return;
+            }
+            const W = Math.max(260, box.clientWidth || 600), H = box.clientHeight || 208, pad = 10;
+            const vals = exams.map(e => e.total);
+            const lo = Math.min(...vals), hi = Math.max(...vals), span = Math.max(1, hi - lo);
+            const X = i => pad + (W - 2 * pad) * (i / (exams.length - 1));
+            const Y = v => pad + (H - 2 * pad - 18) * (1 - (v - lo) / span) + 4;
+            const up = vals[vals.length - 1] >= vals[0];
+            const col = up ? '#34C759' : '#FF3B30';
+            const pts = vals.map((v, i) => [X(i), Y(v)]);
+            const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+            const area = `${line} L ${X(vals.length - 1).toFixed(1)} ${H} L ${X(0).toFixed(1)} ${H} Z`;
+            box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+                <defs><linearGradient id="stkGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".28"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+                <line x1="0" x2="${W}" y1="${Y(vals[0]).toFixed(1)}" y2="${Y(vals[0]).toFixed(1)}" stroke="var(--ios-label3)" stroke-width="1" stroke-dasharray="2 4"/>
+                <path d="${area}" fill="url(#stkGrad)"/>
+                <path d="${line}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+                <g class="stk-cursor"><line id="stkLine" x1="0" x2="0" y1="0" y2="${H}" stroke="var(--ios-label2)" stroke-width="1"/><circle id="stkDot" r="5.5" fill="${col}" stroke="var(--ios-card)" stroke-width="2.5"/></g>
+            </svg>`;
+            const setHead = (i) => {
+                const e = exams[i], base = exams[0];
+                const d = roundNet(e.total - base.total), pc = base.total ? d / base.total * 100 : 0;
+                document.getElementById('stkBig').textContent = e.total.toLocaleString('tr-TR');
+                const chg = document.getElementById('stkChg');
+                chg.textContent = `${d >= 0 ? '+' : ''}${d.toLocaleString('tr-TR')} (%${Math.abs(pc).toFixed(1).replace('.', ',')})`;
+                chg.style.color = d >= 0 ? 'rgb(var(--ios-green))' : 'rgb(var(--ios-red))';
+                return e;
+            };
+            const reset = () => {
+                box.classList.remove('scrubbing');
+                setHead(exams.length - 1);
+                document.getElementById('stkSub').textContent = `${exams.length} deneme · ${fmtDateTr(exams[0].date)} – ${fmtDateTr(exams[exams.length - 1].date)}`;
+            };
+            const scrub = (clientX) => {
+                const r = box.getBoundingClientRect();
+                const rel = (clientX - r.left) / r.width * W;
+                let i = Math.round((rel - pad) / (W - 2 * pad) * (exams.length - 1));
+                i = Math.max(0, Math.min(exams.length - 1, i));
+                box.classList.add('scrubbing');
+                const l = box.querySelector('#stkLine'), dot = box.querySelector('#stkDot');
+                l.setAttribute('x1', X(i)); l.setAttribute('x2', X(i));
+                dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(vals[i]));
+                const e = setHead(i);
+                document.getElementById('stkSub').textContent = `${fmtDateTr(e.date)} · ${e.name}`;
+            };
+            box.onpointermove = e => { if (e.pointerType === 'mouse' || e.buttons || e.pressure) scrub(e.clientX); };
+            box.onpointerdown = e => scrub(e.clientX);
+            box.onpointerleave = reset; box.onpointerup = e => { if (e.pointerType !== 'mouse') reset(); }; box.onpointercancel = reset;
+            reset();
+        }
+        window.addEventListener('resize', () => { clearTimeout(renderStocks.t); renderStocks.t = setTimeout(renderStocks, 150); });
+
+        // ---------- "Veri Ekle" tam ekran formlar ----------
+        let fsState = null;
+        function openAddMenu() {
+            const row = (ic, bg, label, sub, fn) => `<button type="button" class="ios-row" onclick="closeMiniModal(); ${fn}"><span class="ios-icon" style="background:${bg}">${svgIc(ic)}</span><span class="ios-row-body"><span class="text-left"><span class="block">${label}</span><span class="block text-[12px] text-slate-400">${sub}</span></span></span></button>`;
+            openMiniModal(`<div class="text-[17px] font-semibold text-center mb-4 text-slate-900 dark:text-slate-50">Veri Ekle</div>
+                <div class="ios-group" style="background:var(--ios-bg)">
+                    ${row('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>', 'rgb(var(--brand-rgb))', 'Çalışma', 'Soru, süre, konu', "openFormSheet('activity')")}
+                    ${row('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/>', 'rgb(var(--ios-purple))', 'Deneme', 'TYT, AYT (EA / SAY)', "openFormSheet('exam')")}
+                    ${row('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/>', 'rgb(var(--ios-orange))', 'Pomodoro başlat', 'Odak turu', "quickStartPomodoro()")}
+                </div>
+                <button type="button" onclick="closeMiniModal()" class="w-full mt-3 py-3 rounded-xl text-[17px] font-semibold text-brand" style="background:var(--ios-fill)">Vazgeç</button>`);
+        }
+        function quickStartPomodoro() { if (!pomo.running) pomodoroToggle(); showToast('Pomodoro başladı · üstteki adadan takip edebilirsin'); }
+        function openFormSheet(kind) {
+            if (fsState) closeFormSheet();
+            closeMoreSheet();
+            const form = document.getElementById(kind === 'exam' ? 'examForm' : 'activityForm');
+            if (!form) return;
+            const ph = document.createElement('div');
+            ph.className = 'text-xs text-slate-400 py-6 text-center'; ph.textContent = 'Form tam ekranda açık…';
+            form.parentNode.insertBefore(ph, form);
+            document.getElementById('fsBody').appendChild(form);
+            fsState = { kind, form, ph };
+            document.getElementById('fsTitle').textContent = kind === 'exam' ? (editingExamId !== null ? 'Denemeyi Düzenle' : 'Deneme Ekle') : 'Çalışma Ekle';
+            document.getElementById('fsDone').textContent = kind === 'exam' && editingExamId !== null ? 'Kaydet' : 'Ekle';
+            document.getElementById('formSheet').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (kind === 'activity') { const d = document.getElementById('actDate'); if (d && !d.value) d.value = localDateStr(); }
+            addSteppers(form);
+            document.getElementById('fsBody').scrollTop = 0;
+            try { history.pushState({ tab: currentTabId, sheet: kind }, '', location.href); } catch (e) {}
+        }
+        function closeFormSheet() {
+            if (!fsState) return;
+            const { form, ph } = fsState;
+            ph.parentNode.insertBefore(form, ph);
+            ph.remove();
+            fsState = null;
+            document.getElementById('formSheet').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        function formSheetSubmit() { if (fsState) fsState.form.requestSubmit(); }
+        document.addEventListener('yks-form-saved', () => { if (fsState) closeFormSheet(); });
+        // +/− düğmeleri (Sağlık uygulamasındaki gibi)
+        function addSteppers(root) {
+            if (!root) return;
+            root.querySelectorAll('input[type="number"]').forEach(inp => {
+                if (inp.dataset.stepper || !/^(act(Questions|Correct|Wrong|Blank|Duration)|exD-|exY-)/.test(inp.id)) return;
+                inp.dataset.stepper = '1';
+                const step = inp.id === 'actDuration' ? 5 : 1;
+                const wrap = document.createElement('div'); wrap.className = 'stepper';
+                inp.parentNode.insertBefore(wrap, inp);
+                const mk = (sign) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = sign > 0 ? '+' : '−'; b.setAttribute('aria-label', sign > 0 ? 'Artır' : 'Azalt');
+                    b.onclick = () => { const v = Math.max(0, (parseInt(inp.value) || 0) + sign * step); inp.value = v; inp.dispatchEvent(new Event('input', { bubbles: true })); }; return b; };
+                wrap.appendChild(mk(-1)); wrap.appendChild(inp); wrap.appendChild(mk(1));
+            });
+        }
+
+        // ---------- Spotlight arama ----------
+        const SPOT_PAGES = [['dashboard', 'Özet', 'house'], ['exams', 'Deneme Takibi', 'file-text'], ['tekrar', 'Yanlış Defteri', 'book-open'], ['konular', 'Konu İlerlemesi', 'video'], ['mufredat', 'Müfredat', 'list-checks'], ['plan', 'Plan', 'calendar-clock'], ['analytics', 'Analiz', 'pie-chart'], ['liderlik', 'Liderlik', 'trophy'], ['notlar', 'Notlar', 'mic'], ['kaynaklar', 'Kaynaklar', 'library'], ['hedefokul', 'Hedef Okul / Tercih Listem', 'graduation-cap'], ['settings', 'Ayarlar', 'settings']];
+        function spotRecent() { try { return JSON.parse(localStorage.getItem('yks_recent_search') || '[]') || []; } catch (e) { return []; } }
+        function spotSaveRecent(q) { try { const r = [q, ...spotRecent().filter(x => x !== q)].slice(0, 6); localStorage.setItem('yks_recent_search', JSON.stringify(r)); } catch (e) {} }
+        let spotItems = [];
+        function spotGo(i) { const it = spotItems[i]; if (!it) return; const q = (document.getElementById('moreSearch').value || '').trim(); if (q) spotSaveRecent(q); document.getElementById('moreSearch').value = ''; document.getElementById('moreSearch').blur(); closeMoreSheet(); renderSpotlight(); setTimeout(it.go, 60); }
+        function spotSet(q) { const i = document.getElementById('moreSearch'); i.value = q; renderSpotlight(); }
+        function renderSpotlight() {
+            const inp = document.getElementById('moreSearch'), box = document.getElementById('spotResults'), panel = document.getElementById('morePanel');
+            if (!inp || !box) return;
+            const raw = inp.value.trim(), q = raw.toLocaleLowerCase('tr');
+            panel.classList.toggle('searching', !!q);
+            box.classList.toggle('hidden', !q && document.activeElement !== inp);
+            spotItems = [];
+            const item = (bg, ic, title, sub, go) => { spotItems.push({ go }); return `<button type="button" class="spot-item" onclick="spotGo(${spotItems.length - 1})"><span class="spot-ic" style="background:${bg}"><i data-lucide="${ic}"></i></span><span class="min-w-0 flex-1"><span class="block truncate">${title}</span>${sub ? `<span class="block truncate text-[12px] text-slate-400">${sub}</span>` : ''}</span></button>`; };
+            let html = '';
+            if (!q) {
+                const rec = spotRecent();
+                if (rec.length) html += `<div class="spot-head">Son aramalar</div><div>${rec.map(r => `<button type="button" class="spot-chip" onclick="spotSet(${escHtml(JSON.stringify(r))})">${escHtml(r)}</button>`).join('')}</div>`;
+                const due = dueWrongNotes().length;
+                html += `<div class="spot-head">Öneriler</div>`
+                    + item('rgb(var(--brand-rgb))', 'pencil-line', 'Çalışma ekle', '', () => openFormSheet('activity'))
+                    + item('rgb(var(--ios-purple))', 'file-text', 'Deneme ekle', '', () => openFormSheet('exam'))
+                    + item('rgb(var(--ios-orange))', 'timer', pomo.running ? 'Pomodoro çalışıyor' : 'Pomodoro başlat', '', () => { if (!pomo.running) quickStartPomodoro(); })
+                    + (due ? item('rgb(var(--ios-teal))', 'repeat', `Bugünkü ${due} tekrarı yap`, 'Yanlış defteri', () => generateQuizFromWrongNotes()) : '')
+                    + item('rgb(var(--ios-pink))', 'star', 'Tercih listem', `${(state.tercihler || []).length} program`, () => switchTab('hedefokul'));
+            } else {
+                const has = (...v) => v.some(x => String(x || '').toLocaleLowerCase('tr').includes(q));
+                const groups = [];
+                const pages = SPOT_PAGES.filter(p => has(p[1]));
+                if (pages.length) groups.push(['Sayfalar', pages.map(p => item('rgb(var(--ios-gray))', p[2], p[1], '', () => switchTab(p[0])))]);
+                const topics = [];
+                Object.keys(PLAYLISTS).forEach(sb => PLAYLISTS[sb].forEach(t => { if (topics.length < 6 && has(t, sb)) topics.push([sb, t]); }));
+                if (topics.length) groups.push(['Konular', topics.map(([sb, t]) => { const f = topicFreq(sb, t); return item('rgb(var(--ios-green))', 'list-checks', escHtml(cleanTopicName(t)), `${escHtml(sb)}${f ? ` · ~${fmtQ(f.total)} soru/yıl` : ''}`, () => { switchTab('mufredat'); }); })]);
+                const acts = state.activities.filter(a => has(a.subject, a.topic, a.type)).slice(0, 5);
+                if (acts.length) groups.push(['Çalışmalar', acts.map(a => item('rgb(var(--brand-rgb))', 'pencil-line', `${escHtml(subjectShort(a.subject))} · ${escHtml(a.topic)}`, `${fmtDateTr(a.date)} · ${a.questions ? a.questions + ' soru' : (a.duration || 0) + ' dk'}`, () => { document.getElementById('actDate').value = a.date; switchTab('dashboard'); updateUI(); openDayModal(a.date); }))]);
+                const exams = state.exams.filter(e => has(e.name, e.type)).slice(0, 5);
+                if (exams.length) groups.push(['Denemeler', exams.map(e => item('rgb(var(--ios-purple))', 'file-text', escHtml(e.name), `${fmtDateTr(e.date)} · ${examTypeLabel(e.type)} · ${e.total} net`, () => switchTab('exams')))]);
+                const notes = state.wrongNotes.filter(n => has(n.subject, n.topic, n.note)).slice(0, 4);
+                if (notes.length) groups.push(['Yanlış defteri', notes.map(n => item('rgb(var(--ios-red))', 'book-open', escHtml(n.topic || n.subject), escHtml(n.note || ''), () => switchTab('tekrar')))]);
+                const res = (state.resources || []).filter(r => has(r.name, r.subject)).slice(0, 4);
+                if (res.length) groups.push(['Kaynaklar', res.map(r => item('rgb(var(--ios-orange))', 'library', escHtml(r.name), escHtml(r.subject || ''), () => switchTab('kaynaklar')))]);
+                const qn = (state.quickNotes || []).filter(n => has(n.text)).slice(0, 3);
+                if (qn.length) groups.push(['Notlar', qn.map(n => item('rgb(var(--ios-indigo))', 'notebook-pen', escHtml(String(n.text).slice(0, 60)), '', () => switchTab('notlar')))]);
+                const tc = (state.tercihler || []).filter(t => has(t.uni, t.prog)).slice(0, 4);
+                if (tc.length) groups.push(['Tercihler', tc.map(t => item('rgb(var(--ios-pink))', 'star', escHtml(t.uni), escHtml(t.prog), () => switchTab('hedefokul')))]);
+                html = groups.length ? groups.map(([h, items]) => `<div class="spot-head">${h}</div>${items.join('')}`).join('') : `<div class="empty-state" style="padding:22px 8px">${svgIc('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 'class="es-ic"')}<div class="es-title">“${escHtml(raw)}” için sonuç yok</div><div class="es-text">Başka bir kelime dene.</div></div>`;
+            }
+            box.innerHTML = html;
+            if (window.lucide) lucide.createIcons();
+        }
+        document.addEventListener('focusin', e => { if (e.target && e.target.id === 'moreSearch') renderSpotlight(); });
+
+        // ---------- Boş ekran ----------
+        function emptyState(icon, title, text, btn, action) {
+            return `<div class="empty-state"><i data-lucide="${icon}" class="es-ic"></i><div class="es-title">${title}</div><div class="es-text">${text}</div>${btn ? `<button type="button" class="es-btn press-scale" onclick="${action}">${btn}</button>` : ''}</div>`;
+        }
+
+        // ---------- Metin boyutu ----------
+        const TEXT_SIZES = [0.88, 0.94, 1, 1.1, 1.22];
+        function setTextSize(i) {
+            i = Math.max(0, Math.min(4, parseInt(i)));
+            document.documentElement.style.setProperty('--ts', TEXT_SIZES[i]);
+            try { localStorage.setItem('yks_text_size', i); } catch (e) {}
+            scheduleDashBalance(120); updateTabBar(false);
+        }
+        function initTextSizeControl() {
+            const r = document.getElementById('textSizeRange');
+            if (!r) return;
+            let i = 2; try { const v = parseInt(localStorage.getItem('yks_text_size')); if (v >= 0 && v <= 4) i = v; } catch (e) {}
+            r.value = i;
+        }
+
+        // ---------- Yenilikler / hoş geldin ----------
+        const WHATSNEW_KEY = 'yks_whatsnew_v26';
+        function showWelcome() {
+            if (document.getElementById('welcomeSheet')) return;
+            let key, title, items, btn;
+            const ic = (d, c) => svgIc(d, `style="color:${c}"`);
+            if (VIEWER_MODE) {
+                key = 'yks_viewer_welcome_v1';
+                const name = userDisplayName();
+                title = name ? `${name}${turkishGenitive(name)} YKS Gelişimi` : 'YKS Gelişimi';
+                items = [
+                    [ic('<path d="M21 12a9 9 0 1 1-6.2-8.6"/><path d="M21 3v6h-6"/>', '#007AFF'), 'Canlı güncellenir', 'Yeni bir çalışma ya da deneme eklendiğinde bu sayfa kendiliğinden yenilenir.'],
+                    [ic('<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>', '#AF52DE'), 'Denemeler ve netler', 'Deneme sonuçları, net gelişimi ve tahmini puan.'],
+                    [ic('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>', '#34C759'), 'Haftalık çalışma', 'Kaç gün, kaç saat, kaç soru çalışıldığı.'],
+                    [ic('<path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/>', '#FF9500'), 'Dikkat gerekenler', 'Doğruluğu düşük dersler ve konular.']
+                ];
+                btn = 'Başla';
+            } else {
+                key = WHATSNEW_KEY;
+                title = 'YKS Takip’teki Yenilikler';
+                items = [
+                    [ic('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/>', '#FA114F'), 'Günlük Halkalar', 'Soru, süre ve tekrar hedeflerin Fitness halkaları gibi dolar; takvimde her gün kendi halkasıyla.'],
+                    [ic('<rect x="6" y="9" width="12" height="6" rx="3" fill="currentColor"/>', '#1C1C1E'), 'Canlı Zamanlayıcı', 'Pomodoro ya da kronometre çalışırken ekranın üstünde Dinamik Ada gibi kalan süre görünür.'],
+                    [ic('<path d="M12 5v14M5 12h14"/>', '#007AFF'), 'Veri Ekle', 'Üstteki + ile çalışma ve denemeyi tam ekran, +/− düğmeleriyle hızlıca ekle.'],
+                    [ic('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', '#8E8E93'), 'Her Şeyi Ara', '“Diğer” panelinin üstünden konu, deneme, not ve sayfa ara.'],
+                    [ic('<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/>', '#34C759'), 'Borsa Tarzı Grafik', 'Deneme grafiğinde parmağını gezdir, her denemenin netini gör.'],
+                    [ic('<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', '#5856D6'), 'Metin Boyutu', 'Ayarlar’dan bütün uygulamanın yazılarını büyüt ya da küçült.']
+                ];
+                btn = 'Devam';
+            }
+            try { if (localStorage.getItem(key)) return; } catch (e) { return; }
+            const el = document.createElement('div');
+            el.id = 'welcomeSheet'; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+            el.innerHTML = `<div class="wl-body"><h1>${escHtml(title)}</h1>${items.map(([svg, t, d]) => `<div class="wl-item">${svg}<div><b>${t}</b><span>${d}</span></div></div>`).join('')}</div>
+                <div class="wl-foot"><button type="button" class="wl-btn press-scale" id="wlBtn">${btn}</button></div>`;
+            document.body.appendChild(el);
+            document.getElementById('wlBtn').onclick = () => { try { localStorage.setItem(key, '1'); } catch (e) {} el.style.transition = 'transform .35s ease, opacity .3s ease'; el.style.transform = 'translateY(100%)'; setTimeout(() => el.remove(), 350); };
+        }
+
+        // ---------- Widget boyutları ----------
+        const DASH_SMALL = {
+            countdown: () => { const ex = state.settings.examDate; const d = ex ? Math.max(0, Math.ceil((new Date(ex + 'T09:00:00') - new Date()) / 86400000)) : null;
+                return wsm('hourglass', 'YKS', 'rgb(var(--brand-rgb))', d === null ? '—' : d, d === null ? 'tarih girilmedi' : 'gün kaldı'); },
+            xp: () => { const li = levelInfo(computeXP().total);
+                return wsm('sparkles', 'Seviye', 'rgb(var(--ios-purple))', li.level, li.title, `<div class="w-full h-1.5 rounded-full mt-1" style="background:var(--ios-fill)"><div class="h-1.5 rounded-full" style="width:${li.pct}%;background:rgb(var(--ios-purple))"></div></div>`); },
+            rings: () => { const v = ringValues(localDateStr()); const closed = v.filter(r => r.none || r.v >= r.goal).length;
+                return `<div class="wsm-label" style="color:#FA114F">Halkalar</div><svg viewBox="0 0 140 140" style="width:84px;height:84px;align-self:center">${ringSvg(v, 140, 18, 3)}</svg><div class="wsm-sub text-center">${closed}/3 kapandı</div>`; },
+            streak: () => wsm('flame', 'Seri', 'rgb(var(--ios-orange))', computeStreak(), 'gün üst üste'),
+            goals: () => { const today = localDateStr(); const q = state.activities.filter(a => a.date === today).reduce((t, a) => t + numOr0(a.questions), 0); const g = numOr0(state.settings.dailyGoal) || 1;
+                return wsm('target', 'Bugün', 'rgb(var(--brand-rgb))', q, `/ ${g} soru`, `<div class="w-full h-1.5 rounded-full mt-1" style="background:var(--ios-fill)"><div class="h-1.5 rounded-full" style="width:${Math.min(100, Math.round(q / g * 100))}%;background:rgb(var(--brand-rgb))"></div></div>`); },
+            quests: () => { const wq = state.settings.weeklyQuests; let d = 0, n = 0; if (wq && Array.isArray(wq.quests)) { const items = wq.quests.map(q => questProgress(q, wq.week)).filter(Boolean); n = items.length; d = items.filter(i => i.value >= i.target).length; }
+                return wsm('swords', 'Görevler', 'rgb(var(--ios-purple))', n ? `${d}/${n}` : '—', 'bu hafta'); },
+            badges: () => { const e = ACHIEVEMENTS.filter(a => a.check()).length; return wsm('medal', 'Rozetler', 'rgb(var(--ios-orange))', `${e}/${ACHIEVEMENTS.length}`, 'kazanıldı'); },
+            calendar: () => { const ym = localDateStr().slice(0, 7); const agg = dayAggregates(); let days = 0, q = 0; Object.keys(agg).forEach(ds => { if (ds.startsWith(ym) && agg[ds].n) { days++; q += agg[ds].q; } });
+                return wsm('calendar-days', TR_MONTHS[new Date().getMonth()], 'rgb(var(--ios-red))', days, `gün · ${q} soru`); }
+        };
+        function wsm(icon, label, color, big, sub, extra) {
+            return `<div class="wsm-label" style="color:${color}"><i data-lucide="${icon}"></i>${label}</div><div><div class="wsm-big">${big}</div><div class="wsm-sub">${sub}</div>${extra || ''}</div>`;
+        }
+        function cardSize(key) { return ((dashLayout.sizes || {})[key]) === 'S' ? 'S' : 'M'; }
+        function setDashCardSize(key, v) {
+            dashLayout.sizes = { ...(dashLayout.sizes || {}), [key]: v === 'S' ? 'S' : 'M' };
+            saveDashLayout(); applyDashLayout();
+            if (!document.getElementById('miniModal').classList.contains('hidden')) refreshCustomizer();
+        }
+        function applyWidgetSizes() {
+            Object.keys(DASH_SMALL).forEach(key => {
+                const el = document.querySelector(`#content-dashboard [data-card="${key}"]`);
+                if (!el) return;
+                const small = cardSize(key) === 'S';
+                el.classList.toggle('widget-sm', small);
+                let w = el.querySelector(':scope > .wsm');
+                if (small) {
+                    if (!w) { w = document.createElement('div'); w.className = 'wsm'; el.appendChild(w); }
+                    try { w.innerHTML = DASH_SMALL[key](); } catch (e) { w.innerHTML = ''; }
+                }
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function initIphoneUI() {
+            renderStocks();
+            initTextSizeControl();
+            renderIsland();
+            setTimeout(showWelcome, 900);
         }
         // ================= [YENİ v22] Ortak yardımcılar =================
         function pctText(p) { return p >= 10 ? Math.round(p).toLocaleString('tr-TR') : (Math.round(p * 10) / 10).toLocaleString('tr-TR'); }
@@ -7559,7 +8167,7 @@
             });
             if (!arr.length) {
                 document.getElementById('tercihSummary').innerHTML = '';
-                box.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 dark:text-slate-500">Henüz tercih eklemedin.<br>Taban puanları tablosunda programın yanındaki <b>☆</b> düğmesine bas.</div>`;
+                box.innerHTML = emptyState('star', 'Tercih listen boş', 'Taban puanları tablosunda programın yanındaki yıldıza bas.', 'Program Ekle', "goToAtlasForTercih()");
                 return;
             }
             const cats = arr.map(tercihCategory);
@@ -8145,11 +8753,12 @@
                         : isFuture ? 'text-slate-300 dark:text-slate-600' : 'text-slate-500 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/10',
                     isToday ? 'ring-2 ring-brand' : ''
                 ].join(' ');
-                const dots = (hasWork ? '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>' : '') + (g && g.exams ? '<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>' : '');
+                const ringsSvgHtml = isFuture ? '<span class="block w-7 h-7"></span>' : `<svg viewBox="0 0 44 44" class="w-7 h-7">${ringSvg(ringValues(ds), 44, 5, 1)}</svg>`;
                 const title = hasWork ? `${g.n} çalışma · ${g.q} soru · ${g.dur} dk` : (g && g.exams ? 'Deneme günü' : 'Kayıt yok');
-                html += `<button type="button" onclick="openDayModal('${ds}')" class="${cls}" title="${title}">
-                    <span>${day}</span>
-                    <span class="absolute bottom-1 flex gap-0.5">${dots}</span>
+                html += `<button type="button" onclick="openDayModal('${ds}')" class="press-scale relative flex flex-col items-center gap-0.5 py-1 rounded-xl ${isToday ? 'bg-brand/10' : ''}" title="${title}">
+                    <span class="text-[11px] font-semibold ${isToday ? 'text-brand' : isFuture ? 'text-slate-300 dark:text-slate-600' : 'text-slate-600 dark:text-slate-300'}">${day}</span>
+                    ${ringsSvgHtml}
+                    ${g && g.exams ? '<span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-purple-500" title="Deneme"></span>' : ''}
                 </button>`;
             }
             grid.innerHTML = html;
@@ -8360,7 +8969,7 @@
             if (summaryEl) summaryEl.innerText = filtered.length ? activitySummaryText(filtered) : '';
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${COLS}" class="p-4 text-center text-slate-400 dark:text-slate-500 text-xs">${base.length ? 'Bu filtreye uyan çalışma yok.' : 'Bu tarih için aktivite kaydı bulunamadı.'}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${COLS}">${base.length ? emptyState('filter', 'Bu filtrede çalışma yok', 'Filtreyi değiştir ya da temizle.') : emptyState('pencil-line', 'Bu gün kayıt yok', 'Çözdüğün soruları ve çalıştığın süreyi ekle.', 'Çalışma Ekle', "openFormSheet('activity')")}</td></tr>`;
                 return;
             }
 
@@ -8428,7 +9037,7 @@
             tbody.innerHTML = '';
 
             if (state.exams.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400 dark:text-slate-500 text-xs">Henüz kaydolmuş bir deneme sonucu bulunmuyor.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9">${emptyState('file-text', 'Henüz deneme yok', 'İlk denemeni ekle; netlerin, puanın ve gelişimin burada görünsün.', 'Deneme Ekle', "openFormSheet('exam')")}</td></tr>`;
                 return;
             }
 
@@ -8731,7 +9340,7 @@
             renderSrsBanner();
 
             if (state.wrongNotes.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Henüz not eklenmedi. Aktivite eklerken "Yanlış Konu Notu" alanını doldurabilirsin.</div>`;
+                container.innerHTML = emptyState('book-open', 'Yanlış defterin boş', 'Çalışma eklerken “Yanlış Konu Notu” yazdığında soru burada tekrar sırasına girer.', 'Çalışma Ekle', "openFormSheet('activity')");
                 return;
             }
 
@@ -9592,7 +10201,7 @@
             const blocks = state.planBlocks.filter(b => b.date === date).sort((a,b) => (a.time || '').localeCompare(b.time || ''));
 
             if (blocks.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Bu tarih için henüz plan bloğu yok.</div>`;
+                container.innerHTML = emptyState('calendar-clock', 'Bu gün için plan yok', 'Plan bloğu ekleyerek gününü saat saat kur.');
                 return;
             }
 
@@ -11313,7 +11922,7 @@
             const container = document.getElementById('quickNotesContainer');
             if (!container) return;
             if (state.quickNotes.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Henüz not yok.</div>`;
+                container.innerHTML = emptyState('notebook-pen', 'Henüz not yok', 'Aklına geleni yaz ya da sesle kaydet, kaybolmasın.');
                 return;
             }
             container.innerHTML = state.quickNotes.map(n => {
@@ -11370,7 +11979,7 @@
             const container = document.getElementById('topicGoalsContainer');
             if (!container) return;
             if (state.topicGoals.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-6">Henüz mini hedef eklenmedi.</div>`;
+                container.innerHTML = emptyState('crosshair', 'Mini hedef yok', 'Bir konu için soru hedefi koy, ilerlemeyi burada izle.');
                 return;
             }
             container.innerHTML = state.topicGoals.map(g => {
@@ -11888,7 +12497,7 @@
                 sumEl.innerText = list.length ? `${list.length} kaynak${tAll ? ` · ${tDone}/${tAll} test çözüldü` : ''}` : '';
             }
             if (list.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">${state.resources.length ? 'Bu filtrede kaynak yok.' : 'Henüz kaynak eklenmedi. Soldaki formdan kitabını, konularını ve test sayılarını ekle.'}</div>`;
+                container.innerHTML = state.resources.length ? emptyState('filter', 'Bu filtrede kaynak yok', 'Başka bir sınav türü seç.') : emptyState('library', 'Kütüphanen boş', 'Kitabını, konularını ve test sayılarını ekle; hangi testte kaldığını takip et.');
                 return;
             }
             const active = document.activeElement;
@@ -11941,7 +12550,7 @@
             const container = document.getElementById('schoolsContainer');
             if (!container) return;
             if (state.schools.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 dark:text-slate-500 text-xs py-8">Henüz hedef eklenmedi.</div>`;
+                container.innerHTML = emptyState('graduation-cap', 'Hedef okul yok', 'Hedeflediğin üniversite ve bölümü ekle, puan farkını gör.');
                 return;
             }
             const currentScore = getCurrentEstimatedScore();
