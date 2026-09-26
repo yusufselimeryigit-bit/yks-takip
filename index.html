@@ -819,10 +819,32 @@
         #dashLeft { gap: 24px 14px; } #dashRight { gap: 32px 16px; }
         #dashLeft > *, #dashRight > * { grid-column: span 2 / span 2; margin-top: 0 !important; margin-bottom: 0 !important; }
         #dashLeft > .widget-sm, #dashRight > .widget-sm { grid-column: span 1 / span 1; }
+
+        /* ===== [v27] Telefonda üst çubuk: yapışmaz; yerine ince başlık çubuğu ===== */
+        #miniNav { display: none; }
+        @media (max-width: 1023px) {
+            /* Büyük üst çubuk sayfayla birlikte kayar, ekranı kaplamaz */
+            html body header.glass-nav { position: relative !important; top: auto !important; background: transparent !important;
+                border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+            #navTitle { display: none !important; }
+            /* Kalabalığı azalt: geri sayım çipi (ana sayfada zaten var), düzenle düğmesi (Ayarlar'da ve basılı tutunca var), alt satır */
+            #headerCountdown, #layoutEditBtn, #headerGreeting { display: none !important; }
+            #headerActions { gap: 8px; } #headerActions > * + * { margin-left: 0 !important; }
+            /* İnce başlık çubuğu: büyük başlık geçilince görünür, aşağı kaydırırken gizlenir */
+            #miniNav { display: flex; position: fixed; top: 0; left: 0; right: 0; z-index: 60; align-items: center; justify-content: center;
+                height: calc(env(safe-area-inset-top, 0px) + 40px); padding: env(safe-area-inset-top, 0px) 60px 0;
+                background: var(--ios-nav); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+                border-bottom: 0.5px solid var(--ios-sep); transform: translateY(-100%); transition: transform .28s cubic-bezier(.3,1,.4,1);
+                pointer-events: none; cursor: pointer; }
+            #miniNav span { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: var(--ios-label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .2s ease; }
+            body.nav-compact:not(.nav-hide) #miniNav { transform: none; pointer-events: auto; }
+            body.island-on #miniNav span { opacity: 0; }   /* Dinamik Ada varken başlık onun altında kalmasın */
+        }
     </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden is-loading">
     <div id="launchScreen" aria-hidden="true"><img src="apple-touch-icon.png" alt=""><span>YKS Takip</span></div>
+    <div id="miniNav" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" aria-hidden="true"><span id="miniNavTitle"></span></div>
     <div id="liveIsland" role="status" aria-live="polite" onclick="islandTap(event)">
         <div class="li-compact"><span id="liIcon"></span><span id="liTime" class="li-time">00:00</span></div>
         <div class="li-expanded">
@@ -881,7 +903,7 @@
                     <p id="headerGreeting" class="text-xs text-slate-500 dark:text-slate-400">Günlük ilerleme ve video takip merkezi</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-3">
+            <div id="headerActions" class="flex items-center space-x-3">
                 <button onclick="toggleCommandPalette()" class="hidden md:flex items-center space-x-2 bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 px-3.5 py-2 rounded-full text-xs text-slate-600 dark:text-slate-300 transition press-scale">
                     <i data-lucide="search" class="w-3.5 h-3.5"></i>
                     <span>Ara...</span>
@@ -3543,7 +3565,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v26';
+        const APP_VERSION = 'firebase-v27';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -7014,10 +7036,13 @@
             const h1 = sec && sec.querySelector('h1.hero-title');
             const head = document.querySelector('header.glass-nav');
             const hb = head ? Math.min(head.getBoundingClientRect().bottom, head.offsetHeight) : 0;
-            const compact = !!(h1 && head && window.scrollY > 10 && h1.getBoundingClientRect().bottom < hb + 2);
+            const limit = window.innerWidth < 1024 ? 46 : hb + 2;   // telefonda ince başlık çubuğunun yüksekliği
+            const compact = !!(h1 && head && window.scrollY > 10 && h1.getBoundingClientRect().bottom < limit);
             document.body.classList.toggle('nav-compact', compact);
             const t = document.getElementById('navTitle');
             if (t && h1 && t.textContent !== h1.textContent) t.textContent = h1.textContent;
+            const mt = document.getElementById('miniNavTitle');
+            if (mt && h1 && mt.textContent !== h1.textContent) mt.textContent = h1.textContent;
         }
         window.addEventListener('scroll', () => { if (!navTick) { navTick = true; requestAnimationFrame(updateNavOnScroll); } }, { passive: true });
 
@@ -7428,6 +7453,8 @@
             const y = window.scrollY;
             if (window.innerWidth >= 1024 || document.getElementById('moreSheet').classList.contains('open')) { tbLastY = y; return; }
             const wasMin = document.body.classList.contains('tabbar-min');
+            if (y > tbLastY + 6 && y > 140) document.body.classList.add('nav-hide');
+            else if (y < tbLastY - 6 || y < 80) document.body.classList.remove('nav-hide');
             if (y > tbLastY + 6 && y > 140 && !wasMin) document.body.classList.add('tabbar-min');
             else if ((y < tbLastY - 6 || y < 80) && wasMin) { document.body.classList.remove('tabbar-min'); setTimeout(() => updateTabBar(false), 380); }
             if (Math.abs(y - tbLastY) > 6) tbLastY = y;
