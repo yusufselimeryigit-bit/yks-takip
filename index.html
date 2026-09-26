@@ -435,6 +435,85 @@
         .wr-bar.run > span { animation: wrFill var(--wr-dur, 7s) linear forwards; }
         @keyframes wrFill { to { width: 100%; } }
         .header-countdown { background: linear-gradient(135deg, rgb(var(--brand-rgb) / 0.14), rgba(138,63,252,0.16)); }
+
+        /* ===== [v23] iOS 26 Liquid Glass sekme çubuğu ===== */
+        #mobileTabBar { position: fixed; z-index: 85; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+            display: flex; align-items: center; gap: 10px; }
+        @media (min-width: 1024px) { #mobileTabBar { display: none; } }
+        .glass {
+            position: relative; isolation: isolate; border-radius: 999px;
+            background: rgba(255,255,255,0.16);
+            backdrop-filter: blur(6px) saturate(190%) brightness(1.05);
+            -webkit-backdrop-filter: blur(6px) saturate(190%) brightness(1.05);
+            box-shadow:
+                0 12px 32px -10px rgba(0,0,0,0.28),
+                0 2px 8px rgba(0,0,0,0.08),
+                inset 0 1px 1px rgba(255,255,255,0.85),
+                inset 0 -1px 1px rgba(255,255,255,0.28),
+                inset 0 0 14px rgba(255,255,255,0.14);
+        }
+        /* Kenar ışık yansıması (sol üst ve sağ alt parlar) */
+        .glass::before {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 4;
+            background: linear-gradient(140deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.25) 22%, rgba(255,255,255,0) 45%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.3) 82%, rgba(255,255,255,0.8) 100%);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+        }
+        /* Üst yüzeydeki hafif parlaklık */
+        .glass::after {
+            content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.04) 42%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.07) 100%);
+        }
+        .dark .glass {
+            background: rgba(28,28,32,0.30);
+            backdrop-filter: blur(8px) saturate(180%) brightness(0.95);
+            -webkit-backdrop-filter: blur(8px) saturate(180%) brightness(0.95);
+            box-shadow: 0 12px 32px -10px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.3),
+                inset 0 1px 1px rgba(255,255,255,0.3), inset 0 -1px 1px rgba(255,255,255,0.08), inset 0 0 14px rgba(255,255,255,0.05);
+        }
+        .dark .glass::before { background: linear-gradient(140deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 22%, rgba(255,255,255,0) 45%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.1) 82%, rgba(255,255,255,0.45) 100%); }
+        .dark .glass::after { background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 45%); }
+
+        #tabBarInner { display: flex; align-items: center; padding: 4px; touch-action: none; }
+        #mobileTabBar .mtab {
+            position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+            width: 70px; height: 54px; border-radius: 999px; color: rgba(0,0,0,0.84);
+            -webkit-tap-highlight-color: transparent; transition: color .25s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+        }
+        #mobileTabBar .mtab svg { width: 24px; height: 24px; stroke-width: 1.9; }
+        #mobileTabBar .mtab span { font-size: 10px; font-weight: 600; letter-spacing: -0.01em; line-height: 1; white-space: nowrap; }
+        .dark #mobileTabBar .mtab, .dark #tabMoreBtn { color: rgba(255,255,255,0.92); }
+        #mobileTabBar .mtab.active, #tabMoreBtn.active { color: rgb(var(--brand-rgb)); }
+        #mobileTabBar .mtab.active svg { stroke-width: 2.3; }
+        #mobileTabBar .mtab:active { transform: scale(0.9); }
+        /* Seçili sekmenin arkasındaki gri kapsül */
+        #tabIndicator {
+            position: absolute; top: 4px; bottom: 4px; left: 0; z-index: 1; border-radius: 999px;
+            background: rgba(120,120,128,0.16);
+            box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.55);
+            transition: transform .5s cubic-bezier(.34,1.4,.64,1), width .5s cubic-bezier(.34,1.4,.64,1), opacity .25s ease, top .25s ease, bottom .25s ease, background .25s ease;
+        }
+        .dark #tabIndicator { background: rgba(255,255,255,0.14); box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.18); }
+        #tabIndicator.ind-hidden { opacity: 0; }
+        /* Parmakla sürüklerken: şeffaf büyüteç merceği */
+        #tabIndicator.lifted {
+            top: -7px !important; bottom: -7px !important;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(0.5px) saturate(220%) brightness(1.12); -webkit-backdrop-filter: blur(0.5px) saturate(220%) brightness(1.12);
+            box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.7), inset 0 2px 3px rgba(255,255,255,0.9), inset 0 -2px 3px rgba(255,255,255,0.35), 0 14px 30px -8px rgba(0,0,0,0.35);
+        }
+        .dark #tabIndicator.lifted { background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.35), inset 0 2px 3px rgba(255,255,255,0.35), 0 14px 30px -8px rgba(0,0,0,0.7); }
+        #tabMoreBtn {
+            display: flex; align-items: center; justify-content: center; width: 62px; height: 62px; flex-shrink: 0;
+            color: rgba(0,0,0,0.84); -webkit-tap-highlight-color: transparent; transition: color .25s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+        }
+        #tabMoreBtn svg { position: relative; z-index: 3; width: 24px; height: 24px; stroke-width: 1.9; }
+        #tabMoreBtn:active { transform: scale(0.9); }
+        #tabMoreBtn.active::after { background: linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.04) 42%, rgba(255,255,255,0) 70%), rgba(120,120,128,0.14); }
+        @media (max-width: 380px) { #mobileTabBar .mtab { width: 62px; } #tabMoreBtn { width: 56px; height: 56px; } #mobileTabBar { gap: 8px; } }
+        /* "Diğer" paneli de aynı cam dilinde */
+        .liquid-sheet { transform-origin: 92% 100%; }
+        @media (prefers-reduced-transparency: reduce) { .glass { background: rgba(245,245,247,0.92); } .dark .glass { background: rgba(28,28,30,0.94); } }
     </style>
 </head>
 <body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden is-loading">
@@ -2548,30 +2627,30 @@
     </script>
 
     <!-- [YENİ] Telefon/tablet: sıvı cam alt menü çubuğu -->
-    <nav id="mobileTabBar" class="lg:hidden fixed left-1/2 z-[85]" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); transform: translateX(-50%);" aria-label="Ana menü">
-        <div id="tabBarInner" class="liquid-bar relative flex items-center p-[5px] rounded-full touch-none">
-            <span id="tabIndicator" class="liquid-indicator absolute top-[5px] bottom-[5px] left-0 rounded-full"></span>
-            <button type="button" data-mtab="dashboard" class="mtab relative z-10 flex flex-col items-center justify-center gap-0.5 w-[62px] sm:w-[72px] h-[52px] rounded-full">
-                <i data-lucide="house" class="w-[22px] h-[22px]"></i>
-                <span class="text-[10px] font-semibold leading-none">Ana Sayfa</span>
+    <!-- [v23] iOS 26 "Liquid Glass" sekme çubuğu: şeffaf cam kapsül + ayrı yuvarlak "Diğer" düğmesi -->
+    <nav id="mobileTabBar" class="lg:hidden" aria-label="Ana menü">
+        <div id="tabBarInner" class="glass" role="tablist">
+            <span id="tabIndicator" class="liquid-indicator"></span>
+            <button type="button" data-mtab="dashboard" class="mtab" aria-label="Ana Sayfa">
+                <i data-lucide="house"></i>
+                <span>Ana Sayfa</span>
             </button>
-            <button type="button" data-mtab="exams" class="mtab relative z-10 flex flex-col items-center justify-center gap-0.5 w-[62px] sm:w-[72px] h-[52px] rounded-full">
-                <i data-lucide="file-text" class="w-[22px] h-[22px]"></i>
-                <span class="text-[10px] font-semibold leading-none">Deneme</span>
+            <button type="button" data-mtab="exams" class="mtab" aria-label="Deneme">
+                <i data-lucide="file-text"></i>
+                <span>Deneme</span>
             </button>
-            <button type="button" data-mtab="tekrar" class="mtab relative z-10 flex flex-col items-center justify-center gap-0.5 w-[62px] sm:w-[72px] h-[52px] rounded-full">
-                <i data-lucide="book-open" class="w-[22px] h-[22px]"></i>
-                <span class="text-[10px] font-semibold leading-none">Tekrar</span>
+            <button type="button" data-mtab="tekrar" class="mtab" aria-label="Tekrar">
+                <i data-lucide="book-open"></i>
+                <span>Tekrar</span>
             </button>
-            <button type="button" data-mtab="kaynaklar" class="mtab relative z-10 flex flex-col items-center justify-center gap-0.5 w-[62px] sm:w-[72px] h-[52px] rounded-full">
-                <i data-lucide="library" class="w-[22px] h-[22px]"></i>
-                <span class="text-[10px] font-semibold leading-none">Kaynaklar</span>
-            </button>
-            <button type="button" data-mtab="more" class="mtab relative z-10 flex flex-col items-center justify-center gap-0.5 w-[62px] sm:w-[72px] h-[52px] rounded-full">
-                <i data-lucide="grid-2x2" class="w-[22px] h-[22px]"></i>
-                <span class="text-[10px] font-semibold leading-none">Diğer</span>
+            <button type="button" data-mtab="kaynaklar" class="mtab" aria-label="Kaynaklar">
+                <i data-lucide="library"></i>
+                <span>Kaynaklar</span>
             </button>
         </div>
+        <button type="button" id="tabMoreBtn" data-mtab="more" onclick="toggleMoreSheet()" class="glass" aria-label="Diğer sayfalar" aria-haspopup="true">
+            <i data-lucide="grid-2x2"></i>
+        </button>
     </nav>
 
     <!-- [YENİ v18] Kart düzenleme çubuğu -->
@@ -3048,7 +3127,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v22';
+        const APP_VERSION = 'firebase-v23';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -5348,10 +5427,17 @@
             const bar = document.getElementById('tabBarInner');
             if (!bar || !bar.offsetWidth) return;
             const key = tabBarTargetFor(currentTabId);
+            const sheetOpen = document.getElementById('moreSheet').classList.contains('open');
+            document.querySelectorAll('#morePanel .more-item').forEach(b => b.classList.toggle('active', b.dataset.more === currentTabId));
+            const more = document.getElementById('tabMoreBtn');
+            if (more) more.classList.toggle('active', key === 'more' || sheetOpen);
+            const ind = document.getElementById('tabIndicator');
+            // "Diğer" sayfalarından birindeyken ana kapsülde seçili sekme yok; yuvarlak düğme renklenir
+            if (key === 'more') { bar.querySelectorAll('.mtab').forEach(b => b.classList.remove('active')); if (ind) ind.classList.add('ind-hidden'); return; }
             const btn = bar.querySelector(`[data-mtab="${key}"]`);
             if (!btn) return;
+            if (ind) ind.classList.remove('ind-hidden');
             bar.querySelectorAll('.mtab').forEach(b => b.classList.toggle('active', b === btn));
-            document.querySelectorAll('#morePanel .more-item').forEach(b => b.classList.toggle('active', b.dataset.more === currentTabId));
             const x = btn.offsetLeft, w = btn.offsetWidth;
             const prev = tabIndicatorPos;
             if (!animate || !prev || Math.abs(prev.x - x) < 2) { setIndicator(x, w); return; }
@@ -5371,9 +5457,8 @@
             if (sh.classList.contains('open')) closeMoreSheet();
             else {
                 sh.classList.add('open');
-                const bar = document.getElementById('tabBarInner');
-                const btn = bar.querySelector('[data-mtab="more"]');
-                if (btn) { bar.querySelectorAll('.mtab').forEach(b => b.classList.toggle('active', b === btn)); const p = tabIndicatorPos; if (p) { setIndicator(Math.min(p.x, btn.offsetLeft), Math.max(p.x + p.w, btn.offsetLeft + btn.offsetWidth) - Math.min(p.x, btn.offsetLeft), 'stretch'); } setTimeout(() => setIndicator(btn.offsetLeft, btn.offsetWidth), 170); }
+                const more = document.getElementById('tabMoreBtn');
+                if (more) { more.classList.add('active'); more.classList.remove('pop'); void more.offsetWidth; more.classList.add('pop'); }
             }
         }
         function closeMoreSheet() {
