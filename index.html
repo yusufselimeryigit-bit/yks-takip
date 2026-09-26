@@ -389,7 +389,7 @@
         .dark .mtab { color: rgb(148 163 184); }
         .mtab.active { color: rgb(var(--brand-rgb)); }
         .mtab:active { transform: scale(0.88); }
-        .mtab.pop svg { animation: tabPop .5s cubic-bezier(.34,1.56,.64,1); }
+        .mtab.pop svg { animation: tabPop .32s cubic-bezier(.34,1.56,.64,1); }
         @keyframes tabPop { 0% { transform: scale(1); } 35% { transform: scale(1.28) translateY(-2px); } 100% { transform: scale(1); } }
         .liquid-sheet {
             background: rgba(255,255,255,0.72);
@@ -491,12 +491,17 @@
             position: absolute; top: 4px; bottom: 4px; left: 0; z-index: 1; border-radius: 999px;
             background: rgba(120,120,128,0.16);
             box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.55);
-            transition: transform .5s cubic-bezier(.34,1.4,.64,1), width .5s cubic-bezier(.34,1.4,.64,1), opacity .25s ease, top .25s ease, bottom .25s ease, background .25s ease;
+            /* Dokununca: hızlı, hafif yaylı yerleşme (iOS benzeri ~0,3 sn) */
+            transition: transform .32s cubic-bezier(.3,1.3,.5,1), width .32s cubic-bezier(.3,1.3,.5,1), opacity .2s ease, top .18s ease, bottom .18s ease, background .2s ease;
+            will-change: transform, width;
         }
+        /* Uzama anı: çok kısa ve doğrusal */
+        #tabIndicator.stretch { transition: transform .12s cubic-bezier(.2,.8,.3,1), width .12s cubic-bezier(.2,.8,.3,1); }
         .dark #tabIndicator { background: rgba(255,255,255,0.14); box-shadow: inset 0 0.5px 0 rgba(255,255,255,0.18); }
         #tabIndicator.ind-hidden { opacity: 0; }
         /* Parmakla sürüklerken: şeffaf büyüteç merceği */
         #tabIndicator.lifted {
+            transition: width .15s ease, top .18s cubic-bezier(.3,1.3,.5,1), bottom .18s cubic-bezier(.3,1.3,.5,1), background .18s ease, box-shadow .18s ease;
             top: -7px !important; bottom: -7px !important;
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(0.5px) saturate(220%) brightness(1.12); -webkit-backdrop-filter: blur(0.5px) saturate(220%) brightness(1.12);
@@ -3127,7 +3132,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v23';
+        const APP_VERSION = 'firebase-v24';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -5443,7 +5448,7 @@
             if (!animate || !prev || Math.abs(prev.x - x) < 2) { setIndicator(x, w); return; }
             const from = Math.min(prev.x, x), to = Math.max(prev.x + prev.w, x + w);
             setIndicator(from, to - from, 'stretch');
-            setTimeout(() => setIndicator(x, w), 170);
+            setTimeout(() => setIndicator(x, w), 95);
             btn.classList.remove('pop'); void btn.offsetWidth; btn.classList.add('pop');
         }
         function onMobileTab(key) {
