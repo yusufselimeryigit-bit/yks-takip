@@ -1281,6 +1281,155 @@
         #msgBanner .profile-avatar { width: 38px; height: 38px; font-size: 16px; }
         #msgBanner .mb-name { font-size: 14px; font-weight: 700; color: var(--ios-label); }
         #msgBanner .mb-text { font-size: 14px; color: var(--ios-label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* =====================================================================
+           [v42] İzleme modu kilidi · PDF görüntüleyici/kırpma · karne
+           ===================================================================== */
+        /* İzleme modu: veri değiştiren her düğme gizli */
+        body.readonly [onclick*="addExamWrongTopic("],
+        body.readonly [onclick*="addInboxToNotes("],
+        body.readonly [onclick*="addResTopicRow("],
+        body.readonly [onclick*="addTercihManual("],
+        body.readonly [onclick*="addTestToTopic("],
+        body.readonly [onclick*="addTopicToBook("],
+        body.readonly [onclick*="applyReversePlanToTargets("],
+        body.readonly [onclick*="applySuggestion("],
+        body.readonly [onclick*="askDeleteProfile("],
+        body.readonly [onclick*="clearRankCalc("],
+        body.readonly [onclick*="completePlanBlock("],
+        body.readonly [onclick*="createProfile("],
+        body.readonly [onclick*="deleteActivity("],
+        body.readonly [onclick*="deleteAtlasImport("],
+        body.readonly [onclick*="deleteBookTopic("],
+        body.readonly [onclick*="deleteExam("],
+        body.readonly [onclick*="deleteFriend("],
+        body.readonly [onclick*="deleteInboxItem("],
+        body.readonly [onclick*="deletePlanBlock("],
+        body.readonly [onclick*="deleteProfile("],
+        body.readonly [onclick*="deleteQuickNote("],
+        body.readonly [onclick*="deleteResource("],
+        body.readonly [onclick*="deleteSchool("],
+        body.readonly [onclick*="deleteTopicGoal("],
+        body.readonly [onclick*="deleteWrongNote("],
+        body.readonly [onclick*="distributeSubjectTargets("],
+        body.readonly [onclick*="editExam("],
+        body.readonly [onclick*="editSharedGoal("],
+        body.readonly [onclick*="enableReminders("],
+        body.readonly [onclick*="fillRankCalcFromExams("],
+        body.readonly [onclick*="formSheetSubmit("],
+        body.readonly [onclick*="generateQuizFromWrongNotes("],
+        body.readonly [onclick*="handleExamPhotoSelect("],
+        body.readonly [onclick*="handleWrongPhotoSelect("],
+        body.readonly [onclick*="importAtlasText("],
+        body.readonly [onclick*="importData("],
+        body.readonly [onclick*="importResBulk("],
+        body.readonly [onclick*="joinFriendPomodoro("],
+        body.readonly [onclick*="moveTercih("],
+        body.readonly [onclick*="openAddMenu("],
+        body.readonly [onclick*="openAddProfile("],
+        body.readonly [onclick*="openAtlasImport("],
+        body.readonly [onclick*="openCikmis("],
+        body.readonly [onclick*="openFormSheet("],
+        body.readonly [onclick*="openShareNote("],
+        body.readonly [onclick*="openTrash("],
+        body.readonly [onclick*="pomoToForm("],
+        body.readonly [onclick*="pomodoroReset("],
+        body.readonly [onclick*="pomodoroToggle("],
+        body.readonly [onclick*="purgeTrashItem("],
+        body.readonly [onclick*="recompressStoredPhotos("],
+        body.readonly [onclick*="removeExamWrongTopic("],
+        body.readonly [onclick*="removeLastTest("],
+        body.readonly [onclick*="removePendingExamPhoto("],
+        body.readonly [onclick*="removePendingPhoto("],
+        body.readonly [onclick*="removeResTopicRow("],
+        body.readonly [onclick*="removeTercih("],
+        body.readonly [onclick*="replyInbox("],
+        body.readonly [onclick*="restoreProfile("],
+        body.readonly [onclick*="reviewWrongNoteInline("],
+        body.readonly [onclick*="saveDayReview("],
+        body.readonly [onclick*="saveDayStatus("],
+        body.readonly [onclick*="saveGoalSettings("],
+        body.readonly [onclick*="savePomoActivity("],
+        body.readonly [onclick*="saveProfileName("],
+        body.readonly [onclick*="saveProfilePrefs("],
+        body.readonly [onclick*="saveReminderSettings("],
+        body.readonly [onclick*="saveSharedGoal("],
+        body.readonly [onclick*="saveTestResult("],
+        body.readonly [onclick*="sendChatPhoto("],
+        body.readonly [onclick*="sendChatText("],
+        body.readonly [onclick*="sendReply("],
+        body.readonly [onclick*="sendShareNote("],
+        body.readonly [onclick*="snoozeBackupReminder("],
+        body.readonly [onclick*="sortTercihByRank("],
+        body.readonly [onclick*="startCikmis("],
+        body.readonly [onclick*="startExamSim("],
+        body.readonly [onclick*="swFinish("],
+        body.readonly [onclick*="swLap("],
+        body.readonly [onclick*="swReset("],
+        body.readonly [onclick*="swToggle("],
+        body.readonly [onclick*="toggleTercihFromAtlas("],
+        body.readonly [onclick*="toggleYesterdayGoal("],
+        body.readonly [onclick*="undoPlanComplete("],
+        body.readonly [onclick*="useEstimatedTercihRank("],
+        body.readonly [onclick*="toggleVoiceNote("],
+        body.readonly [onclick*="toggleVideoWatched("],
+        body.readonly [onclick*="toggleTopicAll("],
+        body.readonly [onclick*="openQuestionAdd("],
+        body.readonly [onclick*="openQuestionForm("],
+        body.readonly [onclick*="openKarneImport("],
+        body.readonly [onclick*="uploadPdfBooks("],
+        body.readonly [onclick*="renamePdfBook("],
+        body.readonly [onclick*="deletePdfBook("],
+        body.readonly [onclick*="quickStartPomodoro("],
+        body.readonly [onclick*="testReminderNotification("],
+        body.readonly [data-card="pomodoro"], body.readonly .pp-actions button:not(.ro-allow), body.readonly #pdfBooksCard label, body.readonly .inbox-actions { display: none !important; }
+        /* İzleme modu: içerik gösteren satırlar görünür ama dokunulamaz */
+        body.readonly [onclick*="cycleCurriculumStatus("],
+        body.readonly [onclick*="toggleTest("],
+        body.readonly [onclick*="toggleWrongNoteReviewed("],
+        body.readonly [onclick*="togglePlanComplete("],
+        body.readonly [onclick*="setTopicStatus("] { pointer-events: none !important; }
+        body.readonly input:disabled, body.readonly select:disabled, body.readonly textarea:disabled { opacity: .55; }
+        /* PDF görüntüleyici */
+        #pdfViewer { position: fixed; inset: 0; z-index: 139; background: #1C1C1E; display: flex; flex-direction: column; color: #fff; }
+        #pdfViewer.hidden { display: none; }
+        .pv-head { display: flex; align-items: center; gap: 8px; padding: calc(env(safe-area-inset-top, 0px) + 8px) 10px 6px; background: rgba(28,28,30,.96); }
+        .pv-btn { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.12); color: #fff; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .pv-title { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pv-sub { font-size: 12px; color: rgba(255,255,255,.6); }
+        .pv-tools { display: flex; align-items: center; gap: 8px; padding: 6px 10px 10px; background: rgba(28,28,30,.96); border-bottom: 0.5px solid rgba(255,255,255,.12); }
+        .pv-nav { width: 38px; height: 34px; border-radius: 10px; background: rgba(255,255,255,.12); color: #fff; font-size: 22px; line-height: 1; }
+        .pv-page { width: 62px; height: 34px; border-radius: 10px; background: rgba(255,255,255,.12); color: #fff; text-align: center; font-size: 16px !important; border: none; }
+        .pv-crop { margin-left: auto; display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: rgb(var(--brand-rgb)); color: #fff; font-size: 13px; font-weight: 600; }
+        .pv-crop.on { background: #FF9F0A; }
+        .pv-scroll { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; display: flex; justify-content: center; padding: 12px 0 calc(env(safe-area-inset-bottom, 0px) + 80px); }
+        .pv-stage { position: relative; align-self: flex-start; box-shadow: 0 8px 30px rgba(0,0,0,.5); background: #fff; }
+        .pv-stage canvas { display: block; }
+        .pv-stage.cropping { touch-action: none; cursor: crosshair; }
+        .pv-sel { position: absolute; border: 2px solid #FF9F0A; background: rgba(255,159,10,.14); box-shadow: 0 0 0 9999px rgba(0,0,0,.35); pointer-events: none; }
+        .pv-sel.hidden { display: none; }
+        .pv-cropbar { position: absolute; left: 12px; right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); display: flex; align-items: center; gap: 8px; padding: 8px 8px 8px 16px; border-radius: 999px; background: rgba(44,44,46,.95); font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+        .pv-cropbar.hidden { display: none; }
+        .pv-cropbar span { flex: 1; color: rgba(255,255,255,.8); }
+        .pv-cropbar button { padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.14); color: #fff; font-weight: 600; }
+        .pv-cropbar button.ok { background: #FF9F0A; }
+        .pv-cropbar button:disabled { opacity: .4; }
+        /* PDF listesi ve soru formu */
+        .pdf-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; }
+        .pdf-row + .pdf-row { border-top: 0.5px solid var(--ios-sep); }
+        .pdf-ic { width: 40px; height: 48px; border-radius: 6px; background: linear-gradient(180deg,#FF453A,#D70015); color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; flex-shrink: 0; }
+        .qf-img { width: 100%; max-height: 260px; object-fit: contain; border-radius: 12px; background: var(--ios-fill); }
+        .qf-lbl { display: block; font-size: 12px; font-weight: 600; color: var(--ios-label2); margin: 12px 0 4px; }
+        .qf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* Karne onay ekranı */
+        html body .kr-table, html body .pp-table { width: 100%; min-width: 0 !important; font-size: 13px; border-collapse: collapse; }
+        .kr-table th { font-size: 11px; color: var(--ios-label2); font-weight: 600; padding: 4px 3px; text-align: center; }
+        .kr-table th:first-child, .kr-table td:first-child { text-align: left; }
+        .kr-table td { padding: 3px; border-top: 0.5px solid var(--ios-sep); text-align: center; }
+        .kr-table input { width: 44px; text-align: center; padding: 6px 2px; border-radius: 8px; }
+        .kr-chip { display: inline-block; padding: 3px 8px; border-radius: 999px; font-size: 11px; margin: 0 4px 4px 0; }
+        .kr-chip.yanlis { background: rgb(var(--ios-red) / .12); color: rgb(var(--ios-red)); }
+        .kr-chip.bos { background: var(--ios-fill); color: var(--ios-label2); }
     </style>
     <!-- [v30] HIZ: Tailwind stilleri önceden derlendi (Tailwind 3.4, sadece kullanılan sınıflar). Canlı CDN sürümü her açılışta telefonda stilleri yeniden hesaplıyordu. -->
     <style id="tw-build">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:-apple-system,BlinkMacSystemFont,SF Pro Display,SF Pro Text,Helvetica Neue,Inter,Arial,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.\!container{width:100%!important}.container{width:100%}@media (min-width:640px){.\!container{max-width:640px!important}.container{max-width:640px}}@media (min-width:768px){.\!container{max-width:768px!important}.container{max-width:768px}}@media (min-width:1024px){.\!container{max-width:1024px!important}.container{max-width:1024px}}@media (min-width:1280px){.\!container{max-width:1280px!important}.container{max-width:1280px}}@media (min-width:1536px){.\!container{max-width:1536px!important}.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.visible{visibility:visible}.collapse{visibility:collapse}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{top:0;bottom:0}.-right-1\.5{right:-.375rem}.-top-1\.5{top:-.375rem}.bottom-1{bottom:.25rem}.bottom-\[-160px\]{bottom:-160px}.left-0{left:0}.left-1\/2{left:50%}.left-3{left:.75rem}.left-4{left:1rem}.left-6{left:1.5rem}.left-\[-160px\]{left:-160px}.right-0{right:0}.right-1{right:.25rem}.right-3{right:.75rem}.right-4{right:1rem}.right-5{right:1.25rem}.right-6{right:1.5rem}.right-\[-120px\]{right:-120px}.right-\[-160px\]{right:-160px}.top-0{top:0}.top-1{top:.25rem}.top-1\/3{top:33.333333%}.top-5{top:1.25rem}.top-6{top:1.5rem}.top-\[-160px\]{top:-160px}.top-\[-3px\]{top:-3px}.top-\[73px\]{top:73px}.isolate{isolation:isolate}.z-10{z-index:10}.z-20{z-index:20}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[110\]{z-index:110}.z-\[120\]{z-index:120}.z-\[125\]{z-index:125}.z-\[128\]{z-index:128}.z-\[130\]{z-index:130}.z-\[140\]{z-index:140}.z-\[200\]{z-index:200}.z-\[86\]{z-index:86}.z-\[90\]{z-index:90}.z-\[95\]{z-index:95}.col-span-2{grid-column:span 2/span 2}.col-span-full{grid-column:1/-1}.m-auto{margin:auto}.mx-auto{margin-left:auto;margin-right:auto}.-mt-1\.5{margin-top:-.375rem}.mb-0\.5{margin-bottom:.125rem}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2{margin-bottom:.5rem}.mb-2\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-0\.5{margin-left:.125rem}.ml-1{margin-left:.25rem}.ml-1\.5{margin-left:.375rem}.ml-5{margin-left:1.25rem}.ml-auto{margin-left:auto}.mr-1{margin-right:.25rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-2\.5{margin-top:.625rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-auto{margin-top:auto}.\!block{display:block!important}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.\!grid{display:grid!important}.grid{display:grid}.hidden{display:none}.aspect-square{aspect-ratio:1/1}.h-1{height:.25rem}.h-1\.5{height:.375rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-24{height:6rem}.h-28{height:7rem}.h-3{height:.75rem}.h-3\.5{height:.875rem}.h-4{height:1rem}.h-40{height:10rem}.h-44{height:11rem}.h-5{height:1.25rem}.h-52{height:13rem}.h-56{height:14rem}.h-6{height:1.5rem}.h-60{height:15rem}.h-64{height:16rem}.h-7{height:1.75rem}.h-72{height:18rem}.h-8{height:2rem}.h-80{height:20rem}.h-9{height:2.25rem}.h-\[32rem\]{height:32rem}.h-\[calc\(100vh-73px\)\]{height:calc(100vh - 73px)}.h-auto{height:auto}.h-full{height:100%}.max-h-44{max-height:11rem}.max-h-48{max-height:12rem}.max-h-56{max-height:14rem}.max-h-80{max-height:20rem}.max-h-\[340px\]{max-height:340px}.max-h-\[560px\]{max-height:560px}.max-h-\[88vh\]{max-height:88vh}.min-h-\[120px\]{min-height:120px}.min-h-\[280px\]{min-height:280px}.min-h-screen{min-height:100vh}.\!w-16{width:4rem!important}.w-0\.5{width:.125rem}.w-1\.5{width:.375rem}.w-1\/3{width:33.333333%}.w-12{width:3rem}.w-14{width:3.5rem}.w-16{width:4rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-2\/3{width:66.666667%}.w-20{width:5rem}.w-24{width:6rem}.w-28{width:7rem}.w-3{width:.75rem}.w-3\.5{width:.875rem}.w-4{width:1rem}.w-40{width:10rem}.w-44{width:11rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-60{width:15rem}.w-64{width:16rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-80{width:20rem}.w-9{width:2.25rem}.w-\[108px\]{width:108px}.w-\[32rem\]{width:32rem}.w-\[60px\]{width:60px}.w-\[calc\(100\%-24px\)\]{width:calc(100% - 24px)}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\[140px\]{min-width:140px}.min-w-\[160px\]{min-width:160px}.min-w-\[68px\]{min-width:68px}.min-w-\[74px\]{min-width:74px}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-\[220px\]{max-width:220px}.max-w-\[240px\]{max-width:240px}.max-w-\[44px\]{max-width:44px}.max-w-\[45\%\]{max-width:45%}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink{flex-shrink:1}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.border-collapse{border-collapse:collapse}.border-separate{border-collapse:separate}.-translate-x-1\/2{--tw-translate-x:-50%}.-rotate-90,.-translate-x-1\/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-rotate-90{--tw-rotate:-90deg}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes float{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-14px) scale(1.02)}}.animate-float{animation:float 8s cubic-bezier(.45,.05,.55,.95) infinite}@keyframes pop{0%{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}.animate-pop{animation:pop .35s cubic-bezier(.34,1.56,.64,1) both}@keyframes rise{0%{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}.animate-rise{animation:rise .7s cubic-bezier(.16,1,.3,1) both}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.resize-none{resize:none}.resize-y{resize:vertical}.resize{resize:both}.list-decimal{list-style-type:decimal}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-0\.5{gap:.125rem}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-\[3px\]{gap:3px}.gap-x-2{-moz-column-gap:.5rem;column-gap:.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-y-0\.5{row-gap:.125rem}.gap-y-2{row-gap:.5rem}.gap-y-4{row-gap:1rem}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.5rem*var(--tw-space-x-reverse));margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.75rem*var(--tw-space-x-reverse));margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)))}.space-y-0\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.125rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.125rem*var(--tw-space-y-reverse))}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-1\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-2\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.625rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.625rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-3\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.875rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.875rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.space-y-6>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem*var(--tw-space-y-reverse))}.space-y-8>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-black\/5>:not([hidden])~:not([hidden]){border-color:rgba(0,0,0,.05)}.self-start{align-self:flex-start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.overflow-x-hidden{overflow-x:hidden}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.break-words{overflow-wrap:break-word}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-\[10px\]{border-radius:10px}.rounded-\[16px\]{border-radius:16px}.rounded-\[28px\]{border-radius:28px}.rounded-\[32px\]{border-radius:32px}.rounded-\[3px\]{border-radius:3px}.rounded-\[8px\]{border-radius:8px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.rounded-l-xl{border-top-left-radius:.75rem;border-bottom-left-radius:.75rem}.rounded-r-xl{border-top-right-radius:.75rem;border-bottom-right-radius:.75rem}.rounded-t-\[28px\]{border-top-left-radius:28px;border-top-right-radius:28px}.border{border-width:1px}.border-2{border-width:2px}.border-x-0{border-left-width:0;border-right-width:0}.border-b{border-bottom-width:1px}.border-b-0{border-bottom-width:0}.border-l{border-left-width:1px}.border-l-2{border-left-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-t-0{border-top-width:0}.border-dashed{border-style:dashed}.border-none{border-style:none}.border-amber-200\/60{border-color:hsla(48,97%,77%,.6)}.border-amber-400\/25{border-color:rgba(251,191,36,.25)}.border-amber-400\/30{border-color:rgba(251,191,36,.3)}.border-black\/10{border-color:rgba(0,0,0,.1)}.border-black\/5{border-color:rgba(0,0,0,.05)}.border-blue-100\/70{border-color:rgba(219,234,254,.7)}.border-blue-200\/60{border-color:rgba(191,219,254,.6)}.border-brand{--tw-border-opacity:1;border-color:rgb(var(--brand-rgb)/var(--tw-border-opacity,1))}.border-brand\/15{border-color:rgb(var(--brand-rgb)/.15)}.border-brand\/25{border-color:rgb(var(--brand-rgb)/.25)}.border-brand\/40{border-color:rgb(var(--brand-rgb)/.4)}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129/var(--tw-border-opacity,1))}.border-emerald-500\/20{border-color:rgba(16,185,129,.2)}.border-emerald-500\/30{border-color:rgba(16,185,129,.3)}.border-purple-500\/20{border-color:rgba(168,85,247,.2)}.border-rose-200\/60{border-color:rgba(254,205,211,.6)}.border-rose-400\/40{border-color:rgba(251,113,133,.4)}.border-rose-500\/20{border-color:rgba(244,63,94,.2)}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-accentPurple{--tw-bg-opacity:1;background-color:rgb(138 63 252/var(--tw-bg-opacity,1))}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36/var(--tw-bg-opacity,1))}.bg-amber-400\/10{background-color:rgba(251,191,36,.1)}.bg-amber-400\/15{background-color:rgba(251,191,36,.15)}.bg-amber-400\/20{background-color:rgba(251,191,36,.2)}.bg-amber-400\/\[0\.06\]{background-color:rgba(251,191,36,.06)}.bg-amber-400\/\[0\.08\]{background-color:rgba(251,191,36,.08)}.bg-amber-400\/\[0\.1\]{background-color:rgba(251,191,36,.1)}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0/var(--tw-bg-opacity,1))}.bg-black\/10{background-color:rgba(0,0,0,.1)}.bg-black\/30{background-color:rgba(0,0,0,.3)}.bg-black\/40{background-color:rgba(0,0,0,.4)}.bg-black\/5{background-color:rgba(0,0,0,.05)}.bg-black\/\[0\.015\]{background-color:rgba(0,0,0,.015)}.bg-black\/\[0\.025\]{background-color:rgba(0,0,0,.025)}.bg-black\/\[0\.02\]{background-color:rgba(0,0,0,.02)}.bg-black\/\[0\.03\]{background-color:rgba(0,0,0,.03)}.bg-black\/\[0\.05\]{background-color:rgba(0,0,0,.05)}.bg-black\/\[0\.06\]{background-color:rgba(0,0,0,.06)}.bg-blue-200\/20{background-color:rgba(191,219,254,.2)}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255/var(--tw-bg-opacity,1))}.bg-brand{--tw-bg-opacity:1;background-color:rgb(var(--brand-rgb)/var(--tw-bg-opacity,1))}.bg-brand\/10{background-color:rgb(var(--brand-rgb)/.1)}.bg-brand\/25{background-color:rgb(var(--brand-rgb)/.25)}.bg-brand\/55{background-color:rgb(var(--brand-rgb)/.55)}.bg-brand\/\[0\.04\]{background-color:rgb(var(--brand-rgb)/.04)}.bg-brand\/\[0\.05\]{background-color:rgb(var(--brand-rgb)/.05)}.bg-brand\/\[0\.06\]{background-color:rgb(var(--brand-rgb)/.06)}.bg-brandLight{--tw-bg-opacity:1;background-color:rgb(var(--brand-light-rgb)/var(--tw-bg-opacity,1))}.bg-brandLight\/70{background-color:rgb(var(--brand-light-rgb)/.7)}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.bg-emerald-50\/60{background-color:rgba(236,253,245,.6)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129/var(--tw-bg-opacity,1))}.bg-emerald-500\/10{background-color:rgba(16,185,129,.1)}.bg-emerald-500\/20{background-color:rgba(16,185,129,.2)}.bg-emerald-500\/30{background-color:rgba(16,185,129,.3)}.bg-emerald-500\/60{background-color:rgba(16,185,129,.6)}.bg-emerald-500\/\[0\.04\]{background-color:rgba(16,185,129,.04)}.bg-emerald-500\/\[0\.06\]{background-color:rgba(16,185,129,.06)}.bg-emerald-500\/\[0\.07\]{background-color:rgba(16,185,129,.07)}.bg-emerald-500\/\[0\.08\]{background-color:rgba(16,185,129,.08)}.bg-orange-300{--tw-bg-opacity:1;background-color:rgb(253 186 116/var(--tw-bg-opacity,1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237/var(--tw-bg-opacity,1))}.bg-orange-500\/10{background-color:rgba(249,115,22,.1)}.bg-purple-200\/\[0\.15\]{background-color:rgba(233,213,255,.15)}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255/var(--tw-bg-opacity,1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247/var(--tw-bg-opacity,1))}.bg-purple-500\/10{background-color:rgba(168,85,247,.1)}.bg-purple-500\/\[0\.06\]{background-color:rgba(168,85,247,.06)}.bg-purple-500\/\[0\.07\]{background-color:rgba(168,85,247,.07)}.bg-rose-400{--tw-bg-opacity:1;background-color:rgb(251 113 133/var(--tw-bg-opacity,1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242/var(--tw-bg-opacity,1))}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94/var(--tw-bg-opacity,1))}.bg-rose-500\/10{background-color:rgba(244,63,94,.1)}.bg-rose-500\/95{background-color:rgba(244,63,94,.95)}.bg-rose-500\/\[0\.07\]{background-color:rgba(244,63,94,.07)}.bg-rose-500\/\[0\.08\]{background-color:rgba(244,63,94,.08)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.bg-slate-300{--tw-bg-opacity:1;background-color:rgb(203 213 225/var(--tw-bg-opacity,1))}.bg-slate-500\/70{background-color:rgba(100,116,139,.7)}.bg-slate-900\/30{background-color:rgba(15,23,42,.3)}.bg-slate-900\/95{background-color:rgba(15,23,42,.95)}.bg-softbg{--tw-bg-opacity:1;background-color:rgb(245 245 247/var(--tw-bg-opacity,1))}.bg-teal-200\/10{background-color:rgba(153,246,228,.1)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/15{background-color:hsla(0,0%,100%,.15)}.bg-white\/70{background-color:hsla(0,0%,100%,.7)}.bg-gradient-to-b{background-image:linear-gradient(to bottom,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-brand{--tw-gradient-from:rgb(var(--brand-rgb)/1) var(--tw-gradient-from-position);--tw-gradient-to:rgb(var(--brand-rgb)/0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-emerald-500{--tw-gradient-from:#10b981 var(--tw-gradient-from-position);--tw-gradient-to:rgba(16,185,129,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#a855f7 var(--tw-gradient-from-position);--tw-gradient-to:rgba(168,85,247,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-500{--tw-gradient-from:#14b8a6 var(--tw-gradient-from-position);--tw-gradient-to:rgba(20,184,166,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.to-brand{--tw-gradient-to:rgb(var(--brand-rgb)/1) var(--tw-gradient-to-position)}.to-cyan-400{--tw-gradient-to:#22d3ee var(--tw-gradient-to-position)}.to-fuchsia-400{--tw-gradient-to:#e879f9 var(--tw-gradient-to-position)}.to-purple-500{--tw-gradient-to:#a855f7 var(--tw-gradient-to-position)}.to-sky-400{--tw-gradient-to:#38bdf8 var(--tw-gradient-to-position)}.to-teal-400{--tw-gradient-to:#2dd4bf var(--tw-gradient-to-position)}.stroke-black\/5{stroke:rgba(0,0,0,.05)}.object-contain{-o-object-fit:contain;object-fit:contain}.object-cover{-o-object-fit:cover;object-fit:cover}.p-0\.5{padding:.125rem}.p-1{padding:.25rem}.p-1\.5{padding:.375rem}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-7{padding:1.75rem}.p-8{padding:2rem}.p-\[3px\]{padding:3px}.px-1{padding-left:.25rem;padding-right:.25rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-1{padding-bottom:.25rem}.pb-2{padding-bottom:.5rem}.pb-28{padding-bottom:7rem}.pb-3{padding-bottom:.75rem}.pb-32{padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pl-2{padding-left:.5rem}.pl-2\.5{padding-left:.625rem}.pl-3{padding-left:.75rem}.pl-4{padding-left:1rem}.pl-6{padding-left:1.5rem}.pl-\[3\.25rem\]{padding-left:3.25rem}.pr-1{padding-right:.25rem}.pr-2{padding-right:.5rem}.pt-1{padding-top:.25rem}.pt-2{padding-top:.5rem}.pt-24{padding-top:6rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-middle{vertical-align:middle}.align-\[-2px\]{vertical-align:-2px}.font-sans{font-family:-apple-system,BlinkMacSystemFont,SF Pro Display,SF Pro Text,Helvetica Neue,Inter,Arial,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-7xl{font-size:4.5rem;line-height:1}.text-\[10\.5px\]{font-size:10.5px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[12px\]{font-size:12px}.text-\[13px\]{font-size:13px}.text-\[14px\]{font-size:14px}.text-\[15px\]{font-size:15px}.text-\[17px\]{font-size:17px}.text-\[20px\]{font-size:20px}.text-\[22px\]{font-size:22px}.text-\[34px\]{font-size:34px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-\[0\.12em\]{letter-spacing:.12em}.tracking-tight{letter-spacing:-.025em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.text-accentPurple{--tw-text-opacity:1;color:rgb(138 63 252/var(--tw-text-opacity,1))}.text-accentTeal{--tw-text-opacity:1;color:rgb(6 193 160/var(--tw-text-opacity,1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.text-amber-500{--tw-text-opacity:1;color:rgb(245 158 11/var(--tw-text-opacity,1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6/var(--tw-text-opacity,1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.text-brand{--tw-text-opacity:1;color:rgb(var(--brand-rgb)/var(--tw-text-opacity,1))}.text-brand\/70{color:rgb(var(--brand-rgb)/.7)}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129/var(--tw-text-opacity,1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22/var(--tw-text-opacity,1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12/var(--tw-text-opacity,1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247/var(--tw-text-opacity,1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234/var(--tw-text-opacity,1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94/var(--tw-text-opacity,1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72/var(--tw-text-opacity,1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60/var(--tw-text-opacity,1))}.text-sky-600{--tw-text-opacity:1;color:rgb(2 132 199/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.text-white\/60{color:hsla(0,0%,100%,.6)}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-brand{accent-color:rgb(var(--brand-rgb)/1)}.opacity-0{opacity:0}.opacity-40{opacity:.4}.opacity-60{opacity:.6}.opacity-70{opacity:.7}.opacity-80{opacity:.8}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-emerald-500\/10{--tw-shadow-color:rgba(16,185,129,.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-500\/10{--tw-shadow-color:rgba(168,85,247,.1);--tw-shadow:var(--tw-shadow-colored)}.outline{outline-style:solid}.ring{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring,.ring-2{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-amber-400\/60{--tw-ring-color:rgba(251,191,36,.6)}.ring-brand{--tw-ring-opacity:1;--tw-ring-color:rgb(var(--brand-rgb)/var(--tw-ring-opacity,1))}.ring-offset-2{--tw-ring-offset-width:2px}.ring-offset-white{--tw-ring-offset-color:#fff}.blur{--tw-blur:blur(8px)}.blur,.blur-3xl{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-3xl{--tw-blur:blur(64px)}.drop-shadow{--tw-drop-shadow:drop-shadow(0 1px 2px rgba(0,0,0,.1)) drop-shadow(0 1px 1px rgba(0,0,0,.06))}.drop-shadow,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px)}.backdrop-blur,.backdrop-blur-\[2px\]{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-\[2px\]{--tw-backdrop-blur:blur(2px)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px)}.backdrop-blur-md,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px)}.backdrop-blur-xl,.backdrop-filter{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-300{transition-duration:.3s}.ease-in{transition-timing-function:cubic-bezier(.4,0,1,1)}.ease-in-out{transition-timing-function:cubic-bezier(.4,0,.2,1)}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-emerald-500:hover{--tw-border-opacity:1;border-color:rgb(16 185 129/var(--tw-border-opacity,1))}.hover\:bg-amber-400\/10:hover{background-color:rgba(251,191,36,.1)}.hover\:bg-black\/10:hover{background-color:rgba(0,0,0,.1)}.hover\:bg-black\/5:hover{background-color:rgba(0,0,0,.05)}.hover\:bg-black\/\[0\.02\]:hover{background-color:rgba(0,0,0,.02)}.hover\:bg-emerald-600:hover{--tw-bg-opacity:1;background-color:rgb(5 150 105/var(--tw-bg-opacity,1))}.hover\:bg-rose-50:hover{--tw-bg-opacity:1;background-color:rgb(255 241 242/var(--tw-bg-opacity,1))}.hover\:bg-rose-500\/20:hover{background-color:rgba(244,63,94,.2)}.hover\:text-amber-500:hover{--tw-text-opacity:1;color:rgb(245 158 11/var(--tw-text-opacity,1))}.hover\:text-brand:hover{--tw-text-opacity:1;color:rgb(var(--brand-rgb)/var(--tw-text-opacity,1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.hover\:opacity-90:hover{opacity:.9}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-brand\/40:focus{--tw-ring-color:rgb(var(--brand-rgb)/0.4)}.disabled\:opacity-30:disabled{opacity:.3}.disabled\:opacity-40:disabled{opacity:.4}.dark\:divide-white\/5:is(.dark *)>:not([hidden])~:not([hidden]){border-color:hsla(0,0%,100%,.05)}.dark\:border-amber-900\/40:is(.dark *){border-color:rgba(120,53,15,.4)}.dark\:border-blue-900\/40:is(.dark *){border-color:rgba(30,58,138,.4)}.dark\:border-rose-900\/40:is(.dark *){border-color:rgba(136,19,55,.4)}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105/var(--tw-border-opacity,1))}.dark\:border-white\/10:is(.dark *){border-color:hsla(0,0%,100%,.1)}.dark\:border-white\/5:is(.dark *){border-color:hsla(0,0%,100%,.05)}.dark\:bg-amber-500\/10:is(.dark *){background-color:rgba(245,158,11,.1)}.dark\:bg-black:is(.dark *){--tw-bg-opacity:1;background-color:rgb(0 0 0/var(--tw-bg-opacity,1))}.dark\:bg-black\/10:is(.dark *){background-color:rgba(0,0,0,.1)}.dark\:bg-blue-500\/10:is(.dark *){background-color:rgba(59,130,246,.1)}.dark\:bg-blue-500\/15:is(.dark *){background-color:rgba(59,130,246,.15)}.dark\:bg-blue-900\/\[0\.06\]:is(.dark *){background-color:rgba(30,58,138,.06)}.dark\:bg-emerald-500\/10:is(.dark *){background-color:rgba(16,185,129,.1)}.dark\:bg-neutral-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(23 23 23/var(--tw-bg-opacity,1))}.dark\:bg-orange-500\/10:is(.dark *){background-color:rgba(249,115,22,.1)}.dark\:bg-purple-500\/10:is(.dark *){background-color:rgba(168,85,247,.1)}.dark\:bg-purple-900\/\[0\.05\]:is(.dark *){background-color:rgba(88,28,135,.05)}.dark\:bg-rose-500\/10:is(.dark *){background-color:rgba(244,63,94,.1)}.dark\:bg-slate-300\/70:is(.dark *){background-color:rgba(203,213,225,.7)}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.dark\:bg-teal-900\/\[0\.04\]:is(.dark *){background-color:rgba(19,78,74,.04)}.dark\:bg-white\/10:is(.dark *){background-color:hsla(0,0%,100%,.1)}.dark\:bg-white\/15:is(.dark *){background-color:hsla(0,0%,100%,.15)}.dark\:bg-white\/20:is(.dark *){background-color:hsla(0,0%,100%,.2)}.dark\:bg-white\/5:is(.dark *){background-color:hsla(0,0%,100%,.05)}.dark\:bg-white\/95:is(.dark *){background-color:hsla(0,0%,100%,.95)}.dark\:bg-white\/\[0\.02\]:is(.dark *){background-color:hsla(0,0%,100%,.02)}.dark\:bg-white\/\[0\.03\]:is(.dark *){background-color:hsla(0,0%,100%,.03)}.dark\:bg-white\/\[0\.04\]:is(.dark *){background-color:hsla(0,0%,100%,.04)}.dark\:bg-white\/\[0\.05\]:is(.dark *){background-color:hsla(0,0%,100%,.05)}.dark\:stroke-white\/10:is(.dark *){stroke:hsla(0,0%,100%,.1)}.dark\:text-amber-200:is(.dark *){--tw-text-opacity:1;color:rgb(253 230 138/var(--tw-text-opacity,1))}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77/var(--tw-text-opacity,1))}.dark\:text-amber-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.dark\:text-blue-300:is(.dark *){--tw-text-opacity:1;color:rgb(147 197 253/var(--tw-text-opacity,1))}.dark\:text-blue-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250/var(--tw-text-opacity,1))}.dark\:text-emerald-300:is(.dark *){--tw-text-opacity:1;color:rgb(110 231 183/var(--tw-text-opacity,1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.dark\:text-orange-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 146 60/var(--tw-text-opacity,1))}.dark\:text-purple-400:is(.dark *){--tw-text-opacity:1;color:rgb(192 132 252/var(--tw-text-opacity,1))}.dark\:text-rose-300:is(.dark *){--tw-text-opacity:1;color:rgb(253 164 175/var(--tw-text-opacity,1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.dark\:text-rose-400\/90:is(.dark *){color:rgba(251,113,133,.9)}.dark\:text-sky-400:is(.dark *){--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.dark\:text-slate-50:is(.dark *){--tw-text-opacity:1;color:rgb(248 250 252/var(--tw-text-opacity,1))}.dark\:text-slate-500:is(.dark *){--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.dark\:text-slate-600:is(.dark *){--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.dark\:text-slate-900:is(.dark *){--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.dark\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\:ring-offset-black:is(.dark *){--tw-ring-offset-color:#000}.dark\:hover\:bg-rose-500\/10:hover:is(.dark *){background-color:rgba(244,63,94,.1)}.dark\:hover\:bg-white\/10:hover:is(.dark *){background-color:hsla(0,0%,100%,.1)}.dark\:hover\:bg-white\/15:hover:is(.dark *){background-color:hsla(0,0%,100%,.15)}.dark\:hover\:bg-white\/\[0\.04\]:hover:is(.dark *){background-color:hsla(0,0%,100%,.04)}.dark\:hover\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:ml-auto{margin-left:auto}.sm\:block{display:block}.sm\:inline{display:inline}.sm\:h-14{height:3.5rem}.sm\:h-\[min\(88vh\2c 780px\)\]{height:min(88vh,780px)}.sm\:w-14{width:3.5rem}.sm\:w-48{width:12rem}.sm\:w-52{width:13rem}.sm\:w-\[420px\]{width:420px}.sm\:w-auto{width:auto}.sm\:max-w-2xl{max-width:42rem}.sm\:max-w-md{max-width:28rem}.sm\:flex-1{flex:1 1 0%}.sm\:flex-none{flex:none}.sm\:grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-10{gap:2.5rem}.sm\:gap-2\.5{gap:.625rem}.sm\:gap-3{gap:.75rem}.sm\:self-auto{align-self:auto}.sm\:rounded-\[28px\]{border-radius:28px}.sm\:rounded-\[36px\]{border-radius:36px}.sm\:border-l{border-left-width:1px}.sm\:p-4{padding:1rem}.sm\:p-5{padding:1.25rem}.sm\:p-7{padding:1.75rem}.sm\:p-8{padding:2rem}.sm\:px-5{padding-left:1.25rem;padding-right:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pl-8{padding-left:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width:768px){.md\:col-span-2{grid-column:span 2/span 2}.md\:col-span-3{grid-column:span 3/span 3}.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}@media (min-width:1024px){.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}.lg\:flex-col{flex-direction:column}.lg\:items-start{align-items:flex-start}.lg\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.lg\:pb-4{padding-bottom:1rem}}</style>
@@ -1329,6 +1478,22 @@
         </div>
     </div>
     <div id="msgBanner" class="hidden" role="status" onclick="msgBannerTap()"><span id="mbAvatar" class="profile-avatar"></span><div class="min-w-0 flex-1"><div id="mbName" class="mb-name"></div><div id="mbText" class="mb-text"></div></div></div>
+    <div id="pdfViewer" class="hidden" role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+        <div class="pv-head">
+            <button type="button" class="pv-btn" onclick="closePdfViewer()" aria-label="Kapat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            <div class="min-w-0 flex-1"><div id="pvTitle" class="pv-title"></div><div id="pvPageLbl" class="pv-sub"></div></div>
+            <button type="button" class="pv-btn" onclick="pdfZoom(-1)" aria-label="Uzaklaştır">−</button>
+            <button type="button" class="pv-btn" onclick="pdfZoom(1)" aria-label="Yakınlaştır">+</button>
+        </div>
+        <div class="pv-tools">
+            <button type="button" class="pv-nav" onclick="pdfGo(-1)" aria-label="Önceki sayfa">‹</button>
+            <input id="pvPageInp" type="number" min="1" class="pv-page" onchange="pdfGoTo(this.value)" aria-label="Sayfa numarası">
+            <button type="button" class="pv-nav" onclick="pdfGo(1)" aria-label="Sonraki sayfa">›</button>
+            <button type="button" id="pvCropBtn" class="pv-crop press-scale" onclick="togglePdfCrop()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg><span>Soruyu Seç ve Kırp</span></button>
+        </div>
+        <div id="pvScroll" class="pv-scroll"><div id="pvStage" class="pv-stage"><canvas id="pvCanvas"></canvas><div id="pvSel" class="pv-sel hidden"></div></div></div>
+        <div id="pvCropBar" class="pv-cropbar hidden"><span id="pvCropHint">Sorunun etrafını parmağınla çiz</span><button type="button" onclick="togglePdfCrop(false)">İptal</button><button type="button" id="pvCropOk" class="ok" onclick="confirmPdfCrop()" disabled>Kırp</button></div>
+    </div>
     <div id="skyBg" aria-hidden="true"></div>
     <div id="pushPage" class="hidden" role="dialog" aria-modal="true" aria-labelledby="ppTitle">
         <div class="pp-nav"><button type="button" class="pp-back" onclick="closeDetail()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span id="ppBack">Geri</span></button><span id="ppNavTitle" class="pp-navtitle"></span><span></span></div>
@@ -2334,6 +2499,7 @@
                     <i data-lucide="award" class="w-5 h-5 text-brand"></i>
                     <span id="examFormTitle">Deneme Sonucu Ekle</span>
                 </h2>
+                <button type="button" onclick="openKarneImport()" class="ro-hide press-scale w-full mb-4 flex items-center justify-center gap-2 py-3 rounded-2xl text-[13px] font-semibold bg-brand/10 text-brand"><i data-lucide="file-scan" class="w-4 h-4"></i>PDF Karneden Otomatik Ekle</button>
                 <div id="examEditBanner" class="hidden mb-4 flex items-center justify-between gap-2 rounded-xl bg-amber-400/15 px-3 py-2 text-[11px] font-medium text-amber-700 dark:text-amber-300">
                     <span class="flex items-center gap-1.5"><i data-lucide="pencil" class="w-3.5 h-3.5"></i><span id="examEditBannerText">Düzenleniyor</span></span>
                     <button type="button" onclick="cancelExamEdit()" class="press-scale font-semibold underline">Vazgeç</button>
@@ -2646,6 +2812,7 @@
                         <span>Yanlış Soru Defteri</span>
                     </h2>
                     <div class="flex items-center gap-2">
+                        <button type="button" onclick="openQuestionAdd()" class="btn-primary press-scale flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[11px] font-semibold text-white"><i data-lucide="plus" class="w-3.5 h-3.5"></i>Soru Ekle</button>
                         <span class="text-xs text-slate-400 dark:text-slate-500" id="tekrarSummary">0 tekrar bekleniyor</span>
                         <button onclick="generateQuizFromWrongNotes()" class="press-scale flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-brand/10 text-brand">
                             <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
@@ -3290,6 +3457,7 @@
                     <div class="ios-group">
                         <button type="button" class="ios-row" onclick="scrollToSettingsCard('Günlük Hedef Ayarları')"><span class="ios-icon" style="background:rgb(var(--ios-red))"><i data-lucide="target"></i></span><span class="ios-row-body"><span>Hedefler</span><span class="ios-detail"><span id="iosGoalDetail"></span><i data-lucide="chevron-right" class="ios-chev"></i></span></span></button>
                         <button type="button" class="ios-row" onclick="scrollToSettingsCard('Hatırlatıcılar')"><span class="ios-icon" style="background:rgb(var(--ios-red))"><i data-lucide="bell"></i></span><span class="ios-row-body"><span>Bildirimler</span><span class="ios-detail"><span id="iosRemDetail"></span><i data-lucide="chevron-right" class="ios-chev"></i></span></span></button>
+                        <button type="button" class="ios-row" onclick="scrollToSettingsCard('PDF Kitaplarım')"><span class="ios-icon" style="background:rgb(var(--ios-red))"><i data-lucide="book-open-text"></i></span><span class="ios-row-body"><span>PDF Kitaplarım</span><span class="ios-detail"><span id="iosPdfDetail"></span><i data-lucide="chevron-right" class="ios-chev"></i></span></span></button>
                         <button type="button" class="ios-row" onclick="scrollToSettingsCard('Pas (Off-Day)')"><span class="ios-icon" style="background:rgb(var(--ios-orange))"><i data-lucide="calendar"></i></span><span class="ios-row-body"><span>Dinlenme Günleri</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
                     </div>
                 </div>
@@ -3551,6 +3719,15 @@
                         </button>
                     </div>
                 </div>
+            </div>
+                    <!-- [YENİ v42] PDF kitaplar -->
+            <div id="pdfBooksCard" class="soft-card p-7 sm:p-8 rounded-[28px]">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2"><span>PDF Kitaplarım</span></h2>
+                    <label class="ro-hide btn-primary press-scale cursor-pointer flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[11px] font-semibold text-white"><i data-lucide="upload" class="w-3.5 h-3.5"></i>PDF Yükle<input type="file" accept="application/pdf,.pdf" multiple class="hidden" onchange="uploadPdfBooks(this)"></label>
+                </div>
+                <p class="text-[12px] text-slate-500 dark:text-slate-400 mb-4 leading-snug">Soru bankası ve deneme PDF'lerini yükle. Yanlış Defteri → Soru Ekle → PDF'den Yükle ile yanlış yaptığın soruyu sayfadan kırparak ekleyebilirsin. PDF dosyası bu cihazda saklanır; kitap listesi bütün cihazlarında görünür.</p>
+                <div id="pdfBookList"></div>
             </div>
         </section>
 
@@ -4016,6 +4193,7 @@
             resources: [],
             watchedVideos: {},
             tercihler: [],       // [YENİ v21] tercih listesi (sıralı)
+            pdfBooks: [],        // [YENİ v42] PDF kitap listesi (dosyanın kendisi cihazda, IndexedDB)
             schools: [
                 { id: 1, name: 'Boğaziçi Üniversitesi', dept: 'Yönetim Bilişim Sistemleri', targetScore: 0 }
             ]
@@ -4141,8 +4319,8 @@
         // Eski localStorage verisi — sadece ilk açılışta buluta taşımak için okunur.
         const LEGACY_STORAGE_KEY = 'yks_takip_data_v1';
 
-        const SYNC_KEYS = ['tercihler', 'activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'curriculumDates', 'dayReviews', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
-        const ARRAY_KEYS = ['tercihler', 'activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
+        const SYNC_KEYS = ['pdfBooks', 'tercihler', 'activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'curriculumDates', 'dayReviews', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
+        const ARRAY_KEYS = ['pdfBooks', 'tercihler', 'activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
         const OBJECT_KEYS = ['offDays', 'curriculum', 'curriculumDates', 'dayReviews', 'watchedVideos'];
         const DEFAULT_SETTINGS = JSON.parse(JSON.stringify(state.settings));
 
@@ -4152,7 +4330,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v41';
+        const APP_VERSION = 'firebase-v42';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -5595,6 +5773,7 @@
             document.getElementById('examYayinSira').value = '';
             document.getElementById('examYayinKatilim').value = '';
             examMistakes = {}; renderExamMistakeBox(true);
+            pendingKarne = null;
             clearCikmisTag();
             pendingExamTopics = [];
             updateExamNetForm();
@@ -5635,6 +5814,7 @@
                 mistakes: cleanMistakes()
             };
             if (pendingCikmis) data.cikmis = pendingCikmis;
+            if (pendingKarne) data.karne = pendingKarne;
 
             const idx = editingExamId !== null ? state.exams.findIndex(x => x.id === editingExamId) : -1;
             let exam;
@@ -5695,7 +5875,7 @@
             kaynaklar: [['kaynaklar', () => renderResources()]],
             mesajlar: [['sohbetler', () => renderChatList()]],
             hedefokul: [['okullar', () => renderSchools()], ['gereken netler', () => renderReverseCalc()], ['tercih', () => renderTercihList(true)], ['hesaplayıcı', () => renderRankCalc()]],
-            settings: [['veri boyutu', () => renderStorageUsage()], ['ayar listesi', () => renderIosSettings()]]
+            settings: [['veri boyutu', () => renderStorageUsage()], ['ayar listesi', () => renderIosSettings()], ['pdf kitaplar', () => renderPdfBooks()]]
         };
         const dirtyTabs = new Set();
         function visibleTabId() { return VIEWER_MODE ? null : currentTabId; }
@@ -7691,7 +7871,7 @@
             document.addEventListener('touchstart', e => {
                 const target = e.target.closest && e.target.closest('[data-swipe]');
                 if (swipeOpen && (!target || target !== swipeOpen) && !(e.target.closest && e.target.closest('.swipe-act, .swipe-lead'))) closeSwipe();
-                if (!target || e.touches.length !== 1 || document.body.classList.contains('layout-editing')) { el = null; return; }
+                if (!target || READONLY || e.touches.length !== 1 || document.body.classList.contains('layout-editing')) { el = null; return; }
                 el = target; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; dx = 0; axis = null; buzzed = false;
                 lead = target.hasAttribute('data-swipe-lead');
                 base = el === swipeOpen ? (el.dataset.openSide === 'lead' ? 96 : -96) : 0;
@@ -7737,6 +7917,7 @@
             }, true);
         })();
         function runSwipeAction(el, isLead) {
+            if (READONLY) { swipeOpen = null; return; }
             if (READONLY) { showToast('İzleme modundasın: değişiklik yapılamaz.', 'error'); if (el) { el.classList.add('swipe-anim'); el.style.transform = ''; } swipeOpen = null; return; }
             const code = el && el.getAttribute(isLead ? 'data-swipe-lead' : 'data-swipe');
             swipeOpen = null;
@@ -8109,6 +8290,7 @@
         // ---------- Geçmiş: tarayıcının geri hareketi / sol kenardan kaydırma ----------
         try { if (!VIEWER_MODE) history.replaceState({ tab: 'dashboard' }, '', location.href); } catch (e) {}
         window.addEventListener('popstate', e => {
+            if (!document.getElementById('pdfViewer').classList.contains('hidden')) { closePdfViewer(true); return; }
             if (chatOpenId) { closeChat(true); return; }
             if (detailOpen) { closeDetail(true); return; }
             if (expandedCard) { collapseExpanded(true); return; }
@@ -8233,6 +8415,7 @@
                 <div class="ios-group" style="background:var(--ios-bg)">
                     ${row('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>', 'rgb(var(--brand-rgb))', 'Çalışma', 'Soru, süre, konu', "openFormSheet('activity')")}
                     ${row('<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/>', 'rgb(var(--ios-purple))', 'Deneme', 'TYT, AYT (EA / SAY)', "openFormSheet('exam')")}
+                    ${row('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/>', 'rgb(var(--ios-green))', 'Karneden deneme', 'PDF sonuç karnesini oku', "openKarneImport()")}
                     ${row('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/>', 'rgb(var(--ios-orange))', 'Pomodoro başlat', 'Odak turu', "quickStartPomodoro()")}
                 </div>
                 <button type="button" onclick="closeMiniModal()" class="w-full mt-3 py-3 rounded-xl text-[17px] font-semibold text-brand" style="background:var(--ios-fill)">Vazgeç</button>`);
@@ -8818,6 +9001,7 @@
                     { label: 'Sil', icon: 'trash-2', danger: true, run: () => deleteWrongNote(id) }
                 ];
             }
+            if (READONLY) items = items.filter(it => RO_SAFE_MENU.includes(it.label));
             actMenuItems = items;
             const panel = document.getElementById('ctxPanel');
             panel.classList.add('peek');
@@ -9007,12 +9191,13 @@
                     <div class="pp-stats">${ppStat(fmtNum(e.total), 'toplam net')}${ppStat(sc ? fmtNum(Math.round(sc)) : '—', 'tahmini puan')}${ppStat(yr ? '~' + fmtRank(yr.rank) : '—', 'YKS sırası')}</div>
                     ${e.yayinSira ? `<div class="pp-section">Yayın sıralaması</div><div class="pp-group">${ppRow('Sıran', fmtRank(e.yayinSira))}${e.yayinKatilim ? ppRow('Katılımcı', fmtRank(e.yayinKatilim)) + ppRow('Yüzdelik', '%' + pctText(e.yayinSira / e.yayinKatilim * 100)) : ''}</div>` : ''}
                     ${rows ? `<div class="pp-section">Dersler</div><div class="pp-group" style="padding:4px 6px"><table class="pp-table"><thead><tr><th>Ders</th><th>D</th><th>Y</th><th>B</th><th>Net</th></tr></thead><tbody>${rows}</tbody></table></div>` : ''}
+                    ${karneDetailHtml(e)}
                     ${mistakeDetailHtml(e)}
                     ${sameExamHtml(e)}
                     ${times ? `<div class="pp-section">Süreler</div><div class="pp-group">${times}</div>` : ''}
                     ${wt.length ? `<div class="pp-section">Yanlış yaptığın konular</div><div class="pp-group">${wt.map(w => `<div class="pp-row"><span>${escHtml(w)}</span></div>`).join('')}</div>` : ''}
                     ${photos ? `<div class="pp-section">Fotoğraflar</div><div class="flex gap-2 flex-wrap">${photos}</div>` : ''}
-                    <div class="pp-actions"><button type="button" class="primary" onclick="closeDetail(); setTimeout(() => editExam(${e.id}), 350)">Düzenle</button><button type="button" onclick="shareExam(${e.id})">Paylaş</button><button type="button" class="danger" onclick="closeDetail(); setTimeout(() => deleteExam(${e.id}), 350)">Sil</button></div>`;
+                    <div class="pp-actions"><button type="button" class="primary" onclick="closeDetail(); setTimeout(() => editExam(${e.id}), 350)">Düzenle</button><button type="button" class="ro-allow" onclick="shareExam(${e.id})">Paylaş</button><button type="button" class="danger" onclick="closeDetail(); setTimeout(() => deleteExam(${e.id}), 350)">Sil</button></div>`;
             });
         }
         async function shareExam(id) {
@@ -9132,7 +9317,8 @@
         ];
         function menuTarget(el) { for (const m of MENU_TARGETS) { const t = el && el.closest && el.closest(m.sel); if (t) return { el: t, m }; } return null; }
         function openListMenu(hit, x, y) {
-            const items = hit.m.items(hit.el);
+            let items = hit.m.items(hit.el);
+            if (READONLY) items = items.filter(it => RO_SAFE_MENU.includes(it.label));
             if (!items.length) return;
             actMenuItems = items;
             const panel = document.getElementById('ctxPanel');
@@ -9921,7 +10107,7 @@
             if (!n) return;
             if (!others.length) { showToast('Gönderebileceğin başka profil yok.', 'error'); return; }
             window.__shareTo = others[0];
-            openMiniModal(`<div class="text-[20px] font-bold text-center mb-1 text-slate-900 dark:text-slate-50">Soruyu gönder</div>
+            openMiniModal(`<div class="text-[20px] font-bold text-center mb-1 text-slate-900 dark:text-slate-50">Kaliteli soru gönder</div>
                 <div class="text-[13px] text-slate-500 text-center mb-4">${escHtml(subjectShort(n.subject))} · ${escHtml(n.topic || '')}</div>
                 ${(n.photos && n.photos[0]) ? `<div class="mb-3">${photoImg(n.photos[0], 'w-full max-h-44 object-contain rounded-xl bg-black/5')}</div>` : ''}
                 <div class="text-[12px] font-semibold text-slate-500 uppercase mb-2">Kime</div>
@@ -9937,7 +10123,7 @@
             try {
                 const photos = (await Promise.all((n.photos || []).slice(0, 2).map(photoDataUrl))).filter(Boolean);
                 const iid = 'q' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
-                const item = { kind: 'question', from: ACTIVE_PROFILE, fromName: userDisplayName(), subject: n.subject || '', topic: n.topic || '', note: n.note || '', examType: n.examType || '', msg: ((document.getElementById('shareMsg') || {}).value || '').trim().slice(0, 300), photos: photos.length ? photos : null, createdAt: Date.now() };
+                const item = { kind: 'question', from: ACTIVE_PROFILE, fromName: userDisplayName(), subject: n.subject || '', topic: n.topic || '', note: n.note || '', examType: n.examType || '', book: n.book || null, page: n.page || null, qno: n.qno || null, msg: ((document.getElementById('shareMsg') || {}).value || '').trim().slice(0, 300), photos: photos.length ? photos : null, createdAt: Date.now() };
                 await metaWrite(to + '/inbox', { [iid]: item });
                 closeMiniModal(); haptic();
                 showToast(`${PROFILES[to].name}'a gönderildi`);
@@ -9958,7 +10144,8 @@
                     <div class="inbox-msg selectable">${escHtml(it.msg || '')}</div>
                     <div class="inbox-actions ro-hide"><button type="button" onclick="deleteInboxItem('${it.id}')">Sil</button></div></div></div></div>`;
                 return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
-                    <div class="text-[13px] text-slate-500"><b class="text-slate-800 dark:text-slate-100">${who}</b> bir soru gönderdi · ${agoText(it.createdAt)}</div>
+                    <div class="text-[13px] text-slate-500"><b class="text-slate-800 dark:text-slate-100">${who}</b> incelemen gereken kaliteli bir soru gönderdi · ${agoText(it.createdAt)}</div>
+                    ${it.book ? `<div class="text-[12px] text-slate-500 mt-0.5">📖 ${escHtml(it.book)}${it.page ? ' · s. ' + escHtml(String(it.page)) : ''}${it.qno ? ' · soru ' + escHtml(String(it.qno)) : ''}</div>` : ''}
                     <div class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mt-1"><span class="subj-dot" style="background:${subjectColor(it.subject)}"></span>${escHtml(subjectShort(it.subject))} · ${escHtml(it.topic || '')}</div>
                     ${it.note ? `<div class="text-[13px] text-slate-600 dark:text-slate-300 mt-0.5 selectable">${escHtml(it.note)}</div>` : ''}
                     ${(it.photos || []).length ? `<div class="flex gap-2 mt-2">${it.photos.map(src => `<img src="${escHtml(src)}" alt="Soru fotoğrafı" class="w-28 h-28 object-cover rounded-xl cursor-pointer bg-black/5" onclick="openPhotoViewer(this.src)">`).join('')}</div>` : ''}
@@ -9977,7 +10164,7 @@
             const ids = inboxItems().map(x => x.id);
             if (inboxKnown && !READONLY) {
                 const fresh = inboxItems().filter(x => !inboxKnown.has(x.id));
-                if (fresh.length) { const f0 = fresh[0]; showToast(f0.kind === 'reply' ? `${f0.fromName || 'Arkadaşın'} cevap yazdı` : `${f0.fromName || 'Arkadaşın'} sana bir soru gönderdi`); haptic(); }
+                if (fresh.length) { const f0 = fresh[0]; showToast(f0.kind === 'reply' ? `${f0.fromName || 'Arkadaşın'} cevap yazdı` : `${f0.fromName || 'Arkadaşın'} sana incelemen gereken bir soru gönderdi`); haptic(); }
             }
             inboxKnown = new Set(ids);
             updateInboxBadge();
@@ -9986,7 +10173,7 @@
         async function addInboxToNotes(iid) {
             if (READONLY) return;
             const it = inboxItems().find(x => x.id === iid); if (!it) return;
-            state.wrongNotes.unshift({ id: Date.now(), date: localDateStr(), examType: it.examType || 'TYT', subject: it.subject || '', topic: it.topic || '', note: [it.note, it.msg ? '💬 ' + it.msg : ''].filter(Boolean).join('\n'), photos: (it.photos || []).slice(), reviewed: false, from: it.fromName || (PROFILES[it.from] || {}).name || '' });
+            state.wrongNotes.unshift({ id: Date.now(), date: localDateStr(), examType: it.examType || 'TYT', subject: it.subject || '', topic: it.topic || '', note: [it.note, it.msg ? '💬 ' + it.msg : ''].filter(Boolean).join('\n'), photos: (it.photos || []).slice(), reviewed: false, from: it.fromName || (PROFILES[it.from] || {}).name || '', book: it.book || null, page: it.page || null, qno: it.qno || null });
             saveState(); renderWrongNotes();
             try { await metaWrite(ACTIVE_PROFILE + '/inbox/' + iid, { added: true }); } catch (e) {}
             showToast('Yanlış defterine eklendi'); haptic();
@@ -10297,6 +10484,518 @@
         }
         if (window.visualViewport) { visualViewport.addEventListener('resize', fitChatToViewport); visualViewport.addEventListener('scroll', fitChatToViewport); }
         setInterval(() => { if (chatOpenId) document.getElementById('chatStatus').textContent = friendStatus(chatOpenId); }, 30000);
+
+        // =====================================================================
+        // [v42] İZLEME MODU KİLİDİ · PDF KİTAPLAR · SORU KIRPMA · KARNE OKUMA
+        // =====================================================================
+        const RO_SAFE_MENU = ['Paylaş', 'Kopyala', 'Detay', 'Hedefime ne kadar kaldı?', 'Testleri aç/kapat'];
+        // İzleme modunda sadece görünümü değiştiren alanlar (filtre, arama, grafik seçimi) açık kalır; diğerleri kilitlenir
+        const RO_ALLOWED_HANDLER = /^\s*(set(Atlas\w*|DailyFilter|DailySort|DashView|Hc|Mk|Stk|SubjChartView|TimelineRange|TimelineSubject|TopicPriorityFilter|NetBarPeriod|TempoBuffer|ExamCompare|ReverseSchool|ReverseScore|ReverseType|RcAlan|ResFilter|TextSize|ThemeMode|Accent|AmbientSound|AmbientVolume)|filterDailyLogs|handleCommandSearch|renderSpotlight|renderPeriodComparison|calcRankCalc|rcInput|pdfGoTo)\b/;
+        function readonlyLockInputs() {
+            if (!READONLY) return;
+            document.querySelectorAll('main input, main select, main textarea, #pushPage input, #pushPage select, #pushPage textarea, #miniModal input, #miniModal select, #miniModal textarea').forEach(el => {
+                if (el.disabled || el.type === 'search' || el.closest('#pdfViewer')) return;
+                const h = el.getAttribute('onchange') || el.getAttribute('oninput') || '';
+                if (h && RO_ALLOWED_HANDLER.test(h)) return;
+                if (!h && (el.closest('.spot-search') || /Search$/.test(el.id || ''))) return;
+                el.disabled = true; el.dataset.roLocked = '1';
+            });
+        }
+        if (READONLY) {
+            let roT = null;
+            new MutationObserver(() => { clearTimeout(roT); roT = setTimeout(readonlyLockInputs, 120); }).observe(document.documentElement, { childList: true, subtree: true });
+            document.addEventListener('DOMContentLoaded', () => setTimeout(readonlyLockInputs, 300));
+            // Son güvenlik: gizlenmiş bir düğme kodla tetiklense bile veri değiştiren fonksiyonlar çalışmaz
+            document.addEventListener('click', e => {
+                const b = e.target.closest && e.target.closest('[onclick]'); if (!b) return;
+                const h = b.getAttribute('onclick') || '';
+                if (RO_BLOCKED.some(n => h.includes(n + '('))) { e.stopPropagation(); e.preventDefault(); showToast('İzleme modundasın: değişiklik yapılamaz.', 'error'); }
+            }, true);
+        }
+        const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus"];
+
+        // ---------- pdf.js (ihtiyaç olunca yüklenir) ----------
+        const PDFJS_BASE = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/legacy/build/';   // legacy: eski iOS/Safari sürümleriyle de uyumlu
+        let pdfjsPromise = null;
+        function loadPdfJs() {
+            if (!pdfjsPromise) pdfjsPromise = import(PDFJS_BASE + 'pdf.min.mjs').then(m => { m.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.mjs'; return m; }).catch(e => { pdfjsPromise = null; throw e; });
+            return pdfjsPromise;
+        }
+
+        // ---------- PDF dosyaları cihazda (IndexedDB) ----------
+        function pdfDb() { return new Promise((res, rej) => { const r = indexedDB.open('yks_pdfs', 1); r.onupgradeneeded = () => r.result.createObjectStore('files'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+        async function pdfStore(mode, fn) { const db = await pdfDb(); return new Promise((res, rej) => { const tx = db.transaction('files', mode); const req = fn(tx.objectStore('files')); tx.oncomplete = () => res(req && req.result); tx.onerror = () => rej(tx.error); }); }
+        const pdfKey = id => ACTIVE_PROFILE + ':' + id;
+        const pdfPut = (id, blob) => pdfStore('readwrite', st => st.put(blob, pdfKey(id)));
+        const pdfGet = id => pdfStore('readonly', st => st.get(pdfKey(id)));
+        const pdfDel = id => pdfStore('readwrite', st => st.delete(pdfKey(id)));
+        const pdfLocal = {};   // id → cihazda var mı
+        async function refreshPdfLocal() { await Promise.all((state.pdfBooks || []).map(async b => { try { pdfLocal[b.id] = !!(await pdfGet(b.id)); } catch (e) { pdfLocal[b.id] = false; } })); }
+        function fmtSize(n) { return n >= 1048576 ? (Math.round(n / 104857.6) / 10).toLocaleString('tr-TR') + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+        async function renderPdfBooks() {
+            const box = document.getElementById('pdfBookList'); if (!box) return;
+            const books = state.pdfBooks || [];
+            const det = document.getElementById('iosPdfDetail'); if (det) det.textContent = books.length ? books.length + ' kitap' : '';
+            if (!books.length) { box.innerHTML = emptyState('book-open-text', 'Henüz PDF yok', 'Soru bankası ya da deneme PDF\'ini yükle; yanlış yaptığın soruları sayfadan kırparak deftere ekle.'); lucide.createIcons(); return; }
+            await refreshPdfLocal();
+            box.innerHTML = books.map(b => `<div class="pdf-row"><span class="pdf-ic">PDF</span><div class="flex-1 min-w-0"><div class="text-[15px] font-semibold truncate text-slate-900 dark:text-slate-50">${escHtml(b.name)}</div>
+                <div class="text-[12px] text-slate-500">${b.pages ? b.pages + ' sayfa · ' : ''}${fmtSize(b.size || 0)} · ${pdfLocal[b.id] ? '<span style="color:rgb(var(--ios-green))">bu cihazda</span>' : '<span style="color:rgb(var(--ios-orange))">bu cihazda yok · yeniden yükle</span>'}</div></div>
+                <div class="flex gap-1.5">${pdfLocal[b.id] ? `<button type="button" class="fr-btn press-scale" onclick="openPdfViewer('${b.id}')">Aç</button>` : `<label class="fr-btn press-scale ro-hide cursor-pointer">Yükle<input type="file" accept="application/pdf,.pdf" class="hidden" onchange="relinkPdf('${b.id}', this)"></label>`}
+                <button type="button" class="fr-btn press-scale" onclick="renamePdfBook('${b.id}')" aria-label="Yeniden adlandır">✎</button><button type="button" class="fr-btn press-scale" style="color:rgb(var(--ios-red))" onclick="deletePdfBook('${b.id}')" aria-label="Sil">Sil</button></div></div>`).join('');
+        }
+        async function pdfPageCount(file) { try { const pdfjs = await loadPdfJs(); const doc = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; const n = doc.numPages; doc.destroy && doc.destroy(); return n; } catch (e) { return null; } }
+        async function uploadPdfBooks(input) {
+            if (READONLY) return;
+            const files = [...(input.files || [])].filter(f => /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)); input.value = '';
+            if (!files.length) { showToast('PDF dosyası seç.', 'error'); return; }
+            for (const f of files) {
+                showToast(`${f.name} yükleniyor…`);
+                const id = 'pdf' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+                try {
+                    await pdfPut(id, f);
+                    const pages = await pdfPageCount(f);
+                    state.pdfBooks = [...(state.pdfBooks || []), { id, name: f.name.replace(/\.pdf$/i, '').slice(0, 80), size: f.size, pages, addedAt: Date.now() }];
+                    saveState();
+                } catch (e) { showToast(`${f.name} kaydedilemedi (cihazda yer olmayabilir).`, 'error'); }
+            }
+            renderPdfBooks(); showToast('PDF kitap eklendi');
+        }
+        async function relinkPdf(id, input) { const f = input.files && input.files[0]; input.value = ''; if (!f) return; await pdfPut(id, f); renderPdfBooks(); showToast('PDF bu cihaza eklendi'); }
+        function renamePdfBook(id) {
+            if (READONLY) return;
+            const b = (state.pdfBooks || []).find(x => x.id === id); if (!b) return;
+            const n = prompt('Kitap adı', b.name); if (!n || !n.trim()) return;
+            b.name = n.trim().slice(0, 80); saveState(); renderPdfBooks();
+        }
+        async function deletePdfBook(id) {
+            if (READONLY) return;
+            const b = (state.pdfBooks || []).find(x => x.id === id); if (!b) return;
+            if (!confirm(`"${b.name}" listeden ve bu cihazdan silinsin mi? Deftere eklediğin sorular silinmez.`)) return;
+            try { await pdfDel(id); } catch (e) {}
+            state.pdfBooks = state.pdfBooks.filter(x => x.id !== id); saveState(); renderPdfBooks();
+        }
+
+        // ---------- PDF görüntüleyici + kırpma ----------
+        let pv = { doc: null, book: null, page: 1, zoom: 1, crop: false, sel: null, rendering: false };
+        async function openPdfViewer(id, startPage) {
+            const b = (state.pdfBooks || []).find(x => x.id === id); if (!b) return;
+            try { closeMiniModal(); } catch (e) {}
+            let blob;
+            try { blob = await pdfGet(id); } catch (e) {}
+            if (!blob) { showToast('Bu PDF bu cihazda yok; Ayarlar → PDF Kitaplarım\'dan yeniden yükle.', 'error'); return; }
+            const v = document.getElementById('pdfViewer');
+            v.classList.remove('hidden'); document.body.style.overflow = 'hidden';
+            document.getElementById('pvTitle').textContent = b.name;
+            document.getElementById('pvPageLbl').textContent = 'Açılıyor…';
+            try {
+                const pdfjs = await loadPdfJs();
+                pv.doc = await pdfjs.getDocument({ data: new Uint8Array(await blob.arrayBuffer()) }).promise;
+            } catch (e) { closePdfViewer(); showToast('PDF açılamadı. İnternet bağlantını kontrol et (görüntüleyici ilk seferde indirilir).', 'error'); return; }
+            pv.book = b; pv.zoom = 1;
+            let last = 1; try { last = parseInt(localStorage.getItem(pk('yks_pdf_page_' + id))) || 1; } catch (e) {}
+            pv.page = Math.min(pv.doc.numPages, Math.max(1, startPage || last));
+            document.getElementById('pvPageInp').max = pv.doc.numPages;
+            togglePdfCrop(false);
+            await renderPdfPage();
+            try { history.pushState({ tab: currentTabId, pdf: 1 }, '', location.href); } catch (e) {}
+        }
+        function closePdfViewer(fromHistory) {
+            const v = document.getElementById('pdfViewer');
+            if (v.classList.contains('hidden')) return;
+            v.classList.add('hidden'); document.body.style.overflow = '';
+            try { pv.doc && pv.doc.destroy && pv.doc.destroy(); } catch (e) {}
+            pv.doc = null;
+            if (!fromHistory && history.state && history.state.pdf) { try { history.back(); } catch (e) {} }
+        }
+        async function renderPdfPage() {
+            if (!pv.doc || pv.rendering) return;
+            pv.rendering = true;
+            try {
+                const page = await pv.doc.getPage(pv.page);
+                const base = page.getViewport({ scale: 1 });
+                const avail = Math.min(document.getElementById('pvScroll').clientWidth - 16, 1100);
+                const scale = (avail / base.width) * pv.zoom;
+                const vp = page.getViewport({ scale });
+                const dpr = Math.min(3, (window.devicePixelRatio || 1) * 1.5);   // kırpılan soru net olsun
+                const c = document.getElementById('pvCanvas'), ctx = c.getContext('2d');
+                c.width = Math.floor(vp.width * dpr); c.height = Math.floor(vp.height * dpr);
+                c.style.width = Math.floor(vp.width) + 'px'; c.style.height = Math.floor(vp.height) + 'px';
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                await page.render({ canvasContext: ctx, canvas: c, viewport: vp, transform: [dpr, 0, 0, dpr, 0, 0] }).promise;
+                document.getElementById('pvPageLbl').textContent = `Sayfa ${pv.page} / ${pv.doc.numPages}`;
+                document.getElementById('pvPageInp').value = pv.page;
+                try { localStorage.setItem(pk('yks_pdf_page_' + pv.book.id), pv.page); } catch (e) {}
+                clearPdfSel();
+            } catch (e) { console.error(e); showToast('Sayfa çizilemedi.', 'error'); }
+            pv.rendering = false;
+        }
+        function pdfGo(d) { if (!pv.doc) return; const n = Math.min(pv.doc.numPages, Math.max(1, pv.page + d)); if (n !== pv.page) { pv.page = n; renderPdfPage(); document.getElementById('pvScroll').scrollTop = 0; } }
+        function pdfGoTo(v) { const n = parseInt(v); if (pv.doc && n >= 1 && n <= pv.doc.numPages) { pv.page = n; renderPdfPage(); } }
+        function pdfZoom(d) { pv.zoom = Math.min(3, Math.max(0.6, Math.round((pv.zoom + d * 0.25) * 100) / 100)); renderPdfPage(); }
+        function clearPdfSel() { pv.sel = null; document.getElementById('pvSel').classList.add('hidden'); document.getElementById('pvCropOk').disabled = true; }
+        function togglePdfCrop(on) {
+            pv.crop = on === undefined ? !pv.crop : !!on;
+            document.getElementById('pvStage').classList.toggle('cropping', pv.crop);
+            document.getElementById('pvCropBtn').classList.toggle('on', pv.crop);
+            document.getElementById('pvCropBar').classList.toggle('hidden', !pv.crop);
+            clearPdfSel();
+        }
+        (function setupPdfCrop() {
+            let start = null;
+            const pos = e => { const r = document.getElementById('pvCanvas').getBoundingClientRect(); const p = e.touches ? e.touches[0] : e; return { x: Math.max(0, Math.min(r.width, p.clientX - r.left)), y: Math.max(0, Math.min(r.height, p.clientY - r.top)) }; };
+            const draw = (a, b) => { const x = Math.min(a.x, b.x), y = Math.min(a.y, b.y), w = Math.abs(a.x - b.x), h = Math.abs(a.y - b.y);
+                pv.sel = { x, y, w, h }; const el = document.getElementById('pvSel'); el.classList.remove('hidden'); Object.assign(el.style, { left: x + 'px', top: y + 'px', width: w + 'px', height: h + 'px' });
+                document.getElementById('pvCropOk').disabled = !(w > 20 && h > 20); };
+            const down = e => { if (!pv.crop || !e.target.closest('#pvStage')) return; e.preventDefault(); start = pos(e); draw(start, start); };
+            const move = e => { if (!start) return; e.preventDefault(); draw(start, pos(e)); };
+            const up = () => { if (start) { start = null; document.getElementById('pvCropHint').textContent = pv.sel && pv.sel.w > 20 ? 'Seçim hazır · Kırp\'a bas ya da yeniden çiz' : 'Sorunun etrafını parmağınla çiz'; } };
+            document.addEventListener('mousedown', down); document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+            document.addEventListener('touchstart', down, { passive: false }); document.addEventListener('touchmove', move, { passive: false }); document.addEventListener('touchend', up);
+        })();
+        async function confirmPdfCrop() {
+            if (!pv.sel) return;
+            const c = document.getElementById('pvCanvas'), k = c.width / c.getBoundingClientRect().width;
+            const sx = Math.round(pv.sel.x * k), sy = Math.round(pv.sel.y * k), sw = Math.round(pv.sel.w * k), sh = Math.round(pv.sel.h * k);
+            const out = document.createElement('canvas'); out.width = sw; out.height = sh;
+            const o = out.getContext('2d'); o.fillStyle = '#fff'; o.fillRect(0, 0, sw, sh); o.drawImage(c, sx, sy, sw, sh, 0, 0, sw, sh);
+            let data = out.toDataURL('image/jpeg', 0.92);
+            try { data = await compressDataUrl(data); } catch (e) {}
+            const book = pv.book, page = pv.page;
+            closePdfViewer();
+            setTimeout(() => openQuestionForm({ photo: data, book: book.name, page }), 350);
+        }
+
+        // ---------- Yanlış defteri: soru ekleme ----------
+        function openQuestionAdd() {
+            if (READONLY) return;
+            const books = state.pdfBooks || [];
+            openMiniModal(`<div class="text-[20px] font-bold text-center mb-4 text-slate-900 dark:text-slate-50">Soru Ekle</div>
+                <div class="ios-group" style="background:var(--ios-bg)">
+                    <label class="ios-row cursor-pointer"><span class="ios-icon" style="background:rgb(var(--brand-rgb))"><i data-lucide="camera"></i></span><span class="ios-row-body"><span><span class="block">Fotoğraf Çek / Dosya Yükle</span><span class="block text-[12px] text-slate-400">Kameradan ya da galeriden</span></span></span><input type="file" accept="image/*" class="hidden" onchange="questionFromImage(this)"></label>
+                    <button type="button" class="ios-row" onclick="openPdfPicker()"><span class="ios-icon" style="background:rgb(var(--ios-red))"><i data-lucide="file-text"></i></span><span class="ios-row-body"><span><span class="block">PDF'den Yükle</span><span class="block text-[12px] text-slate-400">${books.length ? books.length + ' kitaptan seç, soruyu kırp' : 'Önce Ayarlar\'dan PDF yükle'}</span></span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
+                    <button type="button" class="ios-row" onclick="closeMiniModal(); setTimeout(() => openQuestionForm({}), 250)"><span class="ios-icon" style="background:rgb(var(--ios-gray))"><i data-lucide="pencil"></i></span><span class="ios-row-body"><span>Fotoğrafsız not</span></span></button>
+                </div>
+                <button type="button" onclick="closeMiniModal()" class="w-full mt-3 py-3 rounded-xl text-[17px] font-semibold text-brand" style="background:var(--ios-fill)">Vazgeç</button>`);
+            lucide.createIcons();
+        }
+        async function questionFromImage(input) {
+            const f = input.files && input.files[0]; input.value = '';
+            if (!f) return;
+            try { const data = await compressImageFile(f); closeMiniModal(); setTimeout(() => openQuestionForm({ photo: data }), 250); } catch (e) { showToast('Fotoğraf okunamadı.', 'error'); }
+        }
+        async function openPdfPicker() {
+            const books = state.pdfBooks || [];
+            if (!books.length) { closeMiniModal(); showToast('Önce Ayarlar → PDF Kitaplarım\'dan PDF yükle.', 'error'); setTimeout(() => { switchTab('settings'); scrollToSettingsCard('PDF Kitaplarım'); }, 400); return; }
+            await refreshPdfLocal();
+            openMiniModal(`<div class="text-[20px] font-bold text-center mb-4 text-slate-900 dark:text-slate-50">Hangi kitaptan?</div>
+                <div class="ios-group" style="background:var(--ios-bg)">${books.map(b => `<button type="button" class="ios-row" onclick="openPdfViewer('${b.id}')" ${pdfLocal[b.id] ? '' : 'style="opacity:.5"'}><span class="pdf-ic" style="width:30px;height:36px;font-size:8px">PDF</span><span class="ios-row-body"><span class="min-w-0"><span class="block truncate">${escHtml(b.name)}</span><span class="block text-[12px] text-slate-400">${pdfLocal[b.id] ? (b.pages ? b.pages + ' sayfa' : '') : 'bu cihazda yok'}</span></span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>`).join('')}</div>
+                <button type="button" onclick="closeMiniModal()" class="w-full mt-3 py-3 rounded-xl text-[17px] font-semibold text-brand" style="background:var(--ios-fill)">Vazgeç</button>`);
+            lucide.createIcons();
+        }
+        let qfState = null;
+        function openQuestionForm(o) {
+            if (READONLY) return;
+            const edit = o.editId ? state.wrongNotes.find(n => n.id === o.editId) : null;
+            qfState = { editId: edit ? edit.id : null, photo: o.photo || (edit && edit.photos && edit.photos[0]) || null };
+            const v = edit || {};
+            const opts = SUBJECT_GROUPS.map(g => `<optgroup label="${g.exam}">${g.subjects.map(x => `<option value="${escHtml(x.value)}" ${x.value === v.subject ? 'selected' : ''}>${escHtml(x.label)}</option>`).join('')}</optgroup>`).join('');
+            openMiniModal(`<div class="text-[20px] font-bold text-center mb-3 text-slate-900 dark:text-slate-50">${edit ? 'Soruyu Düzenle' : 'Yanlış Soru'}</div>
+                <div id="qfImgBox">${qfState.photo ? photoImg(qfState.photo, 'qf-img') : ''}</div>
+                <label class="block text-center text-[13px] font-semibold text-brand mt-2 cursor-pointer">${qfState.photo ? 'Görseli değiştir' : 'Görsel ekle'}<input type="file" accept="image/*" class="hidden" onchange="qfSetImage(this)"></label>
+                <span class="qf-lbl">Ders</span><select id="qfSubject" class="input-soft w-full rounded-xl p-2.5 text-sm">${opts}</select>
+                <span class="qf-lbl">Konu</span><input id="qfTopic" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(v.topic || '')}" placeholder="Örn: Oran Orantı" list="qfTopicList"><datalist id="qfTopicList">${Object.values(PLAYLISTS).flat().map(t => `<option value="${escHtml(cleanTopicName(t))}">`).join('')}</datalist>
+                <span class="qf-lbl">Kitap adı</span><input id="qfBook" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(o.book || v.book || '')}" placeholder="Örn: 3D TYT Matematik">
+                <div class="qf-grid"><div><span class="qf-lbl">Sayfa no</span><input id="qfPage" type="number" min="1" inputmode="numeric" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(String(o.page || v.page || ''))}"></div>
+                <div><span class="qf-lbl">Soru no <span class="font-normal">(ops.)</span></span><input id="qfQno" type="number" min="1" inputmode="numeric" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(String(v.qno || ''))}"></div></div>
+                <span class="qf-lbl">Not <span class="font-normal">(neden yanlış yaptın?)</span></span><textarea id="qfNote" rows="3" maxlength="600" class="input-soft w-full rounded-xl p-2.5 text-sm" placeholder="Örn: Ters orantıyı düz orantı gibi kurdum.">${escHtml(v.note || '')}</textarea>
+                <button type="button" onclick="saveQuestionForm()" class="btn-primary press-scale w-full mt-4 py-3.5 rounded-xl text-white font-semibold">${edit ? 'Kaydet' : 'Deftere Ekle'}</button>`);
+        }
+        async function qfSetImage(input) {
+            const f = input.files && input.files[0]; input.value = ''; if (!f) return;
+            try { qfState.photo = await compressImageFile(f); document.getElementById('qfImgBox').innerHTML = `<img src="${qfState.photo}" class="qf-img" alt="Soru">`; } catch (e) { showToast('Fotoğraf okunamadı.', 'error'); }
+        }
+        function saveQuestionForm() {
+            if (READONLY || !qfState) return;
+            const g = id => (document.getElementById(id) || {}).value || '';
+            const subject = g('qfSubject'), topic = g('qfTopic').trim(), note = g('qfNote').trim();
+            if (!topic && !note && !qfState.photo) { showToast('Konu, not ya da görsel ekle.', 'error'); return; }
+            const fields = { subject, examType: examTypeForSubject(subject), topic: topic || subjectShort(subject), note, book: g('qfBook').trim() || null, page: parseInt(g('qfPage')) || null, qno: parseInt(g('qfQno')) || null };
+            if (qfState.editId) {
+                const n = state.wrongNotes.find(x => x.id === qfState.editId); if (!n) return;
+                Object.assign(n, fields);
+                if (qfState.photo && (!n.photos || n.photos[0] !== qfState.photo)) n.photos = [qfState.photo, ...((n.photos || []).slice(1))];
+            } else {
+                state.wrongNotes.unshift({ id: Date.now(), date: localDateStr(), ...fields, photos: qfState.photo ? [qfState.photo] : [], reviewed: false });
+            }
+            saveState(); renderWrongNotes(); closeMiniModal(); haptic();
+            showToast(qfState.editId ? 'Soru güncellendi' : 'Yanlış defterine eklendi');
+            qfState = null;
+        }
+
+        // ---------- Karneden otomatik deneme ----------
+// ===== KARNE OKUYUCU (Pozitif Akademi vb.) — pdf.js metin parçalarından (konumlu) veri çıkarır =====
+const KARNE_VOCAB_EXTRA = 'Matematik Paragrafta Paragrafı Paragrafın Yerleştirme Yerleştir Birleştirme Devleti Teşkilatı Çift Mantıksal Kültür Kültürü Etkileşimler Uygulamalarında Saflaştırma Çeşitliliği İstatistik Artistik Estetik Etik Politik Optik Elektrik Genetik Sistematik Periyodik Aritmetik Geometrik Mantık Özkütle Kuvvet Sıcaklık Kaldırma Tepkimelerde Mücadele Millî Milli Kuvay-ı Millîye Hareketi Hareketin Hareketi’nin Yüzyıl Yüzyıla Coğrafyamız İbadetin Sıfatları Kaynakları Kavramlar Düşünceyi Geliştirme Yardımcı Düşüncesi Soruya Cevap Parçaya Bağlı Cümle Cümleyi Cümlede Sözcük Sözcükte Yorumlama Yorumlanması Eşitsizlikler Mutlak Değerli Periyodik Problemleri Alışveriş Kar Zarar Cebirsel Tablolar İşlemler Kombinasyon Olasılık Permütasyon Fonksiyonlar Bölünebilme Basamakları Kesir Oran Orantı Veri Yaş Hareket Temel Ardışık Kümeler Rasyonel Ondalık Üslü Köklü İfadeler Denklem Sayılarda Aralıklar Sayılar Doğruda Açılar Üçgende Açı Kenar Bağıntıları Dik Üçgen Eşlik Benzerlik Kare Dikdörtgen Yamuk Çokgenler Prizmalar Piramitler Madde Isı Sıvıların Küresel Aynalar Elektrik Devreleri Lambalar Su Dalgaları Kimya Atom Periyodik Sistem Sıvılar Asit Bazların Metallerle Ayırma Tekniği Teknikleri Kimyasal Hesaplamalar Zayıf Enzimler Organeller Canlıların Sınıflandırılması Mitoz Bölünme Eşeye Kalıtım Eşeysiz Üreme İlk Türk Devletlerinde Devlet Abbasi Türkler Lonca Düzenli Ordunun Kurulması Dünyadaki İklim Tipleri Türkiye Yer Şekillerinin Oluşumu Dünyada Nüfus Dağılışı Bölge Kavramı Türleri Afetlerden Korunma Felsefeyi Tanıma Sanat Felsefesinin Konusu Bilgi Ahlak İslamda İslam’da Amacı Kur’an’da Bazı Gönül Allah’ın İsim Söz Öbekleri Ek Fiil Fiiller Ses Bitişik Yazılan Birleşik Kelimeler Noktalı Virgül Noktalama İşaretleri Yazım Kuralları Düşünce Akışını Bozan Ekleme Ana Anlam İki Parçaya Ayırma Sorular Günlük Hayatta Tek Mitoz Fotosentez Solunum Hücre Ekosistem Türev İntegral Limit Logaritma Trigonometri Polinomlar Diziler Vektörler Tiyatro Tanzimat Cumhuriyet Edebiyat Edebiyatı Şiir Divan Halk Destan Roman Hikaye Deneme Makale Anlatım Bozukluğu Fiilimsiler Zamirler Sıfatlar Zarflar Edatlar Bağlaçlar Öğeleri Ögeleri Çatı'.split(/\s+/);
+function karneBuildVocab(extraTopics) {
+    const v = new Set();
+    const add = w => { const k = String(w || '').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşüâîû’'\-]/g, ''); if (k.length >= 2) v.add(k); };
+    KARNE_VOCAB_EXTRA.forEach(add);
+    (extraTopics || []).forEach(t => String(t).split(/[\s()\/,.:;]+/).forEach(add));
+    return v;
+}
+// pdf.js "ti/ft/tı/tt/fi/fl" bağlı harflerini (tanımsız \u0000 olarak gelir) kelime dağarcığıyla onarır
+function karneFixLigatures(text, vocab) {
+    if (!text || text.indexOf('\u0000') < 0) return text;
+    const CAND = ['ti', 'ft', 'tı', 'fı', 'tt', 'fi', 'fl', 'ff', 'tf'];
+    return text.replace(/[^\s]*\u0000[^\s]*/g, word => {
+        const n = (word.match(/\u0000/g) || []).length;
+        let combos = [''];
+        for (let i = 0; i < n; i++) combos = combos.flatMap(c => CAND.map(x => c + '|' + x));
+        let best = null, bestScore = -1;
+        combos.forEach(combo => {
+            const parts = combo.split('|').slice(1); let i = 0;
+            const cand = word.replace(/\u0000/g, () => parts[i++]);
+            const core = cand.toLocaleLowerCase('tr-TR').replace(/…/g, '').replace(/[^a-zçğıöşüâîû’'\-]/g, '');
+            const trunc = /…$/.test(cand);
+            let score = 0;
+            const partsOk = core.split('-').filter(Boolean);
+            if (vocab.has(core) || (partsOk.length > 1 && partsOk.every(w => vocab.has(w)))) score = 3;
+            else if (trunc && [...vocab].some(w => w.startsWith(core))) score = 2;
+            else if ([...vocab].some(w => w.startsWith(core) && core.length >= 4)) score = 1;
+            if (parts.every(p => p === 'ti')) score += 0.5;       // Türkçede en sık bağlı harf
+            if (score > bestScore) { bestScore = score; best = cand; }
+        });
+        return best;
+    });
+}
+function karneNum(s) { const t = String(s || '').trim().replace(/\./g, '').replace(',', '.'); const v = parseFloat(t); return isNaN(v) ? null : v; }
+function karneNorm(s) { return String(s || '').toLocaleUpperCase('tr-TR').replace(/\u0000/g, '').replace(/\s+/g, ' ').trim(); }
+function karneParse(pages, opts) {
+    const vocab = karneBuildVocab((opts && opts.topics) || []);
+    const all = pages.flatMap((p, pi) => p.items.map(it => ({ ...it, p: pi })));
+    const find = (pi, re) => all.find(it => it.p === pi && re.test(karneNorm(it.s)));
+    const out = { name: '', date: '', type: null, puan: null, sira: null, katilim: null, rows: {}, total: null, topics: {}, warnings: [] };
+    // --- Sınav adı ve tarihi
+    const lblName = all.find(it => /^SINAV ADI$/.test(karneNorm(it.s)));
+    const lblBook = all.find(it => lblName && it.p === lblName.p && /^KİTAPÇIK$/.test(karneNorm(it.s)));
+    if (lblName) {
+        const xs = lblName.x + 40, xe = lblBook ? lblBook.x - 4 : 1e9;
+        const parts = all.filter(it => it.p === lblName.p && it.x >= xs && it.x < xe && Math.abs(it.y - lblName.y) < 9).sort((a, b) => b.y - a.y || a.x - b.x);
+        let name = parts.map(x => x.s).join(' ').replace(/\s+/g, ' ').trim();
+        const m = name.match(/^(.*?)\s*\((.*)\)$/);
+        if (m && karneNorm(m[1]).replace(/\s/g, '') === karneNorm(m[2]).replace(/\s/g, '')) name = m[1].trim();
+        out.name = karneFixLigatures(name, vocab);
+    }
+    const lblDate = all.find(it => /^SINAV TARİHİ$/.test(karneNorm(it.s)));
+    if (lblDate) {
+        const d = all.find(it => it.p === lblDate.p && Math.abs(it.y - lblDate.y) < 3 && it.x > lblDate.x && /\d{2}[.\/]\d{2}[.\/]\d{4}/.test(it.s));
+        if (d) { const [dd, mm, yy] = d.s.match(/(\d{2})[.\/](\d{2})[.\/](\d{4})/).slice(1); out.date = `${yy}-${mm}-${dd}`; }
+    }
+    // --- Ders analizi tablosu (sayılar başlık sütunlarına konumla eşlenir: boş hücreler atlanmaz)
+    const hD = find(0, /^DOĞRU$/), hY = find(0, /^YANLIŞ$/), hB = find(0, /^BOŞ$/), hN = find(0, /^NET$/), hS = find(0, /^SORU$/);
+    if (hD && hY && hN) {
+        const cols = [['soru', hS], ['d', hD], ['y', hY], ['b', hB], ['net', hN]].filter(c => c[1]).map(([k, h]) => [k, h.x + (h.w || 0) / 2]);
+        const labelX = hS ? hS.x - 20 : 300;
+        const lines = {};
+        all.filter(it => it.p === hD.p && it.y < hD.y - 2).forEach(it => { const k = Math.round(it.y); (lines[k] = lines[k] || []).push(it); });
+        const ys = Object.keys(lines).map(Number).sort((a, b) => b - a);
+        for (const y of ys) {
+            const row = lines[y], label = row.filter(it => it.x < labelX).map(it => it.s).join(' ');
+            const L = karneNorm(label);
+            if (!L) continue;
+            if (/PUAN|SIRALAMA|SINAVIN/.test(L)) break;
+            const rec = {};
+            row.filter(it => it.x >= labelX).forEach(it => {
+                const v = karneNum(it.s); if (v === null) return;
+                const cx = it.x + (it.w || 0) / 2;
+                let best = null, bd = 1e9; cols.forEach(([k, x]) => { const dd = Math.abs(x - cx); if (dd < bd) { bd = dd; best = k; } });
+                if (best && bd < 30) rec[best] = v;
+            });
+            if (rec.soru === undefined && rec.net === undefined) continue;
+            out.rows[L] = { d: rec.d || 0, y: rec.y || 0, b: rec.b || 0, net: rec.net !== undefined ? rec.net : null, soru: rec.soru || null };
+            if (L === 'TOPLAM') { out.total = rec.net !== undefined ? rec.net : null; break; }
+        }
+    } else out.warnings.push('Ders analizi tablosu bulunamadı');
+    // --- Puan, genel sıralama, katılımcı
+    const hP = all.find(it => /^PUAN$/.test(karneNorm(it.s))), hG = all.find(it => /^GENEL$/.test(karneNorm(it.s)));
+    if (hP && hG) {
+        const row = all.filter(it => it.p === hP.p && it.y < hP.y - 2 && it.y > hP.y - 16);
+        const pick = h => { const c = h.x + (h.w || 0) / 2; const it = row.filter(z => karneNum(z.s) !== null).sort((a, b) => Math.abs(a.x + (a.w || 0) / 2 - c) - Math.abs(b.x + (b.w || 0) / 2 - c))[0]; return it ? karneNum(it.s) : null; };
+        const pv = pick(hP); if (pv !== null) out.puan = String(row.find(z => karneNum(z.s) === pv).s).includes(',') ? pv : pv;
+        out.sira = pick(hG);
+        const kat = all.find(it => it.p === hP.p && /^KATILIMCI SAYILARI$/.test(karneNorm(it.s)));
+        if (kat) { const r2 = all.filter(it => it.p === hP.p && Math.abs(it.y - kat.y) < 3 && karneNum(it.s) !== null); const c = hG.x + (hG.w || 0) / 2; const k = r2.sort((a, b) => Math.abs(a.x + (a.w || 0) / 2 - c) - Math.abs(b.x + (b.w || 0) / 2 - c))[0]; if (k) out.katilim = karneNum(k.s); }
+    }
+    // --- Konu analizi (sütun blokları: No | Konu | DC | ÖC | SO)
+    const SECTIONS = ['TÜRKÇE', 'MATEMATİK', 'GEOMETRİ', 'TARİH', 'COĞRAFYA', 'FELSEFE', 'DİN KÜLTÜRÜ', 'FİZİK', 'KİMYA', 'BİYOLOJİ', 'EDEBİYAT', 'TÜRK DİLİ VE EDEBİYATI', 'TARİH-1', 'TARİH-2', 'COĞRAFYA-1', 'COĞRAFYA-2', 'DİN KÜLTÜRÜ VE AHLAK BİLGİSİ', 'PSİKOLOJİ', 'SOSYOLOJİ', 'MANTIK'];
+    const secRe = SECTIONS.map(s => [s, new RegExp('^' + s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/TI|FT|TI/g, m => m) .replace(/İ/g, 'İ') + '$')]);
+    pages.forEach((pg, pi) => {
+        const heads = all.filter(it => it.p === pi && /^DC$/.test(karneNorm(it.s)));
+        heads.forEach(dc => {
+            const same = all.filter(it => it.p === pi && Math.abs(it.y - dc.y) < 2);
+            const no = same.filter(it => /^NO$/.test(karneNorm(it.s)) && it.x < dc.x).sort((a, b) => b.x - a.x)[0];
+            const oc = same.filter(it => /^ÖC$/.test(karneNorm(it.s)) && it.x > dc.x).sort((a, b) => a.x - b.x)[0];
+            const so = same.filter(it => /^SO$/.test(karneNorm(it.s)) && it.x > dc.x).sort((a, b) => a.x - b.x)[0];
+            if (!no || !oc) return;
+            const nextNo = same.filter(it => /^NO$/.test(karneNorm(it.s)) && it.x > dc.x).sort((a, b) => a.x - b.x)[0];
+            const x0 = no.x - 6, x1 = nextNo ? nextNo.x - 6 : 1e9;
+            const lines = {};
+            all.filter(it => it.p === pi && it.x >= x0 && it.x < x1 && it.y < dc.y - 2).forEach(it => { const k = Math.round(it.y * 2) / 2; const key = Object.keys(lines).find(z => Math.abs(z - k) < 1.6); (lines[key || k] = lines[key || k] || []).push(it); });
+            let section = null;
+            Object.keys(lines).map(Number).sort((a, b) => b - a).forEach(y => {
+                const row = lines[y].sort((a, b) => a.x - b.x);
+                const textAll = karneNorm(row.map(r => r.s).join(''));
+                const numTok = row.find(r => /^\d{1,3}$/.test(r.s.trim()) && r.x < no.x + 12);
+                if (!numTok) {
+                    // bölüm başlığı (Türkçe, Matematik…); bağlı harfler \u0000 olduğu için esnek eşleştir
+                    const raw = row.map(r => r.s).join('');
+                    const cand = SECTIONS.find(s => { const re = new RegExp('^' + s.split('').map(ch => /[A-ZÇĞİÖŞÜ]/.test(ch) ? ch : '\\' + ch).join('').replace(/TI|FT|TT|Tİ/g, '(?:$&|\\u0000)') + '$'); return re.test(karneNorm(raw.replace(/\u0000/g, 'TI'))) || re.test(karneNorm(raw.replace(/\u0000/g, 'Tİ'))) || re.test(karneNorm(raw.replace(/\u0000/g, 'FT'))); });
+                    if (cand) section = cand;
+                    return;
+                }
+                if (!section) return;
+                const near = (h, tol) => row.filter(r => Math.abs(r.x + (r.w || 0) / 2 - (h.x + (h.w || 0) / 2)) < tol && r.s.trim().length <= 2);
+                const dcv = (near(dc, 7)[0] || {}).s, ocv = (near(oc, 7)[0] || {}).s, sov = so ? (near(so, 7)[0] || {}).s : undefined;
+                let konu = '', prevEnd = null;
+                row.filter(r => r.x > numTok.x + 6 && r.x < dc.x - 4).forEach(r => {
+                    if (prevEnd !== null && r.x - prevEnd > 1.2) konu += ' ';
+                    konu += r.s; prevEnd = r.x + (r.w || 0);
+                });
+                konu = karneFixLigatures(konu.replace(/\s+/g, ' ').trim(), vocab);
+                const d = (dcv || '').trim(), o = (ocv || '').trim(), sgn = (sov || '').trim();
+                const status = !o ? 'bos' : (sgn === '+' || (d && o === d)) ? 'dogru' : 'yanlis';
+                (out.topics[section] = out.topics[section] || []).push({ no: +numTok.s, konu, dc: d, oc: o, status });
+            });
+        });
+    });
+    // --- Sınav türü
+    const R = Object.keys(out.rows);
+    if (R.some(k => /TYT/.test(k)) || /TYT/.test(karneNorm(out.name))) out.type = 'TYT';
+    else if (R.some(k => /EDEBİYAT/.test(k))) out.type = 'AYT';
+    else if (R.some(k => /FİZİK|KİMYA|BİYOLOJİ/.test(k))) out.type = 'SAY';
+    else if (/AYT/.test(karneNorm(out.name))) out.type = 'AYT';
+    return out;
+}
+
+        let pendingKarne = null, karneDraft = null;
+        const KARNE_MAP = {
+            TYT: { tr: ['TÜRKÇE', 'TYT-TÜRKÇE'], mat: ['TYT-MATEMATİK', ['MATEMATİK', 'GEOMETRİ']], tarih: ['TARİH'], cog: ['COĞRAFYA'], fel: ['FELSEFE'], din: ['DİN KÜLTÜRÜ', 'DİN KÜLTÜRÜ VE AHLAK BİLGİSİ'], fiz: ['FİZİK'], kim: ['KİMYA'], biy: ['BİYOLOJİ'] },
+            AYT: { edb: ['TÜRK DİLİ VE EDEBİYATI', 'EDEBİYAT', 'AYT-EDEBİYAT'], mat: ['AYT-MATEMATİK', ['MATEMATİK', 'GEOMETRİ']], tarih: ['TARİH-1', 'TARİH'], cog: ['COĞRAFYA-1', 'COĞRAFYA'] },
+            SAY: { mat: ['AYT-MATEMATİK', ['MATEMATİK', 'GEOMETRİ']], fiz: ['FİZİK'], kim: ['KİMYA'], biy: ['BİYOLOJİ'] }
+        };
+        const KARNE_TOPIC_KEY = { 'TÜRKÇE': 'tr', 'MATEMATİK': 'mat', 'GEOMETRİ': 'mat', 'TARİH': 'tarih', 'TARİH-1': 'tarih', 'COĞRAFYA': 'cog', 'COĞRAFYA-1': 'cog', 'FELSEFE': 'fel', 'DİN KÜLTÜRÜ': 'din', 'DİN KÜLTÜRÜ VE AHLAK BİLGİSİ': 'din', 'FİZİK': 'fiz', 'KİMYA': 'kim', 'BİYOLOJİ': 'biy', 'EDEBİYAT': 'edb', 'TÜRK DİLİ VE EDEBİYATI': 'edb' };
+        function karneRowsFor(type, rows) {
+            const out = {};
+            Object.entries(KARNE_MAP[type] || {}).forEach(([key, alts]) => {
+                for (const a of alts) {
+                    if (Array.isArray(a)) { const rs = a.map(n => rows[n]).filter(Boolean); if (rs.length === a.length) { out[key] = { d: rs.reduce((t, r) => t + r.d, 0), y: rs.reduce((t, r) => t + r.y, 0), net: rs.reduce((t, r) => t + (r.net || 0), 0) }; break; } }
+                    else if (rows[a]) { out[key] = { d: rows[a].d, y: rows[a].y, net: rows[a].net }; break; }
+                }
+            });
+            return out;
+        }
+        function openKarneImport() {
+            if (READONLY) return;
+            const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/pdf,.pdf';
+            inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) readKarnePdf(f); };
+            inp.click();
+        }
+        async function readKarnePdf(file) {
+            showToast('Karne okunuyor…');
+            try {
+                const pdfjs = await loadPdfJs();
+                const doc = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+                const pages = [];
+                for (let p = 1; p <= Math.min(doc.numPages, 6); p++) {
+                    const tc = await (await doc.getPage(p)).getTextContent();
+                    pages.push({ items: tc.items.filter(i => i.str && i.str.trim()).map(i => ({ s: i.str, x: i.transform[4], y: i.transform[5], w: i.width })) });
+                }
+                const r = karneParse(pages, { topics: Object.values(PLAYLISTS).flat().map(cleanTopicName) });
+                if (!Object.keys(r.rows).length) { showToast('Bu PDF\'te ders tablosu bulunamadı. Karne biçimi desteklenmiyor olabilir.', 'error'); return; }
+                karneDraft = { ...r, file: file.name };
+                openKarneReview();
+            } catch (e) { console.error(e); showToast('PDF okunamadı. İnternet bağlantını kontrol et (okuyucu ilk seferde indirilir).', 'error'); }
+        }
+        function karneWrongByKey(r, type) {
+            const out = {};
+            Object.entries(r.topics || {}).forEach(([sec, list]) => {
+                const key = KARNE_TOPIC_KEY[sec]; if (!key) return;
+                if (!(EXAM_SECTIONS[type] || []).some(s2 => s2.key === key || (s2.subs || []).some(x => x.key === key))) return;
+                list.filter(t => t.status !== 'dogru').forEach(t => (out[key] = out[key] || []).push({ no: t.no, konu: t.konu, status: t.status }));
+            });
+            return out;
+        }
+        function openKarneReview() {
+            const r = karneDraft, type = r.type || 'TYT';
+            const rows = karneRowsFor(type, r.rows), leaves = examLeafItems(type);
+            const wrong = karneWrongByKey(r, type);
+            const dup = state.exams.some(e => e.date === r.date && normExamName(e.name) === normExamName(r.name));
+            openMiniModal(`<div class="text-[20px] font-bold text-center text-slate-900 dark:text-slate-50">Karneden okunan deneme</div>
+                <div class="text-[12px] text-slate-400 text-center mb-3 truncate">${escHtml(r.file)}</div>
+                ${dup ? '<div class="p-3 rounded-xl mb-3 text-[13px]" style="background:rgb(var(--ios-orange) / .12);color:rgb(var(--ios-orange))">Bu ad ve tarihte bir deneme zaten kayıtlı. Kaydedersen ikinci kez eklenir.</div>' : ''}
+                <span class="qf-lbl">Sınav adı</span><input id="krName" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(r.name)}">
+                <div class="qf-grid"><div><span class="qf-lbl">Tarih</span><input id="krDate" type="date" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(r.date)}"></div>
+                <div><span class="qf-lbl">Tür</span><select id="krType" class="input-soft w-full rounded-xl p-2.5 text-sm" onchange="karneDraft.type=this.value; openKarneReview()">${['TYT', 'AYT', 'SAY'].map(t => `<option value="${t}" ${t === type ? 'selected' : ''}>${examTypeLabel(t)}</option>`).join('')}</select></div></div>
+                <span class="qf-lbl">Dersler <span class="font-normal">(gerekirse düzelt)</span></span>
+                <div class="overflow-x-auto"><table class="kr-table"><thead><tr><th>Ders</th><th>D</th><th>Y</th><th>Net</th><th>Karne</th></tr></thead><tbody>
+                ${leaves.map(it => { const v = rows[it.key] || {}; return `<tr><td><span class="subj-dot" style="background:${subjectColor(it.key)}"></span>${escHtml(it.label)}</td>
+                    <td><input id="krD-${it.key}" type="number" min="0" max="${it.max || sectionMax(it)}" class="input-soft" value="${v.d ?? ''}" oninput="karneNetUpd('${it.key}')"></td>
+                    <td><input id="krY-${it.key}" type="number" min="0" max="${it.max || sectionMax(it)}" class="input-soft" value="${v.y ?? ''}" oninput="karneNetUpd('${it.key}')"></td>
+                    <td id="krN-${it.key}" class="font-semibold">${v.d !== undefined ? fmtNum(v.d - v.y / 4) : '—'}</td><td class="text-slate-400">${v.net !== undefined && v.net !== null ? fmtNum(v.net) : '—'}</td></tr>`; }).join('')}
+                </tbody></table></div>
+                <div class="flex justify-between text-[13px] mt-2"><span class="text-slate-500">Toplam net</span><b id="krTotal"></b></div>
+                <div class="qf-grid"><div><span class="qf-lbl">Yayın sıralaman</span><input id="krSira" type="number" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${r.sira ?? ''}"></div>
+                <div><span class="qf-lbl">Katılımcı</span><input id="krKat" type="number" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${r.katilim ?? ''}"></div></div>
+                ${r.puan ? `<div class="text-[13px] text-slate-500 mt-2">Karnedeki puan: <b class="text-slate-800 dark:text-slate-100">${fmtNum(r.puan)}</b></div>` : ''}
+                <span class="qf-lbl">Yanlış / boş konular</span>
+                <div class="text-[12px]">${Object.keys(wrong).length ? Object.entries(wrong).map(([k, list]) => `<div class="mb-2"><div class="font-semibold text-slate-700 dark:text-slate-200 mb-1"><span class="subj-dot" style="background:${subjectColor(k)}"></span>${escHtml(examKeyLabel(type, k))} <span class="font-normal text-slate-400">${list.filter(x => x.status === 'yanlis').length} yanlış · ${list.filter(x => x.status === 'bos').length} boş</span></div>${list.map(t => `<span class="kr-chip ${t.status}">${escHtml(t.konu)}</span>`).join('')}</div>`).join('') : '<span class="text-slate-400">Konu analizi bulunamadı</span>'}</div>
+                <button type="button" onclick="saveKarneExam()" class="btn-primary press-scale w-full mt-4 py-3.5 rounded-xl text-white font-semibold">Kaydet</button>
+                <button type="button" onclick="closeMiniModal()" class="w-full mt-2 py-3 text-brand font-semibold">Vazgeç</button>`);
+            leaves.forEach(it => karneNetUpd(it.key, true));
+            karneTotalUpd();
+        }
+        function karneNetUpd(key, silent) {
+            const d = parseInt((document.getElementById('krD-' + key) || {}).value) || 0, y = parseInt((document.getElementById('krY-' + key) || {}).value) || 0;
+            const el = document.getElementById('krN-' + key); if (el && ((document.getElementById('krD-' + key) || {}).value !== '' || y)) el.textContent = fmtNum(d - y / 4);
+            if (!silent) karneTotalUpd();
+        }
+        function karneTotalUpd() {
+            const type = karneDraft.type || 'TYT';
+            const tot = examLeafItems(type).reduce((t, it) => t + (parseInt((document.getElementById('krD-' + it.key) || {}).value) || 0) - (parseInt((document.getElementById('krY-' + it.key) || {}).value) || 0) / 4, 0);
+            const el = document.getElementById('krTotal');
+            if (el) el.innerHTML = `${fmtNum(tot)}${karneDraft.total !== null && karneDraft.total !== undefined ? (Math.abs(tot - karneDraft.total) < 0.01 ? ' <span style="color:rgb(var(--ios-green))">✓ karneyle aynı</span>' : ` <span style="color:rgb(var(--ios-orange))">karne: ${fmtNum(karneDraft.total)}</span>`) : ''}`;
+        }
+        function saveKarneExam() {
+            if (READONLY || !karneDraft) return;
+            const type = (document.getElementById('krType') || {}).value || 'TYT';
+            const vals = {}; examLeafItems(type).forEach(it => { vals[it.key] = { d: (document.getElementById('krD-' + it.key) || {}).value || '', y: (document.getElementById('krY-' + it.key) || {}).value || '' }; });
+            const meta = { name: document.getElementById('krName').value.trim() || 'Deneme', date: document.getElementById('krDate').value || localDateStr(), sira: document.getElementById('krSira').value, kat: document.getElementById('krKat').value };
+            const wrong = karneWrongByKey(karneDraft, type);
+            closeMiniModal();
+            // Normal deneme formunu doldurup kaydet: bütün hesaplar ve doğrulamalar aynı yoldan geçer
+            resetExamForm();
+            document.getElementById('examType').value = type; updateExamNetForm();
+            Object.entries(vals).forEach(([k, v]) => { const d = document.getElementById('exD-' + k), y = document.getElementById('exY-' + k); if (d) d.value = v.d; if (y) y.value = v.y; });
+            document.getElementById('examName').value = meta.name;
+            document.getElementById('examDate').value = meta.date;
+            document.getElementById('examYayinSira').value = meta.sira || '';
+            document.getElementById('examYayinKatilim').value = meta.kat || '';
+            calcExamNets();
+            pendingKarne = { source: karneDraft.file, puan: karneDraft.puan || null, total: karneDraft.total, wrong };
+            const before = state.exams.length;
+            document.getElementById('examForm').requestSubmit();
+            setTimeout(() => {
+                if (state.exams.length > before) { const e = state.exams.find(x => x.name === meta.name && x.date === meta.date); showToast('Karnedeki deneme eklendi'); if (e) setTimeout(() => openExamDetail(e.id), 300); }
+                else { showToast('Kaydedilemedi: değerleri kontrol et.', 'error'); switchTab('exams'); setSecSeg('exams', 'ekle'); }
+                pendingKarne = null; karneDraft = null;
+            }, 400);
+        }
+        function karneDetailHtml(e) {
+            const k = e.karne; if (!k) return '';
+            const groups = Object.entries(k.wrong || {});
+            return `<div class="pp-section">Karne${k.puan ? ' · puan ' + fmtNum(k.puan) : ''}</div>
+                <div class="pp-group" style="padding:12px 16px">${groups.length ? groups.map(([key, list]) => `<div class="mb-2"><div class="text-[13px] font-semibold mb-1"><span class="subj-dot" style="background:${subjectColor(key)}"></span>${escHtml(examKeyLabel(e.type, key))} <span class="font-normal text-slate-400">· eksik / yanlış konular</span></div>${list.map(t => `<span class="kr-chip ${t.status}" title="${t.status === 'bos' ? 'Boş' : 'Yanlış'}">${escHtml(t.konu)}</span>`).join('')}</div>`).join('') : '<span class="text-[13px] text-slate-400">Bütün sorular doğru 🎉</span>'}
+                <div class="text-[11px] text-slate-400 mt-1">Kırmızı: yanlış · gri: boş · kaynak: ${escHtml(k.source || 'karne')}</div></div>`;
+        }
         // ================= [v31] Derli toplu: sayfa ve kart birleştirmeleri =================
         let timerPane = (() => { try { return localStorage.getItem('yks_timer_pane') === 'sw' ? 'sw' : 'pomo'; } catch (e) { return 'pomo'; } })();
         function setTimerPane(p) {
@@ -12211,12 +12910,14 @@
                             <span class="flex items-center gap-0.5 ml-0.5" title="Tekrar aşaması ${s.stage}/${SRS_INTERVALS.length}">${dots}</span>
                         </div>
                         <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${escHtml(n.note)}</div>
+                        ${n.book || n.page || n.qno ? `<div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">📖 ${escHtml(n.book || 'Kitap')}${n.page ? ' · s. ' + escHtml(String(n.page)) : ''}${n.qno ? ' · soru ' + escHtml(String(n.qno)) : ''}</div>` : ''}
                         <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">${escHtml(n.date)} &bull; ${escHtml(n.examType)} &bull; ${escHtml(n.subject)}</div>
                         ${isDue ? `<div class="flex gap-2 mt-2">
                             <button onclick="reviewWrongNoteInline(${n.id}, false)" class="press-scale px-3 py-1 rounded-full text-[11px] font-semibold bg-rose-500/10 text-rose-500">Zorlandım</button>
                             <button onclick="reviewWrongNoteInline(${n.id}, true)" class="press-scale px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Hatırladım ✓</button>
                         </div>` : ''}
                     </div>
+                    <button onclick="openQuestionForm({editId:${n.id}})" class="ro-hide press-scale p-1.5 text-slate-400 rounded-lg flex-shrink-0" title="Düzenle" aria-label="Düzenle"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                     <button onclick="openShareNote(${n.id})" class="ro-hide press-scale p-1.5 text-brand rounded-lg flex-shrink-0" title="Arkadaşına gönder" aria-label="Arkadaşına gönder"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
                     <button onclick="deleteWrongNote(${n.id})" class="press-scale p-1.5 hover:bg-rose-50 dark:hover:bg-rose-500/10 text-rose-400 rounded-lg flex-shrink-0">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
