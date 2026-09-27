@@ -805,7 +805,7 @@
         /* 6) Kart içindeki özet kutucukları gri zeminde (Apple iç gruplar) */
         html body .soft-card .glass-stat { background: var(--ios-inner) !important; border-radius: 16px !important; }
         /* 2) Kart başlık satırları: sığmazsa alt satıra geçsin, üst üste binmesin */
-        .soft-card > div.flex.justify-between:first-child, .soft-card > div:first-child > div.flex.justify-between:first-child { flex-wrap: wrap; row-gap: 6px; }
+        .soft-card > div.flex.justify-between:first-of-type, .soft-card > div:first-of-type > div.flex.justify-between:first-child { flex-wrap: wrap; row-gap: 6px; }
         .soft-card h2 { min-width: 0; }
         @media (max-width: 639px) {
             h2 > span.font-normal.text-\[11px\] { display: none; }              /* "Canlı Metrikler" gibi süs etiketleri */
@@ -878,8 +878,8 @@
         .card-seg { margin: 0 0 16px; } .card-seg .seg-track { max-width: none; }
         .timer-off, .ach-off { display: none !important; }
         /* Açıklamalar ⓘ düğmesinin arkasında */
-        [data-card="calendar"] > div:first-child > h2 { flex-shrink: 0; }
-        [data-card="calendar"] > div:first-child { column-gap: 10px; }
+        [data-card="calendar"] > div.flex.justify-between:first-of-type > h2 { flex-shrink: 0; }
+        [data-card="calendar"] > div.flex.justify-between:first-of-type { column-gap: 10px; }
         #calStreak { margin-right: 6px; }
         .card-desc { display: none !important; }
         .show-desc .card-desc { display: block !important; animation: fadeIn .2s ease; }
