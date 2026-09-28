@@ -4330,7 +4330,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v42';
+        const APP_VERSION = 'firebase-v43';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -10538,18 +10538,40 @@
             const det = document.getElementById('iosPdfDetail'); if (det) det.textContent = books.length ? books.length + ' kitap' : '';
             if (!books.length) { box.innerHTML = emptyState('book-open-text', 'Henüz PDF yok', 'Soru bankası ya da deneme PDF\'ini yükle; yanlış yaptığın soruları sayfadan kırparak deftere ekle.'); lucide.createIcons(); return; }
             await refreshPdfLocal();
-            box.innerHTML = books.map(b => `<div class="pdf-row"><span class="pdf-ic">PDF</span><div class="flex-1 min-w-0"><div class="text-[15px] font-semibold truncate text-slate-900 dark:text-slate-50">${escHtml(b.name)}</div>
+            let usage = '';
+            try { if (navigator.storage && navigator.storage.estimate) { const est = await navigator.storage.estimate(); if (est.quota) usage = `<div class="text-[12px] text-slate-400 mt-3">Bu cihazda kullanılan: ${fmtSize(est.usage || 0)} · boş: ${fmtSize(Math.max(0, est.quota - (est.usage || 0)))}${(navigator.storage.persisted && await navigator.storage.persisted()) ? ' · kalıcı' : ''}</div>`; } } catch (e) {}
+            box.innerHTML = usage + books.map(b => `<div class="pdf-row"><span class="pdf-ic">PDF</span><div class="flex-1 min-w-0"><div class="text-[15px] font-semibold truncate text-slate-900 dark:text-slate-50">${escHtml(b.name)}</div>
                 <div class="text-[12px] text-slate-500">${b.pages ? b.pages + ' sayfa · ' : ''}${fmtSize(b.size || 0)} · ${pdfLocal[b.id] ? '<span style="color:rgb(var(--ios-green))">bu cihazda</span>' : '<span style="color:rgb(var(--ios-orange))">bu cihazda yok · yeniden yükle</span>'}</div></div>
                 <div class="flex gap-1.5">${pdfLocal[b.id] ? `<button type="button" class="fr-btn press-scale" onclick="openPdfViewer('${b.id}')">Aç</button>` : `<label class="fr-btn press-scale ro-hide cursor-pointer">Yükle<input type="file" accept="application/pdf,.pdf" class="hidden" onchange="relinkPdf('${b.id}', this)"></label>`}
                 <button type="button" class="fr-btn press-scale" onclick="renamePdfBook('${b.id}')" aria-label="Yeniden adlandır">✎</button><button type="button" class="fr-btn press-scale" style="color:rgb(var(--ios-red))" onclick="deletePdfBook('${b.id}')" aria-label="Sil">Sil</button></div></div>`).join('');
         }
-        async function pdfPageCount(file) { try { const pdfjs = await loadPdfJs(); const doc = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise; const n = doc.numPages; doc.destroy && doc.destroy(); return n; } catch (e) { return null; } }
+        // [v43] Büyük PDF'ler (yüzlerce MB) belleğe bütün olarak okunmaz: pdf.js sadece ihtiyaç duyduğu parçaları ister,
+        // biz de dosyadan yalnızca o aralığı keserek veririz. 300 MB'lık kitabın bir sayfasını açmak birkaç MB okur.
+        async function openPdfBlob(blob) {
+            const pdfjs = await loadPdfJs();
+            const len = blob.size;
+            const first = new Uint8Array(await blob.slice(0, Math.min(len, 262144)).arrayBuffer());
+            const transport = new pdfjs.PDFDataRangeTransport(len, first);
+            transport.requestDataRange = (begin, end) => {
+                blob.slice(begin, end).arrayBuffer().then(buf => transport.onDataRange(begin, new Uint8Array(buf))).catch(err => console.error('PDF parça okunamadı', err));
+            };
+            return pdfjs.getDocument({ range: transport, length: len, rangeChunkSize: 262144, disableAutoFetch: true, disableStream: true }).promise;
+        }
+        async function pdfPageCount(file) { try { const doc = await openPdfBlob(file); const n = doc.numPages; doc.destroy && doc.destroy(); return n; } catch (e) { return null; } }
         async function uploadPdfBooks(input) {
             if (READONLY) return;
             const files = [...(input.files || [])].filter(f => /pdf$/i.test(f.type) || /\.pdf$/i.test(f.name)); input.value = '';
             if (!files.length) { showToast('PDF dosyası seç.', 'error'); return; }
+            // [v43] Tarayıcıdan bu verileri kendiliğinden silmemesini iste; yer yetmiyorsa baştan söyle
+            try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch (e) {}
+            try {
+                if (navigator.storage && navigator.storage.estimate) {
+                    const est = await navigator.storage.estimate(), free = (est.quota || 0) - (est.usage || 0), need = files.reduce((t, f) => t + f.size, 0);
+                    if (est.quota && need > free) { showToast(`Cihazda yeterli yer yok: ${fmtSize(need)} gerekiyor, ${fmtSize(Math.max(0, free))} boş.`, 'error'); return; }
+                }
+            } catch (e) {}
             for (const f of files) {
-                showToast(`${f.name} yükleniyor…`);
+                showToast(`${f.name} kaydediliyor${f.size > 50 * 1048576 ? ' (büyük dosya, biraz sürebilir)' : ''}…`);
                 const id = 'pdf' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
                 try {
                     await pdfPut(id, f);
@@ -10588,8 +10610,7 @@
             document.getElementById('pvTitle').textContent = b.name;
             document.getElementById('pvPageLbl').textContent = 'Açılıyor…';
             try {
-                const pdfjs = await loadPdfJs();
-                pv.doc = await pdfjs.getDocument({ data: new Uint8Array(await blob.arrayBuffer()) }).promise;
+                pv.doc = await openPdfBlob(blob);
             } catch (e) { closePdfViewer(); showToast('PDF açılamadı. İnternet bağlantını kontrol et (görüntüleyici ilk seferde indirilir).', 'error'); return; }
             pv.book = b; pv.zoom = 1;
             let last = 1; try { last = parseInt(localStorage.getItem(pk('yks_pdf_page_' + id))) || 1; } catch (e) {}
@@ -10876,6 +10897,140 @@ function karneParse(pages, opts) {
     return out;
 }
 
+
+        // ---------- [v43] Kurum sıralı listesi (tüm öğrenciler tek tabloda) ----------
+// ===== KURUM SIRALI LİSTE OKUYUCU (Final vb.: bütün öğrencilerin D/Y/N'si tek tabloda) =====
+function listeNorm(s) { return String(s || '').toLocaleUpperCase('tr-TR').replace(/\s+/g, ' ').trim(); }
+function listeIsFormat(pages) { return pages.some(p => p.items.some(it => /SIRALI L[İI]STE|ADI SOYADI/.test(listeNorm(it.s)))); }
+const LISTE_GROUP_KEYS = [
+    [/^T[ÜU]RK[ÇC]E$/, 'tr'], [/^(EDB|EDEB|TDE|T\.D\.E)/, 'edb'], [/^TAR(-?1)?$|^TAR[İI]H(-?1)?$/, 'tarih'], [/^CO[ĞG](-?1)?$|^CO[ĞG]RAFYA(-?1)?$/, 'cog'],
+    [/^FEL$|^FELSEFE$/, 'fel'], [/^D[İI]N$/, 'din'], [/^S\.? ?FEL/, 'din'], [/^(T\. ?MAT|MAT|MATEMAT[İI]K|A\. ?MAT)$/, 'mat'], [/^GEO/, 'mat'],
+    [/^F[İI]Z/, 'fiz'], [/^K[İI]M/, 'kim'], [/^B[İI]Y/, 'biy'], [/^TOPLAM$/, '__total']
+];
+function listeParse(pages) {
+    const out = { title: '', kurum: '', date: '', type: null, rows: [], groups: [], avg: null, warnings: [] };
+    // "12 10" gibi birden fazla sayı tek parça gelebilir: genişliğe göre konum vererek ayrı sayılara böl
+    const split = it => {
+        const s = String(it.s);
+        if (!/^\s*-?[\d.,]+(\s+-?[\d.,]+)+\s*$/.test(s)) return [it];
+        const outp = []; const re = /-?[\d.,]+/g; let m;
+        while ((m = re.exec(s))) outp.push({ ...it, s: m[0], x: it.x + (it.w || 0) * (m.index / Math.max(1, s.length)), w: (it.w || 0) * (m[0].length / Math.max(1, s.length)) });
+        return outp;
+    };
+    const all = pages.flatMap((p, pi) => p.items.flatMap(split).map(it => ({ ...it, p: pi, N: listeNorm(it.s) })));
+    const first = all.filter(it => it.p === 0);
+    const dm = first.map(it => it.N.match(/SINAV TAR[İI]H[İI]\s*:\s*(\d{2})[.\/](\d{2})[.\/](\d{4})/)).find(Boolean);
+    if (dm) out.date = `${dm[3]}-${dm[2]}-${dm[1]}`;
+    const typeLine = first.find(it => /(TYT|AYT)\s+PUAN SIRALI/.test(it.N));
+    out.type = typeLine ? (/AYT/.test(typeLine.N) ? 'AYT' : 'TYT') : null;
+    pages.forEach((pg, pi) => {
+        const items = all.filter(it => it.p === pi);
+        const dys = items.filter(it => /^D\.\s*Y\.$/.test(it.N)).sort((a, b) => a.x - b.x);
+        if (!dys.length) return;
+        const hy = dys[0].y;
+        // Ders başlıkları: D.Y. satırının hemen üstündeki satır
+        const heads = items.filter(it => it.y > hy + 4 && it.y < hy + 25 && !/^\d/.test(it.N)).sort((a, b) => a.x - b.x);
+        const groupHeads = heads.filter(h => h.x < dys[dys.length - 1].x + 40);
+        const extraHeads = heads.filter(h => h.x >= dys[dys.length - 1].x + 40);   // TYT (puan), TG, ŞUBE, SINIF
+        if (pi === 0) {
+            out.groups = groupHeads.map(h => h.N);
+            // başlık bilgileri: kurum (sol üst, en büyük satır), sınav adı (ortadaki başlık)
+            const top = first.filter(it => it.y > hy + 25 && !/ŞEHİR|SEZON|SINAV TAR|PUAN SIRALI/.test(it.N) && !/^\d{2}\.\d{2}\.\d{4}$/.test(it.N));
+            const left = top.filter(it => it.x < 200).sort((a, b) => b.y - a.y)[0];
+            const mid = top.filter(it => it.x >= 200 && it.x < 600).sort((a, b) => b.y - a.y)[0];
+            out.kurum = left ? left.s.trim() : '';
+            out.title = mid ? mid.s.replace(/\s*-\s*(\d+)/, '-$1').replace(/\s+/g, ' ').trim() : '';
+        }
+        const colX = h => h.x + (h.w || 0) / 2;
+        const puanH = extraHeads.find(h => /^(TYT|AYT|PUAN)/.test(h.N)), tgH = extraHeads.find(h => h.N === 'TG'), subeH = extraHeads.find(h => /^ŞUBE/.test(h.N)), sinifH = extraHeads.find(h => /^SINIF$/.test(h.N) && h.x > dys[0].x);
+        const labels = items.filter(it => it.y < hy && it.y > hy - 16 && /^(SIRA|ÖĞ\.?NO|SINIF|ADI SOYADI)$/.test(it.N));
+        const xSira = (labels.find(l => l.N === 'SIRA') || { x: 20 }).x, xNo = (labels.find(l => /^ÖĞ/.test(l.N)) || { x: 45 }).x, xSinif = (labels.find(l => l.N === 'SINIF') || { x: 80 }).x;
+        const nameX0 = xSinif + 20, nameX1 = dys[0].x - 4;
+        // Satırlar: sıra numarasından başlayarak aynı yükseklikteki (±3.5) parçalar
+        const anchors = items.filter(it => it.y < hy - 4 && Math.abs(it.x - xSira) < 12 && /^\d{1,4}$/.test(it.N)).sort((a, b) => b.y - a.y);
+        const parseRow = (rowItems, isAvg) => {
+            const g = dys.map(() => []);
+            // Önce sıralı yöntem: her hücre dolu olduğundan satırda tam (ders sayısı × 3) sayı olur; soldan sağa üçer üçer dağıt.
+            // (3 haneli TOPLAM gibi sola taşan sayılar konuma göre yanlış sütuna kayabiliyordu.)
+            const xEnd = puanH ? puanH.x - 12 : 1e9;
+            const seq = rowItems.filter(it => it.x >= dys[0].x - 15 && it.x < xEnd && /^-?[\d.,]+$/.test(it.N)).sort((a, b) => a.x - b.x);
+            const per = isAvg ? 1 : 3;
+            if (seq.length === dys.length * per) seq.forEach((it, i) => g[Math.floor(i / per)].push(it));
+            else rowItems.filter(it => it.x >= dys[0].x - 6 && /^-?[\d.,]+$/.test(it.N)).forEach(it => {
+                let gi = -1; dys.forEach((d, i) => { if (it.x >= d.x - 6) gi = i; });
+                if (gi >= 0 && it.x < (dys[gi + 1] ? dys[gi + 1].x - 6 : (puanH ? puanH.x - 20 : 1e9))) g[gi].push(it);
+            });
+            const num = s => { const v = parseFloat(String(s).replace(/\./g, '').replace(',', '.')); return isNaN(v) ? null : v; };
+            const vals = g.map(arr => { const ns = arr.sort((a, b) => a.x - b.x).map(a => num(a.s)); return isAvg ? { net: ns[ns.length - 1] ?? null } : { d: ns[0] ?? 0, y: ns[1] ?? 0, net: ns[2] ?? null }; });
+            const near = h => { if (!h) return null; const c = colX(h); const it = rowItems.filter(z => /^-?[\d.,]+$/.test(z.N)).sort((a, b) => Math.abs(colX(a) - c) - Math.abs(colX(b) - c))[0]; return it && Math.abs(colX(it) - c) < 25 ? num(it.s) : null; };
+            return { vals, puan: near(puanH), tg: near(tgH), sube: near(subeH), sinif: near(sinifH) };
+        };
+        anchors.forEach(a => {
+            const rowItems = items.filter(it => Math.abs(it.y - a.y) < 3.5);
+            const no = rowItems.find(it => Math.abs(it.x - xNo) < 14 && /^\d+$/.test(it.N));
+            const sin = rowItems.find(it => Math.abs(it.x - xSinif) < 14 && it !== a && it !== no);
+            const name = rowItems.filter(it => it.x >= nameX0 - 30 && it.x < nameX1 && it !== no && it !== sin && !/^-?[\d.,]+$/.test(it.N)).sort((x, y) => x.x - y.x).map(it => it.s.trim()).join(' ');
+            const r = parseRow(rowItems);
+            out.rows.push({ sira: +a.N, ogrNo: no ? no.N : '', sinifKod: sin ? sin.s.trim() : '', name, ...r });
+        });
+        const avgLbl = items.find(it => /GENEL ORTALAMA/.test(it.N));
+        if (avgLbl) { const r = parseRow(items.filter(it => Math.abs(it.y - avgLbl.y) < 3.5), true); out.avg = { vals: r.vals, puan: r.puan }; }
+    });
+    out.rows.sort((a, b) => a.sira - b.sira);
+    if (!out.type) out.type = out.groups.some(g => /T[ÜU]RK[ÇC]E/.test(g)) ? 'TYT' : 'AYT';
+    return out;
+}
+// Bir öğrencinin satırını uygulama derslerine çevirir (T.MAT+GEO → mat, DİN+S.FEL → din)
+function listeRowToKeys(groups, vals) {
+    const out = {};
+    groups.forEach((g, i) => {
+        const m = LISTE_GROUP_KEYS.find(([re]) => re.test(g)); if (!m || !vals[i]) return;
+        const k = m[1], v = vals[i];
+        if (!out[k]) out[k] = { d: 0, y: 0, net: 0 };
+        if (v.d !== undefined) { out[k].d += v.d || 0; out[k].y += v.y || 0; }
+        out[k].net = Math.round(((out[k].net || 0) + (v.net || 0)) * 100) / 100;
+    });
+    return out;
+}
+
+        let listeData = null;
+        function handleListePdf(pages, file) {
+            const r = listeParse(pages);
+            if (!r.rows.length) { showToast('Listede öğrenci satırı bulunamadı.', 'error'); return; }
+            listeData = { ...r, file: file.name };
+            const st = state.settings || {};
+            let row = st.kurumOgrNo ? r.rows.find(x => x.ogrNo === String(st.kurumOgrNo)) : null;
+            if (!row && st.kurumAd) row = r.rows.find(x => listeNorm(x.name) === listeNorm(st.kurumAd));
+            if (row) useListeRow(row); else showListePicker();
+        }
+        function showListePicker() {
+            if (!listeData) return;
+            const first = listeNorm(userDisplayName()).split(' ')[0];
+            const rows = listeData.rows.slice().sort((a, b) => (listeNorm(b.name).includes(first) - listeNorm(a.name).includes(first)) || a.sira - b.sira);
+            openMiniModal(`<div class="text-[20px] font-bold text-center text-slate-900 dark:text-slate-50">Listede sen hangisisin?</div>
+                <div class="text-[13px] text-slate-500 text-center mb-3">${escHtml(listeData.kurum)} · ${escHtml(listeData.title)} · ${listeData.rows.length} öğrenci<br>Seçimin hatırlanır; sonraki denemelerde otomatik bulunursun.</div>
+                <div class="spot-search list-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="lpSearch" type="search" placeholder="Adını ya da numaranı ara" autocomplete="off" oninput="document.querySelectorAll('[data-lp]').forEach(b=>b.style.display = b.dataset.lp.includes(listeNorm(this.value)) ? '' : 'none')"></div>
+                <div class="ios-group" style="background:var(--ios-bg);max-height:52vh;overflow-y:auto">${rows.map(x => `<button type="button" class="ios-row" data-lp="${escHtml(listeNorm(x.name + ' ' + x.ogrNo))}" onclick="pickListeRow('${escHtml(x.ogrNo)}', ${x.sira})"><span class="text-[13px] font-semibold text-slate-400 w-7 text-right flex-shrink-0">${x.sira}.</span><span class="ios-row-body"><span class="min-w-0"><span class="block truncate font-semibold">${escHtml(x.name)}</span><span class="block text-[12px] text-slate-400">no ${escHtml(x.ogrNo)} · ${escHtml(x.sinifKod || '')}</span></span><span class="text-[13px] text-slate-500 tabular-nums">${fmtNum(((listeRowToKeys(listeData.groups, x.vals).__total) || {}).net || 0)} net</span></span></button>`).join('')}</div>
+                <button type="button" onclick="closeMiniModal()" class="w-full mt-3 py-3 text-brand font-semibold">Vazgeç</button>`);
+        }
+        function pickListeRow(ogrNo, sira) {
+            const row = listeData.rows.find(x => x.ogrNo === ogrNo && x.sira === sira) || listeData.rows.find(x => x.sira === sira);
+            if (!row) return;
+            state.settings.kurumOgrNo = row.ogrNo; state.settings.kurumAd = row.name; saveState();   // bir dahaki sefere otomatik
+            useListeRow(row);
+        }
+        function useListeRow(row) {
+            const r = listeData, keys = listeRowToKeys(r.groups, row.vals), tot = keys.__total || {};
+            delete keys.__total;
+            const avgKeys = r.avg ? listeRowToKeys(r.groups, r.avg.vals.map(v => ({ net: v.net }))) : null;
+            const avg = {}; if (avgKeys) Object.entries(avgKeys).forEach(([k, v]) => { if (k !== '__total') avg[k] = v.net; });
+            karneDraft = {
+                file: r.file, name: r.title, date: r.date, type: r.type || 'TYT', puan: row.puan, sira: row.sira, katilim: Math.max(...r.rows.map(x => x.sira)),
+                total: tot.net ?? null, direct: keys, topics: {}, rows: {}, kurum: r.kurum,
+                liste: { name: row.name, ogrNo: row.ogrNo, sinifKod: row.sinifKod, sira: row.sira, sinifDer: row.sinif, subeDer: row.sube, avg, avgTotal: avgKeys && avgKeys.__total ? avgKeys.__total.net : null, avgPuan: r.avg ? r.avg.puan : null }
+            };
+            openKarneReview();
+        }
         let pendingKarne = null, karneDraft = null;
         const KARNE_MAP = {
             TYT: { tr: ['TÜRKÇE', 'TYT-TÜRKÇE'], mat: ['TYT-MATEMATİK', ['MATEMATİK', 'GEOMETRİ']], tarih: ['TARİH'], cog: ['COĞRAFYA'], fel: ['FELSEFE'], din: ['DİN KÜLTÜRÜ', 'DİN KÜLTÜRÜ VE AHLAK BİLGİSİ'], fiz: ['FİZİK'], kim: ['KİMYA'], biy: ['BİYOLOJİ'] },
@@ -10909,9 +11064,10 @@ function karneParse(pages, opts) {
                     const tc = await (await doc.getPage(p)).getTextContent();
                     pages.push({ items: tc.items.filter(i => i.str && i.str.trim()).map(i => ({ s: i.str, x: i.transform[4], y: i.transform[5], w: i.width })) });
                 }
+                if (listeIsFormat(pages)) { handleListePdf(pages, file); return; }     // [v43] kurumun sıralı listesi
                 const r = karneParse(pages, { topics: Object.values(PLAYLISTS).flat().map(cleanTopicName) });
                 if (!Object.keys(r.rows).length) { showToast('Bu PDF\'te ders tablosu bulunamadı. Karne biçimi desteklenmiyor olabilir.', 'error'); return; }
-                karneDraft = { ...r, file: file.name };
+                karneDraft = { ...r, file: file.name, liste: null };
                 openKarneReview();
             } catch (e) { console.error(e); showToast('PDF okunamadı. İnternet bağlantını kontrol et (okuyucu ilk seferde indirilir).', 'error'); }
         }
@@ -10926,12 +11082,17 @@ function karneParse(pages, opts) {
         }
         function openKarneReview() {
             const r = karneDraft, type = r.type || 'TYT';
-            const rows = karneRowsFor(type, r.rows), leaves = examLeafItems(type);
+            const rows = r.direct || karneRowsFor(type, r.rows), leaves = examLeafItems(type);
+            const L = r.liste;
             const wrong = karneWrongByKey(r, type);
             const dup = state.exams.some(e => e.date === r.date && normExamName(e.name) === normExamName(r.name));
             openMiniModal(`<div class="text-[20px] font-bold text-center text-slate-900 dark:text-slate-50">Karneden okunan deneme</div>
                 <div class="text-[12px] text-slate-400 text-center mb-3 truncate">${escHtml(r.file)}</div>
                 ${dup ? '<div class="p-3 rounded-xl mb-3 text-[13px]" style="background:rgb(var(--ios-orange) / .12);color:rgb(var(--ios-orange))">Bu ad ve tarihte bir deneme zaten kayıtlı. Kaydedersen ikinci kez eklenir.</div>' : ''}
+                ${L ? `<div class="p-3 rounded-xl mb-1 text-[13px] leading-snug" style="background:var(--ios-fill)"><div class="font-semibold text-slate-800 dark:text-slate-100">${escHtml(r.kurum || 'Kurum')}</div>
+                    <div class="text-slate-600 dark:text-slate-300 mt-0.5">${escHtml(L.name)} · no ${escHtml(L.ogrNo)} · ${escHtml(L.sinifKod || '')}</div>
+                    <div class="text-slate-600 dark:text-slate-300">Kurum sıran <b>${L.sira}. / ${r.katilim}</b>${L.sinifDer ? ` · sınıf derecen <b>${L.sinifDer}.</b>` : ''}${L.avgTotal !== null && L.avgTotal !== undefined ? ` · kurum ort. ${fmtNum(L.avgTotal)} net` : ''}</div>
+                    <button type="button" class="text-brand font-semibold mt-1" onclick="showListePicker()">Bu ben değilim, başka satır seç</button></div>` : ''}
                 <span class="qf-lbl">Sınav adı</span><input id="krName" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(r.name)}">
                 <div class="qf-grid"><div><span class="qf-lbl">Tarih</span><input id="krDate" type="date" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${escHtml(r.date)}"></div>
                 <div><span class="qf-lbl">Tür</span><select id="krType" class="input-soft w-full rounded-xl p-2.5 text-sm" onchange="karneDraft.type=this.value; openKarneReview()">${['TYT', 'AYT', 'SAY'].map(t => `<option value="${t}" ${t === type ? 'selected' : ''}>${examTypeLabel(t)}</option>`).join('')}</select></div></div>
@@ -10943,11 +11104,11 @@ function karneParse(pages, opts) {
                     <td id="krN-${it.key}" class="font-semibold">${v.d !== undefined ? fmtNum(v.d - v.y / 4) : '—'}</td><td class="text-slate-400">${v.net !== undefined && v.net !== null ? fmtNum(v.net) : '—'}</td></tr>`; }).join('')}
                 </tbody></table></div>
                 <div class="flex justify-between text-[13px] mt-2"><span class="text-slate-500">Toplam net</span><b id="krTotal"></b></div>
-                <div class="qf-grid"><div><span class="qf-lbl">Yayın sıralaman</span><input id="krSira" type="number" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${r.sira ?? ''}"></div>
-                <div><span class="qf-lbl">Katılımcı</span><input id="krKat" type="number" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${r.katilim ?? ''}"></div></div>
+                <div class="qf-grid"><div><span class="qf-lbl">${L ? 'Kurum sıralaman' : 'Yayın sıralaman'}</span><input id="krSira" type="number" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${r.sira ?? ''}"></div>
+                <div><span class="qf-lbl">${L ? 'Kurumdaki öğrenci' : 'Katılımcı'}</span><input id="krKat" type="number" class="input-soft w-full rounded-xl p-2.5 text-sm" value="${r.katilim ?? ''}"></div></div>
                 ${r.puan ? `<div class="text-[13px] text-slate-500 mt-2">Karnedeki puan: <b class="text-slate-800 dark:text-slate-100">${fmtNum(r.puan)}</b></div>` : ''}
-                <span class="qf-lbl">Yanlış / boş konular</span>
-                <div class="text-[12px]">${Object.keys(wrong).length ? Object.entries(wrong).map(([k, list]) => `<div class="mb-2"><div class="font-semibold text-slate-700 dark:text-slate-200 mb-1"><span class="subj-dot" style="background:${subjectColor(k)}"></span>${escHtml(examKeyLabel(type, k))} <span class="font-normal text-slate-400">${list.filter(x => x.status === 'yanlis').length} yanlış · ${list.filter(x => x.status === 'bos').length} boş</span></div>${list.map(t => `<span class="kr-chip ${t.status}">${escHtml(t.konu)}</span>`).join('')}</div>`).join('') : '<span class="text-slate-400">Konu analizi bulunamadı</span>'}</div>
+                ${L ? '' : '<span class="qf-lbl">Yanlış / boş konular</span>'}
+                <div class="text-[12px]">${Object.keys(wrong).length ? Object.entries(wrong).map(([k, list]) => `<div class="mb-2"><div class="font-semibold text-slate-700 dark:text-slate-200 mb-1"><span class="subj-dot" style="background:${subjectColor(k)}"></span>${escHtml(examKeyLabel(type, k))} <span class="font-normal text-slate-400">${list.filter(x => x.status === 'yanlis').length} yanlış · ${list.filter(x => x.status === 'bos').length} boş</span></div>${list.map(t => `<span class="kr-chip ${t.status}">${escHtml(t.konu)}</span>`).join('')}</div>`).join('') : (L ? '' : '<span class="text-slate-400">Konu analizi bulunamadı</span>')}</div>
                 <button type="button" onclick="saveKarneExam()" class="btn-primary press-scale w-full mt-4 py-3.5 rounded-xl text-white font-semibold">Kaydet</button>
                 <button type="button" onclick="closeMiniModal()" class="w-full mt-2 py-3 text-brand font-semibold">Vazgeç</button>`);
             leaves.forEach(it => karneNetUpd(it.key, true));
@@ -10980,7 +11141,9 @@ function karneParse(pages, opts) {
             document.getElementById('examYayinSira').value = meta.sira || '';
             document.getElementById('examYayinKatilim').value = meta.kat || '';
             calcExamNets();
-            pendingKarne = { source: karneDraft.file, puan: karneDraft.puan || null, total: karneDraft.total, wrong };
+            const LL = karneDraft.liste;
+            pendingKarne = { source: karneDraft.file, puan: karneDraft.puan || null, total: karneDraft.total, wrong,
+                ...(LL ? { kurum: karneDraft.kurum || '', kurumSira: LL.sira, katilim: karneDraft.katilim, sinifDer: LL.sinifDer || null, subeDer: LL.subeDer || null, avg: LL.avg, avgTotal: LL.avgTotal, avgPuan: LL.avgPuan } : {}) };
             const before = state.exams.length;
             document.getElementById('examForm').requestSubmit();
             setTimeout(() => {
@@ -10991,6 +11154,17 @@ function karneParse(pages, opts) {
         }
         function karneDetailHtml(e) {
             const k = e.karne; if (!k) return '';
+            if (k.kurum) {
+                const mine = compactNets(e), keys = examLeafItems(e.type).map(x => x.key).filter(x => k.avg && k.avg[x] !== undefined);
+                return `<div class="pp-section">${escHtml(k.kurum)}</div>
+                    <div class="pp-group">
+                        <div class="pp-row"><span>Kurum sıran</span><span class="pp-val"><b>${k.kurumSira}.</b> / ${k.katilim}${k.sinifDer ? ` · sınıf ${k.sinifDer}.` : ''}</span></div>
+                        ${k.puan ? `<div class="pp-row"><span>Puanın</span><span class="pp-val"><b>${fmtNum(k.puan)}</b>${k.avgPuan ? ` · kurum ort. ${fmtNum(k.avgPuan)}` : ''}</span></div>` : ''}
+                        ${k.avgTotal !== null && k.avgTotal !== undefined ? `<div class="pp-row"><span>Toplam net</span><span class="pp-val"><b>${fmtNum(e.total)}</b> · kurum ort. ${fmtNum(k.avgTotal)} <span style="color:${e.total >= k.avgTotal ? 'rgb(var(--ios-green))' : 'rgb(var(--ios-red))'}">(${e.total >= k.avgTotal ? '+' : ''}${fmtNum(Math.round((e.total - k.avgTotal) * 100) / 100)})</span></span></div>` : ''}
+                    </div>
+                    ${keys.length ? `<div class="pp-section">Kurum ortalamasıyla</div><div class="pp-group" style="padding:4px 6px"><table class="pp-table"><thead><tr><th>Ders</th><th>Sen</th><th>Kurum ort.</th><th>Fark</th></tr></thead><tbody>${keys.map(x => { const a = mine[x] !== undefined ? mine[x] : null, b = k.avg[x], d = a === null ? null : Math.round((a - b) * 100) / 100;
+                        return `<tr><td><span class="subj-dot" style="background:${subjectColor(x)}"></span>${escHtml(examKeyLabel(e.type, x))}</td><td><b>${a === null ? '—' : fmtNum(a)}</b></td><td>${fmtNum(b)}</td><td style="color:${d === null ? 'var(--ios-label3)' : d >= 0 ? 'rgb(var(--ios-green))' : 'rgb(var(--ios-red))'}">${d === null ? '' : (d > 0 ? '+' : '') + fmtNum(d)}</td></tr>`; }).join('')}</tbody></table></div>` : ''}`;
+            }
             const groups = Object.entries(k.wrong || {});
             return `<div class="pp-section">Karne${k.puan ? ' · puan ' + fmtNum(k.puan) : ''}</div>
                 <div class="pp-group" style="padding:12px 16px">${groups.length ? groups.map(([key, list]) => `<div class="mb-2"><div class="text-[13px] font-semibold mb-1"><span class="subj-dot" style="background:${subjectColor(key)}"></span>${escHtml(examKeyLabel(e.type, key))} <span class="font-normal text-slate-400">· eksik / yanlış konular</span></div>${list.map(t => `<span class="kr-chip ${t.status}" title="${t.status === 'bos' ? 'Boş' : 'Yanlış'}">${escHtml(t.konu)}</span>`).join('')}</div>`).join('') : '<span class="text-[13px] text-slate-400">Bütün sorular doğru 🎉</span>'}
