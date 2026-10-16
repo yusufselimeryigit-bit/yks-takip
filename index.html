@@ -2115,6 +2115,35 @@
         @media (min-width: 1024px) { .ai-fab { bottom: 28px; right: 28px; } }
         @media (prefers-reduced-motion: reduce) { .ai-fab-blob, .ai-avatar.spin { animation: none; } }
         body.sheet-open .ai-fab, body.modal-open .ai-fab { opacity: 0; pointer-events: none; }
+        /* [v77] AI küresi: şeffaf gri cam küre, ince kavisli ışık çizgisi, kenarlarda prizma parıltısı */
+        .ai-fab-blob, .ai-avatar { --r: 3px; overflow: hidden; isolation: isolate; border-radius: 50% !important; font-size: 0 !important; color: transparent !important; text-shadow: none !important; transform: none; filter: none;
+            background:
+              radial-gradient(ellipse 5% 20% at 1% 50%, rgba(255,175,110,.9), rgba(255,150,80,0) 100%),
+              radial-gradient(ellipse 5% 20% at 99% 50%, rgba(175,210,255,.9), rgba(120,170,255,0) 100%),
+              radial-gradient(ellipse 9% 12% at 13% 80%, rgba(150,255,170,.45), rgba(255,230,120,.18) 60%, rgba(0,0,0,0) 100%),
+              radial-gradient(ellipse 70% 40% at 50% 50%, rgba(255,255,255,.20), rgba(255,255,255,0) 100%),
+              radial-gradient(ellipse 85% 70% at 50% 108%, rgba(255,255,255,.32), rgba(255,255,255,0) 70%),
+              radial-gradient(circle at 50% 42%, #2f3036 0%, #1c1d21 55%, #0d0d10 100%) !important;
+            box-shadow: 0 0 0 .5px rgba(255,255,255,.22), 0 0 14px rgba(200,212,255,.22), 0 0 34px rgba(200,212,255,.10), 0 10px 22px -8px rgba(0,0,0,.6) !important; animation: aiFloat 6s ease-in-out infinite !important; }
+        .ai-avatar.sm { --r: 1.5px; } .ai-avatar { position: relative !important; }
+        .ai-fab-blob::before, .ai-avatar::before { content: ''; position: absolute; left: 7%; right: 7%; top: 46.5%; height: 8%; z-index: 1; border-radius: 50% 50% 50% 50% / 38% 38% 62% 62%; transform-origin: 50% 50%;
+            background: radial-gradient(ellipse 50% 50% at 50% 55%, #fff 0%, #fff 22%, rgba(255,240,220,.9) 42%, rgba(190,210,255,.45) 70%, rgba(140,170,255,0) 100%);
+            filter: blur(.7px) drop-shadow(0 0 calc(var(--r) * 1.6) rgba(215,228,255,.85)); animation: aiFlare 6s ease-in-out infinite; }
+        .ai-fab-blob::after, .ai-avatar::after { content: ''; position: absolute; inset: 0; z-index: 2; border-radius: 50%; pointer-events: none;
+            background: radial-gradient(ellipse 60% 26% at 50% 4%, rgba(255,255,255,.16), transparent 100%);
+            box-shadow: inset 0 0 0 .8px rgba(255,255,255,.22), inset 0 calc(var(--r) * -.45) calc(var(--r) * .7) 0 rgba(255,255,255,.75), inset calc(var(--r) * .5) 0 calc(var(--r) * 1.2) calc(var(--r) * -.4) rgba(255,160,90,.55), inset calc(var(--r) * -.5) 0 calc(var(--r) * 1.2) calc(var(--r) * -.4) rgba(120,170,255,.6); }
+        .ai-fab::after { display: none; }
+        .ai-fab::before { content: ''; position: absolute; inset: -2px; border-radius: 50%; pointer-events: none; opacity: 0; border: 1.5px solid rgba(220,230,255,.75); }
+        .ai-fab .ai-fab-ic { display: none; }
+        @keyframes aiFlare { 0%, 100% { transform: scaleX(.86) rotate(-3.5deg); opacity: .85; } 50% { transform: scaleX(1) rotate(2deg) translateY(-3%); opacity: 1; } }
+        @keyframes aiFlareBusy { 0%, 100% { transform: scaleX(.8) rotate(-9deg) scaleY(1); opacity: .9; } 50% { transform: scaleX(1.05) rotate(9deg) scaleY(1.6); opacity: 1; } }
+        @keyframes aiFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-1.2%) scale(1.035); } }
+        @keyframes aiRing { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.75); opacity: 0; } }
+        body.ai-busy .ai-fab-blob::before, .ai-avatar.spin::before { animation: aiFlareBusy 1.5s ease-in-out infinite; }
+        body.ai-busy .ai-fab-blob { box-shadow: 0 0 0 .5px rgba(255,255,255,.3), 0 0 22px 2px rgba(200,212,255,.55), 0 0 44px 8px rgba(255,170,100,.2) !important; }
+        body.ai-busy .ai-fab::before { animation: aiRing 1.5s ease-out infinite; }
+        .ai-avatar.spin { animation: aiFloat 1.6s ease-in-out infinite !important; filter: none !important; }
+        @media (prefers-reduced-motion: reduce) { .ai-fab-blob, .ai-avatar, .ai-fab-blob::before, .ai-avatar::before { animation: none !important; } }
 
         /* [v61] 5 sekme (AI Koç) olduğunda sekme genişliği ekrana göre: taşma olmasın */
         body.tb5 #mobileTabBar .mtab { width: clamp(44px, calc((100vw - 128px) / 5), 62px) !important; }
@@ -2340,6 +2369,47 @@
         .dh-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 12px; background: var(--ios-fill); margin-bottom: 5px; font-size: 12.5px; }
         .dh-row .tx { flex: 1; min-width: 0; } .dh-row .tx small { display: block; color: var(--ios-label2); font-size: 11px; }
         .dh-row button { padding: 5px 11px; border-radius: 99px; background: rgb(var(--brand-rgb)); color: #fff; font-size: 12px; font-weight: 600; flex: none; }
+        /* [v79] LIQUID GLASS CİLASI: cam kenar ışığı, dokunma ışığı, canlı arka plan, yaylı geçişler, saat kartı */
+        @property --sheen { syntax: '<angle>'; inherits: true; initial-value: 0deg; }
+        :root { --tp: 0; --sheen: 0deg; --tod-a: 90 140 255; --tod-b: 190 120 255; }
+        button:not(.ai-fab):not(.mtab):not(.seg-btn):active, [role="button"]:active { transition: transform .18s cubic-bezier(.34,1.56,.64,1); }
+        /* canlı arka plan */
+        #aurora { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+        #aurora i { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; filter: blur(70px); opacity: .28; will-change: transform; }
+        #aurora i:nth-child(1) { left: -20vmax; top: -18vmax; background: radial-gradient(circle, rgb(var(--brand-rgb)) 0%, transparent 65%); animation: auroraA 38s ease-in-out infinite alternate; }
+        #aurora i:nth-child(2) { right: -24vmax; top: 20vh; background: radial-gradient(circle, rgb(var(--tod-a)) 0%, transparent 65%); animation: auroraB 46s ease-in-out infinite alternate; }
+        #aurora i:nth-child(3) { left: 10vw; bottom: -30vmax; background: radial-gradient(circle, rgb(var(--tod-b)) 0%, transparent 65%); animation: auroraC 52s ease-in-out infinite alternate; }
+        html.dark #aurora i { opacity: .22; }
+        body[data-tab="aikoc"] #aurora i:nth-child(2) { background: radial-gradient(circle, rgb(255 150 80) 0%, transparent 65%); }
+        body[data-tab="aikoc"] #aurora i:nth-child(3) { background: radial-gradient(circle, rgb(110 150 255) 0%, transparent 65%); }
+        body.ai-busy #aurora i { opacity: .38; animation-duration: 14s; }
+        @keyframes auroraA { to { transform: translate(18vmax, 14vmax) scale(1.15); } }
+        @keyframes auroraB { to { transform: translate(-22vmax, 12vmax) scale(.9); } }
+        @keyframes auroraC { to { transform: translate(14vmax, -16vmax) scale(1.2); } }
+        /* büyük başlık kaydırırken küçülür */
+        @media (max-width: 1023px) { main > section.tab-content h1.hero-title { transform-origin: 0 60%; transform: translateY(calc(var(--tp) * -3px)) scale(calc(1 - var(--tp) * .09)); opacity: calc(1 - var(--tp) * .45); will-change: transform; } }
+        header.glass-nav { box-shadow: 0 1px 0 rgba(0,0,0,calc(var(--tp) * .07)); }
+        /* yaylı geçişler */
+        @keyframes springSheet { 0% { transform: translateY(70%); opacity: .6; } 60% { transform: translateY(-1.6%); opacity: 1; } 100% { transform: none; } }
+        @keyframes springPop { 0% { transform: scale(.9); opacity: 0; } 60% { transform: scale(1.02); opacity: 1; } 100% { transform: none; } }
+        @keyframes tabSpring { 0% { transform: translateX(22px); opacity: 0; } 55% { transform: translateX(-2px); opacity: 1; } 100% { transform: none; opacity: 1; } }
+        .tab-fade { animation: tabSpring .5s cubic-bezier(.22,1,.36,1) both !important; }
+        @media (max-width: 639px) { [role="dialog"]:not(.hidden):not(#dayModal) > div.relative { animation: springSheet .5s cubic-bezier(.22,1,.36,1) both; } }
+        @media (min-width: 640px) { [role="dialog"]:not(.hidden) > div.relative { animation: springPop .42s cubic-bezier(.22,1,.36,1) both; } }
+        /* rakam akışı */
+        .rolling { font-variant-numeric: tabular-nums; }
+        /* kilit ekranı saat kartı */
+        .lock-clock { padding: 6px 2px 14px; margin-bottom: 12px; border-bottom: .5px solid var(--ios-sep); }
+        .lock-clock .lc-date { font-size: 14px; font-weight: 600; color: var(--ios-label2); letter-spacing: -.01em; }
+        .lock-clock .lc-time { font-size: clamp(54px, 17vw, 84px); font-weight: 200; letter-spacing: -.045em; line-height: 1; font-variant-numeric: tabular-nums; margin: 2px 0 10px;
+            background: linear-gradient(180deg, var(--ios-label) 20%, rgb(var(--brand-rgb)) 140%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .lock-clock .lc-time b { font-weight: 200; }
+        .lock-clock .lc-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+        .lock-clock .lc-pill { font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 99px; background: var(--ios-fill); color: var(--ios-label); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lock-clock .lc-pill.b { background: rgb(var(--brand-rgb) / .14); color: rgb(var(--brand-rgb)); }
+        .lock-clock .lc-quote { font-size: 12.5px; color: var(--ios-label2); margin-top: 10px; line-height: 1.4; font-style: italic; }
+        @keyframes lcBlink { 50% { opacity: .25; } }
+        @media (prefers-reduced-motion: reduce) { #aurora i, .tab-fade, .lock-clock .lc-time b { animation: none !important; } }
         .plan-tg { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 12px; } .plan-tg .plan-full, .plan-tg > .plan-full { grid-column: 1 / -1; }
         .plan-pick { padding: 10px; border-radius: 14px; background: var(--ios-fill); }
         .plan-pick-list { max-height: 230px; overflow-y: auto; display: grid; gap: 4px; -webkit-overflow-scrolling: touch; }
@@ -5695,7 +5765,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v75';
+        const APP_VERSION = 'firebase-v81';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -14744,6 +14814,77 @@ function listeRowToKeys(groups, vals) {
             delete TAB_RENDERERS.aikoc;
             try { tbMeasure(); updateTabBar(false); } catch (e) {}
         }
+        setInterval(() => { try { document.body.classList.toggle('ai-busy', !!aiBusy); } catch (e) {} }, 300);
+        // ============ [v79] LIQUID GLASS CİLASI ============
+        (function glassPolish() {
+            const reduce = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // canlı arka plan + gün içi ton
+            const todTone = () => { const h = new Date().getHours();
+                if (h >= 5 && h < 11) return ['255 190 110', '255 130 170'];      // sabah: şeftali / pembe
+                if (h < 17 && h >= 11) return ['90 170 255', '120 220 220'];       // öğle: mavi / turkuaz
+                if (h >= 17 && h < 21) return ['255 140 90', '190 100 255'];       // akşam: turuncu / mor
+                return ['80 100 230', '150 90 240']; };                            // gece: çivit / mor
+            function applyTod() { const [a, b] = todTone(); const r = document.documentElement.style; r.setProperty('--tod-a', a); r.setProperty('--tod-b', b); }
+            if (!document.getElementById('aurora')) { const a = document.createElement('div'); a.id = 'aurora'; a.setAttribute('aria-hidden', 'true'); a.innerHTML = '<i></i><i></i><i></i>'; document.body.prepend(a); }
+            applyTod(); setInterval(applyTod, 600000);
+            // kaydırma: başlık küçülme + cam parıltı açısı
+            let st = false;
+            addEventListener('scroll', () => { if (st) return; st = true; requestAnimationFrame(() => { st = false; const y = window.scrollY; const r = document.documentElement.style;
+                r.setProperty('--tp', Math.max(0, Math.min(1, y / 90)).toFixed(3)); }); }, { passive: true });
+            // dokunma ışığı + hafif titreşim
+            let lastBuzz = 0;
+            const SEL = 'button, [role="button"], .press-scale, .mtab, .today-row.cursor-pointer, .soft-card[onclick], a[href]';
+            addEventListener('pointerdown', e => {
+                const el = e.target.closest && e.target.closest(SEL); if (!el || el.disabled) return;
+                if (e.pointerType === 'touch' && Date.now() - lastBuzz > 80) { lastBuzz = Date.now(); try { navigator.vibrate && navigator.vibrate(6); } catch (x) {} }
+            }, { passive: true, capture: true });
+            // rakam akışı
+            const seen = new WeakSet(); let busy = false;
+            const NUM = /-?\d[\d.,]*/;
+            function parse(t) { const m = NUM.exec(t); if (!m) return null; const raw = m[0]; const dec = /[.,]\d{1,2}$/.test(raw) && !/\d[.,]\d{3}/.test(raw) ? (raw.split(/[.,]/).pop().length) : 0;
+                const v = parseFloat(raw.replace(',', '.')); if (isNaN(v)) return null; return { m, v, dec, comma: raw.includes(',') }; }
+            function roll(el, from, to, p) {
+                const t0 = performance.now(), dur = 650, tok = (el.__rt = (el.__rt || 0) + 1); el.classList.add('rolling'); const pre = p.pre, post = p.post;
+                const fmt = x => (p.dec ? x.toFixed(p.dec) : Math.round(x).toString());
+                const step = now => { if (el.__rt !== tok) return; const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4); const v = from + (to - from) * e; busy = true; let txt = fmt(v); if (p.comma) txt = txt.replace('.', ','); el.textContent = pre + txt + post; el.__lastTxt = el.textContent; busy = false; if (k < 1) requestAnimationFrame(step); else el.classList.remove('rolling'); };
+                requestAnimationFrame(step);
+            }
+            const mo = new MutationObserver(list => { if (busy || reduce()) return; for (const r of list) { const el = r.target.nodeType === 3 ? r.target.parentElement : r.target; if (!el || !el.classList || !el.classList.contains('stat-num')) continue;
+                const nt = el.textContent, a = parse(nt), old = el.__lastTxt; el.__lastTxt = nt; if (!a || old == null || old === nt) continue; const b = parse(old); if (!b) continue;
+                if (nt.replace(NUM, '#') !== old.replace(NUM, '#')) continue; if (Math.abs(a.v - b.v) < 1 && !a.dec) continue; roll(el, b.v, a.v, { dec: a.dec, comma: a.comma, pre: nt.slice(0, a.m.index), post: nt.slice(a.m.index + a.m[0].length) }); } });
+            function scan() { document.querySelectorAll('.stat-num').forEach(el => { if (seen.has(el)) return; seen.add(el); el.__lastTxt = el.textContent; mo.observe(el, { childList: true, characterData: true, subtree: true }); }); }
+            scan(); setInterval(scan, 1500);
+            // grafik animasyonları
+            function chartPolish() { if (!window.Chart || !Chart.defaults) return; try {
+                Chart.defaults.animation = Object.assign({}, Chart.defaults.animation, { duration: 900, easing: 'easeOutQuart' });
+                const d = Chart.defaults.datasets && Chart.defaults.datasets.line; if (d) d.animations = { x: { type: 'number', easing: 'easeOutQuart', duration: 700, from: NaN, delay(c) { if (c.type !== 'data' || c.xStarted) return 0; c.xStarted = true; return c.index * 35; } },
+                    y: { type: 'number', easing: 'easeOutQuart', duration: 700, from: c => c.chart.scales.y ? c.chart.scales.y.getPixelForValue(0) : 0, delay(c) { if (c.type !== 'data' || c.yStarted) return 0; c.yStarted = true; return c.index * 35; } } };
+                Object.assign(Chart.defaults.plugins.tooltip, { backgroundColor: 'rgba(24,24,30,.74)', borderColor: 'rgba(255,255,255,.22)', borderWidth: 1, cornerRadius: 16, padding: 12, caretSize: 0, displayColors: false, titleFont: { weight: '600', size: 12 }, bodyFont: { size: 13 } });
+            } catch (e) {} }
+            chartPolish(); setTimeout(chartPolish, 1500);
+        })();
+
+        // ---- Kilit ekranı gibi saat kartı (Bugün kartının üstünde) ----
+        function lockClockHtml() {
+            const now = new Date(), today = localDateStr();
+            const hm = String(now.getHours()).padStart(2, '0') + '<b>:</b>' + String(now.getMinutes()).padStart(2, '0');
+            const date = now.toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long' });
+            const pills = [];
+            const ex = state.settings && state.settings.examDate;
+            if (ex) { const left = Math.max(0, Math.ceil((new Date(ex + 'T09:00:00') - now) / 86400000)); pills.push(`<span class="lc-pill b">YKS'ye ${left} gün</span>`); }
+            const nowHM = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+            const bl = (state.planBlocks || []).filter(b => b.date === today && !b.completed).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+            const nx = bl.find(b => (b.time || '99') >= nowHM) || bl[0];
+            if (nx) pills.push(`<span class="lc-pill">${nx.time ? escHtml(nx.time) + ' · ' : ''}${escHtml(nx.subject || nx.topic || 'Plan')}</span>`);
+            else pills.push('<span class="lc-pill">Bugün plan bloğu yok</span>');
+            try { const st = computeStreak(); const n = typeof st === 'object' ? (st.current || st.count || 0) : st; if (n) pills.push(`<span class="lc-pill">🔥 ${n} gün seri</span>`); } catch (e) {}
+            const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+            const q = (typeof MOTIVATION_QUOTES !== 'undefined' && MOTIVATION_QUOTES.length) ? MOTIVATION_QUOTES[doy % MOTIVATION_QUOTES.length] : '';
+            return `<div class="lock-clock"><div class="lc-date">${date}</div><div class="lc-time">${hm}</div><div class="lc-pills">${pills.join('')}</div>${q ? `<div class="lc-quote">“${escHtml(q)}”</div>` : ''}</div>`;
+        }
+        (function () { const orig = renderTodayCard; renderTodayCard = function () { orig.apply(this, arguments); try { const box = document.getElementById('todayBody'); if (box && !box.querySelector('.lock-clock')) box.insertAdjacentHTML('afterbegin', lockClockHtml()); } catch (e) {} };
+            setInterval(() => { const c = document.querySelector('.lock-clock'); if (c && !document.hidden) { const n = document.createElement('div'); n.innerHTML = lockClockHtml(); c.replaceWith(n.firstChild); } }, 20000); })();
+
         function aiFabUpdate() { const f = document.getElementById('aiFab'); if (f) f.classList.toggle('hidden', !canSeeAi() || currentTabId === 'aikoc'); }
         function aiSave() { try { localStorage.setItem(pk('yks_ai_chat'), JSON.stringify(aiMsgs.slice(-40).map(m => ({ ...m, img: m.thumb || null, thumb: undefined, pending: undefined })))); } catch (e) {} }
 
