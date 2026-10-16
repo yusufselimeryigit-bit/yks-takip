@@ -2257,6 +2257,40 @@
         /* Ses paneli */
         .amb-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
         .amb-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 11px; color: var(--ios-label2); }
+
+        /* ===== [v70] Plan karnesi · şablonlar · puan/net · AKBİM geçmişi · YBS sayacı ===== */
+        .pk-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
+        .pk-nav { width: 36px; height: 36px; border-radius: 50%; background: var(--ios-fill); font-size: 18px; font-weight: 700; flex: none; }
+        .pk-top { display: flex; gap: 16px; align-items: center; }
+        .pk-ring { --p: 0; width: 96px; height: 96px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; background: conic-gradient(rgb(var(--brand-rgb)) calc(var(--p) * 1%), rgba(118,118,128,.18) 0); position: relative; }
+        .pk-ring::before { content: ''; position: absolute; inset: 9px; border-radius: 50%; background: var(--ios-card, #fff); }
+        .pk-ring b { position: relative; font-size: 22px; letter-spacing: -.02em; }
+        .pk-stats { display: grid; gap: 6px; min-width: 0; flex: 1; font-size: 13px; }
+        .pk-stats div { display: flex; justify-content: space-between; gap: 8px; } .pk-stats span { color: var(--ios-label2); }
+        .pk-days { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 6px; margin-top: 16px; }
+        .pk-day { text-align: center; font-size: 10.5px; color: var(--ios-label2); min-width: 0; }
+        .pk-bar { height: 54px; border-radius: 8px; background: rgba(118,118,128,.14); margin: 4px 0; position: relative; overflow: hidden; display: flex; align-items: flex-end; }
+        .pk-bar i { display: block; width: 100%; background: rgb(var(--ios-green)); border-radius: 0 0 8px 8px; }
+        .pk-day.today b { color: rgb(var(--brand-rgb)); }
+        .tpl-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 14px; background: var(--ios-fill); min-width: 0; }
+        .tpl-row .nm { flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .tpl-row .nm small { display: block; font-weight: 400; color: var(--ios-label2); font-size: 11px; }
+        .tpl-btn { padding: 7px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 600; background: rgb(var(--brand-rgb) / .12); color: rgb(var(--brand-rgb)); white-space: nowrap; }
+        .tpl-btn.del { background: rgb(var(--ios-red) / .1); color: rgb(var(--ios-red)); }
+        .v70-set { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; font-size: 13px; border-top: .5px solid rgba(120,120,128,.2); }
+        .v70-set select { max-width: 150px; }
+        .ah-grp { margin-top: 14px; } .ah-grp h3 { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ios-label2); margin-bottom: 6px; }
+        .ah-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 12px; background: var(--ios-fill); margin-bottom: 5px; font-size: 12.5px; min-width: 0; }
+        .ah-row .t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ah-row .tr { flex: none; font-variant-numeric: tabular-nums; color: var(--ios-label2); font-size: 11.5px; }
+        .ybs-hero { padding: 16px; border-radius: 20px; background: linear-gradient(135deg, rgb(var(--brand-rgb) / .14), rgba(138,63,252,.12)); }
+        .ybs-hero b { display: block; font-size: 34px; letter-spacing: -.03em; line-height: 1.1; }
+        .ybs-track { height: 10px; border-radius: 6px; background: rgba(118,118,128,.2); margin: 12px 0 4px; overflow: hidden; } .ybs-track i { display: block; height: 100%; background: linear-gradient(90deg, rgb(var(--brand-rgb)), #8a3ffc); border-radius: 6px; }
+        .ybs-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--ios-fill); margin-top: 6px; font-size: 13px; min-width: 0; }
+        .ybs-row.top { box-shadow: inset 0 0 0 2px rgb(var(--ios-green)); background: rgb(var(--ios-green) / .08); }
+        .ybs-row .tr { flex: none; font-weight: 700; font-variant-numeric: tabular-nums; }
+        .aw-note { padding: 10px; border-radius: 14px; background: var(--ios-fill); margin-bottom: 6px; display: flex; gap: 8px; align-items: center; min-width: 0; font-size: 12.5px; }
+        .sw-brk { margin-top: 10px; padding: 10px 12px; border-radius: 14px; background: rgb(var(--ios-orange) / .12); font-size: 13px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .sw-brk button { padding: 6px 12px; border-radius: 999px; background: rgb(var(--ios-orange)); color: #fff; font-weight: 600; font-size: 12px; }
         .plan-tg { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 12px; } .plan-tg .plan-full, .plan-tg > .plan-full { grid-column: 1 / -1; }
         .plan-pick { padding: 10px; border-radius: 14px; background: var(--ios-fill); }
         .plan-pick-list { max-height: 230px; overflow-y: auto; display: grid; gap: 4px; -webkit-overflow-scrolling: touch; }
@@ -3016,6 +3050,11 @@
                     </button>
 
                     <div class="w-full mt-4 pt-4 border-t border-black/5 dark:border-white/10">
+                        <div class="v70-set" style="border-top:0;padding-top:0"><span>☕ Mola hatırlat</span><select id="swBreakSel" onchange="setSwBreak(this.value)" class="input-soft rounded-xl p-2 text-xs"></select></div>
+                        <div class="v70-set"><span>Plan bloğunu otomatik tamamla</span><input type="checkbox" id="autoPlanChk" onchange="setAutoPlan(this.checked)" class="accent-brand"></div>
+                        <div id="swBrkBar"></div>
+                    </div>
+                    <div class="w-full mt-4 pt-4 border-t border-black/5 dark:border-white/10">
                         <div class="text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1.5">
                             <i data-lucide="waves" class="w-3.5 h-3.5"></i>
                             <span>Odaklanma Sesleri</span>
@@ -3772,7 +3811,22 @@
                 <div id="simBody"></div>
             </div>
 
-            </section>
+            
+            <!-- [v70] Puan & net grafiği -->
+            <div data-card="puannet" id="puanNetCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <div class="flex items-start justify-between gap-3 mb-3 flex-wrap">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2"><i data-lucide="line-chart" class="w-5 h-5 text-brand"></i><span>Puan & Net Gelişimi</span></h2>
+                    <div class="v69-seg" id="pnSeg"></div>
+                </div>
+                <div class="relative h-64"><canvas id="chartPuanNet"></canvas></div>
+                <div id="pnNote" class="v69-h mt-3"></div>
+            </div>
+            <!-- [v70] AKBİM konu geçmişi -->
+            <div data-card="akbimhist" id="akbimHistCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="history" class="w-5 h-5 text-brand"></i><span>AKBİM Konu Geçmişi</span></h2>
+                <div id="akbimHistBody"></div>
+            </div>
+        </section>
 
         <!-- TAB: WRONG QUESTION NOTEBOOK -->
         <section id="content-tekrar" class="tab-content hidden grid grid-cols-1 gap-6">
@@ -3818,6 +3872,12 @@
                     </div>
                 </div>
                 <div id="flashBody"></div>
+            </div>
+        
+            <!-- [v70] AKBİM ↔ Yanlış defteri -->
+            <div data-card="akbimwrong" id="akbimWrongCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="link" class="w-5 h-5 text-brand"></i><span>AKBİM ↔ Yanlış Defteri</span></h2>
+                <div id="akbimWrongBody"></div>
             </div>
         </section>
 
@@ -4006,6 +4066,21 @@
                     </div>
                 </div>
                 <div id="planBlocksContainer" class="space-y-2"></div>
+            </div>
+        
+            <!-- [v70] Plan karnesi -->
+            <div data-card="plankarne" id="planKarneCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-3 flex items-center space-x-2">
+                    <i data-lucide="target" class="w-5 h-5 text-brand"></i><span>Haftalık Plan Karnesi</span>
+                </h2>
+                <div id="planKarneBody"></div>
+            </div>
+            <!-- [v70] Şablonlar ve otomasyon -->
+            <div data-card="plantools" id="planToolsCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-3 flex items-center space-x-2">
+                    <i data-lucide="copy" class="w-5 h-5 text-brand"></i><span>Hafta Şablonları & Otomasyon</span>
+                </h2>
+                <div id="planToolsBody"></div>
             </div>
         </section>
 
@@ -4322,6 +4397,12 @@
                 <p class="text-[11px] text-slate-400 dark:text-slate-500 mb-4">Son 3 denemenin ortalamasından başlar; her dersteki boş kalan netin aynı oranını kapatacak şekilde hedefe gereken netleri dağıtır. Deneme sekmesindeki yaklaşık katsayılar ve OBP kullanılır.</p>
                 <div id="reverseBox"></div>
             </div>
+        
+            <!-- [v70] Boğaziçi YBS hedef sayacı -->
+            <div data-card="ybs" id="ybsCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-3 flex items-center space-x-2"><i data-lucide="flag" class="w-5 h-5 text-brand"></i><span>YBS Hedef Sayacı</span></h2>
+                <div id="ybsBody"></div>
+            </div>
         </section>
 
         <!-- TAB 3: ANALYTICS -->
@@ -4364,6 +4445,7 @@
                         <span id="reportWeekLabel" class="flex-1 sm:flex-none text-xs font-semibold text-slate-700 dark:text-slate-200 min-w-[140px] text-center">—</span>
                         <button type="button" onclick="shiftReportWeek(1)" class="press-scale p-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-500"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
                         <button type="button" onclick="shareWeeklyReport()" class="btn-primary press-scale text-white font-semibold px-4 py-2 rounded-full text-[11px] flex items-center justify-center gap-1.5 w-full sm:w-auto"><i data-lucide="share-2" class="w-3.5 h-3.5"></i><span>Resim Olarak Paylaş</span></button>
+                        <button type="button" onclick="weeklyPdf()" class="press-scale font-semibold px-4 py-2 rounded-full text-[11px] flex items-center justify-center gap-1.5 w-full sm:w-auto bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200"><i data-lucide="file-text" class="w-3.5 h-3.5"></i><span>PDF (tek sayfa)</span></button>
                     </div>
                 </div>
                 <div id="weeklyReport"></div>
@@ -5375,6 +5457,7 @@
             kursLog: {},         // [YENİ v47] kurs dersi kaydı: 'tarih_dersId' → 'done' | 'skip'
             denemeTakvimi: [],   // [YENİ v47] yaklaşan denemeler
             flashcards: [],      // [YENİ v47] ezber kartları
+            planTemplates: [],   // [v70] kayıtlı hafta şablonları
             kursProgrami: [],    // [YENİ v45] haftalık kurs + özel ders programı (sadece Yusuf'ta görünür)
             pdfBooks: [],        // [YENİ v42] PDF kitap listesi (dosyanın kendisi cihazda, IndexedDB)
             schools: [
@@ -5505,8 +5588,8 @@
         // Eski localStorage verisi — sadece ilk açılışta buluta taşımak için okunur.
         const LEGACY_STORAGE_KEY = 'yks_takip_data_v1';
 
-        const SYNC_KEYS = ['dailyQuiz', 'aiWeekly', 'topicReviews', 'homework', 'galleryArchive', 'dailyGoals', 'shieldDays', 'kursNotlari', 'wellness', 'kursLog', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'pdfBooks', 'tercihler', 'activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'curriculumDates', 'dayReviews', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
-        const ARRAY_KEYS = ['topicReviews', 'homework', 'galleryArchive', 'kursNotlari', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'pdfBooks', 'tercihler', 'activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
+        const SYNC_KEYS = ['dailyQuiz', 'aiWeekly', 'topicReviews', 'homework', 'galleryArchive', 'dailyGoals', 'shieldDays', 'kursNotlari', 'wellness', 'kursLog', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'planTemplates', 'pdfBooks', 'tercihler', 'activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'curriculumDates', 'dayReviews', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
+        const ARRAY_KEYS = ['topicReviews', 'homework', 'galleryArchive', 'kursNotlari', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'planTemplates', 'pdfBooks', 'tercihler', 'activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
         const OBJECT_KEYS = ['offDays', 'curriculum', 'curriculumDates', 'dayReviews', 'watchedVideos', 'kursLog', 'wellness', 'dailyGoals', 'shieldDays', 'aiWeekly', 'dailyQuiz'];   // [v49] kursLog eksikti: buluttan okunurken boşalıyordu
         const DEFAULT_SETTINGS = JSON.parse(JSON.stringify(state.settings));
 
@@ -5516,7 +5599,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v69';
+        const APP_VERSION = 'firebase-v72';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -6182,6 +6265,7 @@
                 if (tabId === 'liderlik') {
                     renderLeaderboard();
                 }
+                if (tabId === 'analytics') { try { renderRoom(); } catch (e) {} }
                 if (tabId === 'notlar') {
                     renderQuickNotes();
                 }
@@ -7097,18 +7181,18 @@
                 ['denge', () => scheduleDashBalance()]
             ],
             exams: [
-                ['deneme tablosu', () => renderExamTable()], ['trend', () => renderExamTrend()], ['puan', () => renderScoreEstimator()], ['simülatör', () => renderSimulator()],
+                ['deneme tablosu', () => renderExamTable()], ['trend', () => renderExamTrend()], ['puan', () => renderScoreEstimator()], ['simülatör', () => renderSimulator()], ['puan-net', () => renderPuanNet()], ['akbim geçmişi', () => renderAkbimHistory()],
                 ['ders grafiği', () => renderSubjectChart()], ['eksikler', () => renderSubjectGaps()], ['süre', () => renderExamTimeAnalysis()],
                 ['karşılaştır', () => renderExamCompare()], ['borsa', () => renderStocks()], ['çıkmış', () => renderCikmis()],
                 ['deneme takvimi', () => renderDenemeTakvim()], ['sıralama', () => renderExamRanks()], ['hata analizi', () => renderMistakeAnalysis()], ['en çok yanlış', () => renderTopWrong()], ['projeksiyon', () => renderProjection()], ['kurum sırası', () => renderKurumRank()], ['strateji', () => renderStrategy()]
             ],
-            tekrar: [['yanlışlar', () => renderWrongNotes()], ['gelen sorular', () => renderInbox()], ['ezber', () => renderFlashDecks()]],
+            tekrar: [['akbim-defter', () => renderAkbimWrong()], ['yanlışlar', () => renderWrongNotes()], ['gelen sorular', () => renderInbox()], ['ezber', () => renderFlashDecks()]],
             konular: [['playlist', () => renderPlaylistProgress()]],
             mufredat: [['müfredat', () => renderMufredat()], ['mini hedefler', () => renderTopicGoals()]],
-            plan: [['plan', () => renderPlanBlocks()], ['notlar', () => renderQuickNotes()]],
+            plan: [['plan', () => renderPlanBlocks()], ['karne', () => renderPlanKarne()], ['şablon', () => renderPlanTools()], ['notlar', () => renderQuickNotes()]],
             analytics: [
                 ['haftalık rapor', () => renderWeeklyReport()], ['aylık rapor', () => fillReportMonths()], ['isabet', () => renderAccuracyAnalysis()],
-                ['grafikler', () => renderCharts()], ['dönem', () => renderPeriodComparison(currentPeriodMode)], ['hafta günü', () => renderWeekdayChart()], ['biyoritim', () => renderBiorhythm()],
+                ['grafikler', () => renderCharts()], ['dönem', () => renderPeriodComparison(currentPeriodMode)], ['hafta günü', () => renderWeekdayChart()], ['biyoritim', () => renderBiorhythm()], ['oda', () => renderRoom()],
                 ['meydan okuma', () => renderChallenge()], ['liderlik', () => renderLeaderboard()], ['düello', () => renderDuo()], ['ortak hedef', () => renderSharedGoal()]
             ],
             liderlik: [['oda', () => renderRoom()], ['liderlik', () => renderLeaderboard()]],
@@ -7118,7 +7202,7 @@
             galeri: [['galeri', () => renderGallery()]],
             aikoc: [['ai hub', () => renderAiHub()]],
             kurs: [['kurs programı', () => renderKurs()]],
-            hedefokul: [['okullar', () => renderSchools()], ['gereken netler', () => renderReverseCalc()], ['tercih', () => renderTercihList(true)], ['hesaplayıcı', () => renderRankCalc()]],
+            hedefokul: [['ybs', () => renderYbs()], ['okullar', () => renderSchools()], ['gereken netler', () => renderReverseCalc()], ['tercih', () => renderTercihList(true)], ['hesaplayıcı', () => renderRankCalc()]],
             settings: [['veri boyutu', () => renderStorageUsage()], ['ayar listesi', () => renderIosSettings()], ['pdf kitaplar', () => renderPdfBooks()], ['ders renkleri', () => renderSubjColors()], ['simge rozeti', () => initIconBadgeToggle()], ['tasarım', () => renderDesignPicker()], ['kısayollar', () => renderShortcuts()], ['güvenlik', () => renderSecurity()]]
         };
         const dirtyTabs = new Set();
@@ -8859,7 +8943,7 @@
         function openPomoLogModal(minutes, source) {
             pomoLogSource = source === 'stopwatch' ? 'stopwatch' : 'pomodoro';
             const isSw = pomoLogSource === 'stopwatch';
-            const last = state.settings.lastPomoSubject || document.getElementById('actSubject').value;
+            const __cand = planCandidateBlock(), last = __cand ? __cand.subject : (state.settings.lastPomoSubject || document.getElementById('actSubject').value);
             const subjOpts = SUBJECT_GROUPS.map(g => `<optgroup label="${g.exam}">` + g.subjects.map(x => `<option value="${escHtml(x.value)}" ${x.value === last ? 'selected' : ''}>${escHtml(x.label)}</option>`).join('') + `</optgroup>`).join('');
             const sel = 'input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100';
             openMiniModal(`
@@ -8930,6 +9014,7 @@
                 duration
             };
             state.activities.unshift(activity);
+            const planDone = planAutoComplete(activity);      // [v70]
             state.settings.lastPomoSubject = subject;
             state.settings.lastPomoType = type;
             if (pomoLogSource === 'stopwatch') swClear();
@@ -8937,7 +9022,7 @@
             updateUI();
             closeMiniModal();
             playFeedbackSound('success');
-            showToast(activity.questions ? `Kaydedildi: ${activity.questions} soru · Net ${activityNet(activity)} · ${duration} dk` : `Kaydedildi: ${duration} dk ${type.toLowerCase()}`);
+            showToast((activity.questions ? `Kaydedildi: ${activity.questions} soru · Net ${activityNet(activity)} · ${duration} dk` : `Kaydedildi: ${duration} dk ${type.toLowerCase()}`) + (planDone ? ' · plan bloğu tamamlandı ✓' : ''));
         }
 
         // ================= [YENİ] Gün sonu değerlendirmesi =================
@@ -11920,7 +12005,7 @@
                 if (RO_BLOCKED.some(n => h.includes(n + '('))) { e.stopPropagation(); e.preventDefault(); showToast('İzleme modundasın: değişiklik yapılamaz.', 'error'); }
             }, true);
         }
-        const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus", "roomCreate", "roomJoin", "roomLeave", "roomWave", "simFill"];
+        const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus", "roomCreate", "roomJoin", "roomLeave", "roomWave", "simFill", "planTplSave", "planTplApply", "planTplDelete", "setPlanRemind", "setAutoPlan", "setSwBreak"];
         RO_BLOCKED.push('openKursForm', 'saveKurs', 'deleteKurs', 'openActivityEdit', 'saveActivityEdit', 'toggleReaction', 'setZorluk');
         RO_BLOCKED.push('saveAkbimImport', 'applyAkbimTopics', 'aiAskAkbimTopics');   // [v66]
         RO_BLOCKED.push('actAddPhotos', 'pinMsg', 'unpinMsg', 'startVoice', 'stopVoice');   // [v60b]
@@ -14984,6 +15069,20 @@ SADECE şu JSON'u döndür: {"hata_adimi":"hangi adımda ne yanlış","hata_turu
         }
 
         // ---------- 6) AI haftalık plan → Plan sayfası ----------
+        // [v70] Boş saat aralıkları: çalışma penceresi − kurs − mevcut plan blokları
+        function planBusy(date) {
+            const dow = (new Date(date + 'T12:00:00').getDay() + 6) % 7, out = [];
+            (state.kursProgrami || []).forEach(k => { if (k.day === dow && k.start && k.end) out.push([hmToMin(k.start), hmToMin(k.end)]); });
+            (state.planBlocks || []).forEach(b => { if (b.date === date && b.time) out.push([hmToMin(b.time), hmToMin(b.time) + (b.duration || 45)]); });
+            return out.sort((a, b) => a[0] - b[0]);
+        }
+        function planFreeSlots(date) {
+            const dow = (new Date(date + 'T12:00:00').getDay() + 6) % 7, win = dow >= 5 ? [9 * 60, 22 * 60 + 30] : [16 * 60 + 30, 22 * 60 + 30], out = []; let cur = win[0];
+            planBusy(date).forEach(([a, b]) => { if (a > cur) out.push([cur, Math.min(a, win[1])]); cur = Math.max(cur, b); });
+            if (cur < win[1]) out.push([cur, win[1]]);
+            return out.filter(x => x[1] - x[0] >= 40);
+        }
+        function planFits(date, time, dur) { const a = hmToMin(time); return planFreeSlots(date).some(x => a >= x[0] && a + dur <= x[1] + 5); }
         let aiPlan = null;
         async function aiWeekPlan() {
             if (!aiGuard()) return;
@@ -14996,16 +15095,22 @@ SADECE şu JSON'u döndür: {"hata_adimi":"hangi adımda ne yanlış","hata_turu
             const hw = (state.homework || []).filter(h => !h.done).map(h => `${h.text} (${h.ders || ''}, teslim ${h.due})`).join('; ');
             const subs = SUBJECT_GROUPS.flatMap(g => g.subjects.map(x => x.value));
             const busy = (state.planBlocks || []).filter(b => b.date >= t && b.date <= days[6]).map(b => `${b.date} ${b.time || ''} ${subjectShort(b.subject)}`).join('; ');
+            // [v70] AKBİM öncelikli konular + gerçek boş saat aralıkları
+            const akE = akbimExams().slice(-1)[0], akList = akE ? akE.akbim.priority.filter(p => p.yanlis > 0 || p.bos > 0).sort((a, b) => b.oncelik - a.oncelik).slice(0, 12) : [];
+            const akTxt = akList.map(p => `${p.dersLabel} - ${p.konu} (başarı %${Math.round(p.basari)}, öncelik %${Math.round(p.oncelik)})`).join('; ');
+            const freeTxt = days.map(d => { const f = planFreeSlots(d); return f.length ? `${d}: ${f.map(x => minToHm(x[0]) + '-' + minToHm(x[1])).join(', ')}` : ''; }).filter(Boolean).join('\n');
             const prompt = `Bana ${days[0]} (${DN[(new Date(days[0] + 'T12:00:00').getDay() + 6) % 7]}) ile ${days[6]} arası 7 günlük çalışma planı hazırla.
 Kurs programım (bu saatlere ASLA blok koyma): ${kurs || 'yok'}
 Bu hafta denemeler: ${den || 'yok'}
 Tekrar zamanı gelen konular: ${tr || 'yok'}
 Bekleyen ödevler: ${hw || 'yok'}
 Planımda zaten olanlar (çakıştırma): ${busy || 'yok'}
+AKBİM analizinde öncelikli (yanlış/boş) konularım — bunlara öncelik ver ve blokta "akbim_konu" alanına listedeki konu adını AYNEN yaz: ${akTxt || 'yok'}
+BOŞ SAAT aralıklarım (bloklar SADECE bu aralıkların içine sığmalı):\n${freeTxt || 'yok'}
 Günlük soru hedefim: ${state.settings.dailyGoal || 100}, günlük çalışma hedefim: ${state.settings.dailyHoursGoal || 4} saat.
 Kurallar: hafta içi 2-4 blok, hafta sonu 4-6 blok; blok süresi 30-90 dk; zayıf derslere ve tekrar konularına öncelik ver; deneme gününe deneme + analiz bloğu koy; ödevleri teslimden önce yerleştir; saatler 07:00-23:00 arası.
 "ders" alanı SADECE şu listeden biri olabilir: ${subs.join(', ')}.
-SADECE JSON döndür: {"ozet":"1-2 cümle","gunler":[{"tarih":"YYYY-MM-DD","bloklar":[{"saat":"HH:MM","sure":60,"ders":"...","konu":"...","hedef_soru":40,"not":"kısa"}]}]}`;
+SADECE JSON döndür: {"ozet":"1-2 cümle","gunler":[{"tarih":"YYYY-MM-DD","bloklar":[{"saat":"HH:MM","sure":60,"ders":"...","tur":"soru|konu|video","konu":"...","akbim_konu":"","hedef_soru":40,"not":"kısa"}]}]}`;
             try {
                 const d = aiJson(await aiCall([{ role: 'user', parts: [{ text: prompt }] }], null, { json: true, temp: 0.5, max: 6000 }));
                 const blocks = [];
@@ -15015,7 +15120,11 @@ SADECE JSON döndür: {"ozet":"1-2 cümle","gunler":[{"tarih":"YYYY-MM-DD","blok
                     const time = /^\d{1,2}:\d{2}$/.test(b.saat || '') ? b.saat.padStart(5, '0') : '';
                     const kh = (state.kursProgrami || []).some(k => k.day === (new Date(gn.tarih + 'T12:00:00').getDay() + 6) % 7 && time && time >= k.start && time < k.end);
                     if (kh) return;                                    // kurs saatine denk gelen bloğu at
-                    blocks.push({ date: gn.tarih, time, duration: Math.min(180, Math.max(15, parseInt(b.sure) || 45)), subject: subj, topic: String(b.konu || '').slice(0, 80), targetQuestions: Math.max(0, parseInt(b.hedef_soru) || 0), note: ('✦ AI · ' + (b.not || '')).slice(0, 120) });
+                    if (time && !planFits(gn.tarih, time, Math.min(180, Math.max(15, parseInt(b.sure) || 45)))) return;   // [v70] boş saat dışına taşan bloğu at
+                    const kind = ['soru', 'konu', 'video'].includes(b.tur) ? b.tur : 'soru'; let subject2 = subj, items;
+                    const ap = b.akbim_konu ? akList.find(p => p.konu === b.akbim_konu) : null, mt = ap ? karneTopicMatch(ap.dersKey, ap.dersType, ap.konu) : null;
+                    if (mt && subs.includes(mt.subj)) { subject2 = mt.subj; if (kind !== 'soru') items = [mt.topic]; }
+                    blocks.push({ date: gn.tarih, time, duration: Math.min(180, Math.max(15, parseInt(b.sure) || 45)), subject: subject2, kind, ...(items ? { items } : {}), topic: String(b.konu || (mt ? cleanTopicName(mt.topic) : '')).slice(0, 80), targetQuestions: kind === 'soru' ? Math.max(0, parseInt(b.hedef_soru) || 0) : 0, note: ('✦ AI · ' + (b.not || '') + (ap ? ' · AKBİM' : '')).slice(0, 120) });
                 }));
                 if (!blocks.length) throw Object.assign(new Error('empty'), { code: 'empty' });
                 aiPlan = { blocks, ozet: d.ozet || '', skip: new Set() };
@@ -15581,7 +15690,6 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                 yksAuth: { users: { '.read': OWN, '$uid': { '.read': 'auth != null && auth.uid == $uid', '.write': OWN } }, requests: { '.read': OWN, '$uid': { '.write': `auth != null && (auth.uid == $uid || ${R} == 'owner')` } } },
                 [CHAT_PATH]: { '.read': FULL, '.write': FULL },
                 [META_PATH]: { '.read': ANY, '.write': FULL },
-                [ROOMS_PATH]: { '$room': { '.read': FULL, '.write': FULL } },
                 [TRASH_PATH]: { '.read': FULL, '.write': FULL },
                 [BK_PATH]: { '.read': FULL, '.write': FULL },
                 '$root': { '.read': ANY, '.write': `auth != null && (${R} == 'owner' || (${R} == 'full' && ($root == ${ME} || $root == ${ME} + '_photos')))` }
@@ -16408,7 +16516,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                 ['liderlik', 'Liderlik', ['Çalışma Odası', 'Arkadaş Ekle', 'Haftalık Meydan Okuma', 'Liderlik Tablosu', 'Ortak Haftalık Hedef', 'Haftalık Düello']]
             ] },
             hedefokul: { def: 'tercih', segs: [
-                ['tercih', 'Tercihler', ['Tercih Listem']],
+                ['tercih', 'Tercihler', ['Tercih Listem', 'YBS Hedef']],
                 ['hesap', 'Hesapla', ['Net & Puan', 'Gereken Netler']],
                 ['taban', 'Tabanlar', ['Taban Puanları']],
                 ['okul', 'Okullar', ['Hedef Ekle', 'Hedef Listem']]
@@ -16440,6 +16548,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             [...sec.children].forEach(el => { if (el.dataset.seg) el.classList.toggle('seg-off', el.dataset.seg !== id); });
             sec.querySelectorAll('[data-seg-btn]').forEach(b => { const on = b.dataset.segBtn === id; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
             secSegState[tab] = id;
+            if (tab === 'analytics' && id === 'liderlik') { try { renderRoom(); } catch (e) {} }
             try { localStorage.setItem('yks_sec_seg', JSON.stringify(secSegState)); } catch (e) {}
             if (!silent) {
                 haptic();
@@ -22222,7 +22331,9 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
         }
 
         // ================= [v69] SANAL ÇALIŞMA ODASI =================
-        const ROOMS_PATH = 'yksTakip_rooms';
+        const ROOMS_PATH = META_PATH + '/rooms';   // [v71] canlı pomodoro ile aynı yol/izin; ayrı kural gerekmez
+        let roomErr = '';
+        function roomErrText(e) { const c = String((e && (e.code || e.message)) || e || ''); return /permission|PERMISSION/.test(c) ? 'Firebase izin vermedi (kurallar). Ayarlar → Güvenlik’teki kuralları yeniden yapıştır.' : /network|offline|unavailable/i.test(c) ? 'İnternet bağlantısı yok.' : 'Bağlanılamadı: ' + c.slice(0, 80); }
         let roomCode = '', roomData = null, roomOn = false, roomSig = '', roomLastWrite = 0, roomWaveSeen = null;
         try { roomCode = localStorage.getItem('yks_room@' + ACTIVE_PROFILE) || ''; } catch (e) {}
         function roomMe() {
@@ -22249,36 +22360,42 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             const code = roomCode;
             f.sdk.onValue(roomRef(f), snap => {
                 if (code !== roomCode) return;
-                roomData = snap.val();
+                roomErr = ''; roomData = snap.val();
                 if (!roomData && roomCode) { showToast('Oda kapatılmış.', 'error'); roomForget(); return; }
                 const mem = (roomData && roomData.members) || {};
                 if (roomWaveSeen === null) { roomWaveSeen = {}; Object.keys(mem).forEach(id => roomWaveSeen[id] = (mem[id].wave || {}).at || 0); }
                 else Object.keys(mem).forEach(id => { const w = mem[id].wave; if (id !== ACTIVE_PROFILE && w && w.at > (roomWaveSeen[id] || 0)) { roomWaveSeen[id] = w.at; showToast(`${mem[id].name || id}: ${w.emoji} gönderdi`); haptic(); } });
                 renderRoom();
-            });
+            }, err => { roomErr = roomErrText(err); renderRoom(); });
             roomWriteMe(true);
+            setTimeout(() => { if (roomCode === code && !roomData && !roomErr) { roomErr = 'Odaya bağlanılamadı (yavaş ya da kapalı bağlantı).'; renderRoom(); } }, 8000);
         }
         function roomForget() { roomCode = ''; roomData = null; roomOn = false; try { localStorage.removeItem('yks_room@' + ACTIVE_PROFILE); } catch (e) {} renderRoom(); }
         async function roomCreate() {
-            if (READONLY) return; const nm = (document.getElementById('roomName').value || '').trim().slice(0, 30) || 'Çalışma odası';
-            const f = await metaFb(); if (!f) { showToast('Bağlantı yok.', 'error'); return; }
-            const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let code = '';
-            for (let t = 0; t < 5; t++) { code = Array.from({ length: 6 }, () => A[Math.floor(Math.random() * A.length)]).join(''); const ex = await f.sdk.get(f.sdk.ref(f.db, ROOMS_PATH + '/' + code)).catch(() => null); if (ex && !ex.exists()) break; code = ''; }
-            if (!code) { showToast('Oda kodu üretilemedi, tekrar dene.', 'error'); return; }
-            roomCode = code; roomOn = false; try { localStorage.setItem('yks_room@' + ACTIVE_PROFILE, code); } catch (e) {}
-            await f.sdk.update(f.sdk.ref(f.db, ROOMS_PATH + '/' + code), { name: nm, owner: ACTIVE_PROFILE, createdAt: Date.now(), members: { [ACTIVE_PROFILE]: roomMe() } }).catch(() => showToast('Oda oluşturulamadı (izin yok?).', 'error'));
-            roomListen(); haptic(); showToast('Oda hazır · kodu arkadaşına gönder');
+            if (READONLY) return;
+            try {
+                const nm = ((document.getElementById('roomName') || {}).value || '').trim().slice(0, 30) || 'Çalışma odası';
+                showToast('Oda kuruluyor…');
+                const f = await metaFb(); if (!f) { showToast('Bağlantı yok (Firebase hazır değil).', 'error'); return; }
+                const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', code = Array.from({ length: 6 }, () => A[Math.floor(Math.random() * A.length)]).join('');
+                await f.sdk.update(f.sdk.ref(f.db, ROOMS_PATH + '/' + code), { name: nm, owner: ACTIVE_PROFILE, createdAt: Date.now(), members: { [ACTIVE_PROFILE]: roomMe() } });
+                roomCode = code; roomOn = false; roomData = null; roomErr = ''; try { localStorage.setItem('yks_room@' + ACTIVE_PROFILE, code); } catch (e) {}
+                renderRoom(); roomListen(); haptic(); showToast('Oda hazır · kodu arkadaşına gönder');
+            } catch (e) { console.error(e); showToast(roomErrText(e), 'error'); }
         }
         async function roomJoin() {
-            if (READONLY) return; const code = (document.getElementById('roomJoinCode').value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
-            if (code.length !== 6) { showToast('Oda kodu 6 karakter.', 'error'); return; }
-            const f = await metaFb(); if (!f) { showToast('Bağlantı yok.', 'error'); return; }
-            const snap = await f.sdk.get(f.sdk.ref(f.db, ROOMS_PATH + '/' + code)).catch(() => null);
-            if (!snap || !snap.exists()) { showToast('Bu kodla oda bulunamadı.', 'error'); return; }
-            const mem = (snap.val() || {}).members || {};
-            if (!mem[ACTIVE_PROFILE] && Object.keys(mem).length >= 8) { showToast('Oda dolu (en fazla 8 kişi).', 'error'); return; }
-            roomCode = code; roomOn = false; try { localStorage.setItem('yks_room@' + ACTIVE_PROFILE, code); } catch (e) {}
-            roomListen(); haptic(); showToast('Odaya katıldın');
+            if (READONLY) return;
+            try {
+                const code = ((document.getElementById('roomJoinCode') || {}).value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+                if (code.length !== 6) { showToast('Oda kodu 6 karakter.', 'error'); return; }
+                const f = await metaFb(); if (!f) { showToast('Bağlantı yok (Firebase hazır değil).', 'error'); return; }
+                const snap = await f.sdk.get(f.sdk.ref(f.db, ROOMS_PATH + '/' + code));
+                if (!snap.exists()) { showToast('Bu kodla oda bulunamadı.', 'error'); return; }
+                const mem = (snap.val() || {}).members || {};
+                if (!mem[ACTIVE_PROFILE] && Object.keys(mem).length >= 8) { showToast('Oda dolu (en fazla 8 kişi).', 'error'); return; }
+                roomCode = code; roomOn = false; roomData = null; roomErr = ''; try { localStorage.setItem('yks_room@' + ACTIVE_PROFILE, code); } catch (e) {}
+                renderRoom(); roomListen(); haptic(); showToast('Odaya katıldın');
+            } catch (e) { console.error(e); showToast(roomErrText(e), 'error'); }
         }
         async function roomLeave() {
             if (!roomCode || !confirm('Odadan çıkılsın mı?')) return;
@@ -22299,7 +22416,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                     <div class="rm-in"><input id="roomJoinCode" maxlength="6" autocapitalize="characters" placeholder="Oda kodu (6 harf)" class="input-soft w-full rounded-xl p-3 text-sm" style="letter-spacing:.15em;text-transform:uppercase"><button onclick="roomJoin()" class="press-scale font-semibold px-5 rounded-xl text-sm bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200">Katıl</button></div>`;
                 return;
             }
-            if (!roomData) { box.innerHTML = `<div class="v69-h py-3">Oda yükleniyor…</div>`; return; }
+            if (!roomData) { box.innerHTML = roomErr ? `<div class="ai-err mb-3">${escHtml(roomErr)}</div><div class="flex gap-2"><button onclick="roomOn=false;roomErr='';renderRoom();roomListen()" class="press-scale flex-1 py-3 rounded-xl font-semibold bg-black/5 dark:bg-white/10 text-sm">↻ Tekrar dene</button><button onclick="roomForget()" class="press-scale flex-1 py-3 rounded-xl font-semibold text-rose-500 bg-rose-500/10 text-sm">Vazgeç</button></div>` : `<div class="v69-h py-3">Oda yükleniyor…</div>`; return; }
             const mem = roomData.members || {}, now = Date.now();
             const rows = Object.keys(mem).sort((a, b) => (a === ACTIVE_PROFILE ? -1 : b === ACTIVE_PROFILE ? 1 : 0)).map(id => {
                 const m = mem[id], stale = now - (m.updatedAt || 0) > 150000, st = stale ? 'idle' : (m.status || 'idle'), label = stale ? 'Pasif' : (m.label || 'Pasif');
@@ -22319,6 +22436,300 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             if (READONLY || IS_VIEWER_URL || !PROFILE_CHOSEN) return;
             try { if (roomCode && !roomOn) roomListen(); else if (roomCode) { roomWriteMe(false); if (document.getElementById('roomBody') && document.getElementById('roomBody').offsetParent) renderRoom(); } } catch (e) {}
         }, 4000);
+
+        // ================= [v70] PLAN KARNESİ · ŞABLONLAR · HATIRLATMA · OTOMASYON =================
+        let pwkOff = 0;
+        const DOW_TR = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+        function pwkStart() { return addDaysStr(weekStartStr(), pwkOff * 7); }
+        function planKarneData(ws) {
+            const to = addDaysStr(ws, 6), bl = (state.planBlocks || []).filter(b => b.date >= ws && b.date <= to);
+            const days = Array.from({ length: 7 }, (_, i) => { const d = addDaysStr(ws, i), a = bl.filter(b => b.date === d); return { date: d, total: a.length, done: a.filter(b => b.completed).length }; });
+            const done = bl.filter(b => b.completed), res = b => b.result || {};
+            return { blocks: bl, total: bl.length, done: done.length, pct: bl.length ? Math.round(done.length / bl.length * 100) : 0,
+                planMin: bl.reduce((t, b) => t + (b.duration || 0), 0), doneMin: done.reduce((t, b) => t + (res(b).duration || b.duration || 0), 0),
+                tq: bl.reduce((t, b) => t + (b.targetQuestions || 0), 0), dq: done.filter(b => (b.kind || 'soru') === 'soru').reduce((t, b) => t + (res(b).correct || 0) + (res(b).wrong || 0) + (res(b).blank || 0), 0), days };
+        }
+        function pwkMove(n) { pwkOff += n; renderPlanKarne(); haptic(); }
+        function renderPlanKarne() {
+            const box = document.getElementById('planKarneBody'); if (!box) return;
+            const ws = pwkStart(), D = planKarneData(ws), today = localDateStr();
+            const label = `${fmtDateTr(ws)} – ${fmtDateTr(addDaysStr(ws, 6))}${pwkOff === 0 ? ' · bu hafta' : pwkOff === 1 ? ' · gelecek hafta' : pwkOff === -1 ? ' · geçen hafta' : ''}`;
+            const maxN = Math.max(1, ...D.days.map(d => d.total));
+            let h = `<div class="pk-head"><button class="pk-nav press-scale" onclick="pwkMove(-1)" aria-label="Önceki hafta">‹</button><div class="text-[13px] font-semibold text-center">${label}</div><button class="pk-nav press-scale" onclick="pwkMove(1)" aria-label="Sonraki hafta">›</button></div>`;
+            if (!D.total) h += `<div class="v69-h py-3">Bu hafta için plan bloğu yok. Aşağıdaki şablonlardan birini uygula ya da blok ekle.</div>`;
+            else h += `<div class="pk-top"><div class="pk-ring" style="--p:${D.pct}"><b>%${D.pct}</b></div><div class="pk-stats">
+                <div><span>Blok</span><b>${D.done} / ${D.total}</b></div><div><span>Süre</span><b>${Math.round(D.doneMin)} / ${D.planMin} dk</b></div>${D.tq ? `<div><span>Soru</span><b>${D.dq} / ${D.tq}</b></div>` : ''}</div></div>
+                <div class="pk-days">${D.days.map((d, i) => `<div class="pk-day ${d.date === today ? 'today' : ''}"><b>${DOW_TR[i]}</b><div class="pk-bar" title="${d.done}/${d.total}"><i style="height:${d.total ? Math.round(d.done / maxN * 100) : 0}%"></i></div>${d.total ? d.done + '/' + d.total : '–'}</div>`).join('')}</div>
+                <div class="v69-h mt-3">${D.pct >= 80 ? 'Harika gidiyorsun 🔥' : D.pct >= 50 ? 'Fena değil; kalan blokları tamamlamaya bak.' : (pwkOff <= 0 ? 'Plan geride; en kısa bloklardan başla.' : 'Henüz başlamadı.')}</div>`;
+            h += `<button type="button" onclick="weeklyPdf()" class="press-scale mt-4 w-full py-3 rounded-xl text-[13px] font-semibold bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200">📄 Haftalık raporu PDF yap</button>`;
+            box.innerHTML = h;
+        }
+        // ---- Şablonlar
+        function planTplSave() {
+            if (READONLY) return; const ws = pwkStart(), D = planKarneData(ws);
+            if (!D.total) { showToast('Seçili haftada plan bloğu yok.', 'error'); return; }
+            const nm = ((document.getElementById('planTplName') || {}).value || '').trim().slice(0, 40) || `Hafta ${fmtDateTr(ws)}`;
+            const blocks = D.blocks.map(b => ({ dow: (new Date(b.date + 'T12:00:00').getDay() + 6) % 7, time: b.time || '', duration: b.duration || 45, subject: b.subject, examType: b.examType, topic: b.topic || '', kind: b.kind || 'soru', items: b.items ? b.items.slice() : undefined, targetQuestions: b.targetQuestions || 0, note: b.note || '' }));
+            state.planTemplates = [...(state.planTemplates || []), { id: 't' + Date.now().toString(36), name: nm, created: Date.now(), blocks }];
+            saveState(); renderPlanTools(); showToast(`Şablon kaydedildi · ${blocks.length} blok`); haptic();
+        }
+        function planTplApply(id, off) {
+            if (READONLY) return; const t = (state.planTemplates || []).find(x => x.id === id); if (!t) return;
+            const ws = addDaysStr(weekStartStr(), off * 7), today = localDateStr(); let n = 0, skipped = 0;
+            t.blocks.forEach((b, i) => {
+                const date = addDaysStr(ws, b.dow); if (date < today) { skipped++; return; }
+                if ((state.planBlocks || []).some(x => x.date === date && x.time === b.time && x.subject === b.subject)) { skipped++; return; }
+                const nb = { id: Date.now() + i + Math.floor(Math.random() * 1000), date, time: b.time, duration: b.duration, subject: b.subject, examType: b.examType || examTypeForSubject(b.subject), topic: b.topic, kind: b.kind, targetQuestions: b.targetQuestions, note: b.note, completed: false };
+                if (b.items) nb.items = b.items.slice(); state.planBlocks.push(nb); n++;
+            });
+            saveState(); try { renderPlanBlocks(); renderPlanKarne(); } catch (e) {}
+            pwkOff = off; renderPlanKarne(); playFeedbackSound('success');
+            showToast(`${n} blok eklendi${skipped ? ` · ${skipped} atlandı (geçmiş/çakışan)` : ''}`);
+        }
+        function planTplDelete(id) { if (READONLY || !confirm('Bu şablon silinsin mi?')) return; state.planTemplates = (state.planTemplates || []).filter(x => x.id !== id); saveState(); renderPlanTools(); }
+        function setPlanRemind(v) {
+            state.settings.planRemind = v; saveState();
+            if (v !== 'off') { try { if (notifySupported() && Notification.permission === 'default') Notification.requestPermission().then(() => { try { refreshReminderStatus(); } catch (e) {} }); } catch (e) {} }
+            showToast(v === 'off' ? 'Plan hatırlatması kapalı' : 'Plan hatırlatması açık 🔔');
+        }
+        function setAutoPlan(v) { state.settings.autoPlanDone = !!v; saveState(); const c = document.getElementById('autoPlanChk'); if (c) c.checked = !!v; }
+        function renderPlanTools() {
+            const box = document.getElementById('planToolsBody'); if (!box) return;
+            const T = state.planTemplates || [], rem = String(state.settings.planRemind ?? 'off'), auto = state.settings.autoPlanDone !== false;
+            let h = `<div class="v69-h mb-3">Üstteki karnede seçili haftayı şablon olarak kaydet; sonra tek dokunuşla başka haftalara kopyala.</div>
+                <div class="rm-in mb-3"><input id="planTplName" maxlength="40" placeholder="Şablon adı (örn: Normal hafta)" class="input-soft w-full rounded-xl p-3 text-sm"><button onclick="planTplSave()" class="btn-primary press-scale text-white font-semibold px-4 rounded-xl text-sm">Kaydet</button></div>`;
+            h += T.length ? `<div class="grid gap-2 mb-2">${T.map(t => `<div class="tpl-row"><div class="nm">${escHtml(t.name)}<small>${t.blocks.length} blok</small></div>
+                <button class="tpl-btn press-scale" onclick="planTplApply('${t.id}',0)">Bu hafta</button><button class="tpl-btn press-scale" onclick="planTplApply('${t.id}',1)">Gelecek</button><button class="tpl-btn del press-scale" onclick="planTplDelete('${t.id}')" aria-label="Sil">✕</button></div>`).join('')}</div>` : `<div class="v69-h mb-2">Henüz şablon yok.</div>`;
+            if (typeof canSeeAi === 'function' && canSeeAi()) h += `<button type="button" onclick="aiWeekPlan()" class="press-scale mt-2 w-full py-3 rounded-xl text-[13px] font-semibold text-white" style="background:linear-gradient(160deg,#34C759,#30B0C7)">✦ AI ile haftayı planla (AKBİM + boş saatlerin)</button>`;
+            h += `<div class="v70-set mt-3"><span>🔔 Blok saatinde hatırlat</span><select class="input-soft rounded-xl p-2 text-xs" onchange="setPlanRemind(this.value)">${[['off', 'Kapalı'], ['0', 'Tam vaktinde'], ['5', '5 dk önce'], ['10', '10 dk önce']].map(([v, l]) => `<option value="${v}" ${rem === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+                <div class="v70-set"><span>Kronometre/Pomodoro bitince bloğu otomatik tamamla</span><input type="checkbox" ${auto ? 'checked' : ''} onchange="setAutoPlan(this.checked)" class="accent-brand"></div>
+                <div class="v69-h mt-2">Hatırlatma, uygulama telefonda açık ya da arka plandayken çalışır; uygulama tamamen kapalıyken sunucu olmadığı için bildirim gelmez.</div>`;
+            box.innerHTML = h;
+        }
+        // ---- Plan bloğu hatırlatması
+        function planNtfKeys() { try { return JSON.parse(localStorage.getItem('yks_plan_ntf') || '[]'); } catch (e) { return []; } }
+        setInterval(() => {
+            try {
+                if (READONLY || IS_VIEWER_URL || !PROFILE_CHOSEN) return;
+                const mode = String(state.settings.planRemind ?? 'off'); if (mode === 'off') return;
+                const lead = parseInt(mode) || 0, now = new Date(), today = localDateStr(now), nowMin = now.getHours() * 60 + now.getMinutes(), keys = planNtfKeys();
+                (state.planBlocks || []).forEach(b => {
+                    if (b.completed || b.date !== today || !b.time) return;
+                    const st = hmToMin(b.time), k = b.id + '@' + b.date + '@' + b.time + '@' + lead;
+                    if (nowMin >= st - lead && nowMin < st + 15 && !keys.includes(k)) {
+                        keys.push(k); try { localStorage.setItem('yks_plan_ntf', JSON.stringify(keys.slice(-80))); } catch (e) {}
+                        const kind = (b.kind || 'soru'), ic = kind === 'video' ? '🎬' : kind === 'konu' ? '📖' : '✏️';
+                        sendAppNotification(`${ic} ${b.time} · ${subjectShort(b.subject)}`, (lead ? `${lead} dk sonra başlıyor` : 'Şimdi başlıyor') + (b.topic ? ' — ' + b.topic : '') + ` · ${b.duration} dk`, 'plan-' + b.id);
+                        try { haptic(); } catch (e) {}
+                    }
+                });
+            } catch (e) {}
+        }, 20000);
+        // ---- Pomodoro/kronometre bitince plan bloğunu otomatik tamamla
+        function planCandidateBlock(subject) {
+            if (state.settings.autoPlanDone === false) return null;
+            const today = localDateStr(), now = new Date(), nm = now.getHours() * 60 + now.getMinutes();
+            const c = (state.planBlocks || []).filter(b => b.date === today && !b.completed && (!subject || b.subject === subject));
+            if (!c.length) return null;
+            return c.sort((a, b) => Math.abs(hmToMin(a.time || '00:00') - nm) - Math.abs(hmToMin(b.time || '00:00') - nm))[0];
+        }
+        function planAutoComplete(activity) {
+            const b = planCandidateBlock(activity.subject); if (!b) return false;
+            b.completed = true; b.activityId = activity.id; b.activityIds = [activity.id];
+            b.result = { correct: activity.correct, wrong: activity.wrong, blank: activity.blank, duration: activity.duration };
+            activity.fromPlanId = b.id; if (!activity.tags.includes('Plan')) activity.tags.push('Plan');
+            try { renderPlanBlocks(); renderPlanKarne(); } catch (e) {}
+            return b;
+        }
+        // ---- Kronometre mola döngüsü
+        let swBreakMark = 0, swBrk = null;
+        function setSwBreak(v) { state.settings.swBreakEvery = parseInt(v) || 0; saveState(); swBreakMark = swElapsed(); }
+        function swBrkRender() {
+            const el = document.getElementById('swBrkBar'); if (!el) return;
+            if (!swBrk) { if (el.innerHTML) el.innerHTML = ''; return; }
+            const left = Math.max(0, Math.ceil((swBrk.endAt - Date.now()) / 1000)), mm = String(Math.floor(left / 60)).padStart(2, '0'), ss = String(left % 60).padStart(2, '0');
+            el.innerHTML = left > 0 ? `<div class="sw-brk"><span>☕ Mola · <b>${mm}:${ss}</b></span><button onclick="swBrkEnd(false)">Bitir</button></div>` : `<div class="sw-brk"><span>Mola bitti 💪</span><button onclick="swBrkEnd(true)">Devam et</button></div>`;
+        }
+        function swBrkEnd(resume) { swBrk = null; swBreakMark = swElapsed(); swBrkRender(); if (resume && !sw.running) swToggle(); }
+        function swBrkStart() {
+            closeMiniModal(); if (sw.running) swToggle();
+            swBrk = { endAt: Date.now() + 10 * 60000, notified: false }; swBrkRender();
+        }
+        setInterval(() => {
+            try {
+                const every = state.settings.swBreakEvery || 0;
+                if (sw.running && every && !swBrk && swElapsed() - swBreakMark >= every * 60000) {
+                    swBreakMark = swElapsed();
+                    sendAppNotification('Mola zamanı ☕', `${every} dakikadır çalışıyorsun, 10 dk mola ver.`, 'sw-break'); try { haptic(); } catch (e) {}
+                    openMiniModal(`<div class="text-center"><div class="text-4xl mb-2">☕</div><div class="text-lg font-bold mb-1">Mola zamanı</div><div class="v69-h mb-4">${every} dakikadır çalışıyorsun. 10 dakikalık bir mola ver, kronometre duraklasın.</div>
+                        <button class="btn-primary press-scale w-full py-3 rounded-xl text-white font-semibold mb-2" onclick="swBrkStart()">10 dk mola başlat</button>
+                        <button class="press-scale w-full py-3 rounded-xl font-semibold bg-black/5 dark:bg-white/10" onclick="closeMiniModal()">Devam et</button></div>`);
+                }
+                if (swBrk) { if (!swBrk.notified && Date.now() >= swBrk.endAt) { swBrk.notified = true; sendAppNotification('Mola bitti 💪', 'Kronometreye dönmeye hazır mısın?', 'sw-break'); try { haptic(); } catch (e) {} } swBrkRender(); }
+            } catch (e) {}
+        }, 1000);
+        function swInitUi() {
+            const sel = document.getElementById('swBreakSel'); if (sel) sel.innerHTML = [[0, 'Kapalı'], [25, 'Her 25 dk'], [45, 'Her 45 dk'], [50, 'Her 50 dk'], [90, 'Her 90 dk']].map(([v, l]) => `<option value="${v}" ${(state.settings.swBreakEvery || 0) === v ? 'selected' : ''}>${l}</option>`).join('');
+            const c = document.getElementById('autoPlanChk'); if (c) c.checked = state.settings.autoPlanDone !== false;
+        }
+        setInterval(swInitUi, 4000); document.addEventListener('DOMContentLoaded', () => setTimeout(swInitUi, 1500));
+
+        // ================= [v70] PUAN & NET GRAFİĞİ =================
+        let pnType = '', chartPuanNetInstance = null;
+        function setPnType(t) { pnType = t; renderPuanNet(); }
+        function examPuan(e) { return (e.karne && e.karne.puan) ? Number(e.karne.puan) : scoreForExam(e); }
+        function ybsTarget() {
+            const ds = Object.values(atlasDatasets()).find(d => d.tur === 'EA' && /Yönetim Bilişim/i.test(d.bolum)); if (!ds) return null;
+            const r = ds.rows.find(x => /^Boğaziçi/i.test(x[0])); if (!r || !r[5]) return null;
+            return { puan: r[5], rank: r[4], puan25: r[7], rank25: r[6], name: 'Boğaziçi · Yönetim Bilişim Sistemleri' };
+        }
+        function renderPuanNet() {
+            const cv = document.getElementById('chartPuanNet'), seg = document.getElementById('pnSeg'); if (!cv || !seg) return;
+            const types = examTypesInUse(); if (!pnType || !types.includes(pnType)) pnType = types.includes('TYT') ? 'TYT' : types[0];
+            seg.innerHTML = types.map(t => `<button class="${t === pnType ? 'on' : ''}" onclick="setPnType('${t}')">${t === 'AYT' ? 'EA' : t}</button>`).join('');
+            const ex = state.exams.filter(e => e.type === pnType && typeof e.total === 'number').sort((a, b) => (a.date || '').localeCompare(b.date || '') || a.id - b.id);
+            const note = document.getElementById('pnNote');
+            if (chartPuanNetInstance) { try { chartPuanNetInstance.destroy(); } catch (e) {} chartPuanNetInstance = null; }
+            if (!ex.length || typeof Chart === 'undefined') { if (note) note.textContent = 'Bu tür için deneme yok.'; return; }
+            const labels = ex.map(e => fmtDateTr(e.date).replace(/ \d{4}$/, '')), net = ex.map(e => e.total), puan = ex.map(e => { const v = examPuan(e); return v ? Math.round(v * 10) / 10 : null; });
+            const tg = pnType === 'AYT' ? ybsTarget() : null, dark = state.theme === 'dark', tc = dark ? '#98989d' : '#6e6e73', gc = dark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)';
+            const ds = [{ label: 'Net', data: net, yAxisID: 'y', borderColor: brandColor(), backgroundColor: brandRgba(0.12), tension: .35, pointRadius: 3, borderWidth: 2.5 },
+                { label: 'Puan', data: puan, yAxisID: 'y1', borderColor: '#8a3ffc', backgroundColor: 'rgba(138,63,252,.12)', tension: .35, pointRadius: 3, borderWidth: 2.5, spanGaps: true }];
+            if (tg) ds.push({ label: 'Hedef puan (Boğaziçi YBS)', data: ex.map(() => tg.puan), yAxisID: 'y1', borderColor: '#FF9500', borderDash: [6, 4], pointRadius: 0, borderWidth: 2, fill: false });
+            chartPuanNetInstance = new Chart(cv.getContext('2d'), { type: 'line', data: { labels, datasets: ds }, options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                plugins: { legend: { labels: { color: tc, boxWidth: 12, font: { size: 10 } } } },
+                scales: { x: { ticks: { color: tc, font: { size: 9 } }, grid: { display: false } }, y: { position: 'left', title: { display: true, text: 'Net', color: tc, font: { size: 10 } }, ticks: { color: tc }, grid: { color: gc } },
+                    y1: { position: 'right', title: { display: true, text: 'Puan', color: tc, font: { size: 10 } }, ticks: { color: tc }, grid: { display: false }, suggestedMin: 150, suggestedMax: 500 } } } });
+            const lp = puan.filter(Boolean).slice(-1)[0];
+            if (note) note.innerHTML = tg && lp ? `Son puanın <b>${fmtNum(lp)}</b>, hedef <b>${fmtNum(round1(tg.puan))}</b> → <b>${lp >= tg.puan ? 'hedefin üstündesin 🎉' : fmtNum(round1(tg.puan - lp)) + ' puan kaldı'}</b>.` : (lp ? `Son puanın <b>${fmtNum(lp)}</b>.` : 'Puan hesabı için deneme netlerini ders bazında gir.');
+        }
+
+        // ================= [v70] AKBİM KONU GEÇMİŞİ =================
+        function akbimExams() { return state.exams.filter(e => e.akbim && e.akbim.priority && e.akbim.priority.length).sort((a, b) => (a.date || '').localeCompare(b.date || '')); }
+        function akbimKey(p) { return (p.dersKey || p.dersLabel || '') + '|' + normTopic(p.konu); }
+        function renderAkbimHistory() {
+            const box = document.getElementById('akbimHistBody'); if (!box) return;
+            const ex = akbimExams();
+            if (!ex.length) { box.innerHTML = `<div class="v69-h py-3">Henüz AKBİM raporu yok. Denemeler → “PDF Karneden Otomatik Ekle” ile AKBİM PDF’ini yükleyince konuların burada izlenir.</div>`; return; }
+            const hist = {}; ex.forEach(e => e.akbim.priority.forEach(p => { (hist[akbimKey(p)] = hist[akbimKey(p)] || { p, pts: [] }).pts.push({ date: e.date, b: p.basari, y: p.yanlis, bos: p.bos }); }));
+            const lastE = ex[ex.length - 1], lastKeys = new Set(lastE.akbim.priority.map(akbimKey));
+            const row = (h, extra) => { const l = h.pts[h.pts.length - 1]; return `<div class="ah-row"><span class="t"><span class="subj-dot" style="background:${subjectColor(h.p.dersLabel)}"></span> ${escHtml(h.p.dersLabel)} · ${escHtml(h.p.konu)}</span><span class="tr">${extra || h.pts.map(x => '%' + Math.round(x.b)).join(' → ')}</span></div>`; };
+            const still = [], fixed = [], fresh = [];
+            Object.values(hist).forEach(h => {
+                const l = h.pts[h.pts.length - 1], inLast = lastKeys.has(akbimKey(h.p)), wrongBefore = h.pts.slice(0, -1).some(x => x.y > 0);
+                if (inLast && l.y > 0 && wrongBefore) still.push(h);
+                else if (inLast && l.y === 0 && wrongBefore) fixed.push(h);
+                else if (inLast && l.y > 0 && h.pts.length === 1) fresh.push(h);
+            });
+            still.sort((a, b) => b.pts.filter(x => x.y > 0).length - a.pts.filter(x => x.y > 0).length || a.pts[a.pts.length - 1].b - b.pts[b.pts.length - 1].b);
+            let h = `<div class="v69-h mb-1">${ex.length} AKBİM raporu · ${fmtDateTr(ex[0].date)} → ${fmtDateTr(lastE.date)}</div>`;
+            if (ex.length < 2) {
+                const wrong = lastE.akbim.priority.filter(p => p.yanlis > 0).sort((a, b) => b.oncelik - a.oncelik).slice(0, 12);
+                h += `<div class="ah-grp"><h3>🔴 Son raporda yanlış yaptıkların (${wrong.length})</h3>${wrong.map(p => `<div class="ah-row"><span class="t"><span class="subj-dot" style="background:${subjectColor(p.dersLabel)}"></span> ${escHtml(p.dersLabel)} · ${escHtml(p.konu)}</span><span class="tr">%${Math.round(p.basari)} · ${p.yanlis}Y</span></div>`).join('')}</div><div class="v69-h mt-3">Karşılaştırma için bir sonraki AKBİM raporunu da yükle; hâlâ yanlış yaptığın konular burada ayrışacak.</div>`;
+            } else {
+                h += `<div class="ah-grp"><h3>🔴 Hâlâ yanlış (${still.length})</h3>${still.length ? still.slice(0, 15).map(x => row(x)).join('') : '<div class="v69-h">Tekrarlayan yanlış konu yok 👏</div>'}</div>
+                    <div class="ah-grp"><h3>🟢 Düzelenler (${fixed.length})</h3>${fixed.length ? fixed.slice(0, 10).map(x => row(x)).join('') : '<div class="v69-h">Henüz yok.</div>'}</div>
+                    <div class="ah-grp"><h3>🆕 Yeni çıkanlar (${fresh.length})</h3>${fresh.slice(0, 8).map(x => row(x)).join('') || '<div class="v69-h">Yok.</div>'}</div>`;
+            }
+            box.innerHTML = h;
+        }
+
+        // ================= [v70] AKBİM ↔ YANLIŞ DEFTERİ =================
+        function akbimNotesFor(p) {
+            const m = karneTopicMatch(p.dersKey, p.dersType, p.konu), keys = [normTopic(p.konu)]; if (m) keys.push(normTopic(m.topic));
+            return state.wrongNotes.filter(n => {
+                const nt = normTopic(n.topic); if (nt.length < 4) return false;
+                if (!keys.some(k => k.length >= 4 && (nt.includes(k) || k.includes(nt)))) return false;
+                if (m && n.subject && !(n.subject === m.subj || subjectShort(n.subject) === subjectShort(m.subj) || planSrcKey(n.subject) === m.subj)) return false;
+                return true;
+            });
+        }
+        function akbimWrongData() {
+            const ex = akbimExams(), e = ex[ex.length - 1]; if (!e) return null;
+            const list = e.akbim.priority.filter(p => p.yanlis > 0 || p.bos > 0).sort((a, b) => b.oncelik - a.oncelik).map(p => ({ p, notes: akbimNotesFor(p) }));
+            return { e, list, withNotes: list.filter(x => x.notes.length).length };
+        }
+        function renderAkbimWrong() {
+            const box = document.getElementById('akbimWrongBody'); if (!box) return;
+            const D = akbimWrongData();
+            if (!D) { box.innerHTML = `<div class="v69-h py-2">AKBİM raporu yüklenince öncelikli konularına ait yanlışların burada toplanır.</div>`; return; }
+            const missing = D.list.filter(x => !x.notes.length && x.p.yanlis > 0).length;
+            box.innerHTML = `<div class="v69-h mb-3">${D.list.length} öncelikli konunun <b>${D.withNotes}</b> tanesinde defterinde soru var${missing ? `; <b>${missing}</b> yanlış konunun defterde sorusu yok` : ''}.</div>
+                <button type="button" onclick="openAkbimWrongs()" class="btn-primary press-scale w-full py-3 rounded-xl text-white font-semibold text-[13px]">Konulara göre yanlışlarımı aç</button>`;
+        }
+        function openAkbimWrongs() {
+            const D = akbimWrongData(); if (!D) return;
+            const body = D.list.slice(0, 25).map(({ p, notes }) => `<div class="mb-3"><div class="flex items-center justify-between gap-2 mb-1"><div class="text-[13px] font-semibold" style="min-width:0"><span class="subj-dot" style="background:${subjectColor(p.dersLabel)}"></span> ${escHtml(p.dersLabel)} · ${escHtml(p.konu)}</div><span class="v69-h" style="flex:none">%${Math.round(p.basari)} · öncelik %${Math.round(p.oncelik)}</span></div>
+                ${notes.length ? notes.slice(0, 6).map(n => { const ph = (n.photos && n.photos[0]) || n.photo; return `<div class="aw-note">${ph ? photoImg(ph, 'w-14 h-14 object-cover rounded-xl cursor-pointer flex-none', 'onclick="openPhotoViewer(this.src)"') : ''}<span style="min-width:0;flex:1">${escHtml(n.topic || '')}${n.note ? '<br><span class="v69-h">' + escHtml(String(n.note).slice(0, 80)) + '</span>' : ''}</span><span class="v69-h" style="flex:none">${n.reviewed ? '✓' : ''}</span></div>`; }).join('') : `<div class="v69-h">Defterinde bu konudan soru yok${p.yanlis ? ` (${p.yanlis} yanlışın var)` : ''}.</div>`}</div>`).join('');
+            openMiniModal(`<div class="text-center mb-3"><div class="text-lg font-bold">AKBİM ↔ Yanlış Defterim</div><div class="v69-h">${fmtDateTr(D.e.date)} raporu · öncelik sırasıyla</div></div><div style="max-height:60vh;overflow-y:auto">${body || '<div class="v69-h">Yanlış/boş konu yok.</div>'}</div>`);
+        }
+
+        // ================= [v70] YBS HEDEF SAYACI =================
+        function ybsCurrent() {
+            const last = (types) => state.exams.filter(e => types.includes(e.type)).sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 3);
+            const tyt = last(['TYT']), ayt = last(['AYT']);
+            if (!tyt.length) return { missing: 'TYT' }; if (!ayt.length) return { missing: 'AYT (EA)' };
+            const avg = f => arr => arr.reduce((t, e) => t + numOr0(f(e)), 0) / arr.length;
+            const T = { tr: avg(e => e.tr)(tyt), mat: avg(e => e.mat)(tyt), fen: avg(e => e.fen)(tyt), sos: avg(e => e.sos)(tyt) };
+            const A = { mat: avg(e => e.mat)(ayt), edb: avg(e => (e.nets || {}).edb)(ayt), tarih: avg(e => (e.nets || {}).tarih)(ayt), cog: avg(e => (e.nets || {}).cog)(ayt) };
+            return { puan: eaHamPuan(T, { mat: A.mat, nets: { edb: A.edb, tarih: A.tarih, cog: A.cog }, answers: true }) + obpKatkisi(), T, A };
+        }
+        function renderYbs() {
+            const box = document.getElementById('ybsBody'); if (!box) return;
+            const tg = ybsTarget(); if (!tg) { box.innerHTML = `<div class="v69-h py-2">Atlas verisinde Boğaziçi YBS bulunamadı.</div>`; return; }
+            const cur = ybsCurrent();
+            if (cur.missing) { box.innerHTML = `<div class="v69-h py-2">Hedef: <b>${tg.name}</b> · taban ${fmtNum(round1(tg.puan))} puan (sıra ${fmtRank(tg.rank)}).<br>Sayacın çalışması için en az bir ${cur.missing} denemesi gerekli.</div>`; return; }
+            const gap = tg.puan - cur.puan, pts = simYearPts('EA', 2026), rk = simRankAt(pts, cur.puan);
+            const K = PUAN_KATSAYI, items = [];
+            [['mat', 'AYT Matematik', 40, 'A'], ['edb', 'AYT Edebiyat', 24, 'A'], ['tarih', 'AYT Tarih', 10, 'A'], ['cog', 'AYT Coğrafya', 6, 'A']].forEach(([k, l, mx]) => items.push({ l, coef: K.EA_AYT[k], room: Math.max(0, mx - cur.A[k]) }));
+            [['tr', 'TYT Türkçe', 40], ['sos', 'TYT Sosyal', 20], ['mat', 'TYT Matematik', 40], ['fen', 'TYT Fen', 20]].forEach(([k, l, mx]) => items.push({ l, coef: K.EA_TYT[k], room: Math.max(0, mx - cur.T[k]) }));
+            items.forEach(i => { i.gain = i.coef * Math.min(5, i.room); }); items.sort((a, b) => b.gain - a.gain);
+            const pct = Math.max(0, Math.min(100, (cur.puan - 150) / (tg.puan - 150) * 100));
+            let h = `<div class="ybs-hero"><div class="v69-h">${tg.name}</div>
+                <b>${gap > 0 ? fmtNum(round1(gap)) + ' puan kaldı' : 'Hedefin üstündesin 🎉'}</b>
+                <div class="ybs-track"><i style="width:${pct}%"></i></div>
+                <div class="flex justify-between v69-h"><span>Şu an ${fmtNum(round1(cur.puan))}</span><span>Hedef ${fmtNum(round1(tg.puan))}</span></div>
+                <div class="v69-h mt-2">${rk ? `Şu anki puanla 2026 verisine göre ~${fmtRank(rk)}. sıradasın; Boğaziçi YBS ${fmtRank(tg.rank)}. sıra${tg.rank25 ? ` (2025: ${fmtRank(tg.rank25)})` : ''}.` : `Boğaziçi YBS taban sırası ${fmtRank(tg.rank)}.`}</div></div>
+                <div class="ah-grp"><h3>Hangi derse çalışırsan en çok kazanırsın?</h3><div class="v69-h mb-1">+5 net (ya da kalan boşluk) yaparsan kazanacağın puan · son 3 deneme ortalamasıyla</div>`;
+            h += items.slice(0, 5).map((i, n) => `<div class="ybs-row ${n === 0 ? 'top' : ''}"><span style="min-width:0">${n === 0 ? '🏆 ' : ''}${i.l}<br><span class="v69-h">1 net = +${i.coef.toFixed(2).replace('.', ',')} puan</span></span><span class="tr">+${fmtNum(round1(i.gain))}</span></div>`).join('') + '</div>';
+            if (gap > 0) { const need = items.filter(i => gap / i.coef <= i.room).sort((a, b) => a.coef - b.coef).reverse()[0]; h += `<div class="v69-h mt-3">${need ? `Tek dersle kapatmak için en kısa yol: <b>${need.l}</b>’de <b>+${(gap / need.coef).toFixed(1).replace('.', ',')} net</b>.` : 'Tek dersle kapanmıyor; birkaç derse dağıtman gerekir.'}</div>`; }
+            box.innerHTML = h;
+        }
+
+        // ================= [v70] HAFTALIK PDF (tek sayfa) =================
+        async function weeklyPdf() {
+            try {
+                const r = buildWeeklyReport(), ws = r.ws, K = planKarneData(ws), PW = 1240, PH = 1754, M = 80, c = document.createElement('canvas'); c.width = PW; c.height = PH; const g = c.getContext('2d');
+                const F = (w, sz) => `${w} ${sz}px -apple-system, "Helvetica Neue", Arial, sans-serif`;
+                const rr = (x, y, w, h, rad, fill) => { g.beginPath(); g.moveTo(x + rad, y); g.arcTo(x + w, y, x + w, y + h, rad); g.arcTo(x + w, y + h, x, y + h, rad); g.arcTo(x, y + h, x, y, rad); g.arcTo(x, y, x + w, y, rad); g.closePath(); g.fillStyle = fill; g.fill(); };
+                const T = (txt, x, y, f, col, al) => { g.font = f; g.fillStyle = col; g.textAlign = al || 'left'; g.fillText(String(txt), x, y); g.textAlign = 'left'; };
+                const fit = (txt, maxW, f) => { g.font = f; let t = String(txt); while (g.measureText(t).width > maxW && t.length > 4) t = t.slice(0, -2); return t === String(txt) ? t : t + '…'; };
+                g.fillStyle = '#fff'; g.fillRect(0, 0, PW, PH);
+                const gr = g.createLinearGradient(0, 0, PW, 230); gr.addColorStop(0, '#0A84FF'); gr.addColorStop(1, '#8A3FFC'); g.fillStyle = gr; g.fillRect(0, 0, PW, 230);
+                T('Haftalık Rapor', M, 108, F(800, 62), '#fff'); T(`${fmtDateTr(r.from)} – ${fmtDateTr(r.to)}  ·  ${(PROFILES[ACTIVE_PROFILE] || {}).name || ''}`, M, 168, F(500, 28), 'rgba(255,255,255,.85)');
+                let y = 270; const tiles = [['Soru', r.st.q], ['Net', r.st.net], ['Doğruluk', r.st.acc === null ? '—' : '%' + r.st.acc], ['Süre', fmtDuration(r.st.dur)], ['Gün', r.st.days + '/7']], tw = (PW - 2 * M - 4 * 20) / 5;
+                tiles.forEach((t, i) => { const x = M + i * (tw + 20); rr(x, y, tw, 130, 22, '#F2F2F7'); T(t[1], x + tw / 2, y + 68, F(800, 40), '#1c1c1e', 'center'); T(t[0], x + tw / 2, y + 106, F(500, 22), '#8e8e93', 'center'); });
+                y += 190;
+                T('Ders bazlı net', M, y, F(700, 32), '#1c1c1e'); y += 24; const subs = r.subs.slice(0, 7), mx = Math.max(1, ...subs.map(x => x.net));
+                if (!subs.length) { T('Bu hafta kayıt yok.', M, y + 40, F(400, 24), '#8e8e93'); y += 70; }
+                subs.forEach(x => { y += 50; T(fit(x.label, 330, F(500, 24)), M, y, F(500, 24), '#2c2c2e'); rr(M + 350, y - 22, 560, 22, 11, '#E5E5EA'); if (x.net > 0) rr(M + 350, y - 22, Math.max(22, 560 * x.net / mx), 22, 11, '#0A84FF'); T(`${x.net} net${x.acc !== null ? ' · %' + x.acc : ''}`, PW - M, y, F(600, 22), '#636366', 'right'); });
+                y += 60; T('Denemeler', M, y, F(700, 32), '#1c1c1e'); y += 14;
+                if (!r.exams.length) { T('Bu hafta deneme yok.', M, y + 40, F(400, 24), '#8e8e93'); y += 66; }
+                r.exams.slice(0, 5).forEach(({ e, diff }) => { y += 48; const pu = examPuan(e); T(fit(e.name, 520, F(500, 24)), M, y, F(500, 24), '#2c2c2e'); T(e.type === 'AYT' ? 'EA' : e.type, M + 560, y, F(600, 22), '#8e8e93'); T(`${e.total} net${diff !== null ? (diff >= 0 ? ' ▲' : ' ▼') + Math.abs(diff) : ''}`, M + 700, y, F(700, 24), diff === null ? '#2c2c2e' : diff >= 0 ? '#248A3D' : '#D70015'); T(pu ? fmtNum(Math.round(pu * 10) / 10) + ' puan' : '', PW - M, y, F(600, 22), '#636366', 'right'); });
+                y += 64; T('Plan karnesi', M, y, F(700, 32), '#1c1c1e'); y += 20;
+                if (!K.total) { T('Bu hafta plan bloğu yok.', M, y + 40, F(400, 24), '#8e8e93'); y += 70; }
+                else { rr(M, y + 20, PW - 2 * M, 28, 14, '#E5E5EA'); rr(M, y + 20, Math.max(28, (PW - 2 * M) * K.pct / 100), 28, 14, '#34C759'); y += 90;
+                    T(`%${K.pct} tamamlandı  ·  ${K.done}/${K.total} blok  ·  ${Math.round(K.doneMin)}/${K.planMin} dk${K.tq ? `  ·  ${K.dq}/${K.tq} soru` : ''}`, M, y, F(500, 26), '#2c2c2e'); y += 30; }
+                const ak = akbimExams().slice(-1)[0];
+                if (ak) { y += 40; T('AKBİM alarm konuları', M, y, F(700, 32), '#1c1c1e'); const al = ak.akbim.priority.filter(p => p.oncelik >= 50 && p.yanlis > 0).sort((a, b) => b.oncelik - a.oncelik).slice(0, 5);
+                    if (!al.length) { y += 46; T('Kırmızı alarm konu yok 👏', M, y, F(400, 24), '#8e8e93'); } al.forEach(p => { y += 44; T('• ' + fit(`${p.dersLabel} · ${p.konu}`, PW - 2 * M - 220, F(500, 24)), M, y, F(500, 24), '#2c2c2e'); T(`%${Math.round(p.basari)} · ${p.yanlis}Y`, PW - M, y, F(600, 22), '#D70015', 'right'); }); }
+                T('YKS Takip', M, PH - 50, F(500, 20), '#c7c7cc'); T(fmtDateTr(localDateStr()), PW - M, PH - 50, F(500, 20), '#c7c7cc', 'right');
+                const blob = await new Promise(res => c.toBlob(res, 'image/jpeg', 0.92)), pages = [{ bytes: new Uint8Array(await blob.arrayBuffer()), w: PW, h: PH }];
+                const fname = `haftalik-rapor-${r.from}.pdf`, file = new File([makePdf(pages)], fname, { type: 'application/pdf' });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: fname }); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+                const url = URL.createObjectURL(file), a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000); showToast('PDF hazır');
+            } catch (e) { showToast('PDF oluşturulamadı.', 'error'); console.error(e); }
+        }
 
         // --- Weekday Study Intensity Chart ---
         let chartWeekdayInstance = null;
