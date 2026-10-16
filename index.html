@@ -2196,6 +2196,68 @@
         .akb-dot { width: 7px; height: 7px; border-radius: 50%; background: rgb(var(--ios-red)); flex-shrink: 0; }
 
         /* ===== [v67] Plan bloğu: konu / video seçici ===== */
+        #planKindSeg button { display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 11.5px; padding: 7px 2px; line-height: 1.2; } #planKindSeg .pk-ic { font-size: 16px; }
+        /* [v68] iPhone Safari: tarih/saat kutuları ızgarada taşıp yanındakinin üstüne biniyordu */
+        input[type="date"], input[type="time"], input[type="datetime-local"], input[type="month"] { min-width: 0; max-width: 100%; box-sizing: border-box; -webkit-appearance: none; appearance: none; display: block; min-height: 40px; text-align: left; }
+        input[type="date"]::-webkit-date-and-time-value, input[type="time"]::-webkit-date-and-time-value { text-align: left; min-height: 1.2em; }
+        .grid > *, .flex > .flex-1, form > div { min-width: 0; }
+        .input-soft, select.input-soft, textarea.input-soft { min-width: 0; max-width: 100%; box-sizing: border-box; }
+        .theme-seg, .theme-seg .seg-track { max-width: 100%; min-width: 0; }
+        .theme-seg .seg-track { min-width: 0; width: 100%; }
+
+        /* ===== [v69] Çalışma odası · Biyoritim · Sıralama simülatörü · Ses paneli ===== */
+        .v69-h { font-size: 12px; color: var(--ios-label2); line-height: 1.45; }
+        .v69-seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: 10px; background: rgba(118,118,128,0.12); }
+        .v69-seg button { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--ios-label); white-space: nowrap; }
+        .v69-seg button.on { background: #fff; box-shadow: 0 3px 8px rgba(0,0,0,.12); } .dark .v69-seg button.on { background: #636366; }
+        /* Isı haritası */
+        .bio-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+        .bio-grid { display: grid; grid-template-columns: 26px repeat(24, minmax(11px, 1fr)); gap: 3px; min-width: 420px; align-items: center; }
+        .bio-lbl { font-size: 10px; color: var(--ios-label2); font-weight: 600; }
+        .bio-hr { font-size: 9px; color: var(--ios-label3); text-align: center; grid-column: span 3; text-align: left; }
+        .bio-cell { aspect-ratio: 1; border-radius: 3px; background: rgb(var(--brand-rgb) / var(--a, .06)); }
+        .bio-cell.z { background: rgba(118,118,128,.1); }
+        .bio-parts { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; margin-top: 14px; }
+        .bio-part { padding: 10px 6px; border-radius: 14px; background: var(--ios-fill); text-align: center; min-width: 0; }
+        .bio-part b { display: block; font-size: 15px; } .bio-part span { display: block; font-size: 10.5px; color: var(--ios-label2); margin-top: 2px; }
+        .bio-part.best { box-shadow: inset 0 0 0 2px rgb(var(--brand-rgb)); background: rgb(var(--brand-rgb) / .08); }
+        .bio-insight { padding: 12px 14px; border-radius: 14px; background: rgb(var(--brand-rgb) / .08); font-size: 13px; line-height: 1.5; margin: 0 0 14px; }
+        /* Simülatör */
+        .sim-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+        .sim-grid label { display: block; font-size: 11px; color: var(--ios-label2); margin-bottom: 3px; font-weight: 500; }
+        .sim-grid .sim-sec { grid-column: 1 / -1; font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--ios-label3); text-transform: uppercase; margin-top: 4px; }
+        .sim-out { margin-top: 14px; display: grid; gap: 10px; }
+        .sim-big { display: flex; gap: 10px; }
+        .sim-big > div { flex: 1; min-width: 0; padding: 12px; border-radius: 16px; background: var(--ios-fill); }
+        .sim-big b { display: block; font-size: 22px; letter-spacing: -.02em; } .sim-big span { font-size: 11px; color: var(--ios-label2); }
+        .sim-year { padding: 12px; border-radius: 16px; background: var(--ios-fill); }
+        .sim-year .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; }
+        .sim-year .row b { font-size: 15px; }
+        .sim-track { position: relative; height: 10px; border-radius: 6px; background: rgba(118,118,128,.18); margin: 10px 0 4px; }
+        .sim-band { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: rgb(var(--brand-rgb)); min-width: 6px; }
+        .sim-mark { position: absolute; top: -4px; width: 3px; height: 18px; border-radius: 2px; background: rgb(var(--ios-orange)); }
+        .sim-scale { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--ios-label3); }
+        .sim-tip { padding: 12px 14px; border-radius: 14px; background: rgb(var(--ios-orange) / .1); font-size: 12.5px; line-height: 1.55; }
+        .sim-tip li { margin-left: 16px; list-style: disc; }
+        /* Çalışma odası */
+        .rm-code { font-family: ui-monospace, Menlo, monospace; font-weight: 800; letter-spacing: .18em; padding: 6px 12px; border-radius: 10px; background: var(--ios-fill); font-size: 15px; }
+        .rm-mem { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; background: var(--ios-fill); min-width: 0; }
+        .rm-av { width: 38px; height: 38px; border-radius: 50%; flex: none; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, rgb(var(--brand-rgb)), #8a3ffc); }
+        .rm-mem .nm { font-size: 14px; font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .rm-mem .st { font-size: 12px; color: var(--ios-label2); display: flex; align-items: center; gap: 6px; }
+        .rm-dot { width: 8px; height: 8px; border-radius: 50%; background: #aeaeb2; flex: none; }
+        .rm-dot.work { background: rgb(var(--ios-green)); box-shadow: 0 0 0 3px rgb(var(--ios-green) / .2); animation: rmPulse 1.6s ease-in-out infinite; }
+        .rm-dot.break { background: rgb(var(--ios-orange)); }
+        @keyframes rmPulse { 50% { box-shadow: 0 0 0 6px rgb(var(--ios-green) / 0); } }
+        .rm-wave { display: flex; gap: 8px; flex-wrap: wrap; }
+        .rm-wave button { width: 44px; height: 44px; border-radius: 50%; background: var(--ios-fill); font-size: 20px; }
+        .rm-in { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; }
+        @media (prefers-reduced-motion: reduce) { .rm-dot.work { animation: none; } }
+        body.readonly #roomCard { display: none !important; }
+        /* Ses paneli */
+        .amb-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; }
+        .amb-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 11px; color: var(--ios-label2); }
+        .plan-tg { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 12px; } .plan-tg .plan-full, .plan-tg > .plan-full { grid-column: 1 / -1; }
         .plan-pick { padding: 10px; border-radius: 14px; background: var(--ios-fill); }
         .plan-pick-list { max-height: 230px; overflow-y: auto; display: grid; gap: 4px; -webkit-overflow-scrolling: touch; }
         .plan-pick-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; font-size: 12.5px; line-height: 1.3; text-align: left; background: var(--ios-card); color: var(--ios-label); }
@@ -2958,13 +3020,9 @@
                             <i data-lucide="waves" class="w-3.5 h-3.5"></i>
                             <span>Odaklanma Sesleri</span>
                         </div>
-                        <div class="grid grid-cols-4 gap-1.5">
-                            <button onclick="setAmbientSound('off')" id="ambientBtnoff" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-brand text-white">Kapalı</button>
-                            <button onclick="setAmbientSound('white')" id="ambientBtnwhite" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Beyaz</button>
-                            <button onclick="setAmbientSound('rain')" id="ambientBtnrain" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Yağmur</button>
-                            <button onclick="setAmbientSound('cafe')" id="ambientBtncafe" class="press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Kafe</button>
-                        </div>
-                        <input type="range" id="ambientVolume" min="0" max="100" value="35" oninput="setAmbientVolume(this.value)" class="w-full mt-2 accent-brand">
+                        <div class="amb-grid" id="ambGrid"></div>
+                        <input type="range" id="ambientVolume" min="0" max="100" value="35" oninput="setAmbientVolume(this.value)" class="w-full mt-2 accent-brand" aria-label="Ses seviyesi">
+                        <label class="amb-row"><span>Sayaç durunca sesi otomatik kapat</span><input type="checkbox" id="ambAuto" checked onchange="setAmbientAuto(this.checked)" class="accent-brand"></label>
                     </div>
 
                     <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-3 text-center leading-relaxed">Tur bitince ne çalıştığın sorulur; tek dokunuşla günlüğe kaydedilir. Ekran kapansa da süre doğru işler.</p>
@@ -3705,7 +3763,16 @@
                 <p id="atlasSource" class="text-[10px] text-slate-400 dark:text-slate-500 mt-3"></p>
             </div>
 
-        </section>
+        <!-- [v69] Net & sıralama simülatörü -->
+            <div data-card="ranksim" id="simCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-brand"></i><span>Net & Sıralama Simülatörü</span>
+                </h2>
+                <p class="v69-h mb-4">Netlerini gir, puanın ve geçmiş yıl tercih verilerine göre olası sıralama bandın çıksın. Hedef sıra yazarsan hangi derste kaç net gerektiğini de gösterir.</p>
+                <div id="simBody"></div>
+            </div>
+
+            </section>
 
         <!-- TAB: WRONG QUESTION NOTEBOOK -->
         <section id="content-tekrar" class="tab-content hidden grid grid-cols-1 gap-6">
@@ -3895,15 +3962,15 @@
                     <div>
                         <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Bu blokta ne yapacaksın?</label>
                         <div class="sec-seg pp-seg" style="margin:0"><div class="seg-track" id="planKindSeg">
-                            <button type="button" data-k="soru" class="on" onclick="setPlanKind('soru')">✏️ Soru çözme</button>
-                            <button type="button" data-k="konu" onclick="setPlanKind('konu')">📖 Konu çalışma</button>
-                            <button type="button" data-k="video" onclick="setPlanKind('video')">🎬 Video izleme</button>
+                            <button type="button" data-k="soru" class="on" onclick="setPlanKind('soru')"><span class="pk-ic">✏️</span>Soru çözme</button>
+                            <button type="button" data-k="konu" onclick="setPlanKind('konu')"><span class="pk-ic">📖</span>Konu çalışma</button>
+                            <button type="button" data-k="video" onclick="setPlanKind('video')"><span class="pk-ic">🎬</span>Video izleme</button>
                         </div></div>
                     </div>
                     <div id="planPicker" class="hidden"></div>
                     <!-- Plan için konu ve hedef soru -->
-                    <div class="grid grid-cols-3 gap-3">
-                        <div id="planTopicWrap" class="col-span-2">
+                    <div class="plan-tg">
+                        <div id="planTopicWrap">
                             <label class="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">Konu</label>
                             <input type="text" id="planTopic" list="planTopicList" placeholder="Konu seç ya da yaz" class="input-soft w-full rounded-xl p-2.5 text-xs text-slate-800 dark:text-slate-100">
                             <datalist id="planTopicList"></datalist>
@@ -3944,6 +4011,14 @@
 
         <!-- TAB: LEADERBOARD -->
         <section id="content-liderlik" class="tab-content hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- [v69] Sanal çalışma odası -->
+            <div data-card="room" id="roomCard" class="lg:col-span-3 soft-card p-7 sm:p-8 rounded-[28px] animate-rise">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2">
+                    <i data-lucide="users" class="w-5 h-5 text-brand"></i><span>Çalışma Odası</span>
+                </h2>
+                <div id="roomBody"></div>
+            </div>
+
             <div class="lg:col-span-3 pt-1 pb-1 px-1 animate-rise">
                 <div class="text-[11px] font-medium text-brand/70 uppercase tracking-[0.12em] mb-2.5">Liderlik</div>
                 <h1 class="hero-title text-2xl sm:text-3xl text-slate-900 dark:text-slate-50">Kiminle yarışıyorsun?</h1>
@@ -4330,6 +4405,17 @@
                 <div class="relative h-72">
                     <canvas id="chartPeriod"></canvas>
                 </div>
+            </div>
+
+            <!-- [v69] Biyoritim -->
+            <div data-card="biorhythm" id="bioCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <div class="flex items-start justify-between gap-3 mb-3 flex-wrap">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2">
+                        <i data-lucide="sun-moon" class="w-5 h-5 text-brand"></i><span>Biyoritim · Verim Saatlerin</span>
+                    </h2>
+                    <div class="v69-seg" id="bioSeg"><button data-m="min" class="on" onclick="setBioMetric('min')">Dakika</button><button data-m="q" onclick="setBioMetric('q')">Soru</button></div>
+                </div>
+                <div id="bioBody"></div>
             </div>
 
             <!-- Weekday Study Intensity -->
@@ -5430,7 +5516,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v67';
+        const APP_VERSION = 'firebase-v69';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -7011,7 +7097,7 @@
                 ['denge', () => scheduleDashBalance()]
             ],
             exams: [
-                ['deneme tablosu', () => renderExamTable()], ['trend', () => renderExamTrend()], ['puan', () => renderScoreEstimator()],
+                ['deneme tablosu', () => renderExamTable()], ['trend', () => renderExamTrend()], ['puan', () => renderScoreEstimator()], ['simülatör', () => renderSimulator()],
                 ['ders grafiği', () => renderSubjectChart()], ['eksikler', () => renderSubjectGaps()], ['süre', () => renderExamTimeAnalysis()],
                 ['karşılaştır', () => renderExamCompare()], ['borsa', () => renderStocks()], ['çıkmış', () => renderCikmis()],
                 ['deneme takvimi', () => renderDenemeTakvim()], ['sıralama', () => renderExamRanks()], ['hata analizi', () => renderMistakeAnalysis()], ['en çok yanlış', () => renderTopWrong()], ['projeksiyon', () => renderProjection()], ['kurum sırası', () => renderKurumRank()], ['strateji', () => renderStrategy()]
@@ -7022,10 +7108,10 @@
             plan: [['plan', () => renderPlanBlocks()], ['notlar', () => renderQuickNotes()]],
             analytics: [
                 ['haftalık rapor', () => renderWeeklyReport()], ['aylık rapor', () => fillReportMonths()], ['isabet', () => renderAccuracyAnalysis()],
-                ['grafikler', () => renderCharts()], ['dönem', () => renderPeriodComparison(currentPeriodMode)], ['hafta günü', () => renderWeekdayChart()],
+                ['grafikler', () => renderCharts()], ['dönem', () => renderPeriodComparison(currentPeriodMode)], ['hafta günü', () => renderWeekdayChart()], ['biyoritim', () => renderBiorhythm()],
                 ['meydan okuma', () => renderChallenge()], ['liderlik', () => renderLeaderboard()], ['düello', () => renderDuo()], ['ortak hedef', () => renderSharedGoal()]
             ],
-            liderlik: [['liderlik', () => renderLeaderboard()]],
+            liderlik: [['oda', () => renderRoom()], ['liderlik', () => renderLeaderboard()]],
             notlar: [['notlar', () => renderQuickNotes()]],
             kaynaklar: [['kaynaklar', () => renderResources()]],
             mesajlar: [['sohbetler', () => renderChatList()]],
@@ -7041,7 +7127,22 @@
             dirtyTabs.delete(tab);
             (TAB_RENDERERS[tab] || []).forEach(([name, fn]) => { try { fn(); } catch (e) { console.error('Çizim hatası (' + name + '):', e); } });
         }
+        // [v68] Eski AKBİM içe aktarmalarında puan "net" diye kaydedilmişti → ders netlerinin toplamına düzelt, puanı karneye taşı
+        function repairExamTotals() {
+            let ch = 0;
+            (state.exams || []).forEach(e => {
+                if (!e || !e.nets || typeof e.total !== 'number') return;
+                const sum = Math.round(Object.values(e.nets).reduce((x, y) => x + (Number(y) || 0), 0) * 100) / 100;
+                const max = e.type === 'TYT' ? 120 : 80;
+                if (e.total > max && sum <= max && sum > 0) { e.karne = e.karne || {}; if (!e.karne.puan) e.karne.puan = e.total; e.total = sum; ch++; }
+            });
+            (state.exams || []).forEach(e => {          // [v69] AKBİM'den gelen eski kayıtlarda ders netleri üst alanlarda yoktu → puan hesabı eksik çıkıyordu
+                if (e && e.nets && !e.answers && e.tr === undefined && e.mat === undefined) { ['tr', 'mat', 'fen', 'sos'].forEach(k => { if (e.nets[k] !== undefined) e[k] = e.nets[k]; }); ch++; }
+            });
+            if (ch && !READONLY && !VIEWER_MODE) { try { saveState(); } catch (er) {} }
+        }
         function updateUI() {
+            try { repairExamTotals(); } catch (er) {}
             const cur = visibleTabId();
             Object.keys(TAB_RENDERERS).forEach(t => { if (t === cur) runTabRenderers(t); else dirtyTabs.add(t); });
             if (VIEWER_MODE) renderViewer();
@@ -11819,7 +11920,7 @@
                 if (RO_BLOCKED.some(n => h.includes(n + '('))) { e.stopPropagation(); e.preventDefault(); showToast('İzleme modundasın: değişiklik yapılamaz.', 'error'); }
             }, true);
         }
-        const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus"];
+        const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus", "roomCreate", "roomJoin", "roomLeave", "roomWave", "simFill"];
         RO_BLOCKED.push('openKursForm', 'saveKurs', 'deleteKurs', 'openActivityEdit', 'saveActivityEdit', 'toggleReaction', 'setZorluk');
         RO_BLOCKED.push('saveAkbimImport', 'applyAkbimTopics', 'aiAskAkbimTopics');   // [v66]
         RO_BLOCKED.push('actAddPhotos', 'pinMsg', 'unpinMsg', 'startVoice', 'stopVoice');   // [v60b]
@@ -15480,6 +15581,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                 yksAuth: { users: { '.read': OWN, '$uid': { '.read': 'auth != null && auth.uid == $uid', '.write': OWN } }, requests: { '.read': OWN, '$uid': { '.write': `auth != null && (auth.uid == $uid || ${R} == 'owner')` } } },
                 [CHAT_PATH]: { '.read': FULL, '.write': FULL },
                 [META_PATH]: { '.read': ANY, '.write': FULL },
+                [ROOMS_PATH]: { '$room': { '.read': FULL, '.write': FULL } },
                 [TRASH_PATH]: { '.read': FULL, '.write': FULL },
                 [BK_PATH]: { '.read': FULL, '.write': FULL },
                 '$root': { '.read': ANY, '.write': `auth != null && (${R} == 'owner' || (${R} == 'full' && ($root == ${ME} || $root == ${ME} + '_photos')))` }
@@ -15596,7 +15698,8 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                 const nets = {};
                 if (type === 'TYT') { if (trk !== null) nets.tr = trk; if (mat !== null) nets.mat = mat; if (fen !== null) nets.fen = fen; if (sos !== null) nets.sos = sos; }
                 else { if (aMat !== null) nets.mat = aMat; if (aFen !== null) nets.fen = aFen; if (tde !== null) nets.edb = tde; if (aSos !== null) nets.sos = aSos; }
-                if (date && Object.keys(nets).length) out.sinavlar.push({ name: m[1].trim(), date, type, total, nets });
+                const puan = total; total = Math.round(Object.values(nets).reduce((x, y) => x + (y || 0), 0) * 100) / 100;   // [v68] PDF'teki sayı PUAN; net = ders netlerinin toplamı
+                if (date && Object.keys(nets).length) out.sinavlar.push({ name: m[1].trim(), date, type, total, puan, nets });
             }
             // --- ZORLUĞA GÖRE ÇÖZÜM ANALİZİ
             rows.forEach((r, i) => {
@@ -15656,6 +15759,8 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                 if (existing) { if (isFocus) focusExam = existing; return; }
                 if (!cb || !cb.checked) return;
                 const exam = { id: Date.now() + i, date: ex.date, type: ex.type, name: ex.name, total: ex.total, nets: ex.nets, answers: {}, photos: [], wrongTopics: [] };
+                if (ex.puan) exam.karne = { source: r.file, puan: ex.puan, total: ex.total };
+                ['tr', 'mat', 'fen', 'sos'].forEach(k => { if (ex.nets[k] !== undefined) exam[k] = ex.nets[k]; });   // [v69] puan hesabı bu alanları okur
                 state.exams.push(exam); added++; if (isFocus) focusExam = exam;
             });
             if (focusExam && (r.priority.length || Object.keys(r.difficulty).length)) focusExam.akbim = { source: r.file, at: Date.now(), difficulty: r.difficulty, priority: r.priority, topicsApplied: null };
@@ -16300,7 +16405,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             analytics: { def: 'grafik', segs: [
                 ['rapor', 'Rapor', ['Aylık Rapor', 'YKS Yolculuğum', 'Haftalık Rapor']],
                 ['grafik', 'Grafikler', []],
-                ['liderlik', 'Liderlik', ['Arkadaş Ekle', 'Haftalık Meydan Okuma', 'Liderlik Tablosu', 'Ortak Haftalık Hedef', 'Haftalık Düello']]
+                ['liderlik', 'Liderlik', ['Çalışma Odası', 'Arkadaş Ekle', 'Haftalık Meydan Okuma', 'Liderlik Tablosu', 'Ortak Haftalık Hedef', 'Haftalık Düello']]
             ] },
             hedefokul: { def: 'tercih', segs: [
                 ['tercih', 'Tercihler', ['Tercih Listem']],
@@ -18660,7 +18765,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             document.querySelectorAll('#planKindSeg button').forEach(b => b.classList.toggle('on', b.dataset.k === planKind));
             const soru = planKind === 'soru', tw = document.getElementById('planTopicWrap');
             document.getElementById('planTargetWrap').classList.toggle('hidden', !soru);
-            tw.classList.toggle('col-span-3', !soru); tw.classList.toggle('col-span-2', soru);
+            tw.classList.toggle('plan-full', !soru);
             document.getElementById('planTopic').value = '';
             renderPlanPicker(); haptic();
         }
@@ -21839,70 +21944,381 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             });
         }
 
-        // --- Ambient Focus Sounds ---
-        let ambientNodes = null;
-        let ambientCurrentType = 'off';
-        function createNoiseBuffer(ctx) {
-            const bufferSize = 2 * ctx.sampleRate;
-            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-            const data = buffer.getChannelData(0);
-            let lastOut = 0;
-            for (let i = 0; i < bufferSize; i++) {
-                const white = Math.random() * 2 - 1;
-                lastOut = (lastOut + 0.02 * white) / 1.02;
-                data[i] = lastOut * 3.5;
+        // --- Ambient Focus Sounds [v69: 6 ses, Web Audio ile üretilir, dosya gerekmez; sayaç durunca otomatik kapanır] ---
+        const AMB_SOUNDS = [['off', 'Kapalı', '🔇'], ['rain', 'Yağmur', '🌧️'], ['library', 'Kütüphane', '📚'], ['lofi', 'Lo-Fi', '🎧'], ['cafe', 'Kafe', '☕'], ['white', 'Beyaz', '🌫️']];
+        let ambientNodes = null, ambientCurrentType = 'off', ambArmed = false, ambAuto = true;
+        try { ambAuto = localStorage.getItem('yks_amb_auto') !== '0'; } catch (e) {}
+        function ambNoise(kind) {
+            const sr = audioCtx.sampleRate, n = 4 * sr, buf = audioCtx.createBuffer(1, n, sr), d = buf.getChannelData(0);
+            let last = 0, b0 = 0, b1 = 0, b2 = 0;
+            for (let i = 0; i < n; i++) {
+                const w = Math.random() * 2 - 1;
+                if (kind === 'brown') { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; }
+                else if (kind === 'pink') { b0 = 0.99765 * b0 + w * 0.099046; b1 = 0.963 * b1 + w * 0.2965164; b2 = 0.57 * b2 + w * 1.0526913; d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.2; }
+                else d[i] = w * 0.6;
             }
-            return buffer;
+            // dikişsiz döngü: uçları çapraz soldur
+            const f = Math.floor(sr * 0.05); for (let i = 0; i < f; i++) { const t = i / f; d[n - f + i] = d[n - f + i] * (1 - t) + d[i] * t; }
+            return buf;
         }
-
+        function ambLoop(kind, nodes, chain) {
+            const src = audioCtx.createBufferSource(); src.buffer = ambNoise(kind); src.loop = true;
+            let prev = src; chain.forEach(c => { prev.connect(c); prev = c; });
+            src.start(); nodes.push(src); return prev;
+        }
+        function ambFilter(type, f, q) { const x = audioCtx.createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; return x; }
+        function ambLfo(param, rate, depth, nodes) { const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.frequency.value = rate; g.gain.value = depth; o.connect(g); g.connect(param); o.start(); nodes.push(o); }
+        function ambBuild(type, out) {
+            const nodes = [], timers = [];
+            const mk = (v) => { const g = audioCtx.createGain(); g.gain.value = v; g.connect(out); return g; };
+            if (type === 'white') { ambLoop('white', nodes, [ambFilter('lowpass', 9000)]).connect(mk(0.35)); }
+            else if (type === 'rain') {
+                const g = mk(0.9);
+                ambLoop('pink', nodes, [ambFilter('highpass', 350), ambFilter('lowpass', 7500)]).connect(g);
+                const g2 = audioCtx.createGain(); g2.gain.value = 0.35; g2.connect(out);
+                ambLoop('white', nodes, [ambFilter('bandpass', 3200, 0.7)]).connect(g2);
+                ambLfo(g2.gain, 0.17, 0.12, nodes);
+            }
+            else if (type === 'library') {
+                const g = mk(0.55); ambLoop('brown', nodes, [ambFilter('lowpass', 260)]).connect(g);
+                const g2 = mk(0.05); ambLoop('pink', nodes, [ambFilter('bandpass', 1400, 0.4)]).connect(g2); ambLfo(g2.gain, 0.07, 0.025, nodes);
+                // ara sıra uzaktan sayfa/hışırtı
+                timers.push(setInterval(() => { if (Math.random() < 0.45) ambBlip(out, 2400, 0.05, 0.25); }, 6000));
+            }
+            else if (type === 'cafe') {
+                const g = mk(0.9); const bp = ambFilter('bandpass', 520, 0.55);
+                ambLoop('pink', nodes, [bp, ambFilter('lowpass', 1800)]).connect(g); ambLfo(g.gain, 0.23, 0.18, nodes);
+                timers.push(setInterval(() => { if (Math.random() < 0.6) ambBlip(out, 3800 + Math.random() * 2200, 0.07, 0.12); }, 2500));
+            }
+            else if (type === 'lofi') {
+                const bus = audioCtx.createGain(); bus.gain.value = 0.5; const lp = ambFilter('lowpass', 1100); bus.connect(lp); lp.connect(out);
+                const g = audioCtx.createGain(); g.gain.value = 0.045; g.connect(out);   // plak çıtırtısı
+                ambLoop('white', nodes, [ambFilter('highpass', 5000)]).connect(g);
+                const CH = [[57, 60, 64, 67], [50, 53, 57, 60], [55, 59, 62, 65], [48, 52, 55, 59]];   // Am7 · Dm7 · G7 · Cmaj7
+                let ci = 0;
+                const play = () => {
+                    const t = audioCtx.currentTime, ch = CH[ci++ % CH.length];
+                    ch.forEach((m, k) => {
+                        const o = audioCtx.createOscillator(), e = audioCtx.createGain();
+                        o.type = k === 0 ? 'sine' : 'triangle'; o.frequency.value = 440 * Math.pow(2, (m - 69) / 12) * (1 + (Math.random() - .5) * 0.003);
+                        e.gain.setValueAtTime(0, t); e.gain.linearRampToValueAtTime(k === 0 ? 0.22 : 0.12, t + 0.9); e.gain.linearRampToValueAtTime(0.0001, t + 3.9);
+                        o.connect(e); e.connect(bus); o.start(t); o.stop(t + 4);
+                    });
+                    // yumuşak bas vuruşu
+                    const kk = audioCtx.createOscillator(), ke = audioCtx.createGain(); kk.type = 'sine'; kk.frequency.setValueAtTime(110, t); kk.frequency.exponentialRampToValueAtTime(48, t + 0.25);
+                    ke.gain.setValueAtTime(0.28, t); ke.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); kk.connect(ke); ke.connect(bus); kk.start(t); kk.stop(t + 0.4);
+                };
+                play(); timers.push(setInterval(play, 4000));
+            }
+            return { nodes, timers };
+        }
+        function ambBlip(out, freq, vol, dur) {
+            try {
+                const t = audioCtx.currentTime, src = audioCtx.createBufferSource(); src.buffer = ambBlip.buf || (ambBlip.buf = ambNoise('white'));
+                const f = ambFilter('bandpass', freq, 1.5), g = audioCtx.createGain();
+                g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+                src.connect(f); f.connect(g); g.connect(out); src.start(t, Math.random() * 3); src.stop(t + dur + 0.05);
+            } catch (e) {}
+        }
         function stopAmbientSound() {
-            if (ambientNodes) {
-                try { ambientNodes.source.stop(); } catch(e) {}
-                ambientNodes = null;
-            }
+            const a = ambientNodes; ambientNodes = null;
+            if (!a) return;
+            a.timers.forEach(clearInterval);
+            try { a.master.gain.setTargetAtTime(0, audioCtx.currentTime, 0.12); } catch (e) {}
+            setTimeout(() => { a.nodes.forEach(n => { try { n.stop(); } catch (e) {} }); try { a.master.disconnect(); } catch (e) {} }, 500);
         }
-
-        function setAmbientSound(type) {
-            ['off','white','rain','cafe'].forEach(t => {
-                const btn = document.getElementById('ambientBtn' + t);
-                if (btn) btn.className = t === type
-                    ? 'press-scale text-[10px] font-semibold py-2 rounded-xl bg-brand text-white'
-                    : 'press-scale text-[10px] font-semibold py-2 rounded-xl bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300';
-            });
-            ambientCurrentType = type;
-            stopAmbientSound();
-            if (type === 'off') return;
-
-            const source = audioCtx.createBufferSource();
-            source.buffer = createNoiseBuffer(audioCtx);
-            source.loop = true;
-
-            const filter = audioCtx.createBiquadFilter();
-            const gain = audioCtx.createGain();
-            const vol = (document.getElementById('ambientVolume').value || 35) / 100;
-
-            if (type === 'white') {
-                filter.type = 'allpass';
-            } else if (type === 'rain') {
-                filter.type = 'lowpass';
-                filter.frequency.value = 900;
-            } else if (type === 'cafe') {
-                filter.type = 'bandpass';
-                filter.frequency.value = 500;
-                filter.Q.value = 0.6;
-            }
-
-            gain.gain.value = vol * 0.5;
-            source.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
-            source.start();
-            ambientNodes = { source, filter, gain };
+        function ambRenderBtns() {
+            const g = document.getElementById('ambGrid'); if (!g) return;
+            g.innerHTML = AMB_SOUNDS.map(([k, l, ic]) => `<button type="button" onclick="setAmbientSound('${k}')" id="ambientBtn${k}" class="press-scale text-[11px] font-semibold py-2 rounded-xl ${k === ambientCurrentType ? 'bg-brand text-white' : 'bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300'}">${ic} ${l}</button>`).join('');
         }
-
+        function setAmbientSound(type, silent) {
+            if (!AMB_SOUNDS.some(x => x[0] === type)) type = 'off';
+            ambientCurrentType = type; ambRenderBtns(); stopAmbientSound();
+            try { localStorage.setItem('yks_amb_type', type); } catch (e) {}
+            if (type === 'off') { ambArmed = false; return; }
+            try { if (audioCtx.state === 'suspended') audioCtx.resume(); } catch (e) {}
+            const master = audioCtx.createGain(), vol = ((document.getElementById('ambientVolume') || {}).value || 35) / 100;
+            master.gain.value = 0; master.connect(audioCtx.destination);
+            const built = ambBuild(type, master);
+            master.gain.setTargetAtTime(vol * 0.9, audioCtx.currentTime, 0.4);
+            ambientNodes = { master, nodes: built.nodes, timers: built.timers };
+            ambArmed = ambActive();            // sayaç zaten çalışıyorsa hemen "silahlı"; değilse çalışınca silahlanır
+        }
         function setAmbientVolume(val) {
-            if (ambientNodes) ambientNodes.gain.gain.value = (val / 100) * 0.5;
+            try { localStorage.setItem('yks_amb_vol', String(val)); } catch (e) {}
+            if (ambientNodes) ambientNodes.master.gain.setTargetAtTime((val / 100) * 0.9, audioCtx.currentTime, 0.05);
         }
+        function setAmbientAuto(v) { ambAuto = !!v; try { localStorage.setItem('yks_amb_auto', v ? '1' : '0'); } catch (e) {} }
+        function ambActive() { try { return !!(sw.running || (pomo.running && pomo.mode === 'work')); } catch (e) { return false; } }
+        setInterval(() => {      // sayaç başlayınca silahlan, durunca (duraklat/bitir/mola) sesi kapat
+            if (ambientCurrentType === 'off' || !ambAuto) return;
+            const act = ambActive();
+            if (act) ambArmed = true;
+            else if (ambArmed) { ambArmed = false; setAmbientSound('off'); showToast('Sayaç durdu · ses kapatıldı'); }
+        }, 1000);
+        function ambInit() {
+            try { const v = localStorage.getItem('yks_amb_vol'); if (v !== null && document.getElementById('ambientVolume')) document.getElementById('ambientVolume').value = v; } catch (e) {}
+            const c = document.getElementById('ambAuto'); if (c) c.checked = ambAuto;
+            ambRenderBtns();
+        }
+        document.addEventListener('DOMContentLoaded', ambInit); if (document.readyState !== 'loading') ambInit();
+
+        // ================= [v69] BİYORİTİM · ısı haritası =================
+        let bioMetric = 'min';
+        function setBioMetric(m) { bioMetric = m === 'q' ? 'q' : 'min'; document.querySelectorAll('#bioSeg button').forEach(b => b.classList.toggle('on', b.dataset.m === bioMetric)); renderBiorhythm(); }
+        // Zamanı gerçek olan oturumlar: kronometre/pomodoro kayıtları (kayıt anı = bitiş anı). Elle/plandan eklenenlerin saati bilinmez, sayılmaz.
+        function bioSessions() {
+            const out = [];
+            (state.activities || []).forEach(a => {
+                if (!a || !(a.duration > 0) || !a.tags || !(a.tags.includes('Pomodoro') || a.tags.includes('Kronometre'))) return;
+                const end = Number(a.id); if (!(end > 1.6e12)) return;
+                if (localDateStr(new Date(end)) !== a.date) return;
+                out.push({ end, start: end - a.duration * 60000, min: a.duration, q: a.questions || 0 });
+            });
+            return out;
+        }
+        function bioCompute() {
+            const min = Array.from({ length: 7 }, () => new Array(24).fill(0)), q = Array.from({ length: 7 }, () => new Array(24).fill(0)), sess = bioSessions();
+            sess.forEach(x => {
+                const perMin = x.q / Math.max(1, x.min);
+                for (let m = 0; m < x.min; m++) {
+                    const d = new Date(x.start + m * 60000 + 30000), dow = (d.getDay() + 6) % 7, h = d.getHours();
+                    min[dow][h] += 1; q[dow][h] += perMin;
+                }
+            });
+            return { min, q, n: sess.length };
+        }
+        function bioFmtH(h) { return String(((h % 24) + 24) % 24).padStart(2, '0') + ':00'; }
+        function renderBiorhythm() {
+            const box = document.getElementById('bioBody'); if (!box) return;
+            const D = bioCompute();
+            if (!D.n) { box.innerHTML = `<div class="v69-h py-4">Henüz saati bilinen oturum yok. Kronometre ya da Pomodoro ile çalışıp kaydettikçe saatlerin burada ısı haritasına dönüşür.</div>`; return; }
+            const grid = D[bioMetric], flat = grid.flat(), mx = Math.max(...flat) || 1;
+            const hourMin = new Array(24).fill(0), hourQ = new Array(24).fill(0);
+            for (let d = 0; d < 7; d++) for (let h = 0; h < 24; h++) { hourMin[h] += D.min[d][h]; hourQ[h] += D.q[d][h]; }
+            // en iyi 3 saatlik pencere (dakikaya göre) ve en verimli saat (dakika başına soru)
+            let bw = 0, bwv = -1; for (let h = 0; h < 24; h++) { const v = hourMin[h] + hourMin[(h + 1) % 24] + hourMin[(h + 2) % 24]; if (v > bwv) { bwv = v; bw = h; } }
+            let eh = -1, ev = 0; for (let h = 0; h < 24; h++) if (hourMin[h] >= 20 && hourQ[h] / hourMin[h] > ev) { ev = hourQ[h] / hourMin[h]; eh = h; }
+            let sentence = `En çok odaklandığın saatler <b>${bioFmtH(bw)} – ${bioFmtH(bw + 3)}</b> (toplam ${(bwv / 60).toFixed(1).replace('.', ',')} saat).`;
+            if (eh >= 0 && ev > 0) sentence += ` Soru çözüm veriminin zirvesi <b>${bioFmtH(eh)}</b> civarı (dakikada ${ev.toFixed(2).replace('.', ',')} soru).`;
+            else sentence += ' Soru verimi için daha fazla soru çözülen oturum gerekiyor.';
+            const days = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+            let h = `<div class="bio-insight">${sentence}</div><div class="bio-wrap"><div class="bio-grid"><span></span>` + Array.from({ length: 8 }, (_, i) => `<span class="bio-hr">${String(i * 3).padStart(2, '0')}</span>`).join('');
+            for (let d = 0; d < 7; d++) {
+                h += `<span class="bio-lbl">${days[d]}</span>`;
+                for (let hr = 0; hr < 24; hr++) { const v = grid[d][hr], a = v ? (0.18 + 0.82 * v / mx).toFixed(2) : 0; h += `<span class="bio-cell ${v ? '' : 'z'}" ${v ? `style="--a:${a}"` : ''} title="${days[d]} ${bioFmtH(hr)} · ${bioMetric === 'min' ? Math.round(v) + ' dk' : Math.round(v) + ' soru'}"></span>`; }
+            }
+            h += `</div></div>`;
+            // günün dilimleri
+            const parts = [['Sabah', '06–12', [6, 7, 8, 9, 10, 11]], ['Öğle', '12–17', [12, 13, 14, 15, 16]], ['Akşam', '17–22', [17, 18, 19, 20, 21]], ['Gece', '22–06', [22, 23, 0, 1, 2, 3, 4, 5]]];
+            const src = bioMetric === 'min' ? hourMin : hourQ, tot = parts.map(p => p[2].reduce((t, x) => t + src[x], 0)), best = tot.indexOf(Math.max(...tot));
+            h += `<div class="bio-parts">` + parts.map((p, i) => `<div class="bio-part ${i === best ? 'best' : ''}"><b>${bioMetric === 'min' ? (tot[i] / 60).toFixed(1).replace('.', ',') + ' sa' : Math.round(tot[i])}</b><span>${p[0]} · ${p[1]}</span></div>`).join('') + `</div>`;
+            h += `<div class="v69-h mt-3">${D.n} oturum · yalnızca Kronometre/Pomodoro ile kaydettiklerin sayılır (başlangıç saati belli olduğu için).</div>`;
+            box.innerHTML = h;
+        }
+
+        // ================= [v69] NET & SIRALAMA SİMÜLATÖRÜ =================
+        const SIM_DERS = {
+            TYT: [['tr', 'Türkçe', 40], ['sos', 'Sosyal', 20], ['mat', 'Matematik', 40], ['fen', 'Fen', 20]],
+            EA: [['mat', 'AYT Matematik', 40], ['edb', 'AYT Edebiyat', 24], ['tarih', 'AYT Tarih', 10], ['cog', 'AYT Coğrafya', 6]],
+            SAY: [['mat', 'AYT Matematik', 40], ['fiz', 'AYT Fizik', 14], ['kim', 'AYT Kimya', 13], ['biy', 'AYT Biyoloji', 13]]
+        };
+        let simSt = null;
+        function simLoad() {
+            if (simSt) return simSt;
+            let o = null; try { o = JSON.parse(localStorage.getItem(pk('yks_sim')) || 'null'); } catch (e) {}
+            simSt = Object.assign({ alan: (typeof rcAlan === 'function' ? rcAlan() : 'EA'), year: 2026, tyt: {}, ayt: {}, target: '' }, o || {});
+            return simSt;
+        }
+        function simSave() { try { localStorage.setItem(pk('yks_sim'), JSON.stringify(simSt)); } catch (e) {} }
+        function simYearPts(tur, year) {
+            const ci = year === 2025 ? [6, 7] : [4, 5], pts = [];
+            Object.values(atlasDatasets()).forEach(d => { if (d.tur === tur) d.rows.forEach(r => { if (r[ci[0]] && r[ci[1]]) pts.push({ p: r[ci[1]], r: r[ci[0]] }); }); });
+            pts.sort((a, b) => b.p - a.p || a.r - b.r);
+            let maxR = 0; return pts.filter(x => { if (x.r < maxR) return false; maxR = x.r; return true; });
+        }
+        function simRankAt(pts, puan) {
+            if (pts.length < 4) return null;
+            if (puan >= pts[0].p) return pts[0].r; if (puan <= pts[pts.length - 1].p) return pts[pts.length - 1].r;
+            for (let i = 0; i < pts.length - 1; i++) { const a = pts[i], b = pts[i + 1]; if (puan <= a.p && puan >= b.p) { const t = a.p === b.p ? 0 : (a.p - puan) / (a.p - b.p); return Math.round(Math.exp(Math.log(a.r) + (Math.log(b.r) - Math.log(a.r)) * t)); } }
+            return null;
+        }
+        function simPuanAt(pts, rank) {
+            if (pts.length < 4 || !rank) return null;
+            if (rank <= pts[0].r) return pts[0].p;
+            for (let i = 0; i < pts.length - 1; i++) { const a = pts[i], b = pts[i + 1]; if (rank >= a.r && rank <= b.r) { const t = a.r === b.r ? 0 : (Math.log(rank) - Math.log(a.r)) / (Math.log(b.r) - Math.log(a.r)); return a.p + (b.p - a.p) * t; } }
+            return pts[pts.length - 1].p;
+        }
+        function simPuan(st) {
+            const t = {}, a = {}; SIM_DERS.TYT.forEach(([k]) => t[k] = numOr0(st.tyt[k])); SIM_DERS[st.alan].forEach(([k]) => a[k] = numOr0(st.ayt[k]));
+            const obp = obpKatkisi();
+            return st.alan === 'SAY' ? sayHamPuan(t, { nets: a }) + obp : eaHamPuan(t, { mat: a.mat, nets: { edb: a.edb, tarih: a.tarih, cog: a.cog }, answers: true }) + obp;
+        }
+        function simFill() {
+            const st = simLoad(), last = (types) => state.exams.filter(e => types.includes(e.type)).sort((x, y) => (y.date || '').localeCompare(x.date || '')).slice(0, 3);
+            const avg = (arr, f) => arr.length ? Math.round(arr.reduce((t, e) => t + numOr0(f(e)), 0) / arr.length * 4) / 4 : '';
+            const ty = last(['TYT']), ay = last([st.alan === 'SAY' ? 'SAY' : 'AYT']);
+            SIM_DERS.TYT.forEach(([k]) => st.tyt[k] = avg(ty, e => e[k]));
+            SIM_DERS[st.alan].forEach(([k]) => st.ayt[k] = avg(ay, e => k === 'mat' && st.alan === 'EA' ? e.mat : (e.nets || {})[k]));
+            if (!ty.length && !ay.length) showToast('Henüz deneme yok; netleri elle gir.', 'error');
+            simSave(); renderSimulator(); haptic();
+        }
+        function simSet(grp, k, v) { const st = simLoad(); const n = parseFloat(String(v).replace(',', '.')); st[grp][k] = isFinite(n) ? n : ''; simSave(); simOut(); }
+        function simAlan(a) { const st = simLoad(); st.alan = a === 'SAY' ? 'SAY' : 'EA'; st.ayt = {}; simSave(); renderSimulator(); }
+        function simYear(y) { simLoad().year = y; simSave(); simOut(); document.querySelectorAll('#simYearSeg button').forEach(b => b.classList.toggle('on', +b.dataset.y === y)); }
+        function simTarget(v) { simLoad().target = v; simSave(); simOut(); }
+        function renderSimulator() {
+            const box = document.getElementById('simBody'); if (!box) return;
+            const st = simLoad(), inp = (grp, [k, l, max]) => `<div><label>${l} <span style="opacity:.6">/ ${max}</span></label><input type="number" inputmode="decimal" step="0.25" min="0" max="${max}" value="${st[grp][k] ?? ''}" placeholder="0" oninput="simSet('${grp}','${k}',this.value)" class="input-soft w-full rounded-xl p-2.5 text-sm text-slate-800 dark:text-slate-100"></div>`;
+            box.innerHTML = `<div class="flex items-center gap-2 flex-wrap mb-3">
+                <div class="v69-seg"><button class="${st.alan === 'EA' ? 'on' : ''}" onclick="simAlan('EA')">EA</button><button class="${st.alan === 'SAY' ? 'on' : ''}" onclick="simAlan('SAY')">SAY</button></div>
+                <div class="v69-seg" id="simYearSeg"><button data-y="2026" class="${st.year === 2026 ? 'on' : ''}" onclick="simYear(2026)">2026</button><button data-y="2025" class="${st.year === 2025 ? 'on' : ''}" onclick="simYear(2025)">2025</button></div>
+                <button onclick="simFill()" class="press-scale text-[12px] font-semibold px-3 py-2 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">Denemelerimden doldur</button></div>
+                <div class="sim-grid"><div class="sim-sec">TYT netleri</div>${SIM_DERS.TYT.map(d => inp('tyt', d)).join('')}<div class="sim-sec">AYT netleri (${st.alan})</div>${SIM_DERS[st.alan].map(d => inp('ayt', d)).join('')}
+                <div class="sim-sec">Hedef</div><div style="grid-column:1/-1"><label>Hedef sıralama (isteğe bağlı)</label><input type="number" inputmode="numeric" min="1" value="${st.target || (typeof tercihRank === 'function' && tercihRank(st.alan) ? tercihRank(st.alan) : '')}" placeholder="Örn: 884" oninput="simTarget(this.value)" class="input-soft w-full rounded-xl p-2.5 text-sm text-slate-800 dark:text-slate-100"></div></div>
+                <div class="sim-out" id="simOut"></div>`;
+            simOut();
+        }
+        function simPos(r) { return Math.max(0, Math.min(100, Math.log10(Math.max(1, r)) / Math.log10(2000000) * 100)); }
+        function simOut() {
+            const out = document.getElementById('simOut'); if (!out) return;
+            const st = simLoad(), puan = simPuan(st), tur = st.alan, target = parseInt(st.target) || ((typeof tercihRank === 'function' && tercihRank(tur)) || 0);
+            const has = [...Object.values(st.tyt), ...Object.values(st.ayt)].some(v => numOr0(v) > 0);
+            if (!has) { out.innerHTML = `<div class="v69-h">Netlerini gir ya da “Denemelerimden doldur”a bas.</div>`; return; }
+            let h = `<div class="sim-big"><div><b>${fmtNum(round1(puan))}</b><span>tahmini ${tur} puanı${obpKatkisi() ? ' (OBP dahil)' : ''}</span></div>`;
+            const yrs = [2026, 2025].map(y => { const pts = simYearPts(tur, y); return { y, pts, r: simRankAt(pts, puan), lo: simRankAt(pts, puan + 5), hi: simRankAt(pts, puan - 5) }; });
+            const cur = yrs.find(x => x.y === st.year) || yrs[0];
+            h += `<div><b>${cur.r ? '~' + fmtRank(cur.r) : '—'}</b><span>${cur.y} verisine göre sıralama</span></div></div>`;
+            h += yrs.map(Y => {
+                if (!Y.r) return `<div class="sim-year"><div class="row"><span>${Y.y}</span><b>—</b></div><div class="v69-h">Bu yıl için yeterli veri yok.</div></div>`;
+                const lo = Math.min(Y.lo, Y.hi), hi = Math.max(Y.lo, Y.hi), tp = target ? simPos(target) : null;
+                return `<div class="sim-year"><div class="row"><span>${Y.y} tercih verisi</span><b>~${fmtRank(Y.r)}</b></div>
+                    <div class="sim-track"><div class="sim-band" style="left:${simPos(lo)}%;width:${Math.max(.8, simPos(hi) - simPos(lo))}%"></div>${tp !== null ? `<div class="sim-mark" style="left:${tp}%" title="Hedef"></div>` : ''}</div>
+                    <div class="sim-scale" style="position:relative;height:12px">${[[1000,'1 bin'],[10000,'10 bin'],[100000,'100 bin'],[1000000,'1 milyon']].map(([v,l]) => `<span style="position:absolute;left:${simPos(v)}%;transform:translateX(-50%)">${l}</span>`).join('')}</div>
+                    <div class="v69-h mt-1">Olası bant (±5 puan): <b>${fmtRank(lo)} – ${fmtRank(hi)}</b>${target ? ` · turuncu çizgi: hedef ${fmtRank(target)}` : ''}</div></div>`;
+            }).join('');
+            // hedef yönlendirmesi
+            if (target) {
+                const tp = simPuanAt(cur.pts, target);
+                if (tp) {
+                    const gap = tp - puan;
+                    if (gap <= 0) h += `<div class="sim-tip">🎯 <b>${fmtRank(target)}</b> sırası için gereken ~${fmtNum(round1(tp))} puanın <b>${fmtNum(round1(-gap))} puan üstündesin</b>. Bu seviyeyi koru.</div>`;
+                    else {
+                        const K = PUAN_KATSAYI, opts = [];
+                        SIM_DERS[tur].forEach(([k, l, max]) => opts.push({ l, coef: K[tur + '_AYT'][k], room: Math.max(0, max - numOr0(st.ayt[k])) }));
+                        SIM_DERS.TYT.forEach(([k, l, max]) => opts.push({ l: 'TYT ' + l, coef: K[tur + '_TYT'][k], room: Math.max(0, max - numOr0(st.tyt[k])) }));
+                        const single = opts.map(o => ({ ...o, need: gap / o.coef })).filter(o => o.need <= o.room).sort((a, b) => a.need - b.need).slice(0, 3);
+                        let li = single.map(o => `<li><b>${o.l}</b>’de <b>+${o.need.toFixed(1).replace('.', ',')} net</b></li>`).join('');
+                        if (!li) {   // tek dersle kapanmıyor: katsayısı yüksekten doldur
+                            let left = gap; const plan = []; opts.slice().sort((a, b) => b.coef - a.coef).forEach(o => { if (left > 0 && o.room > 0) { const n = Math.min(o.room, left / o.coef); plan.push(`<li><b>${o.l}</b> +${n.toFixed(1).replace('.', ',')} net</li>`); left -= n * o.coef; } });
+                            li = plan.join('') + (left > 0.5 ? `<li>Bu netlerle bile ~${Math.round(left)} puan açık kalıyor; hedef bu yıl verisine göre çok yüksek.</li>` : '');
+                        }
+                        h += `<div class="sim-tip">🎯 <b>${fmtRank(target)}</b> sırası için ~${fmtNum(round1(tp))} puan gerekiyor, <b>${fmtNum(round1(gap))} puan eksiğin</b> var. Kapatmak için:<ul>${li}</ul></div>`;
+                    }
+                }
+            }
+            h += `<div class="v69-h">Sıralama, tercih kılavuzundaki taban puan–taban sıra çiftlerinden (${tur}, 2026 ve 2025) tahmin edilir. 2023–2024 verisi uygulamada yok; gerçek ÖSYM yığılma tablosu değildir, kaba bir bantı gösterir.</div>`;
+            out.innerHTML = h;
+        }
+
+        // ================= [v69] SANAL ÇALIŞMA ODASI =================
+        const ROOMS_PATH = 'yksTakip_rooms';
+        let roomCode = '', roomData = null, roomOn = false, roomSig = '', roomLastWrite = 0, roomWaveSeen = null;
+        try { roomCode = localStorage.getItem('yks_room@' + ACTIVE_PROFILE) || ''; } catch (e) {}
+        function roomMe() {
+            let status = 'idle', label = 'Pasif', until = 0;
+            if (pomo.running && pomo.mode === 'work') { status = 'work'; label = "Pomodoro'da"; until = pomo.endAt; }
+            else if (sw.running) { status = 'work'; label = 'Çalışıyor (kronometre)'; }
+            else if (pomo.running) { status = 'break'; label = 'Molada'; until = pomo.endAt; }
+            const today = localDateStr(), todayMin = (state.activities || []).filter(a => a.date === today).reduce((t, a) => t + (a.duration || 0), 0);
+            return { name: (PROFILES[ACTIVE_PROFILE] || {}).name || ACTIVE_PROFILE, status, label, until: until || 0, todayMin, updatedAt: Date.now() };
+        }
+        function roomRef(f, sub) { return f.sdk.ref(f.db, ROOMS_PATH + '/' + roomCode + (sub ? '/' + sub : '')); }
+        async function roomWriteMe(force) {
+            if (!roomCode || READONLY || IS_VIEWER_URL) return;
+            const me = roomMe(), sig = me.status + '|' + me.until + '|' + me.todayMin;
+            if (!force && sig === roomSig && Date.now() - roomLastWrite < 45000) return;
+            const f = await metaFb(); if (!f) return;
+            roomSig = sig; roomLastWrite = Date.now();
+            f.sdk.update(roomRef(f, 'members/' + ACTIVE_PROFILE), me).catch(() => { roomSig = ''; });
+        }
+        async function roomListen() {
+            if (roomOn || !roomCode) return;
+            const f = await metaFb(); if (!f) return;
+            roomOn = true; roomWaveSeen = null;
+            const code = roomCode;
+            f.sdk.onValue(roomRef(f), snap => {
+                if (code !== roomCode) return;
+                roomData = snap.val();
+                if (!roomData && roomCode) { showToast('Oda kapatılmış.', 'error'); roomForget(); return; }
+                const mem = (roomData && roomData.members) || {};
+                if (roomWaveSeen === null) { roomWaveSeen = {}; Object.keys(mem).forEach(id => roomWaveSeen[id] = (mem[id].wave || {}).at || 0); }
+                else Object.keys(mem).forEach(id => { const w = mem[id].wave; if (id !== ACTIVE_PROFILE && w && w.at > (roomWaveSeen[id] || 0)) { roomWaveSeen[id] = w.at; showToast(`${mem[id].name || id}: ${w.emoji} gönderdi`); haptic(); } });
+                renderRoom();
+            });
+            roomWriteMe(true);
+        }
+        function roomForget() { roomCode = ''; roomData = null; roomOn = false; try { localStorage.removeItem('yks_room@' + ACTIVE_PROFILE); } catch (e) {} renderRoom(); }
+        async function roomCreate() {
+            if (READONLY) return; const nm = (document.getElementById('roomName').value || '').trim().slice(0, 30) || 'Çalışma odası';
+            const f = await metaFb(); if (!f) { showToast('Bağlantı yok.', 'error'); return; }
+            const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let code = '';
+            for (let t = 0; t < 5; t++) { code = Array.from({ length: 6 }, () => A[Math.floor(Math.random() * A.length)]).join(''); const ex = await f.sdk.get(f.sdk.ref(f.db, ROOMS_PATH + '/' + code)).catch(() => null); if (ex && !ex.exists()) break; code = ''; }
+            if (!code) { showToast('Oda kodu üretilemedi, tekrar dene.', 'error'); return; }
+            roomCode = code; roomOn = false; try { localStorage.setItem('yks_room@' + ACTIVE_PROFILE, code); } catch (e) {}
+            await f.sdk.update(f.sdk.ref(f.db, ROOMS_PATH + '/' + code), { name: nm, owner: ACTIVE_PROFILE, createdAt: Date.now(), members: { [ACTIVE_PROFILE]: roomMe() } }).catch(() => showToast('Oda oluşturulamadı (izin yok?).', 'error'));
+            roomListen(); haptic(); showToast('Oda hazır · kodu arkadaşına gönder');
+        }
+        async function roomJoin() {
+            if (READONLY) return; const code = (document.getElementById('roomJoinCode').value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (code.length !== 6) { showToast('Oda kodu 6 karakter.', 'error'); return; }
+            const f = await metaFb(); if (!f) { showToast('Bağlantı yok.', 'error'); return; }
+            const snap = await f.sdk.get(f.sdk.ref(f.db, ROOMS_PATH + '/' + code)).catch(() => null);
+            if (!snap || !snap.exists()) { showToast('Bu kodla oda bulunamadı.', 'error'); return; }
+            const mem = (snap.val() || {}).members || {};
+            if (!mem[ACTIVE_PROFILE] && Object.keys(mem).length >= 8) { showToast('Oda dolu (en fazla 8 kişi).', 'error'); return; }
+            roomCode = code; roomOn = false; try { localStorage.setItem('yks_room@' + ACTIVE_PROFILE, code); } catch (e) {}
+            roomListen(); haptic(); showToast('Odaya katıldın');
+        }
+        async function roomLeave() {
+            if (!roomCode || !confirm('Odadan çıkılsın mı?')) return;
+            const f = await metaFb(), mem = (roomData && roomData.members) || {}, others = Object.keys(mem).filter(id => id !== ACTIVE_PROFILE);
+            if (f) await (others.length ? f.sdk.update(roomRef(f), { ['members/' + ACTIVE_PROFILE]: null }) : f.sdk.update(f.sdk.ref(f.db, ROOMS_PATH), { [roomCode]: null })).catch(() => {});
+            roomForget();
+        }
+        async function roomWave(emoji) {
+            if (!roomCode) return; const f = await metaFb(); if (!f) return;
+            f.sdk.update(roomRef(f, 'members/' + ACTIVE_PROFILE + '/wave'), { emoji, at: Date.now() }).then(() => { haptic(); showToast('Gönderildi ' + emoji); }).catch(() => showToast('Gönderilemedi.', 'error'));
+        }
+        function roomCopy() { try { navigator.clipboard.writeText(roomCode).then(() => showToast('Kod kopyalandı')); } catch (e) {} }
+        function renderRoom() {
+            const box = document.getElementById('roomBody'); if (!box) return;
+            if (!roomCode) {
+                box.innerHTML = `<p class="v69-h mb-4">Arkadaşlarınla aynı odaya gir; kimin çalıştığını, molada olduğunu canlı gör ve selam gönder.</p>
+                    <div class="rm-in mb-3"><input id="roomName" maxlength="30" placeholder="Oda adı (örn: Gece Mesaisi)" class="input-soft w-full rounded-xl p-3 text-sm"><button onclick="roomCreate()" class="btn-primary press-scale text-white font-semibold px-5 rounded-xl text-sm">Oda kur</button></div>
+                    <div class="rm-in"><input id="roomJoinCode" maxlength="6" autocapitalize="characters" placeholder="Oda kodu (6 harf)" class="input-soft w-full rounded-xl p-3 text-sm" style="letter-spacing:.15em;text-transform:uppercase"><button onclick="roomJoin()" class="press-scale font-semibold px-5 rounded-xl text-sm bg-black/5 dark:bg-white/10 text-slate-700 dark:text-slate-200">Katıl</button></div>`;
+                return;
+            }
+            if (!roomData) { box.innerHTML = `<div class="v69-h py-3">Oda yükleniyor…</div>`; return; }
+            const mem = roomData.members || {}, now = Date.now();
+            const rows = Object.keys(mem).sort((a, b) => (a === ACTIVE_PROFILE ? -1 : b === ACTIVE_PROFILE ? 1 : 0)).map(id => {
+                const m = mem[id], stale = now - (m.updatedAt || 0) > 150000, st = stale ? 'idle' : (m.status || 'idle'), label = stale ? 'Pasif' : (m.label || 'Pasif');
+                const left = (st !== 'idle' && m.until > now) ? ` · ${Math.ceil((m.until - now) / 60000)} dk kaldı` : '';
+                const cols = (typeof profileColors === 'function' && PROFILES[id]) ? profileColors(id) : null;
+                return `<div class="rm-mem"><div class="rm-av" ${cols ? `style="background:linear-gradient(135deg,${cols[0]},${cols[1]})"` : ''}>${escHtml((m.name || id).charAt(0).toUpperCase())}</div>
+                    <div style="min-width:0;flex:1"><div class="nm">${escHtml(m.name || id)}${id === ACTIVE_PROFILE ? ' <span style="opacity:.5;font-weight:500">(sen)</span>' : ''}</div><div class="st"><span class="rm-dot ${st}"></span>${escHtml(label)}${left}</div></div>
+                    <div class="v69-h" style="text-align:right;flex:none">${m.todayMin ? Math.round(m.todayMin) + ' dk<br>bugün' : ''}</div></div>`;
+            }).join('');
+            box.innerHTML = `<div class="flex items-center justify-between gap-3 flex-wrap mb-3"><div style="min-width:0"><div class="text-base font-semibold" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escHtml(roomData.name || 'Oda')}</div><div class="v69-h">${Object.keys(mem).length} kişi</div></div>
+                <button onclick="roomCopy()" class="rm-code press-scale" title="Kodu kopyala">${roomCode}</button></div>
+                <div class="grid gap-2 mb-4">${rows}</div>
+                <div class="flex items-center justify-between gap-3 flex-wrap"><div class="rm-wave">${['🔥', '💪', '☕', '🎯'].map(e => `<button onclick="roomWave('${e}')" class="press-scale" aria-label="Gönder ${e}">${e}</button>`).join('')}</div>
+                <button onclick="roomLeave()" class="press-scale text-[12px] font-semibold px-4 py-2 rounded-full text-rose-500 bg-rose-500/10">Odadan çık</button></div>`;
+        }
+        setInterval(() => {      // durum değişince / her 45 sn'de yaz; kayıtlı oda varsa dinlemeyi başlat; süre metinlerini tazele
+            if (READONLY || IS_VIEWER_URL || !PROFILE_CHOSEN) return;
+            try { if (roomCode && !roomOn) roomListen(); else if (roomCode) { roomWriteMe(false); if (document.getElementById('roomBody') && document.getElementById('roomBody').offsetParent) renderRoom(); } } catch (e) {}
+        }, 4000);
 
         // --- Weekday Study Intensity Chart ---
         let chartWeekdayInstance = null;
