@@ -2315,6 +2315,21 @@
         .er-top { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--ios-fill); margin-bottom: 6px; }
         .er-top .n { width: 26px; height: 26px; border-radius: 50%; background: #FF3B30; color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex: none; }
         .rp-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 12px; background: var(--ios-fill); margin-bottom: 5px; font-size: 12.5px; }
+        /* [v74] gün sonu, yoğunluk, tekrar takvimi, odak, karne-hedef, rozetler */
+        .de-seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: 12px; background: var(--ios-fill); flex: none; }
+        .de-seg label { cursor: pointer; } .de-seg input { position: absolute; opacity: 0; pointer-events: none; }
+        .de-seg span { display: block; padding: 6px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--ios-label2); }
+        .de-seg input:checked + span { background: rgb(var(--brand-rgb)); color: #fff; }
+        .de-blk { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border-radius: 14px; background: var(--ios-fill); margin-bottom: 6px; font-size: 13px; min-width: 0; }
+        .de-rate { display: flex; justify-content: space-between; gap: 6px; margin: 8px 0 12px; } .de-rate label { flex: 1; cursor: pointer; } .de-rate input { position: absolute; opacity: 0; }
+        .de-rate span { display: block; text-align: center; font-size: 26px; padding: 6px 0; border-radius: 14px; background: var(--ios-fill); filter: grayscale(.8); opacity: .7; } .de-rate input:checked + span { filter: none; opacity: 1; outline: 2px solid rgb(var(--brand-rgb)); }
+        .int-hero { display: flex; align-items: center; gap: 16px; margin: 6px 0 12px; } .int-hero .d { font-size: 54px; font-weight: 800; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+        .int-chip { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; color: #fff; }
+        .sc-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; margin: 8px 0 10px; }
+        .sc-cell { border-radius: 10px; padding: 6px 0; text-align: center; background: var(--ios-fill); font-size: 10px; color: var(--ios-label2); min-width: 0; } .sc-cell b { display: block; font-size: 15px; color: inherit; } .sc-cell.on { background: rgb(var(--brand-rgb) / .16); color: rgb(var(--brand-rgb)); } .sc-cell.today { outline: 2px solid rgb(var(--brand-rgb)); }
+        .fc-bars { display: flex; align-items: flex-end; gap: 8px; height: 110px; margin: 10px 0 4px; } .fc-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; font-size: 10px; color: var(--ios-label2); } .fc-bar i { display: block; width: 100%; max-width: 30px; border-radius: 8px 8px 3px 3px; background: linear-gradient(180deg, #FF9500, #FF3B30); min-height: 3px; } .fc-bar i.ok { background: linear-gradient(180deg, #34C759, #30B0C7); }
+        .rm-badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 99px; font-size: 12px; font-weight: 600; background: rgba(255,204,0,.16); margin: 0 6px 6px 0; }
+        .yk-row { display: grid; grid-template-columns: minmax(0,1.4fr) repeat(3, minmax(0,1fr)); gap: 6px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--ios-fill); margin-bottom: 5px; font-size: 12px; } .yk-row.h { background: none; font-size: 10.5px; font-weight: 700; color: var(--ios-label2); text-transform: uppercase; padding: 0 10px; } .yk-row span:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
         .plan-tg { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 12px; } .plan-tg .plan-full, .plan-tg > .plan-full { grid-column: 1 / -1; }
         .plan-pick { padding: 10px; border-radius: 14px; background: var(--ios-fill); }
         .plan-pick-list { max-height: 230px; overflow-y: auto; display: grid; gap: 4px; -webkit-overflow-scrolling: touch; }
@@ -3858,6 +3873,11 @@
                 </div>
                 <div id="pdBody"></div>
             </div>
+            <!-- [v74] Karne ↔ Boğaziçi YBS -->
+            <div data-card="ybskarne" id="ybsKarneCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="flag" class="w-5 h-5 text-brand"></i><span>Karne ↔ Boğaziçi YBS Farkı</span></h2>
+                <div id="ybsKarneBody"></div>
+            </div>
         </section>
 
         <!-- TAB: WRONG QUESTION NOTEBOOK -->
@@ -3910,6 +3930,11 @@
             <div data-card="akbimwrong" id="akbimWrongCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="link" class="w-5 h-5 text-brand"></i><span>AKBİM ↔ Yanlış Defteri</span></h2>
                 <div id="akbimWrongBody"></div>
+            </div>
+            <!-- [v74] Yanlış tekrar takvimi -->
+            <div data-card="srscal" id="srsCalCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="calendar-check" class="w-5 h-5 text-brand"></i><span>Tekrar Takvimi</span></h2>
+                <div id="srsCalBody"></div>
             </div>
         </section>
 
@@ -4100,6 +4125,11 @@
                 <div id="planBlocksContainer" class="space-y-2"></div>
             </div>
         
+            <!-- [v74] Sınav geri sayımı & yoğunluk modu -->
+            <div data-card="intensity" id="intensityCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="timer" class="w-5 h-5 text-brand"></i><span>Sınav Geri Sayımı & Yoğunluk Modu</span></h2>
+                <div id="intensityBody"></div>
+            </div>
             <!-- [v73] Haftalık plan tahtası -->
             <div data-card="planboard" id="planBoardCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift lg:col-span-3">
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2">
@@ -4528,6 +4558,11 @@
                 </div>
             </div>
 
+            <!-- [v74] Odak & dikkat -->
+            <div data-card="focus" id="focusCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
+                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="eye" class="w-5 h-5 text-brand"></i><span>Odak & Dikkat</span></h2>
+                <div id="focusBody"></div>
+            </div>
             <!-- [v69] Biyoritim -->
             <div data-card="biorhythm" id="bioCard" class="soft-card p-7 sm:p-8 rounded-[28px] hover-lift">
                 <div class="flex items-start justify-between gap-3 mb-3 flex-wrap">
@@ -5644,7 +5679,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v73';
+        const APP_VERSION = 'firebase-v74';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -7226,18 +7261,18 @@
                 ['denge', () => scheduleDashBalance()]
             ],
             exams: [
-                ['deneme tablosu', () => renderExamTable()], ['trend', () => renderExamTrend()], ['puan', () => renderScoreEstimator()], ['simülatör', () => renderSimulator()], ['puan-net', () => renderPuanNet()], ['akbim geçmişi', () => renderAkbimHistory()], ['sınav günü', () => renderProjDers()],
+                ['deneme tablosu', () => renderExamTable()], ['trend', () => renderExamTrend()], ['puan', () => renderScoreEstimator()], ['simülatör', () => renderSimulator()], ['puan-net', () => renderPuanNet()], ['akbim geçmişi', () => renderAkbimHistory()], ['sınav günü', () => renderProjDers()], ['karne-ybs', () => renderYbsKarne()],
                 ['ders grafiği', () => renderSubjectChart()], ['eksikler', () => renderSubjectGaps()], ['süre', () => renderExamTimeAnalysis()],
                 ['karşılaştır', () => renderExamCompare()], ['borsa', () => renderStocks()], ['çıkmış', () => renderCikmis()],
                 ['deneme takvimi', () => renderDenemeTakvim()], ['sıralama', () => renderExamRanks()], ['hata analizi', () => renderMistakeAnalysis()], ['en çok yanlış', () => renderTopWrong()], ['projeksiyon', () => renderProjection()], ['kurum sırası', () => renderKurumRank()], ['strateji', () => renderStrategy()]
             ],
-            tekrar: [['akbim-defter', () => renderAkbimWrong()], ['yanlışlar', () => renderWrongNotes()], ['gelen sorular', () => renderInbox()], ['ezber', () => renderFlashDecks()]],
+            tekrar: [['akbim-defter', () => renderAkbimWrong()], ['tekrar takvimi', () => renderSrsCal()], ['yanlışlar', () => renderWrongNotes()], ['gelen sorular', () => renderInbox()], ['ezber', () => renderFlashDecks()]],
             konular: [['playlist', () => renderPlaylistProgress()]],
             mufredat: [['müfredat', () => renderMufredat()], ['mini hedefler', () => renderTopicGoals()]],
-            plan: [['plan', () => renderPlanBlocks()], ['tahta', () => renderPlanBoard()], ['karne', () => renderPlanKarne()], ['şablon', () => renderPlanTools()], ['notlar', () => renderQuickNotes()]],
+            plan: [['plan', () => renderPlanBlocks()], ['tahta', () => renderPlanBoard()], ['yoğunluk', () => renderIntensity()], ['karne', () => renderPlanKarne()], ['şablon', () => renderPlanTools()], ['notlar', () => renderQuickNotes()]],
             analytics: [
                 ['haftalık rapor', () => renderWeeklyReport()], ['aylık rapor', () => fillReportMonths()], ['isabet', () => renderAccuracyAnalysis()],
-                ['grafikler', () => renderCharts()], ['dönem', () => renderPeriodComparison(currentPeriodMode)], ['hafta günü', () => renderWeekdayChart()], ['biyoritim', () => renderBiorhythm()], ['oda', () => renderRoom()],
+                ['grafikler', () => renderCharts()], ['dönem', () => renderPeriodComparison(currentPeriodMode)], ['hafta günü', () => renderWeekdayChart()], ['biyoritim', () => renderBiorhythm()], ['odak', () => renderFocusCard()], ['oda', () => renderRoom()],
                 ['meydan okuma', () => renderChallenge()], ['liderlik', () => renderLeaderboard()], ['düello', () => renderDuo()], ['ortak hedef', () => renderSharedGoal()]
             ],
             liderlik: [['oda', () => renderRoom()], ['liderlik', () => renderLeaderboard()]],
@@ -10196,6 +10231,8 @@
                 if (hw.length) body += row(late ? 'rgb(var(--ios-red))' : '#FF9500', '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>', `<b>${hw.length} ödev</b>${late ? ` · <span style="color:rgb(var(--ios-red))">${late} gecikti</span>` : soon ? ` · ${soon} tanesi yarın/bugün teslim` : ''}`, "switchTab('kurs')"); }
             if (canSeeAi()) { const dq = (state.dailyQuiz || {})[localDateStr()]; body += row('#FF9500', '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>', dq ? `⚡ Günün 5 sorusu: <b>${dq.ok}/${dq.n}</b>${dqStreak() > 1 ? ` · ${dqStreak()} gün üst üste` : ''}` : `⚡ <b>Günün 5 sorusu</b> seni bekliyor`, 'dqOpen()'); }
             if (canSeeAi()) { try { syncTopicReviews(); } catch (e) {} const trd = trDue().length; if (trd) body += row('#AF52DE', '<path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/><path d="M9 21h6"/>', `🧠 <b>${trd} konu</b> için tekrar zamanı`, "switchTab('aikoc')"); }
+            try { const stk = computeStreak(); if (stk >= 2) body += row('#FF9500', '<path d="M12 2s5 4 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/>', `<b>${stk} günlük</b> serin sürüyor 🔥`);
+                if (roomCode && roomData && roomData.members) { const on = Object.entries(roomData.members).filter(([id, m]) => id !== ACTIVE_PROFILE && m.status === 'work' && Date.now() - (m.updatedAt || 0) < 150000); if (on.length) body += row('#34C759', '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/>', `Odada <b>${on.map(([, m]) => escHtml(m.name || '')).join(', ')}</b> şu an çalışıyor`, "switchTab('liderlik')"); } } catch (e) {}
             const sh = shieldOffer();
             if (sh && !READONLY) body += row('#FF9500', '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>', `Serin ${sh.days.length === 1 ? 'dün' : 'son ' + sh.days.length + ' gün'} bozuldu · <b>🛡️ kalkan kullan</b>, ${sh.after} gün olarak devam etsin (bu ay ${sh.left} hakkın var)`, 'useShield()');
             if (canSeeAi()) { const nx = (state.denemeTakvimi || []).filter(d => daysUntil(d.date) >= 0 && daysUntil(d.date) <= 1).sort((a, b) => a.date.localeCompare(b.date))[0];
@@ -12051,7 +12088,7 @@
             }, true);
         }
         const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus", "roomCreate", "roomJoin", "roomLeave", "roomWave", "simFill", "planTplSave", "planTplApply", "planTplDelete", "setPlanRemind", "setAutoPlan", "setSwBreak"];
-        RO_BLOCKED.push('roomChatSend', 'roomSetGoal', 'roomPomoStart', 'roomPomoJoin', 'akbimManual', 'akbimManualSave', 'akbimManualDel', 'examReportPlan', 'restorePointApply', 'restorePointDel', 'openKursForm', 'saveKurs', 'deleteKurs', 'openActivityEdit', 'saveActivityEdit', 'toggleReaction', 'setZorluk');
+        RO_BLOCKED.push('dayEndApply', 'dayEndSet', 'intensityApply', 'srsCalPlan', 'roomChatSend', 'roomSetGoal', 'roomPomoStart', 'roomPomoJoin', 'akbimManual', 'akbimManualSave', 'akbimManualDel', 'examReportPlan', 'restorePointApply', 'restorePointDel', 'openKursForm', 'saveKurs', 'deleteKurs', 'openActivityEdit', 'saveActivityEdit', 'toggleReaction', 'setZorluk');
         RO_BLOCKED.push('saveAkbimImport', 'applyAkbimTopics', 'aiAskAkbimTopics');   // [v66]
         RO_BLOCKED.push('actAddPhotos', 'pinMsg', 'unpinMsg', 'startVoice', 'stopVoice');   // [v60b]
         RO_BLOCKED.push('applyKarneTopics', 'openHwForm', 'saveHw', 'toggleHw', 'deleteHw');   // [v60]
@@ -15149,6 +15186,7 @@ Kurs programım (bu saatlere ASLA blok koyma): ${kurs || 'yok'}
 Bu hafta denemeler: ${den || 'yok'}
 Tekrar zamanı gelen konular: ${tr || 'yok'}
 Bekleyen ödevler: ${hw || 'yok'}
+Sınav yoğunluk modu: ${intensityText()}
 Planımda zaten olanlar (çakıştırma): ${busy || 'yok'}
 AKBİM analizinde öncelikli (yanlış/boş) konularım — bunlara öncelik ver ve blokta "akbim_konu" alanına listedeki konu adını AYNEN yaz: ${akTxt || 'yok'}
 BOŞ SAAT aralıklarım (bloklar SADECE bu aralıkların içine sığmalı):\n${freeTxt || 'yok'}
@@ -16541,10 +16579,10 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             exams: { def: 'analiz', segs: [
                 ['ozet', 'Özet', ['Deneme Takvimi', 'stockCard', 'Deneme Geçmişi', 'Son Deneme Karşılaştırması']],
                 ['ekle', 'Ekle', ['Deneme Sonucu Ekle', 'Sınav Simülasyon', 'Çıkmış Sorular']],
-                ['analiz', 'Analiz', ['Kurum Sıralaman', 'Net Projeksiyonu', 'Deneme Stratejin', 'En Çok Yanlış', 'Hata Analizi', 'Ders Bazlı Net Gelişimi', 'Süre Analizi', 'İki Denemeyi', 'Hedefe Göre', 'Deneme Sıralaması', 'Sınav Günü Tahmini', 'AKBİM Konu']]
+                ['analiz', 'Analiz', ['Kurum Sıralaman', 'Net Projeksiyonu', 'Deneme Stratejin', 'En Çok Yanlış', 'Hata Analizi', 'Ders Bazlı Net Gelişimi', 'Süre Analizi', 'İki Denemeyi', 'Hedefe Göre', 'Deneme Sıralaması', 'Sınav Günü Tahmini', 'AKBİM Konu', 'Karne ↔ Boğaziçi']]
             ] },
             tekrar: { def: 'defter', segs: [
-                ['defter', 'Yanlış Defteri', ['Gelen Sorular', 'Yanlış Soru Defteri']],
+                ['defter', 'Yanlış Defteri', ['Gelen Sorular', 'Yanlış Soru Defteri', 'Tekrar Takvimi', 'AKBİM']],
                 ['ezber', 'Ezber Kartları', ['Ezber Kartları']]
             ] },
             mufredat: { def: 'konular', segs: [
@@ -22392,7 +22430,9 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             const today = localDateStr(), todayMin = (state.activities || []).filter(a => a.date === today).reduce((t, a) => t + (a.duration || 0), 0);
             const ws = weekStartStr(), we = addDaysStr(ws, 6), weekMin = (state.activities || []).filter(a => a.date >= ws && a.date <= we).reduce((t, a) => t + (a.duration || 0), 0);
             let streak = 0; try { streak = computeStreak(); } catch (e) {}
-            return { name: (PROFILES[ACTIVE_PROFILE] || {}).name || ACTIVE_PROFILE, status, label, until: until || 0, todayMin, weekMin, weekKey: ws, streak, today: today, updatedAt: Date.now() };
+            const wk = (state.activities || []).filter(a => a.date >= ws && a.date <= we), weekQ = wk.reduce((t, a) => t + (a.questions != null ? numOr0(a.questions) : numOr0(a.correct) + numOr0(a.wrong) + numOr0(a.blank)), 0);
+            const fm = (state.activities || []).filter(a => a.date === today && a.id > 1e12).map(a => { const d = new Date(a.id); return d.getHours() * 60 + d.getMinutes(); }); const firstMin = fm.length ? Math.min(...fm) : null;
+            return { weekQ, firstMin, name: (PROFILES[ACTIVE_PROFILE] || {}).name || ACTIVE_PROFILE, status, label, until: until || 0, todayMin, weekMin, weekKey: ws, streak, today: today, updatedAt: Date.now() };
         }
         function roomRef(f, sub) { return f.sdk.ref(f.db, ROOMS_PATH + '/' + roomCode + (sub ? '/' + sub : '')); }
         async function roomWriteMe(force) {
@@ -22499,11 +22539,20 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             // haftalık sıralama
             const board = Object.keys(mem).map(id => ({ id, name: mem[id].name || id, min: mem[id].weekKey === wk ? (mem[id].weekMin || 0) : 0, streak: mem[id].streak || 0 })).sort((x, y) => y.min - x.min);
             const medal = ['🥇', '🥈', '🥉'];
+            const best = (arr, f, min) => { const a = arr.filter(m => f(m) > min).sort((x, y) => f(y) - f(x)); return a[0] || null; };
+            const bdg = []; if (Object.keys(mem).length >= 2) {
+                const L = Object.keys(mem).map(id => ({ id, name: mem[id].name || id, wk: mem[id].weekKey === wk, ...mem[id] }));
+                const w1 = best(L.filter(m => m.wk), m => m.weekMin || 0, 0), w2 = best(L, m => m.streak || 0, 1), w3 = best(L.filter(m => m.wk), m => m.weekQ || 0, 0);
+                const early = L.filter(m => m.today === todayS && m.firstMin != null).sort((x, y) => x.firstMin - y.firstMin)[0];
+                if (w1) bdg.push(`🏆 ${escHtml(w1.name)} · haftanın çalışkanı`); if (w2) bdg.push(`🔥 ${escHtml(w2.name)} · seri kralı (${w2.streak} gün)`);
+                if (w3) bdg.push(`🎯 ${escHtml(w3.name)} · soru makinesi (${w3.weekQ})`); if (early) bdg.push(`🌅 ${escHtml(early.name)} · bugün ilk başlayan (${minToHm(early.firstMin)})`);
+            }
+            const badgeHtml = bdg.length ? `<div class="mt-2">${bdg.map(b => `<span class="rm-badge">${b}</span>`).join('')}</div>` : '';
             const boardHtml = `<div class="rm-sec"><span>Bu hafta</span></div>${board.map((m, i) => `<div class="ah-row"><span class="t">${medal[i] || (i + 1) + '.'} ${escHtml(m.name)}${m.id === ACTIVE_PROFILE ? ' (sen)' : ''}</span><span class="tr"><b>${m.min >= 60 ? Math.floor(m.min / 60) + ' sa ' + Math.round(m.min % 60) + ' dk' : Math.round(m.min) + ' dk'}</b>${m.streak ? ' · 🔥' + m.streak : ''}</span></div>`).join('')}`;
             // ortak pomodoro
             const pm = roomData.pomo, pmEnd = pm ? pm.startAt + pm.dur * 60000 : 0, pmLive = !!pm && pmEnd > now;
             const joined = pmLive && pomo.running && pomo.mode === 'work' && Math.abs(pomo.endAt - pmEnd) < 8000;
-            const pomoHtml = `<div class="rm-sec"><span>Birlikte Pomodoro</span></div>
+            const pomoHtml = `${badgeHtml}<div class="rm-sec"><span>Birlikte Pomodoro</span></div>
                 ${pmLive ? `<div class="rm-pomo"><span style="font-size:22px">🍅</span><div style="flex:1;min-width:0"><b>${escHtml(pm.name || pm.by)}</b> başlattı · ${pm.dur} dk<div class="v69-h">${Math.max(1, Math.ceil((pmEnd - now) / 60000))} dk kaldı</div></div>${joined ? '<span class="v69-h">katıldın ✓</span>' : `<button onclick="roomPomoJoin()" class="btn-primary press-scale text-white font-semibold px-4 py-2 rounded-xl text-[13px]">Katıl</button>`}</div>` : ''}
                 <div class="flex gap-2"><button onclick="roomPomoStart(25)" class="press-scale flex-1 py-2.5 rounded-xl text-[13px] font-semibold" style="background:var(--ios-fill)">🍅 Birlikte 25 dk</button><button onclick="roomPomoStart(50)" class="press-scale flex-1 py-2.5 rounded-xl text-[13px] font-semibold" style="background:var(--ios-fill)">🍅 Birlikte 50 dk</button></div>`;
             const chatBox = `<div class="rm-sec"><span>Sohbet</span></div><div id="roomChatList" class="rm-chat">${chatHtml}</div>
@@ -22663,7 +22712,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             }).join('');
             box.innerHTML = `<div class="flex items-center justify-between gap-2 mb-2"><div class="v69-h">${READONLY ? 'İzleme modunda taşıma kapalı.' : 'Bloğa basılı tut (telefon) / sürükle; başka güne bırak. Başka bloğa bırakırsan saatleri yer değiştirir.'}</div>
                 <div class="flex items-center gap-1"><button onclick="pbMoveWeek(-1)" class="press-scale px-3 py-1.5 rounded-full text-sm" style="background:var(--ios-fill)" aria-label="Önceki hafta">‹</button><button onclick="pbMoveWeek(0)" class="press-scale px-3 py-1.5 rounded-full text-[12px] font-semibold" style="background:var(--ios-fill)">${fmtDateTr(ws).replace(/\s\d{4}$/, '')}</button><button onclick="pbMoveWeek(1)" class="press-scale px-3 py-1.5 rounded-full text-sm" style="background:var(--ios-fill)" aria-label="Sonraki hafta">›</button></div></div>
-                <div class="pb-wrap" id="pbWrap"><div class="pb-grid">${cols}</div></div>`;
+                <div class="pb-wrap" id="pbWrap"><div class="pb-grid">${cols}</div></div>${dayEndRowHtml()}`;
             pbBind();
             if (pbOff === 0) { const w = document.getElementById('pbWrap'), t = w && w.querySelector('.pb-col.today'); if (t && w.scrollLeft === 0) w.scrollLeft = Math.max(0, t.offsetLeft - 16); }
         }
@@ -22741,6 +22790,186 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
         }
         async function restorePointDel(id) { try { const db = await rpDb(); await new Promise(res => { const tx = db.transaction('pts', 'readwrite'); tx.objectStore('pts').delete(id); tx.oncomplete = res; tx.onerror = res; }); renderRestorePoints(); } catch (e) {} }
         setTimeout(() => { try { if (READONLY || IS_VIEWER_URL || !PROFILE_CHOSEN) return; const k = 'yks_rp_day@' + ACTIVE_PROFILE, d = localDateStr(); if (localStorage.getItem(k) !== d && ((state.activities || []).length || (state.exams || []).length)) { localStorage.setItem(k, d); restorePointSave('otomatik'); } } catch (e) {} }, 9000);
+
+
+        // ================= [v74] GÜN SONU · YOĞUNLUK MODU · TEKRAR TAKVİMİ · ODAK SAYACI · KARNE↔YBS =================
+        // ---------- Gün sonu değerlendirmesi ----------
+        function dayEndCfg() { let c = {}; try { c = JSON.parse(localStorage.getItem('yks_dayend@' + ACTIVE_PROFILE) || '{}') || {}; } catch (e) {} return { on: c.on !== false, time: c.time || '21:30', last: c.last || '', ntf: c.ntf || '' }; }
+        function dayEndSave(patch) { try { localStorage.setItem('yks_dayend@' + ACTIVE_PROFILE, JSON.stringify({ ...dayEndCfg(), ...patch })); } catch (e) {} }
+        function dayEndSet(k, v) { if (k === 'on') { dayEndSave({ on: !!v }); if (v) try { askNotifyPermissionSoft(); } catch (e) {} } else dayEndSave({ [k]: v, last: '', ntf: '' }); renderPlanBoard(); }
+        function dayEndRowHtml() {
+            const c = dayEndCfg();
+            return `<div class="v70-set mt-3"><span>🌙 Gün sonu değerlendirmesi</span><span style="display:flex;gap:8px;align-items:center"><select class="rm-sel" onchange="dayEndSet('time',this.value)" ${c.on ? '' : 'disabled'}>${['20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00'].map(t => `<option ${t === c.time ? 'selected' : ''}>${t}</option>`).join('')}</select><input type="checkbox" ${c.on ? 'checked' : ''} onchange="dayEndSet('on',this.checked)" class="accent-brand" aria-label="Gün sonu değerlendirmesi"></span></div>
+                <button type="button" onclick="dayEndOpen(true)" class="press-scale w-full mt-2 py-2.5 rounded-xl text-[13px] font-semibold" style="background:var(--ios-fill)">Şimdi değerlendir</button>`;
+        }
+        function dayEndOpen(manual) {
+            const today = localDateStr(), bl = (state.planBlocks || []).filter(b => b.date === today).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+            if (!bl.length) { if (manual) showToast('Bugün için plan bloğun yok.'); return; }
+            const left = bl.filter(b => !b.completed), done = bl.length - left.length, pct = Math.round(done / bl.length * 100), prev = (state.dayReviews || {})[today] || {};
+            if (!left.length && !manual) return;
+            openMiniModal(`<div class="text-[12px] font-bold uppercase text-center text-indigo-500">🌙 Gün sonu</div>
+                <div class="text-[20px] font-bold text-center text-slate-900 dark:text-slate-50">Bugünü kapatalım</div>
+                <div class="text-[13px] text-slate-500 text-center mb-3">${bl.length} bloktan <b>${done}</b> tanesini tamamladın (%${pct}).${left.length ? ' Kalanlar ne olsun?' : ' Hepsi tamam 👏'}</div>
+                <div class="v69-h">Gün nasıl geçti?</div>
+                <div class="de-rate">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="deRate" value="${n}" ${prev.rating === n ? 'checked' : ''}><span>${DR_EMOJI[n]}</span></label>`).join('')}</div>
+                ${left.map(b => `<div class="de-blk"><span style="min-width:0;flex:1" class="truncate"><b>${escHtml(b.time || '')}</b> ${escHtml(subjectShort(b.subject))}${b.topic ? ' · ' + escHtml(b.topic) : ''}</span>
+                    <span class="de-seg">${[['move', 'Yarına'], ['done', 'Yaptım'], ['skip', 'Bırak']].map(([v, l]) => `<label><input type="radio" name="de_${b.id}" value="${v}" ${v === 'move' ? 'checked' : ''}><span>${l}</span></label>`).join('')}</span></div>`).join('')}
+                <button type="button" onclick="dayEndApply()" class="btn-primary press-scale w-full mt-3 py-3.5 rounded-xl text-white font-semibold">Kaydet</button>
+                <button type="button" onclick="closeMiniModal()" class="w-full mt-2 py-3 text-brand font-semibold">Şimdi değil</button>`);
+            dayEndSave({ last: today });
+        }
+        function dayEndApply() {
+            if (READONLY) return; const today = localDateStr(), tm = addDaysStr(today, 1); let moved = 0, done = 0;
+            (state.planBlocks || []).filter(b => b.date === today && !b.completed).forEach(b => {
+                const el = document.querySelector(`input[name="de_${b.id}"]:checked`), v = el ? el.value : 'skip';
+                if (v === 'move') { b.date = tm; b.note = ((b.note || '') + ' ↪ dünden').trim().slice(0, 120); moved++; }
+                else if (v === 'done') { b.completed = true; b.result = { correct: 0, wrong: 0, blank: 0, duration: b.duration || 0 }; done++; }
+            });
+            const r = document.querySelector('input[name="deRate"]:checked');
+            if (r) { if (!state.dayReviews || typeof state.dayReviews !== 'object') state.dayReviews = {}; const prev = state.dayReviews[today] || {}; state.dayReviews[today] = { ...prev, rating: +r.value, hard: prev.hard || 3, note: prev.note || '', tomorrow: prev.tomorrow || '', savedAt: new Date().toTimeString().slice(0, 5) }; }
+            saveState(); closeMiniModal(); playFeedbackSound('success');
+            try { renderPlanBlocks(); renderPlanKarne(); renderPlanBoard(); renderDayReviewCard(true); renderTodayCard(); } catch (e) {}
+            showToast(`${done ? done + ' blok tamamlandı' : ''}${done && moved ? ' · ' : ''}${moved ? moved + ' blok yarına kaydı' : ''}${!done && !moved ? 'Kaydedildi' : ''}`);
+        }
+        let dayEndPending = false;
+        function dayEndTick() {
+            try {
+                if (READONLY || IS_VIEWER_URL || !PROFILE_CHOSEN) return; const c = dayEndCfg(); if (!c.on) return;
+                const now = new Date(), today = localDateStr(now); if (c.last === today || now.getHours() * 60 + now.getMinutes() < hmToMin(c.time)) return;
+                const left = (state.planBlocks || []).filter(b => b.date === today && !b.completed); if (!left.length) return;
+                if (document.hidden) { if (c.ntf !== today) { dayEndSave({ ntf: today }); sendAppNotification('Gün sonu 🌙', `${left.length} plan bloğun açık kaldı. Yarına kaydıralım mı?`, 'dayend'); } dayEndPending = true; return; }
+                if (document.getElementById('miniModal').classList.contains('hidden')) { dayEndPending = false; dayEndOpen(); }
+            } catch (e) {}
+        }
+        setInterval(dayEndTick, 30000); document.addEventListener('visibilitychange', () => { if (!document.hidden && dayEndPending) setTimeout(dayEndTick, 800); });
+        setTimeout(dayEndTick, 6000);
+
+        // ---------- Sınav geri sayımı & yoğunluk modu ----------
+        const INT_PHASES = [
+            { max: 30, key: 'final', name: 'Son düzlük', col: '#FF3B30', dh: 1, rep: 60, den: 'haftada 2 deneme', tip: 'Yeni konu açma; denemeler, yanlış defteri ve hız. Uykuyu bozma.' },
+            { max: 50, key: 'sprint', name: 'Sprint', col: '#FF9500', dh: 1, rep: 45, den: 'haftada 1–2 deneme', tip: 'Eksik konuları kapat, her gün yanlış tekrarı yap.' },
+            { max: 100, key: 'yogun', name: 'Yoğun', col: '#AF52DE', dh: 0.5, rep: 30, den: 'haftada 1 deneme', tip: 'Müfredatı bitir, haftalık deneme düzenine otur.' },
+            { max: 99999, key: 'temel', name: 'Temel', col: '#34C759', dh: 0, rep: 20, den: '2 haftada 1 deneme', tip: 'Konu eksiklerini kapat, düzenli tempo kur.' }
+        ];
+        function intensityInfo() {
+            const d = state.settings.examDate; if (!d) return null; const left = daysUntil(d); if (left < 0) return { left, over: true };
+            const ph = INT_PHASES.find(x => left <= x.max) || INT_PHASES[3];
+            const base = numOr0(state.settings.intensityBase) || numOr0(state.settings.dailyHoursGoal) || 4;
+            return { left, ph, base, sug: Math.round((base + ph.dh) * 2) / 2, cur: numOr0(state.settings.dailyHoursGoal) || 4 };
+        }
+        function intensityText() { const i = intensityInfo(); if (!i || i.over) return 'tarih yok'; return `YKS'ye ${i.left} gün · ${i.ph.name} modu (günlük ${i.sug} saat, tekrar payı %${i.ph.rep}, ${i.ph.den}) — planı buna göre yoğunlaştır, tekrar ve deneme ağırlığını artır`; }
+        function renderIntensity() {
+            const box = document.getElementById('intensityBody'); if (!box) return; const i = intensityInfo();
+            if (!i) { box.innerHTML = `<div class="v69-h py-2">Geri sayım için Ayarlar’dan YKS sınav tarihini gir.</div>`; return; }
+            if (i.over) { box.innerHTML = `<div class="v69-h py-2">Sınav tarihi geçmiş görünüyor. Ayarlar’dan yeni tarihi gir.</div>`; return; }
+            const applied = state.settings.intensityPhase === i.ph.key;
+            box.innerHTML = `<div class="int-hero"><div class="d">${i.left}</div><div><div class="text-[13px] text-slate-500">gün kaldı · ${Math.floor(i.left / 7)} hafta</div><span class="int-chip" style="background:${i.ph.col}">${i.ph.name} modu</span></div></div>
+                <div class="ah-row"><span class="t">Günlük çalışma hedefi</span><span class="tr">${fmtNum(i.cur)} sa → <b>${fmtNum(i.sug)} sa</b></span></div>
+                <div class="ah-row"><span class="t">Tekrar / yanlış çözümü payı</span><span class="tr"><b>%${i.ph.rep}</b></span></div>
+                <div class="ah-row"><span class="t">Deneme sıklığı</span><span class="tr"><b>${i.ph.den}</b></span></div>
+                <div class="v69-h mt-2">${i.ph.tip}</div>
+                ${READONLY ? '' : `<button type="button" onclick="intensityApply()" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold text-[13px]">${applied ? '↻ Modu yenile ve 7 günlük tekrar bloklarını ekle' : 'Bu modu uygula'}</button>
+                <div class="v69-h mt-1">Uygulayınca günlük hedefin ${fmtNum(i.sug)} saate çıkar ve önümüzdeki 7 güne akşam tekrar blokları eklenir. Haftalık AI planı da bu modu dikkate alır.</div>`}`;
+        }
+        function intensityApply() {
+            if (READONLY) return; const i = intensityInfo(); if (!i || i.over) return;
+            if (!state.settings.intensityBase) state.settings.intensityBase = numOr0(state.settings.dailyHoursGoal) || 4;
+            state.settings.dailyHoursGoal = i.sug; state.settings.intensityPhase = i.ph.key;
+            let topics = []; const lastE = state.exams.filter(e => e.date).sort((a, b) => b.date.localeCompare(a.date));
+            for (const e of lastE.slice(0, 4)) { const D = examReportData(e); topics = topics.concat(D.all.filter(r => r.subj)); if (topics.length >= 7) break; }
+            let n = 0;
+            if (topics.length) for (let k = 1; k <= 7; k++) {
+                const date = addDaysStr(localDateStr(), k), t = topics[(k - 1) % topics.length];
+                if (state.planBlocks.some(b => b.date === date && /Yoğunluk/.test(b.note || ''))) continue;
+                state.planBlocks.push({ id: Date.now() + k, date, time: '20:00', duration: 45, subject: t.subj, examType: examTypeForSubject(t.subj), topic: t.topic, kind: 'soru', targetQuestions: 25, note: '⚡ Yoğunluk · tekrar', completed: false }); n++;
+            }
+            saveState(); try { updateUI(); renderIntensity(); renderPlanBlocks(); renderPlanKarne(); renderPlanBoard(); } catch (e) {}
+            playFeedbackSound('success'); showToast(`${i.ph.name} modu uygulandı · hedef ${fmtNum(i.sug)} sa${n ? ' · ' + n + ' tekrar bloğu eklendi' : ' (tekrar bloğu için konu verisi yok)'}`);
+        }
+        setTimeout(() => { try { if (READONLY || IS_VIEWER_URL || !PROFILE_CHOSEN) return; const i = intensityInfo(); if (!i || i.over) return; const ms = [100, 50, 30, 14, 7].find(m => i.left <= m && i.left > m - 3); if (!ms) return; const k = 'yks_int_ms@' + ACTIVE_PROFILE; if (localStorage.getItem(k) === String(ms)) return; localStorage.setItem(k, String(ms)); showToast(`YKS’ye ${i.left} gün kaldı · ${i.ph.name} modu önerisi Plan sekmesinde`); sendAppNotification('YKS geri sayımı ⏳', `${i.left} gün kaldı. ${i.ph.name} moduna geçmeyi düşün.`, 'intensity'); } catch (e) {} }, 7000);
+
+        // ---------- Yanlış tekrar takvimi ----------
+        function srsCalData() {
+            const today = localDateStr(), map = {};
+            state.wrongNotes.filter(n => !n.reviewed).forEach(n => { let d = noteSrs(n).due; if (d < today) d = today; (map[d] = map[d] || []).push(n); });
+            return { today, map };
+        }
+        function renderSrsCal() {
+            const box = document.getElementById('srsCalBody'); if (!box) return; const { today, map } = srsCalData();
+            const total = Object.values(map).reduce((t, a) => t + a.length, 0);
+            if (!state.wrongNotes.length) { box.innerHTML = `<div class="v69-h py-2">Yanlış defterine soru ekleyince 1-3-7-15 gün aralıklı tekrar takvimin burada görünür.</div>`; return; }
+            const days = Array.from({ length: 14 }, (_, i) => addDaysStr(today, i)), names = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+            const dueToday = (map[today] || []).length;
+            box.innerHTML = `<div class="v69-h">Aralıklı tekrar: 1 → 3 → 7 → 15 gün. Önümüzdeki 14 günde <b>${days.reduce((t, d) => t + (map[d] || []).length, 0)}</b> soru sırada${dueToday ? `, bugün <b>${dueToday}</b>` : ''}.</div>
+                <div class="sc-grid">${days.map((d, i) => { const c = (map[d] || []).length; return `<div class="sc-cell ${c ? 'on' : ''} ${i === 0 ? 'today' : ''}">${names[new Date(d + 'T12:00:00').getDay()]}<b>${c || '·'}</b>${d.slice(8)}</div>`; }).join('')}</div>
+                ${dueToday ? `<button type="button" onclick="switchTab('tekrar');setSecSeg('tekrar','defter')" class="btn-primary press-scale w-full py-3 rounded-xl text-white font-semibold text-[13px] mb-2">Bugünkü ${dueToday} soruyu tekrar et</button>` : ''}
+                ${READONLY || !total ? '' : `<button type="button" onclick="srsCalPlan()" class="press-scale w-full py-3 rounded-xl text-[13px] font-semibold" style="background:var(--ios-fill)">📅 Tekrarları plana yaz (20:30 blokları)</button>`}`;
+        }
+        function srsCalPlan() {
+            if (READONLY) return; const { today, map } = srsCalData(); let n = 0;
+            Array.from({ length: 7 }, (_, i) => addDaysStr(today, i)).forEach((d, i) => {
+                const list = map[d] || []; if (!list.length) return;
+                if (state.planBlocks.some(b => b.date === d && /Yanlış tekrarı/.test(b.note || ''))) return;
+                const cnt = {}; list.forEach(x => cnt[x.subject] = (cnt[x.subject] || 0) + 1); const subj = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0][0];
+                const nowHM = new Date(); if (i === 0 && nowHM.getHours() * 60 + nowHM.getMinutes() > 20 * 60 + 15) return;
+                state.planBlocks.push({ id: Date.now() + i, date: d, time: '20:30', duration: Math.min(60, Math.max(15, list.length * 5)), subject: subj, examType: examTypeForSubject(subj), topic: `Yanlış defteri · ${list.length} soru`, kind: 'konu', targetQuestions: 0, note: '🔁 Yanlış tekrarı', completed: false }); n++;
+            });
+            saveState(); try { renderPlanBlocks(); renderPlanKarne(); renderPlanBoard(); } catch (e) {}
+            showToast(n ? `${n} tekrar bloğu plana eklendi` : 'Eklenecek yeni gün yok (zaten planda ya da saat geçti).');
+        }
+
+        // ---------- Odak & dikkat dağınıklığı ----------
+        function focusStore() { try { return JSON.parse(localStorage.getItem('yks_focus@' + ACTIVE_PROFILE) || '{}') || {}; } catch (e) { return {}; } }
+        function focusSave(o) { try { localStorage.setItem('yks_focus@' + ACTIVE_PROFILE, JSON.stringify(o)); } catch (e) {} }
+        let fHide = 0, fCur = { exits: 0, away: 0 };
+        function focusDay(o) { const d = localDateStr(); o.days = o.days || {}; o.days[d] = o.days[d] || { exits: 0, away: 0, turns: 0, clean: 0 }; const keys = Object.keys(o.days).sort(); keys.slice(0, -21).forEach(k => delete o.days[k]); return o.days[d]; }
+        function focusActive() { return !READONLY && ((pomo.running && pomo.mode === 'work') || sw.running); }
+        document.addEventListener('visibilitychange', () => {
+            try {
+                if (document.hidden) { if (focusActive()) fHide = Date.now(); return; }
+                if (!fHide) return; const away = (Date.now() - fHide) / 1000; fHide = 0;
+                if (away < 8 || !focusActive()) return;
+                const o = focusStore(), d = focusDay(o); d.exits++; d.away += Math.round(away); fCur.exits++; fCur.away += Math.round(away); focusSave(o);
+                showToast(`Odaktan ${away >= 60 ? Math.round(away / 60) + ' dk' : Math.round(away) + ' sn'} çıktın · bu turda ${fCur.exits}. çıkış`);
+            } catch (e) {}
+        });
+        function focusTurnEnd() {
+            try { const o = focusStore(), d = focusDay(o); d.turns++; if (!fCur.exits) d.clean++; focusSave(o); setTimeout(() => showToast(fCur.exits ? `Bu turda ${fCur.exits} kez uygulamadan çıktın (${Math.round(fCur.away)} sn)` : 'Bu tur hiç dağılmadın 🎯'), 600); fCur = { exits: 0, away: 0 }; } catch (e) {}
+        }
+        { const _ppc = pomodoroPhaseComplete; pomodoroPhaseComplete = function () { if (pomo.mode === 'work') focusTurnEnd(); return _ppc.apply(this, arguments); }; }
+        { const _pr = pomodoroReset; pomodoroReset = function () { fCur = { exits: 0, away: 0 }; return _pr.apply(this, arguments); }; }
+        function renderFocusCard() {
+            const box = document.getElementById('focusBody'); if (!box) return; const o = focusStore(), days = Array.from({ length: 7 }, (_, i) => addDaysStr(localDateStr(), i - 6)), D = days.map(d => (o.days || {})[d] || { exits: 0, away: 0, turns: 0, clean: 0 });
+            const tot = D.reduce((t, x) => ({ e: t.e + x.exits, a: t.a + x.away, t: t.t + x.turns, c: t.c + x.clean }), { e: 0, a: 0, t: 0, c: 0 }), mx = Math.max(1, ...D.map(x => x.exits)), nm = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+            if (!tot.e && !tot.t) { box.innerHTML = `<div class="v69-h py-2">Pomodoro ya da kronometre çalışırken uygulamadan çıktığında (8 sn üstü) sayılır. Tur bitince “bu turda kaç kez dağıldın” bilgisi gelir; burada da haftalık grafiği görürsün. Veri bu cihazda tutulur.</div>`; return; }
+            box.innerHTML = `<div class="grid grid-cols-3 gap-2 mb-1"><div class="p-3 rounded-2xl" style="background:var(--ios-fill)"><div class="text-[11px] text-slate-500">Haftalık çıkış</div><div class="text-[22px] font-bold tabular-nums">${tot.e}</div></div>
+                <div class="p-3 rounded-2xl" style="background:var(--ios-fill)"><div class="text-[11px] text-slate-500">Tur başına</div><div class="text-[22px] font-bold tabular-nums">${tot.t ? fmtNum(Math.round(tot.e / tot.t * 10) / 10) : '—'}</div></div>
+                <div class="p-3 rounded-2xl" style="background:var(--ios-fill)"><div class="text-[11px] text-slate-500">Temiz tur</div><div class="text-[22px] font-bold tabular-nums">${tot.t ? '%' + Math.round(tot.c / tot.t * 100) : '—'}</div></div></div>
+                <div class="fc-bars">${D.map((x, i) => `<div class="fc-bar"><span>${x.exits || ''}</span><i class="${x.exits ? '' : 'ok'}" style="height:${x.exits ? Math.max(8, x.exits / mx * 80) : 3}px"></i><span>${nm[new Date(days[i] + 'T12:00:00').getDay()]}</span></div>`).join('')}</div>
+                <div class="v69-h">Toplam ${Math.round(tot.a / 60)} dk ekran dışında geçti. Ekranı kilitlemek de “çıkış” sayılır; telefonu kilitleyerek çalışıyorsan bu rakam yüksek çıkabilir.</div>`;
+        }
+
+        // ---------- Karne ↔ Boğaziçi YBS farkı ----------
+        function renderYbsKarne() {
+            const box = document.getElementById('ybsKarneBody'); if (!box) return; const tg = ybsTarget();
+            if (!tg) { box.innerHTML = `<div class="v69-h py-2">Atlas verisinde Boğaziçi YBS bulunamadı.</div>`; return; }
+            const ea = state.exams.filter(e => e.type === 'AYT' && e.date && examPuan(e) > 0).sort((a, b) => a.date.localeCompare(b.date)).slice(-6);
+            if (!ea.length) { box.innerHTML = `<div class="v69-h py-2">Hedef: <b>${tg.name}</b> · taban ${fmtNum(round1(tg.puan))}. Karşılaştırma için puanı olan (karneden eklenmiş) bir AYT (EA) denemesi gerekli.</div>`; return; }
+            const rows = ea.map((e, i) => { const pu = examPuan(e), gap = tg.puan - pu, dl = i ? pu - examPuan(ea[i - 1]) : null; return { e, pu, gap, dl }; });
+            const last = rows[rows.length - 1], deltas = rows.filter(r => r.dl !== null).map(r => r.dl), avgD = deltas.length ? deltas.reduce((t, v) => t + v, 0) / deltas.length : 0;
+            const tyt = state.exams.filter(e => e.type === 'TYT' && e.date <= last.e.date).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
+            let tbl = '';
+            if (tyt.length && last.gap > 0) {
+                const av = f => tyt.reduce((t, e) => t + numOr0(f(e)), 0) / tyt.length, T = { tr: av(e => e.tr), mat: av(e => e.mat), fen: av(e => e.fen), sos: av(e => e.sos) }, nn = last.e.nets || {}, A = { mat: numOr0(last.e.mat != null ? last.e.mat : nn.mat), edb: numOr0(nn.edb), tarih: numOr0(nn.tarih), cog: numOr0(nn.cog) }, K = PUAN_KATSAYI;
+                const it = [['AYT Matematik', A.mat, 40, K.EA_AYT.mat], ['AYT Edebiyat', A.edb, 24, K.EA_AYT.edb], ['AYT Tarih', A.tarih, 10, K.EA_AYT.tarih], ['AYT Coğrafya', A.cog, 6, K.EA_AYT.cog], ['TYT Türkçe', T.tr, 40, K.EA_TYT.tr], ['TYT Sosyal', T.sos, 20, K.EA_TYT.sos], ['TYT Matematik', T.mat, 40, K.EA_TYT.mat], ['TYT Fen', T.fen, 20, K.EA_TYT.fen]].map(([l, c, m, k]) => ({ l, c, m, k, room: Math.max(0, m - c) }));
+                const cap = it.reduce((t, x) => t + x.k * x.room, 0), f = cap ? last.gap / cap : 0;
+                tbl = `<div class="rm-sec"><span>Farkı kapatmak için ders ders hedef net</span></div><div class="yk-row h"><span>Ders</span><span>Şu an</span><span>Hedef</span><span>Fark</span></div>${it.sort((a, b) => b.k * b.room - a.k * a.room).map(x => { const tgn = x.c + Math.min(1, f) * x.room; return `<div class="yk-row"><span>${x.l}</span><span>${fmtNum(round1(x.c))}</span><span><b>${fmtNum(round1(tgn))}</b></span><span style="color:#34C759">+${fmtNum(round1(tgn - x.c))}</span></div>`; }).join('')}
+                    <div class="v69-h mt-1">${f > 1 ? 'Tüm derslerde tam net yapsan bile hedefe yetmiyor görünüyor (OBP ve sıralama etkisi hariç).' : `Tüm derslerde boşluğunun %${Math.round(f * 100)}’ini kapatırsan hedef puana ulaşırsın.`} Son 3 TYT ve seçili AYT denemesi baz alındı.</div>`;
+            }
+            box.innerHTML = `<div class="ybs-hero"><div class="v69-h">${tg.name} · taban ${fmtNum(round1(tg.puan))}</div><b>${last.gap > 0 ? fmtNum(round1(last.gap)) + ' puan fark' : 'Hedefin üstündesin 🎉'}</b>
+                <div class="v69-h mt-1">Son karne: ${fmtNum(round1(last.pu))} puan${deltas.length ? ` · denemeler arası ortalama ${avgD >= 0 ? '+' : ''}${fmtNum(round1(avgD))}` : ''}${last.gap > 0 && avgD > 0.5 ? ` · bu hızla ~${Math.ceil(last.gap / avgD)} denemede hedefe ulaşırsın` : ''}</div></div>
+                <div class="rm-sec"><span>Denemeler</span></div>${rows.slice().reverse().map(r => `<div class="ah-row"><span class="t">${escHtml((r.e.name || 'Deneme').slice(0, 28))} · ${fmtDateTr(r.e.date).replace(/\s\d{4}$/, '')}</span><span class="tr"><b>${fmtNum(round1(r.pu))}</b> · ${r.gap > 0 ? '−' + fmtNum(round1(r.gap)) : '+' + fmtNum(round1(-r.gap))}${r.dl !== null ? ` · <span style="color:${r.dl >= 0 ? '#34C759' : '#FF3B30'}">${r.dl >= 0 ? '▲' : '▼'}${fmtNum(round1(Math.abs(r.dl)))}</span>` : ''}</span></div>`).join('')}${tbl}`;
+        }
 
 
         // ================= [v70] PLAN KARNESİ · ŞABLONLAR · HATIRLATMA · OTOMASYON =================
