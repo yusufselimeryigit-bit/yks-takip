@@ -2330,6 +2330,16 @@
         .fc-bars { display: flex; align-items: flex-end; gap: 8px; height: 110px; margin: 10px 0 4px; } .fc-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; font-size: 10px; color: var(--ios-label2); } .fc-bar i { display: block; width: 100%; max-width: 30px; border-radius: 8px 8px 3px 3px; background: linear-gradient(180deg, #FF9500, #FF3B30); min-height: 3px; } .fc-bar i.ok { background: linear-gradient(180deg, #34C759, #30B0C7); }
         .rm-badge { display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 99px; font-size: 12px; font-weight: 600; background: rgba(255,204,0,.16); margin: 0 6px 6px 0; }
         .yk-row { display: grid; grid-template-columns: minmax(0,1.4fr) repeat(3, minmax(0,1fr)); gap: 6px; align-items: center; padding: 8px 10px; border-radius: 12px; background: var(--ios-fill); margin-bottom: 5px; font-size: 12px; } .yk-row.h { background: none; font-size: 10.5px; font-weight: 700; color: var(--ios-label2); text-transform: uppercase; padding: 0 10px; } .yk-row span:not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+        /* [v75] alt menü düzenleyici, veri sağlığı */
+        .tbe-row { display: flex; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 14px; background: var(--ios-fill); margin-bottom: 6px; font-size: 14px; min-width: 0; }
+        .tbe-row .ic { width: 34px; height: 34px; border-radius: 11px; display: flex; align-items: center; justify-content: center; background: rgba(120,120,128,.16); flex: none; }
+        .tbe-row .nm { flex: 1; min-width: 0; font-weight: 600; }
+        .tbe-row button { width: 32px; height: 32px; border-radius: 10px; background: rgba(120,120,128,.16); font-weight: 700; flex: none; } .tbe-row button:disabled { opacity: .3; }
+        .tbe-row button.add { background: rgb(var(--brand-rgb)); color: #fff; } .tbe-row button.del { color: #FF3B30; }
+        #moreEditBtn { width: 100%; margin-top: 10px; padding: 10px; border-radius: 14px; font-size: 13px; font-weight: 600; color: rgb(var(--brand-rgb)); background: var(--ios-fill); }
+        .dh-row { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 12px; background: var(--ios-fill); margin-bottom: 5px; font-size: 12.5px; }
+        .dh-row .tx { flex: 1; min-width: 0; } .dh-row .tx small { display: block; color: var(--ios-label2); font-size: 11px; }
+        .dh-row button { padding: 5px 11px; border-radius: 99px; background: rgb(var(--brand-rgb)); color: #fff; font-size: 12px; font-weight: 600; flex: none; }
         .plan-tg { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 12px; } .plan-tg .plan-full, .plan-tg > .plan-full { grid-column: 1 / -1; }
         .plan-pick { padding: 10px; border-radius: 14px; background: var(--ios-fill); }
         .plan-pick-list { max-height: 230px; overflow-y: auto; display: grid; gap: 4px; -webkit-overflow-scrolling: touch; }
@@ -4932,6 +4942,11 @@
                         <div id="restorePoints"></div>
                         <p class="text-[11px] text-slate-400 mt-1">Bu cihazda son 6 anlık görüntü tutulur (günde bir otomatik, yedek yüklemeden önce de). Yanlışlıkla silersen buradan geri dönebilirsin.</p>
                     </div>
+                    <div class="mt-5">
+                        <div class="flex items-center justify-between gap-2 mb-2"><div class="text-[12px] font-bold uppercase text-slate-500">Veri sağlığı</div>
+                            <button type="button" onclick="dhScan(true)" class="press-scale text-[12px] font-semibold text-brand">🔍 Tara</button></div>
+                        <div id="dataHealth"><div class="v69-h">Tutarsız kayıtları (çift deneme, ders adı farkları, hatalı toplamlar…) tarar; düzeltmeden önce kendisi geri yükleme noktası alır.</div></div>
+                    </div>
                 </div>
             </div>
 
@@ -5204,6 +5219,7 @@
                     <span class="text-[11px] font-medium text-slate-700 dark:text-slate-200 text-center leading-tight">Ayarlar</span>
                 </button>
             </div>
+            <button type="button" id="moreEditBtn" onclick="openTabEditor()" class="press-scale">✎ Alt menüyü düzenle</button>
         </div>
     </div>
 
@@ -5679,7 +5695,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v74';
+        const APP_VERSION = 'firebase-v75';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -11854,7 +11870,7 @@
         function totalUnread() { return chatFriends().reduce((t, pid) => t + unreadFrom(pid), 0); }
         function updateMsgBadges() {
             const n = READONLY ? 0 : totalUnread();
-            [['sideMsgBadge'], ['moreMsgBadge'], ['cvBackBadge']].forEach(([id]) => { const el = document.getElementById(id); if (!el) return; const v = id === 'cvBackBadge' ? n - (chatOpenId ? unreadFrom(chatOpenId) : 0) : n; el.textContent = v > 99 ? '99+' : v; el.classList.toggle('hidden', !(v > 0)); });
+            [['sideMsgBadge'], ['moreMsgBadge'], ['barMsgBadge'], ['cvBackBadge']].forEach(([id]) => { const el = document.getElementById(id); if (!el) return; const v = id === 'cvBackBadge' ? n - (chatOpenId ? unreadFrom(chatOpenId) : 0) : n; el.textContent = v > 99 ? '99+' : v; el.classList.toggle('hidden', !(v > 0)); });
             const more = document.getElementById('tabMoreBtn');
             if (more) { let dot = document.getElementById('moreBtnDot'); if (!dot) { dot = document.createElement('span'); dot.id = 'moreBtnDot'; dot.setAttribute('aria-hidden', 'true'); more.appendChild(dot); } dot.classList.toggle('hidden', !(n > 0)); more.setAttribute('aria-label', n > 0 ? `Diğer sayfalar, ${n} okunmamış mesaj` : 'Diğer sayfalar'); }
         }
@@ -12088,7 +12104,7 @@
             }, true);
         }
         const RO_BLOCKED = ["addExamWrongTopic", "addInboxToNotes", "addResTopicRow", "addTercihManual", "addTestToTopic", "addTopicToBook", "applyReversePlanToTargets", "applySuggestion", "askDeleteProfile", "clearRankCalc", "completePlanBlock", "createProfile", "deleteActivity", "deleteAtlasImport", "deleteBookTopic", "deleteExam", "deleteFriend", "deleteInboxItem", "deletePlanBlock", "deleteProfile", "deleteQuickNote", "deleteResource", "deleteSchool", "deleteTopicGoal", "deleteWrongNote", "distributeSubjectTargets", "editExam", "editSharedGoal", "enableReminders", "fillRankCalcFromExams", "formSheetSubmit", "generateQuizFromWrongNotes", "handleExamPhotoSelect", "handleWrongPhotoSelect", "importAtlasText", "importData", "importResBulk", "joinFriendPomodoro", "moveTercih", "openAddMenu", "openAddProfile", "openAtlasImport", "openCikmis", "openFormSheet", "openShareNote", "openTrash", "pomoToForm", "pomodoroReset", "pomodoroToggle", "purgeTrashItem", "recompressStoredPhotos", "removeExamWrongTopic", "removeLastTest", "removePendingExamPhoto", "removePendingPhoto", "removeResTopicRow", "removeTercih", "replyInbox", "restoreProfile", "reviewWrongNoteInline", "saveDayReview", "saveDayStatus", "saveGoalSettings", "savePomoActivity", "saveProfileName", "saveProfilePrefs", "saveReminderSettings", "saveSharedGoal", "saveTestResult", "sendChatPhoto", "sendChatText", "sendReply", "sendShareNote", "snoozeBackupReminder", "sortTercihByRank", "startCikmis", "startExamSim", "swFinish", "swLap", "swReset", "swToggle", "toggleTercihFromAtlas", "toggleYesterdayGoal", "undoPlanComplete", "useEstimatedTercihRank", "toggleVoiceNote", "toggleVideoWatched", "toggleTopicAll", "openQuestionAdd", "openQuestionForm", "openKarneImport", "uploadPdfBooks", "renamePdfBook", "deletePdfBook", "quickStartPomodoro", "testReminderNotification", "cycleCurriculumStatus", "toggleTest", "toggleWrongNoteReviewed", "togglePlanComplete", "setTopicStatus", "roomCreate", "roomJoin", "roomLeave", "roomWave", "simFill", "planTplSave", "planTplApply", "planTplDelete", "setPlanRemind", "setAutoPlan", "setSwBreak"];
-        RO_BLOCKED.push('dayEndApply', 'dayEndSet', 'intensityApply', 'srsCalPlan', 'roomChatSend', 'roomSetGoal', 'roomPomoStart', 'roomPomoJoin', 'akbimManual', 'akbimManualSave', 'akbimManualDel', 'examReportPlan', 'restorePointApply', 'restorePointDel', 'openKursForm', 'saveKurs', 'deleteKurs', 'openActivityEdit', 'saveActivityEdit', 'toggleReaction', 'setZorluk');
+        RO_BLOCKED.push('tbeSave', 'tbeReset', 'dhFix', 'dhFixAll', 'dayEndApply', 'dayEndSet', 'intensityApply', 'srsCalPlan', 'roomChatSend', 'roomSetGoal', 'roomPomoStart', 'roomPomoJoin', 'akbimManual', 'akbimManualSave', 'akbimManualDel', 'examReportPlan', 'restorePointApply', 'restorePointDel', 'openKursForm', 'saveKurs', 'deleteKurs', 'openActivityEdit', 'saveActivityEdit', 'toggleReaction', 'setZorluk');
         RO_BLOCKED.push('saveAkbimImport', 'applyAkbimTopics', 'aiAskAkbimTopics');   // [v66]
         RO_BLOCKED.push('actAddPhotos', 'pinMsg', 'unpinMsg', 'startVoice', 'stopVoice');   // [v60b]
         RO_BLOCKED.push('applyKarneTopics', 'openHwForm', 'saveHw', 'toggleHw', 'deleteHw');   // [v60]
@@ -22970,6 +22986,111 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                 <div class="v69-h mt-1">Son karne: ${fmtNum(round1(last.pu))} puan${deltas.length ? ` · denemeler arası ortalama ${avgD >= 0 ? '+' : ''}${fmtNum(round1(avgD))}` : ''}${last.gap > 0 && avgD > 0.5 ? ` · bu hızla ~${Math.ceil(last.gap / avgD)} denemede hedefe ulaşırsın` : ''}</div></div>
                 <div class="rm-sec"><span>Denemeler</span></div>${rows.slice().reverse().map(r => `<div class="ah-row"><span class="t">${escHtml((r.e.name || 'Deneme').slice(0, 28))} · ${fmtDateTr(r.e.date).replace(/\s\d{4}$/, '')}</span><span class="tr"><b>${fmtNum(round1(r.pu))}</b> · ${r.gap > 0 ? '−' + fmtNum(round1(r.gap)) : '+' + fmtNum(round1(-r.gap))}${r.dl !== null ? ` · <span style="color:${r.dl >= 0 ? '#34C759' : '#FF3B30'}">${r.dl >= 0 ? '▲' : '▼'}${fmtNum(round1(Math.abs(r.dl)))}</span>` : ''}</span></div>`).join('')}${tbl}`;
         }
+
+
+        // ================= [v75] ALT MENÜ ÖZELLEŞTİRME · VERİ SAĞLIĞI =================
+        const TAB_CATALOG = { dashboard: ['Özet', 'house'], exams: ['Deneme', 'file-text'], tekrar: ['Tekrar', 'book-open'], kaynaklar: ['Kaynaklar', 'library'], aikoc: ['AI Koç', 'sparkles'], mufredat: ['Konular', 'list-checks'], plan: ['Plan', 'calendar-clock'], galeri: ['Galeri', 'images'], kurs: ['Kurs', 'school'], mesajlar: ['Mesajlar', 'message-circle'], analytics: ['Analiz', 'pie-chart'], hedefokul: ['Üniversite', 'graduation-cap'], settings: ['Ayarlar', 'settings'] };
+        const TAB_DEFAULT = ['dashboard', 'exams', 'tekrar', 'kaynaklar', 'aikoc'];
+        function tabAvail(id) { if (!TAB_CATALOG[id]) return false; if (id === 'aikoc') return canSeeAi(); if (id === 'kurs') return canSeeKurs(); return true; }
+        function tabsConfig() {
+            const saved = Array.isArray(state.settings && state.settings.mobileTabs) ? state.settings.mobileTabs : null;
+            let list = (saved || TAB_DEFAULT).filter((x, i, a) => tabAvail(x) && a.indexOf(x) === i).slice(0, 5);
+            if (list.length < 3) list = TAB_DEFAULT.filter(tabAvail);
+            return list;
+        }
+        let tabSig = '';
+        function applyTabBarConfig(force) {
+            try {
+                const list = tabsConfig(), sig = list.join(',') + '|' + (typeof canSeeKurs === 'function' && canSeeKurs());
+                if (!force && sig === tabSig) return; tabSig = sig;
+                const bar = document.getElementById('tabBarInner'), grid = document.getElementById('moreGrid'); if (!bar || !grid) return;
+                MOBILE_MAIN_TABS.length = 0; list.forEach(x => MOBILE_MAIN_TABS.push(x));
+                bar.querySelectorAll('.mtab').forEach(b => b.remove());
+                list.forEach(id => { const [lb, ic] = TAB_CATALOG[id], b = document.createElement('button'); b.type = 'button'; b.className = 'mtab'; b.dataset.mtab = id; b.setAttribute('aria-label', lb); if (id === 'aikoc') b.id = 'mtabAi'; b.innerHTML = `<i data-lucide="${ic}"></i><span>${lb}</span>${id === 'mesajlar' ? '<span id="barMsgBadge" class="msg-badge msg-badge-abs hidden"></span>' : ''}`; bar.appendChild(b); });
+                const rest = Object.keys(TAB_CATALOG).filter(id => !list.includes(id) && tabAvail(id));
+                grid.innerHTML = rest.map(id => { const [lb, ic] = TAB_CATALOG[id]; return `<button type="button" onclick="pickMoreTab('${id}')" data-more="${id}" ${id === 'kurs' ? 'id="moreKursBtn"' : ''} class="more-item press-scale flex flex-col items-center gap-1.5 py-3 rounded-2xl"><span class="relative w-12 h-12 rounded-2xl flex items-center justify-center bg-black/[0.05] dark:bg-white/10"><i data-lucide="${ic}" class="w-5 h-5"></i>${id === 'mesajlar' ? '<span id="moreMsgBadge" class="msg-badge msg-badge-abs hidden"></span>' : ''}</span><span class="text-[11px] font-medium text-slate-700 dark:text-slate-200 text-center leading-tight">${lb}</span></button>`; }).join('');
+                document.body.classList.toggle('tb5', list.length >= 5);
+                if (window.lucide) lucide.createIcons();
+                try { updateInboxBadge(); } catch (e) {} try { if (typeof updateMsgBadges === 'function') updateMsgBadges(); } catch (e) {}
+                tbMeasure(); updateTabBar(false);
+            } catch (e) {}
+        }
+        setTimeout(() => applyTabBarConfig(true), 1200); setTimeout(() => applyTabBarConfig(true), 3500); setInterval(() => applyTabBarConfig(false), 3000);
+        let tbeDraft = [];
+        function openTabEditor() {
+            tbeDraft = tabsConfig().slice(); closeMoreSheet(); tbeRender(true);
+        }
+        function tbeRender(open) {
+            const rest = Object.keys(TAB_CATALOG).filter(id => !tbeDraft.includes(id) && tabAvail(id)), full = tbeDraft.length >= 5;
+            const html = `<div class="text-[18px] font-bold text-center text-slate-900 dark:text-slate-50">Alt menüyü düzenle</div>
+                <div class="text-[12px] text-slate-400 text-center mb-3">En fazla 5, en az 3 sayfa seç. Sırayı ok tuşlarıyla değiştir.</div>
+                <div class="rm-sec" style="margin-top:4px"><span>Alt çubukta (${tbeDraft.length}/5)</span></div>
+                ${tbeDraft.map((id, i) => `<div class="tbe-row"><span class="ic"><i data-lucide="${TAB_CATALOG[id][1]}" class="w-4 h-4"></i></span><span class="nm">${TAB_CATALOG[id][0]}</span>
+                    <button onclick="tbeMove(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Yukarı">↑</button><button onclick="tbeMove(${i},1)" ${i === tbeDraft.length - 1 ? 'disabled' : ''} aria-label="Aşağı">↓</button>
+                    <button class="del" onclick="tbeRemove(${i})" ${tbeDraft.length <= 3 ? 'disabled' : ''} aria-label="Çıkar">✕</button></div>`).join('')}
+                <div class="rm-sec"><span>Diğer sayfalar</span></div>
+                ${rest.length ? rest.map(id => `<div class="tbe-row"><span class="ic"><i data-lucide="${TAB_CATALOG[id][1]}" class="w-4 h-4"></i></span><span class="nm">${TAB_CATALOG[id][0]}</span><button class="add" onclick="tbeAdd('${id}')" ${full ? 'disabled' : ''} aria-label="Ekle">＋</button></div>`).join('') : '<div class="v69-h">Hepsi çubukta.</div>'}
+                ${full ? '<div class="v69-h mt-1">Çubuk dolu: yenisini eklemek için önce birini çıkar.</div>' : ''}
+                <button type="button" onclick="tbeSave()" class="btn-primary press-scale w-full mt-3 py-3.5 rounded-xl text-white font-semibold">Kaydet</button>
+                <button type="button" onclick="tbeReset()" class="w-full mt-1 py-2.5 text-[13px] font-semibold text-slate-500">Varsayılana dön</button>
+                <button type="button" onclick="closeMiniModal()" class="w-full py-2.5 text-brand font-semibold">Vazgeç</button>`;
+            if (open) openMiniModal(html); else { document.getElementById('miniModalCard').innerHTML = html; if (window.lucide) lucide.createIcons(); }
+        }
+        function tbeMove(i, d) { const j = i + d; if (j < 0 || j >= tbeDraft.length) return; [tbeDraft[i], tbeDraft[j]] = [tbeDraft[j], tbeDraft[i]]; tbeRender(); haptic(); }
+        function tbeRemove(i) { if (tbeDraft.length <= 3) return; tbeDraft.splice(i, 1); tbeRender(); }
+        function tbeAdd(id) { if (tbeDraft.length >= 5 || tbeDraft.includes(id)) return; tbeDraft.push(id); tbeRender(); haptic(); }
+        function tbeSave() { state.settings.mobileTabs = tbeDraft.slice(); saveState(); closeMiniModal(); applyTabBarConfig(true); playFeedbackSound('success'); showToast('Alt menü güncellendi'); }
+        function tbeReset() { delete state.settings.mobileTabs; saveState(); closeMiniModal(); applyTabBarConfig(true); showToast('Alt menü varsayılana döndü'); }
+
+        // ---------- Veri sağlığı ----------
+        let dhIssues = [];
+        const dhNorm = x => String(x || '').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9]/g, '');
+        function dhExamScore(e) { return (e.akbim ? 4 : 0) + (e.karne ? 2 : 0) + Object.keys(e.nets || {}).length + ((e.photos || []).length ? 2 : 0) + ((e.wrongTopics || []).length ? 1 : 0); }
+        function dhCollect() {
+            const out = [], today = localDateStr(), tomorrow = addDaysStr(today, 1), isD = d => /^\d{4}-\d{2}-\d{2}$/.test(String(d || ''));
+            // 1) çift denemeler
+            const g = {}; (state.exams || []).forEach(e => { const k = (e.date || '') + '|' + e.type + '|' + dhNorm(normExamName(e.name || '')); (g[k] = g[k] || []).push(e); });
+            const dups = Object.values(g).filter(a => a.length > 1);
+            if (dups.length) out.push({ id: 'dupExams', t: `${dups.reduce((t, a) => t + a.length - 1, 0)} çift deneme kaydı`, d: dups.slice(0, 3).map(a => (a[0].name || a[0].type) + ' · ' + a[0].date).join('; '), fix: () => { const drop = new Set(); dups.forEach(a => { const keep = a.slice().sort((x, y) => dhExamScore(y) - dhExamScore(x))[0]; a.forEach(e => { if (e !== keep) drop.add(e); }); }); state.exams = state.exams.filter(e => !drop.has(e)); } });
+            // 2) TYT toplam ≠ ders toplamı
+            const bad = (state.exams || []).filter(e => e.type === 'TYT' && ['tr', 'mat', 'fen', 'sos'].every(k => typeof e[k] === 'number') && Math.abs(e.tr + e.mat + e.fen + e.sos - numOr0(e.total)) > 0.5);
+            if (bad.length) out.push({ id: 'tytTotal', t: `${bad.length} TYT denemesinde toplam net ders netlerinin toplamına uymuyor`, d: bad.slice(0, 3).map(e => `${e.name || 'Deneme'}: ${e.total} → ${roundNet(e.tr + e.mat + e.fen + e.sos)}`).join('; '), fix: () => bad.forEach(e => { e.total = roundNet(e.tr + e.mat + e.fen + e.sos); }) });
+            // 3) çift çalışma kayıtları
+            const ak = {}, dupA = []; (state.activities || []).forEach(a => { const k = [a.date, a.subject, a.topic, a.type, a.questions, a.correct, a.wrong, a.blank, a.duration].join('|'), p0 = ak[k]; if (p0 && (p0.id === a.id || Math.abs(numOr0(p0.id) - numOr0(a.id)) < 60000)) dupA.push(a); else ak[k] = a; });
+            if (dupA.length) out.push({ id: 'dupActs', t: `${dupA.length} çift çalışma kaydı (aynı dakikada aynı içerik)`, d: dupA.slice(0, 3).map(a => `${a.date} ${subjectShort(a.subject)}`).join('; '), fix: () => { const s2 = new Set(dupA); state.activities = state.activities.filter(a => !s2.has(a)); } });
+            // 4) çift plan blokları
+            const pk = {}, dupP = []; (state.planBlocks || []).forEach(b => { const k = [b.date, b.time, b.subject, b.topic].join('|'); if (pk[k]) dupP.push(b.completed && !pk[k].completed ? pk[k] : b); else pk[k] = b; });
+            if (dupP.length) out.push({ id: 'dupPlan', t: `${dupP.length} çift plan bloğu`, d: dupP.slice(0, 3).map(b => `${b.date} ${b.time} ${subjectShort(b.subject)}`).join('; '), fix: () => { const s2 = new Set(dupP); state.planBlocks = state.planBlocks.filter(b => !s2.has(b)); } });
+            // 5) ders adı farkları
+            const known = {}; SUBJECT_GROUPS.forEach(gr => gr.subjects.forEach(x => { known[dhNorm(x.value)] = x.value; known[dhNorm(x.label)] = x.value; }));
+            const vals = new Set(Object.values(known)), fixList = [], unk = {};
+            [['activities', 'subject'], ['planBlocks', 'subject'], ['wrongNotes', 'subject']].forEach(([key, f]) => (state[key] || []).forEach(o => { const v = o[f]; if (!v || vals.has(v)) return; const m = known[dhNorm(v)]; if (m) fixList.push([o, f, m]); else unk[v] = (unk[v] || 0) + 1; }));
+            if (fixList.length) out.push({ id: 'subjVar', t: `${fixList.length} kayıtta ders adı yazım farkı`, d: [...new Set(fixList.map(x => x[1] && `${x[0][x[1]]} → ${x[2]}`))].slice(0, 3).join('; '), fix: () => fixList.forEach(([o, f, m]) => { o[f] = m; }) });
+            if (Object.keys(unk).length) out.push({ id: 'subjUnk', t: `${Object.keys(unk).length} bilinmeyen ders adı`, d: Object.entries(unk).slice(0, 4).map(([k, n]) => `“${k}” (${n})`).join('; ') + ' — otomatik düzeltilemez', fix: null });
+            // 6) mantıksız değerler / tarihler
+            const badV = (state.activities || []).filter(a => numOr0(a.correct) < 0 || numOr0(a.wrong) < 0 || numOr0(a.duration) < 0 || (a.questions != null && numOr0(a.correct) + numOr0(a.wrong) + numOr0(a.blank) > numOr0(a.questions) + 0.01));
+            if (badV.length) out.push({ id: 'badVals', t: `${badV.length} çalışma kaydında tutarsız sayılar`, d: badV.slice(0, 3).map(a => `${a.date} ${subjectShort(a.subject)}`).join('; ') + ' — kayıtları elle gözden geçir', fix: null });
+            const badD = [...(state.activities || []), ...(state.exams || [])].filter(o => !isD(o.date) || o.date > tomorrow);
+            if (badD.length) out.push({ id: 'badDates', t: `${badD.length} kayıtta geçersiz ya da ileri tarih`, d: badD.slice(0, 3).map(o => String(o.date || 'tarih yok') + ' · ' + (o.name || subjectShort(o.subject || ''))).join('; ') + ' — elle düzelt', fix: null });
+            return out;
+        }
+        function dhRender(done) {
+            const box = document.getElementById('dataHealth'); if (!box) return;
+            if (!dhIssues.length) { box.innerHTML = `<div class="v69-h">${done ? 'Tutarsız kayıt bulunamadı. Verilerin temiz ✨' : ''}</div>`; return; }
+            const fixable = dhIssues.filter(x => x.fix).length;
+            box.innerHTML = dhIssues.map(x => `<div class="dh-row"><span class="tx"><b>${escHtml(x.t)}</b><small>${escHtml(x.d || '')}</small></span>${x.fix && !READONLY ? `<button onclick="dhFix('${x.id}')">Düzelt</button>` : ''}</div>`).join('')
+                + (fixable > 1 && !READONLY ? `<button type="button" onclick="dhFixAll()" class="press-scale w-full mt-2 py-2.5 rounded-xl text-[13px] font-semibold text-white" style="background:rgb(var(--brand-rgb))">Düzeltilebilenlerin hepsini düzelt (${fixable})</button>` : '');
+        }
+        function dhScan(manual) { try { dhIssues = dhCollect(); } catch (e) { dhIssues = []; showToast('Tarama sırasında hata oluştu.', 'error'); return; } dhRender(manual); }
+        async function dhApply(list) {
+            if (READONLY || !list.length) return;
+            try { await restorePointSave('veri düzeltmeden önce'); } catch (e) {}
+            list.forEach(x => { try { x.fix(); } catch (e) {} });
+            saveState(); try { updateUI(); refreshAllViews(); } catch (e) {}
+            playFeedbackSound('success'); showToast(`${list.length} sorun düzeltildi`); dhScan(true);
+        }
+        function dhFix(id) { const x = dhIssues.find(y => y.id === id); if (x && x.fix) dhApply([x]); }
+        function dhFixAll() { dhApply(dhIssues.filter(x => x.fix)); }
 
 
         // ================= [v70] PLAN KARNESİ · ŞABLONLAR · HATIRLATMA · OTOMASYON =================
