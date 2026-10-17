@@ -2500,6 +2500,10 @@
         .pin-orb.tap { filter: brightness(1.35) saturate(1.2); }
         .pin-orb.ok { box-shadow: 0 0 0 .5px rgba(255,255,255,.5), 0 0 30px 6px rgba(130,170,255,.75) !important; }
         @media (prefers-reduced-motion: reduce) { .ai-fab-blob, .ai-avatar.big, .sp-orb, .pin-orb { background-image: var(--orb-img-static) !important; } }
+        /* [v87] açılış küresi, ana ekrandan açılırken görünen sabit görselle aynı yerde ve aynı boyutta başlar (geçişte sıçrama olmaz) */
+        #launchScreen .sp-orb { position: absolute !important; left: 50%; top: 50%; width: min(30vw, 160px); height: min(30vw, 160px); margin: calc(min(30vw, 160px) / -2) 0 0 calc(min(30vw, 160px) / -2); animation: none; }
+        #launchScreen .sp-name { position: absolute; left: 0; right: 0; top: calc(50% + min(30vw, 160px) / 2 + 30px); text-align: center; }
+        #launchScreen.hide .sp-orb { transform: scale(1.25); opacity: 0; }
         .plan-tg { display: grid; grid-template-columns: minmax(0,2fr) minmax(0,1fr); gap: 12px; } .plan-tg .plan-full, .plan-tg > .plan-full { grid-column: 1 / -1; }
         .plan-pick { padding: 10px; border-radius: 14px; background: var(--ios-fill); }
         .plan-pick-list { max-height: 230px; overflow-y: auto; display: grid; gap: 4px; -webkit-overflow-scrolling: touch; }
@@ -2620,7 +2624,7 @@
         <button type="button" class="vm-end" onclick="vmClose()">Bitir</button>
     </div>
     <div id="accessGate" class="ag-ov hidden" role="dialog" aria-modal="true" aria-label="Cihaz onayı"><div class="ag-card"><div class="text-[44px] text-center">🔒</div><div id="agBody"></div></div></div>
-    <button type="button" id="aiFab" class="ai-fab hidden" onclick="orbOpen(this);switchTab('aikoc')" aria-label="AI Koç"><span class="ai-fab-blob"></span><span class="ai-fab-ic">✦</span></button>
+    <button type="button" id="aiFab" class="ai-fab hidden" onclick="switchTab('aikoc')" aria-label="AI Koç"><span class="ai-fab-blob"></span><span class="ai-fab-ic">✦</span></button>
     <div id="skyBg" aria-hidden="true"></div>
     <div id="pushPage" class="hidden" role="dialog" aria-modal="true" aria-labelledby="ppTitle">
         <div class="pp-nav"><button type="button" class="pp-back" onclick="closeDetail()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span id="ppBack">Geri</span></button><span id="ppNavTitle" class="pp-navtitle"></span><span></span></div>
@@ -4910,6 +4914,7 @@
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:#1c1c1e"><i data-lucide="sparkles"></i></span><span class="ios-row-body"><span>Açılış animasyonu</span><span class="sec-seg theme-seg"><span class="seg-track"><button type="button" data-intro-btn="full" onclick="setIntroMode('full')">Tam</button><button type="button" data-intro-btn="short" onclick="setIntroMode('short')">Kısa</button><button type="button" data-intro-btn="off" onclick="setIntroMode('off')">Kapalı</button></span></span></span></div>
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-pink))"><i data-lucide="volume-2"></i></span><span class="ios-row-body"><span>Açılış sesi</span><input type="checkbox" id="introSoundChk" onchange="setIntroSound(this.checked)" aria-label="Açılış sesi"></span></div>
                         <button type="button" class="ios-row" onclick="previewIntro()"><span class="ios-icon" style="background:rgb(var(--ios-indigo))"><i data-lucide="play"></i></span><span class="ios-row-body"><span>Açılışı önizle</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
+                        <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-teal))"><i data-lucide="clock"></i></span><span class="ios-row-body"><span>Ana sayfada saat kartı</span><input type="checkbox" id="lockClockChk" onchange="setLockClock(this.checked)" aria-label="Ana sayfada saat kartı"></span></div>
                         <button type="button" class="ios-row" onclick="scrollToSettingsCard('Görünüm')"><span class="ios-icon" style="background:rgb(var(--ios-indigo))"><i data-lucide="palette"></i></span><span class="ios-row-body"><span>Tema Rengi</span><span class="ios-detail"><span id="iosAccentName"></span><i data-lucide="chevron-right" class="ios-chev"></i></span></span></button>
                         <button type="button" class="ios-row" onclick="toggleLayoutEdit(true)"><span class="ios-icon" style="background:rgb(var(--ios-teal))"><i data-lucide="move"></i></span><span class="ios-row-body"><span>Kartları Yerleştir</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
                         <button type="button" class="ios-row" onclick="openDashCustomizer()"><span class="ios-icon" style="background:rgb(var(--brand-rgb))"><i data-lucide="layout-grid"></i></span><span class="ios-row-body"><span>Ana Sayfa Kartları</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
@@ -5858,7 +5863,7 @@
         let lastSyncedCanon = {};       // Her koleksiyonun bulutla son eşleşen hali
         let saveBlockedToastShown = false;
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v85';
+        const APP_VERSION = 'firebase-v88';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -14958,6 +14963,8 @@ function listeRowToKeys(groups, vals) {
         })();
 
         // ---- Kilit ekranı gibi saat kartı (Bugün kartının üstünde) ----
+        function lockClockOn() { try { return localStorage.getItem('yks_lockclock') === '1'; } catch (e) { return false; } }
+        function setLockClock(on) { try { localStorage.setItem('yks_lockclock', on ? '1' : '0'); } catch (e) {} try { document.querySelectorAll('.lock-clock').forEach(c => c.remove()); renderTodayCard(); } catch (e) {} }
         function lockClockHtml() {
             const now = new Date(), today = localDateStr();
             const hm = String(now.getHours()).padStart(2, '0') + '<b>:</b>' + String(now.getMinutes()).padStart(2, '0');
@@ -14975,7 +14982,7 @@ function listeRowToKeys(groups, vals) {
             const q = (typeof MOTIVATION_QUOTES !== 'undefined' && MOTIVATION_QUOTES.length) ? MOTIVATION_QUOTES[doy % MOTIVATION_QUOTES.length] : '';
             return `<div class="lock-clock"><div class="lc-date">${date}</div><div class="lc-time">${hm}</div><div class="lc-pills">${pills.join('')}</div>${q ? `<div class="lc-quote">“${escHtml(q)}”</div>` : ''}</div>`;
         }
-        (function () { const orig = renderTodayCard; renderTodayCard = function () { orig.apply(this, arguments); try { const box = document.getElementById('todayBody'); if (box && !box.querySelector('.lock-clock')) box.insertAdjacentHTML('afterbegin', lockClockHtml()); } catch (e) {} };
+        (function () { const orig = renderTodayCard; renderTodayCard = function () { orig.apply(this, arguments); try { const box = document.getElementById('todayBody'); if (box && lockClockOn() && !box.querySelector('.lock-clock')) box.insertAdjacentHTML('afterbegin', lockClockHtml()); } catch (e) {} };
             setInterval(() => { const c = document.querySelector('.lock-clock'); if (c && !document.hidden) { const n = document.createElement('div'); n.innerHTML = lockClockHtml(); c.replaceWith(n.firstChild); } }, 20000); })();
 
         // ============ [v84] AÇILIŞ AYARLARI · KÜRE GEÇİŞİ · ÇEKEREK YENİLE ============
@@ -14985,6 +14992,7 @@ function listeRowToKeys(groups, vals) {
             const m = introMode();
             document.querySelectorAll('[data-intro-btn]').forEach(b => b.classList.toggle('on', b.dataset.introBtn === m));
             const c = document.getElementById('introSoundChk'); if (c) c.checked = introSoundOn();
+            const lc = document.getElementById('lockClockChk'); if (lc) lc.checked = lockClockOn();
         }
         function setIntroMode(m) { try { localStorage.setItem('yks_intro', m); } catch (e) {} introRefresh(); showToast(m === 'off' ? 'Açılış animasyonu kapatıldı.' : m === 'short' ? 'Kısa açılış seçildi.' : 'Tam açılış seçildi.'); }
         function setIntroSound(on) { try { localStorage.setItem('yks_intro_snd', on ? '1' : '0'); } catch (e) {} if (on) playChime(); }
@@ -15017,6 +15025,7 @@ function listeRowToKeys(groups, vals) {
         try { introRefresh(); } catch (e) {}
         // AI düğmesinden büyüyen küre
         function orbOpen(el) {
+            return;   // geçiş animasyonu kapalı
             try {
                 if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
                 if (document.body.dataset.tab === 'aikoc') return;
