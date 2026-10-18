@@ -4318,7 +4318,7 @@
                         <span id="planListTitle">Günün Planı</span>
                     </h2>
                     <div class="flex items-center gap-2">
-                        <span class="text-[11px] text-slate-400 dark:text-slate-500">Sürükleyerek sırala</span>
+                        <button type="button" onclick="openDayCopy()" class="press-scale text-[11px] font-semibold text-brand px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10">⧉ Günü kopyala</button><span class="text-[11px] text-slate-400 dark:text-slate-500 hidden sm:inline">Sürükleyerek sırala</span>
                         <button onclick="exportPlanToICS()" class="press-scale flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/10 text-slate-600 dark:text-slate-300">
                             <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i>
                             <span>Takvime Aktar</span>
@@ -5895,7 +5895,7 @@
         let saveBlockedToastShown = false;
         let offlineMode = false, ackedCanon = {}, pendingUpdates = 0;   // [v90] çevrimdışı veri ekleme
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v95';
+        const APP_VERSION = 'firebase-v97';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -11065,7 +11065,7 @@
             { sel: '#tercihList [data-swipe^="removeTercih"]', items: el => { const id = el.getAttribute('data-swipe').match(/'([^']+)'/)[1];
                 return [{ label: 'Hedefime ne kadar kaldı?', icon: 'crosshair', run: () => openTercihTarget(id) }, { label: 'Yukarı taşı', icon: 'arrow-up', run: () => moveTercih(id, -1) }, { label: 'Aşağı taşı', icon: 'arrow-down', run: () => moveTercih(id, 1) }, { label: 'Listeden çıkar', icon: 'trash-2', danger: true, run: () => removeTercih(id) }]; } },
             { sel: '#resourcesContainer [data-book]', items: el => { const k = el.getAttribute('data-book'); const r = state.resources.find(x => String(x.id) === k);
-                return r ? [{ label: 'Detay', icon: 'info', run: () => openBookDetail(r.id) }, { label: 'Testleri aç/kapat', icon: 'list', run: () => toggleBook(k) }, { label: 'Sil', icon: 'trash-2', danger: true, run: () => deleteResource(r.id) }] : []; } },
+                return r ? [{ label: 'Düzenle', icon: 'pencil', run: () => openResEdit(r.id) }, { label: 'Detay', icon: 'info', run: () => openBookDetail(r.id) }, { label: 'Testleri aç/kapat', icon: 'list', run: () => toggleBook(k) }, { label: 'Sil', icon: 'trash-2', danger: true, run: () => deleteResource(r.id) }] : []; } },
             { sel: '#schoolsContainer [data-swipe^="deleteSchool"]', items: el => { const id = +el.getAttribute('data-swipe').match(/\d+/)[0]; return [{ label: 'Sil', icon: 'trash-2', danger: true, run: () => deleteSchool(id) }]; } },
             { sel: '#dailyTableBody tr', items: el => { const b = el.querySelector('[onclick^="deleteActivity("]'); if (!b) return []; const id = +b.getAttribute('onclick').match(/\d+/)[0]; const a = state.activities.find(x => x.id === id);
                 return [{ label: 'Düzenle', icon: 'pencil', run: () => openActivityEdit(id) }, { label: 'Aynı konudan ekle', icon: 'plus', run: () => { openFormSheet('activity'); if (a) { const t = document.getElementById('actTopic'); if (t) t.value = a.topic || ''; } } }, { label: 'Sil', icon: 'trash-2', danger: true, run: () => deleteActivity(id) }]; } }
@@ -14829,7 +14829,7 @@ function listeRowToKeys(groups, vals) {
             const open = list.filter(h => !h.done), done = list.filter(h => h.done).slice(-3);
             box.innerHTML = `<div class="hw-card"><div class="flex items-center justify-between mb-1"><span class="text-[14px] font-bold text-slate-900 dark:text-slate-50">📚 Ödevler${open.length ? ` <span class="text-slate-400 font-semibold">· ${open.length}</span>` : ''}</span>${READONLY ? '' : `<button type="button" class="text-[13px] font-semibold text-brand" onclick="openHwForm()">+ Ödev</button>`}</div>
                 ${open.length ? open.map(h => { const d = daysUntil(h.due), late = d < 0;
-                    return `<div class="hw-row"><button type="button" class="g3-check press-scale ro-hide" onclick="toggleHw('${h.id}')" aria-label="Bitti"></button><div class="flex-1 min-w-0"><div class="text-[14px] text-slate-800 dark:text-slate-100">${escHtml(h.text)}</div><div class="text-[11.5px] ${late ? '' : 'text-slate-500'}" ${late ? 'style="color:rgb(var(--ios-red));font-weight:700"' : ''}>${escHtml(h.ders || '')} · ${late ? `${-d} gün gecikti` : d === 0 ? 'bugün teslim' : d === 1 ? 'yarın teslim' : fmtDateTr(h.due) + ' teslim'}</div></div>${READONLY ? '' : `<button type="button" class="text-[12px] text-slate-400" onclick="deleteHw('${h.id}')" aria-label="Sil">✕</button>`}</div>`; }).join('') : '<div class="text-[13px] text-slate-400 py-1">Bekleyen ödev yok 🎉</div>'}
+                    return `<div class="hw-row"><button type="button" class="g3-check press-scale ro-hide" onclick="toggleHw('${h.id}')" aria-label="Bitti"></button><div class="flex-1 min-w-0"><div class="text-[14px] text-slate-800 dark:text-slate-100">${escHtml(h.text)}</div><div class="text-[11.5px] ${late ? '' : 'text-slate-500'}" ${late ? 'style="color:rgb(var(--ios-red));font-weight:700"' : ''}>${escHtml(h.ders || '')} · ${late ? `${-d} gün gecikti` : d === 0 ? 'bugün teslim' : d === 1 ? 'yarın teslim' : fmtDateTr(h.due) + ' teslim'}</div></div>${READONLY ? '' : `<button type="button" class="text-[13px] text-slate-400 mr-2" onclick="openHwEdit('${h.id}')" aria-label="Düzenle">✎</button><button type="button" class="text-[12px] text-slate-400" onclick="deleteHw('${h.id}')" aria-label="Sil">✕</button>`}</div>`; }).join('') : '<div class="text-[13px] text-slate-400 py-1">Bekleyen ödev yok 🎉</div>'}
                 ${done.length ? `<div class="text-[11px] text-slate-400 mt-1">Son bitenler: ${done.map(h => escHtml(h.text)).join(' · ')}</div>` : ''}</div>`;
         }
         function openHwForm() {
@@ -15969,6 +15969,255 @@ function listeRowToKeys(groups, vals) {
                 <div class="mt-3 text-[11px] text-slate-500">${DUP_GROUPS.map(g => `<div>• <b>${escHtml(g.name)}:</b> ${escHtml(g.note)}</div>`).join('')}</div>`;
             if (keep && document.getElementById('miniModalCard')) { const sc = (document.querySelector('#miniModalCard [style*="overflow-y:auto"]:last-of-type') || {}).scrollTop; document.getElementById('miniModalCard').innerHTML = html; try { lucide.createIcons(); } catch (e) {} } else openMiniModal(html);
         }
+
+        // ============ [v96] PLAN BLOĞU DÜZENLEME ============
+        function openPlanEdit(id) {
+            if (READONLY) return;
+            const b = state.planBlocks.find(x => x.id === id); if (!b) return;
+            const done = !!b.completed, kind = b.kind || 'soru';
+            const inp = 'input-soft w-full rounded-xl p-2.5 text-sm';
+            const subjOpts = SUBJECT_GROUPS.map(g => `<optgroup label="${g.exam}">` + g.subjects.map(x => `<option value="${escHtml(x.value)}" ${x.value === b.subject ? 'selected' : ''}>${escHtml(x.label)}</option>`).join('') + '</optgroup>').join('');
+            openMiniModal(`<div class="flex items-center justify-between mb-1"><div class="text-[19px] font-bold text-slate-900 dark:text-slate-50">✏️ Bloğu düzenle</div>
+                <button type="button" onclick="closeMiniModal()" class="press-scale p-2 rounded-full bg-black/5 dark:bg-white/10 text-slate-500" aria-label="Kapat"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+                ${done ? '<div class="text-[11px] text-amber-600 dark:text-amber-400 mb-2">Bu blok tamamlandı. Saat, konu ve not değişir; günlüğe işlenen sonuç aynı kalır. Değiştirmek için önce "Geri al".</div>' : ''}
+                <div style="max-height:62vh;overflow-y:auto;padding-bottom:4px">
+                ${done ? '' : `<span class="qf-lbl">Tarih</span><input type="date" id="peDate" class="${inp}" value="${escHtml(b.date || '')}">`}
+                <div class="grid grid-cols-2 gap-2"><div><span class="qf-lbl">Saat</span><input type="time" id="peTime" class="${inp}" value="${escHtml(b.time || '')}"></div>
+                ${done ? '' : `<div><span class="qf-lbl">Süre (dk)</span><input type="number" id="peDur" min="5" step="5" inputmode="numeric" class="${inp}" value="${numOr0(b.duration) || 30}"></div>`}</div>
+                ${done ? '' : `<span class="qf-lbl">Ders</span><select id="peSubj" class="${inp}">${subjOpts}</select>
+                <span class="qf-lbl">Tür</span><select id="peKind" class="${inp}" onchange="document.getElementById('peTgtWrap').style.display = this.value === 'soru' ? '' : 'none'">${Object.keys(PLAN_KIND).map(k => `<option value="${k}" ${k === kind ? 'selected' : ''}>${PLAN_KIND[k].ic} ${PLAN_KIND[k].label}</option>`).join('')}</select>`}
+                <span class="qf-lbl">Konu</span><input type="text" id="peTopic" maxlength="120" class="${inp}" value="${escHtml(b.topic || '')}">
+                <span class="qf-lbl">Not</span><input type="text" id="peNote" maxlength="200" class="${inp}" value="${escHtml(b.note || '')}">
+                <div id="peTgtWrap" style="${kind === 'soru' ? '' : 'display:none'}"><span class="qf-lbl">Hedef soru sayısı</span><input type="number" id="peTgt" min="0" step="5" inputmode="numeric" class="${inp}" value="${numOr0(b.targetQuestions) || ''}" placeholder="İsteğe bağlı"></div>
+                </div>
+                <button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="savePlanEdit(${b.id})">Kaydet</button>`);
+        }
+        function savePlanEdit(id) {
+            const b = state.planBlocks.find(x => x.id === id); if (!b) return;
+            const g = i => { const e = document.getElementById(i); return e ? e.value : null; };
+            const time = g('peTime');
+            if (!time) { showToast('Saat boş olamaz.', 'error'); return; }
+            b.time = time; b.topic = (g('peTopic') || '').trim().slice(0, 120); b.note = (g('peNote') || '').trim().slice(0, 200);
+            const oldDate = b.date;
+            if (!b.completed) {
+                const date = g('peDate'), dur = parseInt(g('peDur')), subj = g('peSubj'), kind = g('peKind');
+                if (!date) { showToast('Tarih boş olamaz.', 'error'); return; }
+                b.date = date; if (dur > 0) b.duration = dur;
+                if (subj) { b.subject = subj; b.examType = examTypeForSubject(subj); }
+                if (kind && PLAN_KIND[kind]) { if (kind !== (b.kind || 'soru')) { delete planDrafts[b.id]; if (kind === 'soru') delete b.items; } b.kind = kind; }
+                const tgt = parseInt(g('peTgt')); if (b.kind === 'soru') { if (tgt > 0) b.targetQuestions = tgt; else delete b.targetQuestions; } else delete b.targetQuestions;
+            }
+            saveState(); closeMiniModal(); try { playFeedbackSound('success'); } catch (e) {}
+            try { renderPlanBlocks(); } catch (e) {} try { renderPlanBoard(); } catch (e) {} try { renderPlanKarne(); } catch (e) {} try { renderTodayCard(); } catch (e) {}
+            showToast(b.date !== oldDate ? `Blok ${fmtDateTr(b.date)} gününe taşındı ✅` : 'Blok güncellendi ✅');
+        }
+
+        // ============ [v97] KÜÇÜK KONFOR ÖZELLİKLERİ ============
+        const _mi = 'input-soft w-full rounded-xl p-2.5 text-sm';
+        const _mHead = (t) => `<div class="flex items-center justify-between mb-2"><div class="text-[19px] font-bold text-slate-900 dark:text-slate-50">${t}</div><button type="button" onclick="closeMiniModal()" class="press-scale p-2 rounded-full bg-black/5 dark:bg-white/10 text-slate-500" aria-label="Kapat"><i data-lucide="x" class="w-4 h-4"></i></button></div>`;
+
+        // ---- 1) Plan: yarına taşı · kopyala
+        function planMoveTomorrow(id) {
+            if (READONLY) return; const b = state.planBlocks.find(x => x.id === id); if (!b) return;
+            b.date = addDaysStr(b.date, 1); delete planDrafts[b.id];
+            saveState(); haptic(); try { renderPlanBlocks(); renderPlanBoard(); renderPlanKarne(); renderTodayCard(); } catch (e) {}
+            showToast('Blok yarına taşındı → ' + (b.time || ''));
+        }
+        function planDuplicate(id) {
+            if (READONLY) return; const b = state.planBlocks.find(x => x.id === id); if (!b) return;
+            const c = { ...b, id: Date.now(), completed: false }; delete c.result; delete c.activityId; delete c.activityIds; delete c.watchedSet;
+            state.planBlocks.push(c); saveState(); haptic();
+            try { renderPlanBlocks(); renderPlanBoard(); renderPlanKarne(); } catch (e) {}
+            openPlanEdit(c.id);
+        }
+        // ---- 2) Günü kopyala
+        function openDayCopy() {
+            if (READONLY) return;
+            const date = document.getElementById('planDate').value || localDateStr(), n = state.planBlocks.filter(b => b.date === date).length;
+            if (!n) { showToast('Bu günde kopyalanacak blok yok.', 'error'); return; }
+            const opt = (label, d) => `<button type="button" class="press-scale w-full flex justify-between items-center py-3 border-b border-black/5 dark:border-white/10 text-left" onclick="dayCopyTo('${d}')"><span class="text-[14px] font-medium text-slate-900 dark:text-slate-50">${label}</span><span class="text-[12px] text-slate-400">${fmtDateTr(d)}</span></button>`;
+            openMiniModal(_mHead('⧉ Günü kopyala') + `<div class="text-[12px] text-slate-500 mb-2">${fmtDateTr(date)} gününün <b>${n}</b> bloğu seçtiğin güne kopyalanır (tamamlanmamış olarak).</div>
+                ${opt('Yarın', addDaysStr(date, 1))}${opt('1 hafta sonra', addDaysStr(date, 7))}${opt('Bugün', localDateStr())}
+                <span class="qf-lbl mt-3">Başka bir gün</span><div class="flex gap-2"><input type="date" id="dcDate" class="${_mi}" value="${addDaysStr(date, 2)}"><button type="button" class="btn-primary press-scale px-5 rounded-xl text-white font-semibold" onclick="dayCopyTo(document.getElementById('dcDate').value)">Kopyala</button></div>`);
+            window.__dcFrom = date;
+        }
+        function dayCopyTo(to) {
+            const from = window.__dcFrom || document.getElementById('planDate').value; if (!to || to === from) { showToast('Farklı bir gün seç.', 'error'); return; }
+            const src = state.planBlocks.filter(b => b.date === from); let k = 0;
+            src.forEach(b => { const c = { ...b, id: Date.now() + (k++), date: to, completed: false }; delete c.result; delete c.activityId; delete c.activityIds; delete c.watchedSet; state.planBlocks.push(c); });
+            saveState(); closeMiniModal(); haptic(); try { playFeedbackSound('success'); } catch (e) {}
+            try { renderPlanBlocks(); renderPlanBoard(); renderPlanKarne(); } catch (e) {}
+            showToast(`${k} blok ${fmtDateTr(to)} gününe kopyalandı ✅`);
+        }
+        // ---- 3) Gecikmiş blok uyarısı
+        function planOverdue(date) {
+            if (date !== localDateStr()) return [];
+            const n = new Date(), nowMin = n.getHours() * 60 + n.getMinutes();
+            return state.planBlocks.filter(b => b.date === date && !b.completed && b.time && (() => { const [h, m] = b.time.split(':').map(Number); return h * 60 + m + numOr0(b.duration) < nowMin; })());
+        }
+        function planMoveOverdue() {
+            const list = planOverdue(localDateStr()); if (!list.length) return;
+            list.forEach(b => { b.date = addDaysStr(b.date, 1); delete planDrafts[b.id]; });
+            saveState(); haptic(); try { renderPlanBlocks(); renderPlanBoard(); renderPlanKarne(); renderTodayCard(); } catch (e) {}
+            showToast(list.length + ' blok yarına taşındı');
+        }
+        (function () {
+            const o = renderPlanBlocks;
+            renderPlanBlocks = function () {
+                o.apply(this, arguments);
+                try {
+                    const box = document.getElementById('planBlocksContainer'), date = document.getElementById('planDate').value; if (!box) return;
+                    const od = planOverdue(date); if (!od.length) return;
+                    const ids = new Set(od.map(b => b.id));
+                    const blocks = state.planBlocks.filter(b => b.date === date).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+                    blocks.forEach((b, i) => { if (ids.has(b.id) && box.children[i]) box.children[i].style.boxShadow = 'inset 3px 0 0 rgb(var(--ios-orange))'; });
+                    box.insertAdjacentHTML('afterbegin', `<div class="p-3 rounded-2xl bg-amber-400/[0.1] border border-amber-400/30 text-[12px] text-slate-700 dark:text-slate-200 flex items-center justify-between gap-2"><span>⏰ <b>${od.length}</b> bloğun zamanı geçti, tamamlanmadı.</span>${READONLY ? '' : '<button type="button" class="press-scale text-brand font-semibold flex-shrink-0" onclick="planMoveOverdue()">Yarına taşı</button>'}</div>`);
+                } catch (e) {}
+            };
+            setInterval(() => { try { const c = document.getElementById('content-plan'); if (c && !c.classList.contains('hidden') && document.visibilityState === 'visible') renderPlanBlocks(); } catch (e) {} }, 120000);
+        })();
+
+        // ---- 4) Formlar son seçimi hatırlasın
+        const FM_KEY = 'yks_form_mem';
+        const fmGet = () => { try { return JSON.parse(localStorage.getItem(FM_KEY)) || {}; } catch (e) { return {}; } };
+        const fmSet = o => { try { localStorage.setItem(FM_KEY, JSON.stringify({ ...fmGet(), ...o })); } catch (e) {} };
+        (function () {
+            const o = handleActivitySubmit;
+            handleActivitySubmit = function (e) {
+                try { const v = id => (document.getElementById(id) || {}).value; fmSet({ act: { subject: v('actSubject'), type: v('actType'), dur: v('actDuration'), topic: v('actTopic'), at: Date.now() } }); } catch (er) {}
+                return o.apply(this, arguments);
+            };
+            const op = handlePlanSubmit;
+            handlePlanSubmit = function (e) {
+                try { const v = id => (document.getElementById(id) || {}).value; fmSet({ plan: { subject: v('planSubject'), dur: v('planDuration'), kind: planKind } }); } catch (er) {}
+                return op.apply(this, arguments);
+            };
+            const of = openFormSheet;
+            openFormSheet = function (kind) {
+                const r = of.apply(this, arguments);
+                try {
+                    if (kind === 'activity' && fsState && !window.__actAgain) {
+                        const m = fmGet().act; if (m && m.subject) {
+                            const sub = document.getElementById('actSubject'); if (sub && [...sub.options].some(x => x.value === m.subject)) { sub.value = m.subject; handleSubjectChange(); }
+                            const ty = document.getElementById('actType'); if (ty && m.type && [...ty.options].some(x => x.value === m.type)) { ty.value = m.type; handleActivityTypeChange(); }
+                            const du = document.getElementById('actDuration'); if (du && m.dur) du.value = m.dur;
+                            const tp = document.getElementById('actTopic'); if (tp && !tp.value && m.topic && Date.now() - (m.at || 0) < 6 * 3600 * 1000) tp.value = m.topic;
+                        }
+                    }
+                } catch (er) {}
+                return r;
+            };
+            // Plan formu: açılışta son ders ve süre
+            setTimeout(() => {
+                try {
+                    const m = fmGet().plan; if (!m) return;
+                    const sub = document.getElementById('planSubject'); if (sub && m.subject && [...sub.options].some(x => x.value === m.subject)) { sub.value = m.subject; try { updatePlanTopicList(); } catch (er) {} }
+                    const du = document.getElementById('planDuration'); if (du && m.dur) du.value = m.dur;
+                    if (m.kind && PLAN_KIND[m.kind]) setPlanKind(m.kind);
+                } catch (er) {}
+            }, 1500);
+        })();
+        // ---- 5) Çalışmayı "aynısını tekrar ekle"
+        function activityAgain(id) {
+            if (READONLY) return; const a = state.activities.find(x => x.id === id); if (!a) return;
+            window.__actAgain = true; openFormSheet('activity'); window.__actAgain = false;
+            try {
+                const set = (i, v) => { const e = document.getElementById(i); if (e) e.value = v; };
+                const sub = document.getElementById('actSubject'); if (sub) { sub.value = a.subject; handleSubjectChange(); }
+                const ty = document.getElementById('actType'); if (ty && a.type && [...ty.options].some(x => x.value === a.type)) { ty.value = a.type; handleActivityTypeChange(); }
+                set('actDate', localDateStr()); set('actTopic', a.topic || ''); set('actDuration', numOr0(a.duration) || 45);
+                set('actQuestions', 0); set('actCorrect', 0); set('actWrong', 0); set('actBlank', '');
+                const q = document.getElementById('actQuestions'); if (q) setTimeout(() => { q.focus(); q.select && q.select(); }, 250);
+                try { updateActivityPreview(); } catch (er) {}
+            } catch (er) {}
+            showToast('Aynı ders ve konu hazır: sayıları gir');
+        }
+        // günlük tablosuna "tekrar ekle" düğmesi
+        (function () {
+            const o = renderDailyTable;
+            if (typeof o !== 'function') return;
+            renderDailyTable = function () {
+                o.apply(this, arguments);
+                try { document.querySelectorAll('#dailyTableBody button[onclick^="openActivityEdit("]').forEach(b => { if (b.previousElementSibling && b.previousElementSibling.classList.contains('act-again')) return; const id = b.getAttribute('onclick').match(/\d+/)[0]; b.insertAdjacentHTML('beforebegin', `<button onclick="activityAgain(${id})" class="act-again press-scale p-1.5 hover:bg-black/5 dark:hover:bg-white/10 text-slate-500 rounded-lg ro-hide" title="Aynısını tekrar ekle" aria-label="Aynısını tekrar ekle"><i data-lucide="copy-plus" class="w-4 h-4"></i></button>`); }); try { lucide.createIcons(); } catch (er) {} } catch (er) {}
+            };
+        })();
+
+        // ---- 6) Düzenleme: not · ödev · kart · kaynak
+        function openNoteEdit(id) {
+            if (READONLY) return; const n = state.quickNotes.find(x => x.id === id); if (!n) return;
+            openMiniModal(_mHead('✏️ Notu düzenle') + `<textarea id="neText" rows="6" maxlength="3000" class="${_mi}">${escHtml(n.text)}</textarea><button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="saveNoteEdit(${id})">Kaydet</button>`);
+        }
+        function saveNoteEdit(id) {
+            const n = state.quickNotes.find(x => x.id === id), t = (document.getElementById('neText').value || '').trim(); if (!n) return;
+            if (!t) { showToast('Not boş olamaz.', 'error'); return; }
+            n.text = t; saveState(); closeMiniModal(); renderQuickNotes(); showToast('Not güncellendi');
+        }
+        function openHwEdit(id) {
+            if (READONLY) return; const h = (state.homework || []).find(x => x.id === id); if (!h) return;
+            openMiniModal(_mHead('✏️ Ödevi düzenle') + `<span class="qf-lbl">Ödev</span><input id="heText" class="${_mi}" maxlength="100" value="${escHtml(h.text)}">
+                <div class="qf-grid"><div><span class="qf-lbl">Ders</span><input id="heDers" class="${_mi}" maxlength="40" value="${escHtml(h.ders || '')}"></div>
+                <div><span class="qf-lbl">Teslim</span><input id="heDue" type="date" class="${_mi}" value="${escHtml(h.due || '')}"></div></div>
+                <button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="saveHwEdit('${h.id}')">Kaydet</button>`);
+        }
+        function saveHwEdit(id) {
+            const h = (state.homework || []).find(x => x.id === id); if (!h) return;
+            const t = (document.getElementById('heText').value || '').trim(); if (!t) { showToast('Ödevi yaz.', 'error'); return; }
+            h.text = t.slice(0, 100); h.ders = (document.getElementById('heDers').value || '').trim().slice(0, 40); h.due = document.getElementById('heDue').value || h.due;
+            saveState(); closeMiniModal(); renderHomework(); showToast('Ödev güncellendi');
+        }
+        function openFlashEdit(id, deck) {
+            if (READONLY) return; const c = (state.flashcards || []).find(x => x.id === id); if (!c) return;
+            window.__feDeck = deck;
+            openMiniModal(_mHead('✏️ Kartı düzenle') + `<span class="qf-lbl">Ön yüz (soru)</span><textarea id="feFront" rows="3" maxlength="160" class="${_mi}">${escHtml(c.front)}</textarea>
+                <span class="qf-lbl">Arka yüz (cevap)</span><textarea id="feBack" rows="4" maxlength="240" class="${_mi}">${escHtml(c.back)}</textarea>
+                <button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="saveFlashEdit(${id})">Kaydet</button>`);
+        }
+        function saveFlashEdit(id) {
+            const c = (state.flashcards || []).find(x => x.id === id); if (!c) return;
+            const f = (document.getElementById('feFront').value || '').trim(), b = (document.getElementById('feBack').value || '').trim();
+            if (!f || !b) { showToast('İki yüz de dolu olmalı.', 'error'); return; }
+            c.front = f.slice(0, 160); c.back = b.slice(0, 240); saveState(); closeMiniModal();
+            try { renderFlashDecks(); } catch (e) {} try { openDeck(window.__feDeck); } catch (e) {} showToast('Kart güncellendi');
+        }
+        function openResEdit(id) {
+            if (READONLY) return; const r = state.resources.find(x => String(x.id) === String(id)); if (!r) return;
+            const isBook = Array.isArray(r.topics);
+            const subjOpts = SUBJECT_GROUPS.map(g => `<optgroup label="${g.exam}">` + g.subjects.map(x => `<option value="${escHtml(x.value)}" ${x.value === r.subject ? 'selected' : ''}>${escHtml(x.label)}</option>`).join('') + '</optgroup>').join('');
+            openMiniModal(_mHead('✏️ Kaynağı düzenle') + `<div style="max-height:62vh;overflow-y:auto"><span class="qf-lbl">Ad</span><input id="reName" class="${_mi}" maxlength="80" value="${escHtml(r.name)}">
+                <span class="qf-lbl">Ders</span><select id="reSubj" class="${_mi}">${subjOpts}</select>
+                <span class="qf-lbl">Hedef bitiş tarihi</span><input id="reTarget" type="date" class="${_mi}" value="${escHtml(r.targetDate || '')}">
+                ${isBook ? '<div class="text-[11px] text-slate-400 mt-2">Konu ve testleri kitap kartından ekleyip silebilirsin.</div>' : `<div class="qf-grid"><div><span class="qf-lbl">Toplam</span><input id="reTotal" type="number" min="1" inputmode="numeric" class="${_mi}" value="${numOr0(r.total)}"></div><div><span class="qf-lbl">Şu an</span><input id="reCur" type="number" min="0" inputmode="numeric" class="${_mi}" value="${numOr0(r.current)}"></div></div>`}</div>
+                <button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="saveResEdit(${JSON.stringify(id)})">Kaydet</button>`);
+        }
+        function saveResEdit(id) {
+            const r = state.resources.find(x => String(x.id) === String(id)); if (!r) return;
+            const g = i => (document.getElementById(i) || {}).value, name = (g('reName') || '').trim(); if (!name) { showToast('Ad boş olamaz.', 'error'); return; }
+            r.name = name.slice(0, 80); const sj = g('reSubj'); if (sj) { r.subject = sj; r.examType = examTypeForSubject(sj); } r.targetDate = g('reTarget') || '';
+            if (!Array.isArray(r.topics)) {
+                const tot = Math.max(1, parseInt(g('reTotal')) || r.total || 1), cur = Math.min(tot, Math.max(0, parseInt(g('reCur')) || 0));
+                const changed = cur !== numOr0(r.current); r.total = tot; r.current = cur;
+                if (changed) { r.log = Array.isArray(r.log) ? r.log : []; r.log.push({ d: localDateStr(), v: cur }); }
+            }
+            saveState(); closeMiniModal(); renderResources(); showToast('Kaynak güncellendi');
+        }
+
+        // ---- 7) Saat için hızlı seçici
+        function timeChipsApply(input) {
+            if (!input || input.dataset.tchips) return; input.dataset.tchips = '1';
+            const row = document.createElement('div'); row.className = 'flex gap-1.5 mt-1.5 flex-wrap';
+            const mk = (label, fn) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'ai-chip press-scale'; b.style.padding = '4px 10px'; b.style.fontSize = '11.5px'; b.textContent = label; b.onclick = () => { input.value = fn(); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true })); try { haptic(); } catch (e) {} }; row.appendChild(b); };
+            const parse = () => { const v = input.value || ''; const m = /^(\d{1,2}):(\d{2})/.exec(v); return m ? (+m[1]) * 60 + (+m[2]) : null; };
+            const fmt = t => { t = ((t % 1440) + 1440) % 1440; return String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0'); };
+            const nowT = () => { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); };
+            mk('Şimdi', () => fmt(nowT()));
+            mk('−1 sa', () => fmt((parse() ?? nowT()) - 60)); mk('+30 dk', () => fmt((parse() ?? nowT()) + 30)); mk('+1 sa', () => fmt((parse() ?? nowT()) + 60));
+            input.insertAdjacentElement('afterend', row);
+        }
+        setTimeout(() => { try { timeChipsApply(document.getElementById('planTime')); } catch (e) {} }, 1200);
+        (function () {
+            const o = openPlanEdit;
+            openPlanEdit = function () { o.apply(this, arguments); setTimeout(() => { try { timeChipsApply(document.getElementById('peTime')); } catch (e) {} }, 30); };
+        })();
 
         function aiFabUpdate() { const f = document.getElementById('aiFab'); if (f) f.classList.toggle('hidden', !canSeeAi() || currentTabId === 'aikoc'); }
         function aiSave() { try { localStorage.setItem(pk('yks_ai_chat'), JSON.stringify(aiMsgs.slice(-40).map(m => ({ ...m, img: m.thumb || null, thumb: undefined, pending: undefined })))); } catch (e) {} }
@@ -17476,7 +17725,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
         function openDeck(name) {
             const cs = (state.flashcards || []).filter(c => c.deck === name);
             openMiniModal(`<div class="text-[20px] font-bold text-center mb-1 text-slate-900 dark:text-slate-50">${escHtml(name)}</div><div class="text-[13px] text-slate-500 text-center mb-3">${cs.length} kart</div>
-                <div class="ios-group" style="background:var(--ios-bg);max-height:52vh;overflow-y:auto">${cs.map(c => `<div class="ios-row" style="cursor:default"><span class="ios-row-body"><span class="min-w-0"><span class="block font-semibold truncate">${escHtml(c.front)}</span><span class="block text-[12px] text-slate-400 truncate">${escHtml(c.back)} · ${(c.stage || 0) >= 4 ? 'öğrenildi' : fcDue(c) ? 'bugün' : fmtDateTr(c.due)}</span></span>${READONLY ? '' : `<button type="button" class="text-[13px] font-semibold" style="color:rgb(var(--ios-red))" onclick="deleteFlash(${c.id}, ${escHtml(JSON.stringify(name))})">Sil</button>`}</span></div>`).join('')}</div>
+                <div class="ios-group" style="background:var(--ios-bg);max-height:52vh;overflow-y:auto">${cs.map(c => `<div class="ios-row" style="cursor:default"><span class="ios-row-body"><span class="min-w-0"><span class="block font-semibold truncate">${escHtml(c.front)}</span><span class="block text-[12px] text-slate-400 truncate">${escHtml(c.back)} · ${(c.stage || 0) >= 4 ? 'öğrenildi' : fcDue(c) ? 'bugün' : fmtDateTr(c.due)}</span></span>${READONLY ? '' : `<button type="button" class="text-[13px] font-semibold mr-3 text-brand" onclick="openFlashEdit(${c.id}, ${escHtml(JSON.stringify(name))})">Düzenle</button><button type="button" class="text-[13px] font-semibold" style="color:rgb(var(--ios-red))" onclick="deleteFlash(${c.id}, ${escHtml(JSON.stringify(name))})">Sil</button>`}</span></div>`).join('')}</div>
                 ${READONLY ? '' : `<div class="grid grid-cols-2 gap-2 mt-3"><button type="button" class="py-3 rounded-xl font-semibold text-brand" style="background:var(--ios-fill)" onclick="closeMiniModal(); setTimeout(() => openFlashAdd(${escHtml(JSON.stringify(name))}), 250)">+ Kart ekle</button><button type="button" class="py-3 rounded-xl font-semibold" style="background:var(--ios-fill);color:rgb(var(--ios-red))" onclick="deleteDeck(${escHtml(JSON.stringify(name))})">Desteyi sil</button></div>`}`);
         }
         function deleteFlash(id, deck) { if (READONLY) return; state.flashcards = (state.flashcards || []).filter(c => c.id !== id); saveState(); renderFlashDecks(); openDeck(deck); }
@@ -20511,6 +20760,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                             ${sub ? `<div class="text-[11px] text-slate-500 dark:text-slate-400 truncate">${sub}</div>` : ''}
                         </div>
                         <span class="text-[10px] text-slate-400 dark:text-slate-500 flex-shrink-0 text-right">${target ? `🎯 ${target} soru<br>` : ''}${b.duration} dk</span>
+                        <button onclick="openPlanEdit(${b.id})" class="press-scale p-1 text-slate-400 flex-shrink-0" title="Düzenle" aria-label="Bloğu düzenle"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                         <button onclick="deletePlanBlock(${b.id})" class="press-scale p-1 text-rose-400 flex-shrink-0" title="Sil"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                     </div>`;
 
@@ -20549,7 +20799,9 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                         <div><label class="${lab}">Boş</label><input type="number" min="0" step="1" inputmode="numeric" value="${val(dr.b)}" placeholder="0" data-pf="${b.id}-b" oninput="planDraftInput(${b.id}, 'b', this.value)" class="${inp}"></div>
                     </div>`}
                     <div class="pl-[3.25rem] flex flex-wrap items-center justify-between gap-2">
-                        <span id="plPrev-${b.id}" class="text-[11px] text-slate-500 dark:text-slate-400"></span>
+                        <span class="flex items-center gap-2.5 flex-wrap"><span id="plPrev-${b.id}" class="text-[11px] text-slate-500 dark:text-slate-400"></span>
+                            <button type="button" onclick="planMoveTomorrow(${b.id})" class="press-scale text-[11px] font-semibold text-brand">→ Yarına taşı</button>
+                            <button type="button" onclick="planDuplicate(${b.id})" class="press-scale text-[11px] font-semibold text-brand">⧉ Kopyala</button></span>
                         <button onclick="completePlanBlock(${b.id})" class="btn-primary press-scale text-white px-3.5 py-1.5 rounded-full text-[11px] font-semibold flex items-center gap-1.5">
                             <i data-lucide="check-check" class="w-3.5 h-3.5"></i><span>Tamamla & Günlüğe Ekle</span>
                         </button>
@@ -22211,6 +22463,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                         <div class="text-xs text-slate-700 dark:text-slate-200 whitespace-pre-wrap">${escHtml(n.text)}</div>
                         <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-1">${dateLabel}</div>
                     </div>
+                    <button onclick="openNoteEdit(${n.id})" class="press-scale p-1.5 text-slate-400 flex-shrink-0 ro-hide" title="Düzenle" aria-label="Notu düzenle"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button>
                     <button onclick="readNoteAloud(${n.id})" class="press-scale p-1.5 text-brand flex-shrink-0" title="Sesli oku"><i data-lucide="volume-2" class="w-3.5 h-3.5"></i></button>
                     <button onclick="deleteQuickNote(${n.id})" class="press-scale p-1.5 text-rose-400 flex-shrink-0"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                 </div>`;
@@ -22659,7 +22912,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                             <span class="text-[11px] text-slate-400">/${total}</span>
                             <button onclick="updateResourcePage(${r.id}, 1)" class="press-scale w-6 h-6 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 text-xs">+</button>
                             <button onclick="updateResourcePage(${r.id}, 5)" class="press-scale px-1.5 h-6 rounded-full bg-black/5 dark:bg-white/10 text-slate-500 text-[10px] font-semibold">+5</button>
-                            <button onclick="deleteResource(${r.id})" class="press-scale text-rose-400 ml-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            <button onclick="openResEdit(${JSON.stringify(r.id)})" class="press-scale text-slate-400 ml-1" title="Düzenle" aria-label="Düzenle"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteResource(${r.id})" class="press-scale text-rose-400 ml-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                         </div>
                     </div>
                     <div class="w-full bg-black/5 dark:bg-white/10 rounded-full h-2 overflow-hidden">
@@ -22737,7 +22990,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
                             </div>
                         </div>
                         <div class="flex items-center gap-1 flex-shrink-0">
-                            <button type="button" onclick="event.stopPropagation(); deleteResource(${JSON.stringify(r.id)})" class="press-scale p-1.5 text-rose-400" title="Kitabı sil"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                            <button type="button" onclick="event.stopPropagation(); openResEdit(${JSON.stringify(r.id)})" class="press-scale p-1.5 text-slate-400" title="Düzenle" aria-label="Kitabı düzenle"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button type="button" onclick="event.stopPropagation(); deleteResource(${JSON.stringify(r.id)})" class="press-scale p-1.5 text-rose-400" title="Kitabı sil"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                             <i data-lucide="chevron-down" class="book-chevron w-4 h-4 text-slate-400"></i>
                         </div>
                     </div>
