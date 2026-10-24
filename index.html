@@ -3217,6 +3217,8 @@
         html.lg body.ts-over #headerActions > button:not(#addBtn):not(#profileBtn) { background: rgba(255,255,255,.12) !important; }
         html.lg body.ts-over #headerActions > button:not(#addBtn):not(#profileBtn):hover { background: rgba(255,255,255,.22) !important; }
         @media (max-width: 767px) { html.lg #content-dashboard > .ts-hero::after { background: linear-gradient(to bottom, rgba(0,0,0,.4) 0%, rgba(0,0,0,.1) 40%, rgba(0,0,0,0) 62%, rgba(0,0,0,.28) 100%); } }
+        /* Başlığın altındaki gün/seri kapsülleri gizli: aynı bilgi alttaki satırda yazıyor */
+        html.lg .ts-hero #lgGreet { display: none !important; }
 
     </style>
     <!-- [v30] HIZ: Tailwind stilleri önceden derlendi (Tailwind 3.4, sadece kullanılan sınıflar). Canlı CDN sürümü her açılışta telefonda stilleri yeniden hesaplıyordu. -->
@@ -27192,10 +27194,11 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             if (!document.getElementById('tsLine')) {
                 h1.insertAdjacentHTML('afterend', `<p id="tsLine"></p>${READONLY ? '' : `<div class="ts-btns"><button type="button" class="ts-btn pri" onclick="openFormSheet('activity')">Çalışma ekle</button><button type="button" class="ts-btn sec" onclick="openFormSheet('exam')">Deneme ekle</button></div>`}`);
             }
-            const v = ringValues(localDateStr()), q = v[0], m = v[1];
             const d = state.settings && state.settings.examDate;
             const left = d ? Math.max(0, Math.ceil((new Date(d + 'T09:00:00') - new Date()) / 86400000)) : 0;
-            document.getElementById('tsLine').textContent = `Bugün ${q.v}/${q.goal} soru · ${m.v}/${m.goal} dakika${left ? ` · YKS'ye ${left} gün` : ''}`;
+            let stk = 0; try { stk = computeStreak(); } catch (e) {}
+            const parts = [left ? `YKS'ye ${left} gün kaldı` : '', stk >= 1 ? `${stk} günlük seri` : ''].filter(Boolean);   // sadece kalan gün ve seri
+            const line = document.getElementById('tsLine'); line.textContent = parts.join(' · '); line.hidden = !parts.length;
         }
         { const _rtc = renderTodayCard; renderTodayCard = function () { const r = _rtc.apply(this, arguments); try { renderTsHero(); } catch (e) {} return r; }; }
         function renderTpAccentRow() {
