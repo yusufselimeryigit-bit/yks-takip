@@ -3219,6 +3219,8 @@
         @media (max-width: 767px) { html.lg #content-dashboard > .ts-hero::after { background: linear-gradient(to bottom, rgba(0,0,0,.4) 0%, rgba(0,0,0,.1) 40%, rgba(0,0,0,0) 62%, rgba(0,0,0,.28) 100%); } }
         /* Başlığın altındaki gün/seri kapsülleri gizli: aynı bilgi alttaki satırda yazıyor */
         html.lg .ts-hero #lgGreet { display: none !important; }
+        /* Telefonda ana ekran fotoğrafında selamlama ve kalan gün/seri yazısı gizli */
+        @media (max-width: 767px) { html.lg .ts-hero h1.hero-title, html.lg .ts-hero #tsLine { display: none !important; } }
 
     </style>
     <!-- [v30] HIZ: Tailwind stilleri önceden derlendi (Tailwind 3.4, sadece kullanılan sınıflar). Canlı CDN sürümü her açılışta telefonda stilleri yeniden hesaplıyordu. -->
