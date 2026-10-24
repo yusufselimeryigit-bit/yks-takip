@@ -3330,6 +3330,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 <button type="button" onclick="pinKey('7')">7<small>PQRS</small></button><button type="button" onclick="pinKey('8')">8<small>TUV</small></button><button type="button" onclick="pinKey('9')">9<small>WXYZ</small></button>
                 <span></span><button type="button" onclick="pinKey('0')">0</button><button type="button" class="pin-del" onclick="pinKey('del')" aria-label="Sil">⌫</button>
             </div>
+            <button type="button" id="pinFaceBtn" class="pin-link hidden" onclick="faceIdUnlock()">Face ID ile aç</button>
             <button type="button" id="pinViewBtn" class="pin-link hidden" onclick="pinViewOnly()">İzleme olarak aç</button>
             <button type="button" id="pinCancelBtn" class="pin-link" onclick="pinCancel()">Vazgeç</button>
         </div>
@@ -11940,6 +11941,79 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             const [c1, c2] = profileColors(id);
             el.textContent = p.name.charAt(0);
             el.style.setProperty('--pa1', c1); el.style.setProperty('--pa2', c2);
+            const ph = profilePhoto(id);
+            el.style.background = ph ? `url('${ph}') center / cover no-repeat` : '';
+            el.style.color = ph ? 'transparent' : '';
+        }
+        // [v107] Profil fotoğrafı: küçültülmüş JPEG olarak ortak alanda (PROFILE_META[id].photo) saklanır
+        function profilePhoto(id) { const m = PROFILE_META[id]; const ph = m && m.photo; return typeof ph === 'string' && ph.startsWith('data:image/') ? ph : ''; }
+        function paBg(id) { const ph = profilePhoto(id); return ph ? `;background:url('${ph}') center / cover no-repeat;color:transparent` : ''; }
+        function pickProfilePhoto() {
+            if (READONLY) return;
+            const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+            inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) saveProfilePhoto(f); };
+            inp.click();
+        }
+        function saveProfilePhoto(file) {
+            const url = URL.createObjectURL(file), img = new Image();
+            img.onload = async () => {
+                URL.revokeObjectURL(url);
+                const S = 192, c = document.createElement('canvas'); c.width = c.height = S;
+                const s = Math.min(img.naturalWidth, img.naturalHeight);   // ortadan kare kırp
+                c.getContext('2d').drawImage(img, (img.naturalWidth - s) / 2, (img.naturalHeight - s) / 2, s, s, 0, 0, S, S);
+                const data = c.toDataURL('image/jpeg', 0.82);
+                const id = ACTIVE_PROFILE;
+                PROFILE_META[id] = { ...(PROFILE_META[id] || {}), photo: data };
+                initProfileUI(); refreshDetail();
+                try { await metaWrite(id, { photo: data }); showToast('Profil fotoğrafı kaydedildi'); } catch (e) { showToast('Kaydedilemedi, internetini kontrol et', 'error'); }
+            };
+            img.onerror = () => { URL.revokeObjectURL(url); showToast('Bu fotoğraf açılamadı', 'error'); };
+            img.src = url;
+        }
+        async function removeProfilePhoto() {
+            if (READONLY) return;
+            const id = ACTIVE_PROFILE;
+            if (PROFILE_META[id]) delete PROFILE_META[id].photo;
+            initProfileUI(); refreshDetail();
+            try { await metaWrite(id, { photo: null }); showToast('Profil fotoğrafı kaldırıldı'); } catch (e) { showToast('Kaydedilemedi, internetini kontrol et', 'error'); }
+        }
+
+        // [v107] Face ID / Touch ID ile giriş (WebAuthn). Kayıt bu cihaza özeldir; şifre her zaman yedek olarak kalır.
+        const faceIdKey = id => 'yks_faceid@' + id;
+        function faceIdSupported() { return !!(window.PublicKeyCredential && navigator.credentials && window.isSecureContext); }
+        function faceIdCred(id) { try { return localStorage.getItem(faceIdKey(id)) || ''; } catch (e) { return ''; } }
+        function faceIdOn(id) { return faceIdSupported() && !!pinOf(id) && !!faceIdCred(id); }
+        const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        const unb64u = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), ch => ch.charCodeAt(0));
+        async function enableFaceId(id) {
+            if (!faceIdSupported()) { showToast('Bu cihaz veya tarayıcı Face ID desteklemiyor', 'error'); refreshDetail(); return; }
+            try {
+                const name = (PROFILES[id] || {}).name || id;
+                const cred = await navigator.credentials.create({ publicKey: {
+                    challenge: crypto.getRandomValues(new Uint8Array(32)),
+                    rp: { name: 'YKS Takip' },
+                    user: { id: new TextEncoder().encode('yks-' + id), name: 'YKS Takip · ' + name, displayName: name },
+                    pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+                    authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' },
+                    timeout: 60000
+                } });
+                localStorage.setItem(faceIdKey(id), b64u(cred.rawId));
+                showToast('Face ID açıldı'); refreshDetail();
+            } catch (e) { if (e && e.name !== 'NotAllowedError') showToast('Face ID açılamadı', 'error'); refreshDetail(); }
+        }
+        function disableFaceId(id) { try { localStorage.removeItem(faceIdKey(id)); } catch (e) {} showToast('Face ID kapatıldı'); refreshDetail(); }
+        async function faceIdUnlock() {
+            const c = pinCtx;
+            if (!c || !faceIdOn(c.id)) return;
+            try {
+                await navigator.credentials.get({ publicKey: {
+                    challenge: crypto.getRandomValues(new Uint8Array(32)),
+                    allowCredentials: [{ type: 'public-key', id: unb64u(faceIdCred(c.id)) }],
+                    userVerification: 'required', timeout: 60000
+                } });
+                if (pinCtx !== c) return;
+                pinFails = 0; pinUnlocked(c);
+            } catch (e) { if (pinCtx === c) pinUpdateText('Face ID olmadı · şifreni gir'); }
         }
         function renderChooserList(firstTime) {
             const list = document.getElementById('pcList');
@@ -11947,7 +12021,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             list.innerHTML = Object.entries(PROFILES).map(([id, p]) => {
                 const [c1, c2] = profileColors(id), locked = !!pinOf(id);
                 return `<button type="button" class="pc-item ${!firstTime && id === ACTIVE_PROFILE ? 'current' : ''}" onclick="chooseProfile('${id}')" aria-label="${escHtml(p.name)} profili${locked ? ', şifreli' : ''}">
-                    <span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${escHtml(p.name.charAt(0))}${locked ? '<span class="pc-lock"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : ''}</span>
+                    <span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(p.name.charAt(0))}${locked ? '<span class="pc-lock"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>' : ''}</span>
                     <span class="pc-name">${escHtml(p.name)}</span>
                 </button>`;
             }).join('');
@@ -12105,6 +12179,9 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             const pad = document.getElementById('pinPad');
             profileAvatar(document.getElementById('pinAvatar'), ctx.id);
             document.getElementById('pinViewBtn').classList.toggle('hidden', !(ctx.mode === 'enter' || ctx.mode === 'gate'));
+            const fid = (ctx.mode === 'enter' || ctx.mode === 'gate') && faceIdOn(ctx.id);
+            document.getElementById('pinFaceBtn').classList.toggle('hidden', !fid);
+            if (fid && ctx.mode === 'enter') faceIdUnlock();   // profile dokununca Face ID kendiliğinden sorulur (Safari dokunuşun içinde ister)
             document.getElementById('pinPad').classList.toggle('pin-msg', ctx.mode === 'msg');
             document.getElementById('pinCancelBtn').textContent = ctx.mode === 'gate' ? 'Başka profil seç' : 'Vazgeç';
             if (ctx.mode === 'gate') pinGateOpen = true;
@@ -12171,8 +12248,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                     return pinWrong('Yanlış şifre');
                 }
                 pinFails = 0;
-                if (c.mode === 'enter') { hidePinPad(); goProfile(c.id, 'full', pinOf(c.id).hash); return; }
-                if (c.mode === 'gate') { try { localStorage.setItem('yks_unlock@' + c.id, pinOf(c.id).hash); } catch (e) {} pinGateOpen = false; hidePinPad(); showToast('Profil açıldı'); return; }
+                if (c.mode === 'enter' || c.mode === 'gate') { pinUnlocked(c); return; }
                 if (c.mode === 'remove') {
                     try { await metaWrite(c.id, { pin: null }); if (PROFILE_META[c.id]) delete PROFILE_META[c.id].pin; hidePinPad(); showToast('Şifre kaldırıldı'); refreshDetail(); try { initProfileUI(); } catch (e) {} } catch (e) { pinWrong('Kaydedilemedi, internetini kontrol et'); }
                     return;
@@ -12190,6 +12266,10 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                     hidePinPad(); showToast(c.mode === 'create' ? 'Şifre oluşturuldu' : 'Şifre değiştirildi'); refreshDetail();
                 } catch (e) { pinWrong('Kaydedilemedi, internetini kontrol et'); }
             }
+        }
+        function pinUnlocked(c) {   // şifre ya da Face ID doğrulandı
+            if (c.mode === 'enter') { hidePinPad(); goProfile(c.id, 'full', pinOf(c.id).hash); return; }
+            if (c.mode === 'gate') { try { localStorage.setItem('yks_unlock@' + c.id, pinOf(c.id).hash); } catch (e) {} pinGateOpen = false; hidePinPad(); showToast('Profil açıldı'); }
         }
         function hidePinPad() { document.getElementById('pinPad').classList.add('hidden'); pinCtx = null; pinBuf = ''; }
         function pinCancel() {
@@ -12220,9 +12300,10 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 const alan = pr.alan || state.settings.alan || 'EA';
                 const row = (label, act, cls) => `<button type="button" class="pp-row w-full text-left ${cls || ''}" onclick="${act}"><span>${label}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ios-label3)" stroke-width="2.6" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button>`;
                 return `<div class="flex flex-col items-center text-center pt-2 pb-4">
-                        <span class="profile-avatar" style="width:92px;height:92px;font-size:40px;--pa1:${c1};--pa2:${c2}">${escHtml(p.name.charAt(0))}</span>
+                        <span class="profile-avatar" style="width:92px;height:92px;font-size:40px;--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(p.name.charAt(0))}</span>
                         <div class="pp-title" id="ppTitle" style="margin:12px 0 2px">${escHtml(p.name)}</div>
                         <div class="text-[13px] text-slate-500">${READONLY ? 'İzleme modu · salt okunur' : (hasPin ? 'Şifreli profil' : 'Şifresiz profil')}</div>
+                        ${READONLY ? '' : `<div class="flex gap-4 mt-3"><button type="button" class="text-[15px] font-semibold text-brand press-scale" onclick="pickProfilePhoto()">${profilePhoto(id) ? 'Fotoğrafı Değiştir' : 'Fotoğraf Ekle'}</button>${profilePhoto(id) ? `<button type="button" class="text-[15px] font-semibold press-scale" style="color:rgb(var(--ios-red))" onclick="removeProfilePhoto()">Kaldır</button>` : ''}</div>`}
                     </div>
                     ${READONLY ? `<div class="pp-group"><button type="button" class="pp-row w-full text-left" onclick="closeDetail(); setTimeout(() => chooseProfile(ACTIVE_PROFILE), 300)"><span class="text-brand font-semibold">Şifreyle aç (tam erişim)</span></button></div>` : `
                     <div class="pp-section">Görünen ad</div>
@@ -12232,14 +12313,14 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                     <div class="pp-section">Alan</div>
                     <div class="sec-seg pp-seg"><div class="seg-track">${['EA', 'SAY', 'SÖZ', 'DİL'].map(x => `<button type="button" class="${alan === x ? 'on' : ''}" onclick="saveProfilePrefs({alan:'${x}'})">${x}</button>`).join('')}</div></div>
                     <div class="pp-section">Şifre</div>
-                    <div class="pp-group">${hasPin ? row('Şifreyi Değiştir', `showPinPad({mode:'change', id:'${id}'})`) + row('<span style="color:rgb(var(--ios-red))">Şifreyi Kaldır</span>', `showPinPad({mode:'remove', id:'${id}'})`) : row('Şifre Oluştur', `showPinPad({mode:'create', id:'${id}'})`)}</div>
+                    <div class="pp-group">${hasPin ? row('Şifreyi Değiştir', `showPinPad({mode:'change', id:'${id}'})`) + row('<span style="color:rgb(var(--ios-red))">Şifreyi Kaldır</span>', `showPinPad({mode:'remove', id:'${id}'})`) : row('Şifre Oluştur', `showPinPad({mode:'create', id:'${id}'})`)}${hasPin && faceIdSupported() ? `<label class="pp-row w-full" style="cursor:pointer"><span>Face ID ile giriş <span class="block text-[12px] text-slate-400">Sadece bu cihazda · şifre yedek kalır</span></span><input type="checkbox" aria-label="Face ID ile giriş" ${faceIdCred(id) ? 'checked' : ''} onchange="this.checked ? enableFaceId('${id}') : disableFaceId('${id}')"></label>` : ''}</div>
                     <div class="text-[12px] text-slate-400 px-4 pt-2 leading-snug">${hasPin ? 'Başka biri bu profile girmek isterse şifre sorulur; şifreyi bilmeyen sadece izleyebilir.' : 'Şifre oluşturursan bu profile girerken 4 haneli şifre sorulur. Şifreyi bilmeyenler profili sadece izleyebilir.'}</div>`}
                     <div class="pp-section">Profiller</div>
                     <div class="pp-group">${row('Profil Değiştir', 'closeDetail(); setTimeout(() => showProfileChooser(false), 300)')}</div>
                     ${canManageProfiles() ? `<div class="pp-section">Profilleri yönet</div>
                     <div class="pp-group">
-                        <div class="pp-row"><span class="flex items-center gap-3"><span class="profile-avatar" style="width:32px;height:32px;font-size:14px;--pa1:${profileColors(PROFILE_OWNER)[0]};--pa2:${profileColors(PROFILE_OWNER)[1]}">${escHtml(PROFILES[PROFILE_OWNER].name.charAt(0))}</span>${escHtml(PROFILES[PROFILE_OWNER].name)}</span><span class="pp-val">Sahip · silinemez</span></div>
-                        ${Object.keys(PROFILES).filter(x => x !== PROFILE_OWNER).map(x => `<div class="pp-row"><span class="flex items-center gap-3"><span class="profile-avatar" style="width:32px;height:32px;font-size:14px;--pa1:${profileColors(x)[0]};--pa2:${profileColors(x)[1]}">${escHtml(PROFILES[x].name.charAt(0))}</span>${escHtml(PROFILES[x].name)}</span><button type="button" class="text-[15px] font-semibold press-scale" style="color:rgb(var(--ios-red))" onclick="askDeleteProfile('${x}')">Sil</button></div>`).join('')}
+                        <div class="pp-row"><span class="flex items-center gap-3"><span class="profile-avatar" style="width:32px;height:32px;font-size:14px;--pa1:${profileColors(PROFILE_OWNER)[0]};--pa2:${profileColors(PROFILE_OWNER)[1]}${paBg(PROFILE_OWNER)}">${escHtml(PROFILES[PROFILE_OWNER].name.charAt(0))}</span>${escHtml(PROFILES[PROFILE_OWNER].name)}</span><span class="pp-val">Sahip · silinemez</span></div>
+                        ${Object.keys(PROFILES).filter(x => x !== PROFILE_OWNER).map(x => `<div class="pp-row"><span class="flex items-center gap-3"><span class="profile-avatar" style="width:32px;height:32px;font-size:14px;--pa1:${profileColors(x)[0]};--pa2:${profileColors(x)[1]}${paBg(x)}">${escHtml(PROFILES[x].name.charAt(0))}</span>${escHtml(PROFILES[x].name)}</span><button type="button" class="text-[15px] font-semibold press-scale" style="color:rgb(var(--ios-red))" onclick="askDeleteProfile('${x}')">Sil</button></div>`).join('')}
                         <button type="button" class="pp-row w-full text-left" onclick="openAddProfile()"><span class="text-brand font-semibold">+ Yeni Profil Ekle</span></button>
                         <button type="button" class="pp-row w-full text-left" onclick="shareAllViewer()"><span>Birleşik izleme bağlantısı <span class="block text-[12px] text-slate-400">Bütün profiller tek sayfada (amcan için)</span></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ios-label3)" stroke-width="2.6" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button>
                         <button type="button" class="pp-row w-full text-left" onclick="openTrash()"><span>Son Silinenler</span><span class="pp-val" id="trashCountLbl">${trashCache ? Object.keys(trashCache).length : ''}</span></button>
@@ -12376,7 +12457,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                     ? `<button type="button" class="fr-btn go press-scale" onclick="joinFriendPomodoro('${id}')">Katıl</button>`
                     : `<button type="button" class="fr-btn press-scale" onclick="chooseProfile('${id}')">Profili gör</button>`;
                 const msgBtn = `<button type="button" class="fr-btn press-scale ro-hide" onclick="openChat('${id}')" aria-label="${escHtml(p.name)} ile mesajlaş">Mesaj${unreadFrom(id) ? ` · ${unreadFrom(id)}` : ''}</button>`;
-                return `<div class="fr-row"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${escHtml(p.name.charAt(0))}</span>
+                return `<div class="fr-row"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(p.name.charAt(0))}</span>
                     <div class="flex-1 min-w-0"><div class="text-[15px] font-semibold text-slate-900 dark:text-slate-50">${escHtml(p.name)}</div>
                     <div class="text-[13px] text-slate-600 dark:text-slate-300">${line}</div>${sub ? `<div class="text-[12px] text-slate-400">${escHtml(sub)}</div>` : ''}</div><div class="flex flex-col gap-1.5 items-end">${act}<div class="flex gap-1.5">${msgBtn}${!liveActive(L) && !(S && S.today === today && S.day && (S.day.q > 0 || S.day.min > 0)) ? `<button type="button" class="fr-btn press-scale ro-hide" onclick="sendNudge('${id}')" aria-label="${escHtml(p.name)} dürt" title="Dürt: hadi çalışmaya başla">👋</button>` : `<button type="button" class="fr-btn press-scale ro-hide" onclick="sendCheer('${id}')" aria-label="${escHtml(p.name)} tebrik et" title="Tebrik et">👏</button>`}</div></div></div>`;
             }).join('');
@@ -12455,7 +12536,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             }).join('');
             const best = Math.max(...Object.values(wins));
             const top = ids.filter(id => wins[id] === best && best > 0);
-            const hero = ids.map(id => { const [c1, c2] = profileColors(id); return `<span class="profile-avatar ${top.length === 1 && top[0] === id ? 'win' : ''}" style="--pa1:${c1};--pa2:${c2}">${escHtml(PROFILES[id].name.charAt(0))}</span>`; }).join('<span class="vs">VS</span>');
+            const hero = ids.map(id => { const [c1, c2] = profileColors(id); return `<span class="profile-avatar ${top.length === 1 && top[0] === id ? 'win' : ''}" style="--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(PROFILES[id].name.charAt(0))}</span>`; }).join('<span class="vs">VS</span>');
             // geçmiş haftalar: soru sayısına göre galip
             const hist = [1, 2, 3, 4].map(i => { const w0 = addDaysStr(ws, -7 * i); const q = ids.map(id => weekOf(id, w0).q); const mx = Math.max(...q); const win = mx > 0 && q.filter(x => x === mx).length === 1 ? ids[q.indexOf(mx)] : null; return { w0, win, q }; });
             const tally = Object.fromEntries(ids.map(id => [id, hist.filter(h => h.win === id).length]));
@@ -12484,7 +12565,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             if (!p || !path) { showToast('Bu profil silinemez.', 'error'); return; }
             const [c1, c2] = profileColors(id);
             openMiniModal(`<div class="flex flex-col items-center text-center">
-                    <span class="profile-avatar" style="width:64px;height:64px;font-size:28px;--pa1:${c1};--pa2:${c2}">${escHtml(p.name.charAt(0))}</span>
+                    <span class="profile-avatar" style="width:64px;height:64px;font-size:28px;--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(p.name.charAt(0))}</span>
                     <div class="text-[20px] font-bold text-slate-900 dark:text-slate-50 mt-3">${escHtml(p.name)} profilini sil</div>
                     <div class="text-[14px] text-slate-500 mt-2 leading-snug">${escHtml(p.name)} profili bütün cihazlardan kalkar. Verileri <b>30 gün boyunca çöp kutusunda</b> durur; bu sürede Profil → Son Silinenler'den geri getirebilirsin. 30 gün sonra kalıcı olarak silinir.<br><br>Senin verilerin etkilenmez.</div>
                 </div>
@@ -12744,15 +12825,15 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             document.getElementById('inboxCount').textContent = items.length ? `${items.length}` : '';
             box.innerHTML = duelScoreHtml() + items.map(it => {
                 const [c1, c2] = profileColors(it.from), who = escHtml(it.fromName || (PROFILES[it.from] || {}).name || 'Arkadaşın');
-                if (it.kind === 'result') return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
+                if (it.kind === 'result') return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}${paBg(it.from)}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
                     <div class="text-[13px] text-slate-500"><b class="text-slate-800 dark:text-slate-100">${who}</b> gönderdiğin soruyu cevapladı · ${escHtml(it.topic || '')} · ${agoText(it.createdAt)}</div>
                     <div class="dl-res ${it.correct ? 'ok' : 'no'}">${it.correct ? `✓ Doğru bildi (${escHtml(it.choice)})` : `✗ ${escHtml(it.choice)} seçti · doğrusu ${escHtml(it.answer)}`}</div>
                     <div class="inbox-actions ro-hide"><button type="button" onclick="deleteInboxItem('${it.id}')">Sil</button></div></div></div></div>`;
-                if (it.kind === 'reply') return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
+                if (it.kind === 'reply') return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}${paBg(it.from)}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
                     <div class="text-[13px] text-slate-500"><b class="text-slate-800 dark:text-slate-100">${who}</b> cevap yazdı · ${escHtml(it.topic || '')} · ${agoText(it.createdAt)}</div>
                     <div class="inbox-msg selectable">${escHtml(it.msg || '')}</div>
                     <div class="inbox-actions ro-hide"><button type="button" onclick="deleteInboxItem('${it.id}')">Sil</button></div></div></div></div>`;
-                return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
+                return `<div class="inbox-item"><div class="flex items-start gap-3"><span class="profile-avatar" style="width:38px;height:38px;font-size:16px;--pa1:${c1};--pa2:${c2}${paBg(it.from)}">${who.charAt(0)}</span><div class="flex-1 min-w-0">
                     <div class="text-[13px] text-slate-500"><b class="text-slate-800 dark:text-slate-100">${who}</b> incelemen gereken kaliteli bir soru gönderdi · ${agoText(it.createdAt)}</div>
                     ${it.book ? `<div class="text-[12px] text-slate-500 mt-0.5">📖 ${escHtml(it.book)}${it.page ? ' · s. ' + escHtml(String(it.page)) : ''}${it.qno ? ' · soru ' + escHtml(String(it.qno)) : ''}</div>` : ''}
                     <div class="text-[15px] font-semibold text-slate-900 dark:text-slate-50 mt-1"><span class="subj-dot" style="background:${subjectColor(it.subject)}"></span>${escHtml(subjectShort(it.subject))} · ${escHtml(it.topic || '')}</div>
@@ -12874,7 +12955,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         function threadName(pid) { return isGroup(pid) ? 'Çalışma Grubu' : ((PROFILES[pid] || {}).name || ''); }
         function threadColors(pid) { return isGroup(pid) ? ['#5AC8FA', '#5856D6'] : profileColors(pid); }
         function threadAvatarInner(pid) { return isGroup(pid) ? GROUP_SVG : escHtml(threadName(pid).charAt(0)); }
-        function threadAvatar(el, pid) { if (!isGroup(pid)) { profileAvatar(el, pid); return; } if (!el) return; const [c1, c2] = threadColors(pid); el.innerHTML = GROUP_SVG; el.style.setProperty('--pa1', c1); el.style.setProperty('--pa2', c2); }
+        function threadAvatar(el, pid) { if (!isGroup(pid)) { profileAvatar(el, pid); return; } if (!el) return; const [c1, c2] = threadColors(pid); el.innerHTML = GROUP_SVG; el.style.background = ''; el.style.color = ''; el.style.setProperty('--pa1', c1); el.style.setProperty('--pa2', c2); }
         function chatFriends() { return Object.keys(PROFILES).filter(id => id !== ACTIVE_PROFILE); }
         async function startChats() {
             if (IS_VIEWER_URL || !PROFILE_CHOSEN) return;
@@ -12955,7 +13036,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 const [c1, c2] = threadColors(pid), p = { name: threadName(pid) };
                 const preview = last ? `${last.from === ACTIVE_PROFILE ? 'Sen: ' : isGroup(pid) ? ((PROFILES[last.from] || {}).name || '') + ': ' : ''}${last.audio ? '🎤 Sesli mesaj' : last.card ? '📎 Soru kartı' : last.photo ? '📷 Fotoğraf' : last.text}` : 'Henüz mesaj yok · ilk mesajı sen gönder';
                 const t = last ? (localDateStr(new Date(last.createdAt)) === localDateStr() ? chatTime(last.createdAt) : chatDayLabel(last.createdAt)) : '';
-                return `<button type="button" class="chat-row press-scale ${un ? 'unread' : ''}" onclick="openChat('${pid}')"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${threadAvatarInner(pid)}</span>
+                return `<button type="button" class="chat-row press-scale ${un ? 'unread' : ''}" onclick="openChat('${pid}')"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}${paBg(pid)}">${threadAvatarInner(pid)}</span>
                     <span class="flex-1 min-w-0"><span class="flex items-center justify-between gap-2"><span class="cr-name">${escHtml(p.name)}</span><span class="cr-time">${escHtml(t)}</span></span>
                     <span class="flex items-center gap-2"><span class="cr-last flex-1">${escHtml(preview)}</span>${un ? `<span class="msg-badge" style="margin-left:0">${un}</span>` : ''}</span></span></button>`;
             }).join('');
@@ -13014,7 +13095,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             document.getElementById('chatStatus').textContent = friendStatus(pid);
             if (!st.msgs.length) {
                 const [c1, c2] = threadColors(pid);
-                box.innerHTML = `<div class="m-auto text-center px-8"><span class="profile-avatar" style="width:72px;height:72px;font-size:30px;--pa1:${c1};--pa2:${c2}">${threadAvatarInner(pid)}</span><div class="text-[17px] font-semibold mt-3 text-slate-900 dark:text-slate-50">${escHtml(threadName(pid))}</div><div class="text-[13px] text-slate-500 mt-1">${st.loaded === false ? 'Mesajlar yükleniyor…' : 'Henüz mesaj yok. Bir selam gönder 👋'}</div></div>`;
+                box.innerHTML = `<div class="m-auto text-center px-8"><span class="profile-avatar" style="width:72px;height:72px;font-size:30px;--pa1:${c1};--pa2:${c2}${paBg(pid)}">${threadAvatarInner(pid)}</span><div class="text-[17px] font-semibold mt-3 text-slate-900 dark:text-slate-50">${escHtml(threadName(pid))}</div><div class="text-[13px] text-slate-500 mt-1">${st.loaded === false ? 'Mesajlar yükleniyor…' : 'Henüz mesaj yok. Bir selam gönder 👋'}</div></div>`;
                 return;
             }
             let html = '', lastDay = '';
@@ -13427,7 +13508,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         // Grup arama ekranı (tek kişilik aramayla aynı #callView'ı kullanır)
         function gcPeopleHtml(ids, me) {
             return ids.map(id => { const [c1, c2] = profileColors(id), pr = me && me.peers[id], on = !me || (pr && pr.pc.connectionState === 'connected');
-                return `<div class="cl-p ${on ? '' : 'wait'}"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${escHtml(PROFILES[id].name.charAt(0))}</span><span>${escHtml(PROFILES[id].name)}</span></div>`; }).join('');
+                return `<div class="cl-p ${on ? '' : 'wait'}"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(PROFILES[id].name.charAt(0))}</span><span>${escHtml(PROFILES[id].name)}</span></div>`; }).join('');
         }
         function gcHead() {
             threadAvatar(document.getElementById('callAvatar'), GROUP_ID);
@@ -19780,7 +19861,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             box.innerHTML = `<div class="va-grid">${ids.map(id => {
                 const p = PROFILES[id], S = (PROFILE_META[id] || {}).summary, [c1, c2] = profileColors(id);
                 const w = S && (S.weeks || []).find(x => x.ws === ws) || {}, d = S && S.today === today ? S.day : { q: 0, min: 0, rings: 0 };
-                return `<div class="va-card"><div class="flex items-center gap-3"><span class="profile-avatar" style="width:48px;height:48px;font-size:20px;--pa1:${c1};--pa2:${c2}">${escHtml(p.name.charAt(0))}</span>
+                return `<div class="va-card"><div class="flex items-center gap-3"><span class="profile-avatar" style="width:48px;height:48px;font-size:20px;--pa1:${c1};--pa2:${c2}${paBg(id)}">${escHtml(p.name.charAt(0))}</span>
                     <div class="min-w-0"><div class="text-[18px] font-bold text-slate-900 dark:text-slate-50">${escHtml(p.name)}</div><div class="text-[12px] text-slate-500">${S ? `${S.streak ? S.streak + ' gün seri · ' : ''}${agoText(S.updatedAt)} güncellendi` : 'Henüz veri yok'}</div></div></div>
                     <div class="text-[11px] font-semibold uppercase text-slate-400 mt-3">Bugün</div>
                     <div class="va-stats"><div><b>${d.q || 0}</b><span>soru</span></div><div><b>${d.min || 0}</b><span>dakika</span></div><div><b>${d.rings || 0}/3</b><span>halka</span></div></div>
