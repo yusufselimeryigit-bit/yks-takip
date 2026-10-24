@@ -2543,6 +2543,316 @@
         .plan-pick-tag { font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; flex-shrink: 0; background: rgb(var(--ios-green) / .15); color: rgb(var(--ios-green)); }
         .plan-pick-chip { flex-shrink: 0; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--ios-card); color: var(--ios-label2); } .plan-pick-chip.on { background: rgb(var(--brand-rgb)); color: #fff; }
         .plan-pick-empty { padding: 8px; font-size: 12px; color: var(--ios-label2); }
+
+        /* =====================================================================
+           [v95] LIQUID GLASS 2.0 (html.lg): katmanlı ışık kenarı · imleci izleyen yansıma · cam düğmeler
+           Kartlarda yine gerçek bulanıklık YOK (arkadaki hareketli bulutlar her karede yeniden bulanıklaştırılırdı);
+           derinlik: üst ışık kenarı + alt kırılma çizgisi + iki katmanlı yumuşak gölge.
+           Hareket: yalnızca transform/opacity/gölge; hover yalnızca fare olan cihazlarda; dokunmada basma geri bildirimi.
+           ===================================================================== */
+        html.lg { --lg-ease-out: cubic-bezier(.22, 1, .36, 1); --lg-ease-press: cubic-bezier(.3, 0, .5, 1);
+            --lg-rim-top: rgba(255,255,255,.95); --lg-rim-low: rgba(30,42,90,.06);
+            --lg-shadow-hover: 0 30px 60px -28px rgba(30,42,90,.38), 0 6px 14px -6px rgba(30,42,90,.12);
+            --lg-btn: rgba(255,255,255,.56); --lg-btn-hover: rgba(255,255,255,.78); --lg-btn-edge: rgba(255,255,255,.95); }
+        html.lg.dark, html.lg .dark { --lg-rim-top: rgba(255,255,255,.16); --lg-rim-low: rgba(0,0,0,.35);
+            --lg-shadow-hover: 0 32px 64px -26px rgba(0,0,0,.9), 0 6px 14px -6px rgba(0,0,0,.6);
+            --lg-btn: rgba(255,255,255,.09); --lg-btn-hover: rgba(255,255,255,.15); --lg-btn-edge: rgba(255,255,255,.16); }
+
+        /* Aydınlık & yumuşak açık tema: daha açık zemin, pastel bulutlar, daha beyaz cam, hafif gölgeler */
+        html.lg:not(.dark) { --lg-base: #F6F7FB; --lg-card: rgba(255,255,255,.76); --lg-card-strong: rgba(255,255,255,.9); --lg-edge2: rgba(255,255,255,.6);
+            --lg-sheen: rgba(255,255,255,.72); --lg-tile: rgba(255,255,255,.62); --lg-b1: .24; --lg-b2: .18; --lg-b3: .16; --lg-b4: .14;
+            --lg-rim-low: rgba(60,72,110,.04); --lg-btn: rgba(255,255,255,.7); --lg-btn-hover: rgba(255,255,255,.92);
+            --lg-shadow: 0 18px 40px -28px rgba(60,72,110,.16), 0 1px 4px -2px rgba(60,72,110,.04);
+            --lg-shadow-hover: 0 24px 48px -28px rgba(60,72,110,.22), 0 3px 10px -5px rgba(60,72,110,.06);
+            --lg-btn-shadow: 0 4px 12px -8px rgba(60,72,110,.2); --lg-btn-shadow-hover: 0 8px 18px -10px rgba(60,72,110,.26); --lg-pri-glow: .4; }
+        html.lg:not(.dark) #content-dashboard > div:first-child::before { opacity: .5; }
+
+        /* Kartlar: üstte ince ışık, altta kırılma */
+        html.lg body main .soft-card, html.lg body .soft-card {
+            box-shadow: inset 0 1px 0 var(--lg-rim-top), inset 0 -1px 0 var(--lg-rim-low), inset 0 0 0 0.5px var(--lg-edge2), var(--lg-shadow) !important;
+            transition: transform .32s var(--lg-ease-out), box-shadow .32s var(--lg-ease-out), color .25s var(--ease-apple);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            html.lg body:not(.layout-editing) main .soft-card:not(.lay-dragging):not([data-swipe]):hover {
+                transform: translate3d(0, -3px, 0) !important;
+                box-shadow: inset 0 1px 0 var(--lg-rim-top), inset 0 -1px 0 var(--lg-rim-low), inset 0 0 0 0.5px var(--lg-edge), var(--lg-shadow-hover) !important;
+                transition: transform .42s var(--lg-ease-out), box-shadow .42s var(--lg-ease-out), color .25s var(--ease-apple);
+            }
+            #expandOverlay .soft-card:hover { transform: none !important; }
+        }
+
+        /* Birincil düğme: renkli cam (üst parlaklık + iç ışık kenarı), basınca yaylı küçülme */
+        html.lg body .btn-primary, html.lg body #headerActions > #addBtn, html.lg #welcomeSheet .wl-btn {
+            background: linear-gradient(180deg, rgba(255,255,255,.24) 0%, rgba(255,255,255,0) 52%), rgb(var(--brand-rgb)) !important;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.42), inset 0 -1px 0 rgba(0,0,0,.12), 0 8px 20px -10px rgb(var(--brand-rgb) / var(--lg-pri-glow, .75)) !important;
+            transition: transform .2s var(--lg-ease-out), box-shadow .3s var(--lg-ease-out), filter .3s var(--lg-ease-out);
+        }
+        /* İkincil düğmeler: buzlu cam kapsül */
+        html.lg body #headerActions > button:not(#addBtn):not(#profileBtn), html.lg body #headerActions > div > button, html.lg .empty-state .es-btn, html.lg .design-opt, html.lg .lg-chip {
+            background: var(--lg-btn) !important; backdrop-filter: blur(14px) saturate(180%); -webkit-backdrop-filter: blur(14px) saturate(180%);
+            box-shadow: inset 0 1px 0 var(--lg-btn-edge), inset 0 0 0 0.5px var(--lg-edge2), var(--lg-btn-shadow, 0 6px 16px -10px rgba(30,42,90,.3)) !important;
+            transition: transform .2s var(--lg-ease-out), background-color .3s var(--lg-ease-out), box-shadow .3s var(--lg-ease-out), color .25s var(--ease-apple);
+        }
+        html.lg .empty-state .es-btn { color: rgb(var(--brand-rgb)); }
+        html.lg .design-opt.on { box-shadow: inset 0 0 0 2px rgb(var(--brand-rgb)), inset 0 1px 0 var(--lg-btn-edge), 0 6px 16px -10px rgb(var(--brand-rgb) / .5) !important; border-color: transparent; }
+        html.lg .card-info-btn, html.lg .expand-btn { transition: transform .2s var(--lg-ease-out), background-color .2s ease, color .2s ease; }
+        @media (hover: hover) and (pointer: fine) {
+            html.lg body .btn-primary:hover, html.lg body #headerActions > #addBtn:hover, html.lg #welcomeSheet .wl-btn:hover {
+                transform: translate3d(0, -1px, 0); filter: brightness(1.06) saturate(1.05);
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.12), 0 14px 28px -12px rgb(var(--brand-rgb) / calc(var(--lg-pri-glow, .75) + .1)) !important;
+            }
+            html.lg body #headerActions > button:not(#addBtn):not(#profileBtn):hover, html.lg body #headerActions > div > button:hover, html.lg .empty-state .es-btn:hover, html.lg .design-opt:hover, html.lg .lg-chip:hover {
+                background: var(--lg-btn-hover) !important; transform: translate3d(0, -1px, 0);
+                box-shadow: inset 0 1px 0 var(--lg-btn-edge), inset 0 0 0 0.5px var(--lg-edge), var(--lg-btn-shadow-hover, 0 10px 22px -12px rgba(30,42,90,.38)) !important;
+            }
+            html.lg .card-info-btn:hover, html.lg .expand-btn:hover { background: var(--lg-btn); }
+        }
+        /* Basma: hızlı içeri (120ms), bırakınca yukarıdaki yaylı geçişle geri */
+        html.lg body .btn-primary:active, html.lg body #headerActions > button:active, html.lg body #headerActions > div > button:active,
+        html.lg .empty-state .es-btn:active, html.lg .design-opt:active, html.lg .lg-chip:active, html.lg #welcomeSheet .wl-btn:active,
+        html.lg .card-info-btn:active, html.lg .expand-btn:active {
+            transform: scale(.96); filter: brightness(.97); transition-duration: .12s; transition-timing-function: var(--lg-ease-press);
+        }
+        html.lg body .btn-primary:focus-visible, html.lg body #headerActions button:focus-visible, html.lg .es-btn:focus-visible, html.lg .design-opt:focus-visible {
+            outline: none; box-shadow: 0 0 0 3px var(--ios-card, #fff), 0 0 0 5px rgb(var(--brand-rgb) / .7) !important;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html.lg body main .soft-card, html.lg body main .soft-card:hover, html.lg body .btn-primary, html.lg body .btn-primary:hover, html.lg body .btn-primary:active,
+            html.lg body #headerActions button, html.lg body #headerActions button:hover, html.lg body #headerActions button:active,
+            html.lg .es-btn, html.lg .es-btn:hover, html.lg .es-btn:active, html.lg .design-opt, html.lg .design-opt:hover, html.lg .design-opt:active,
+            html.lg .lg-chip, html.lg .lg-chip:hover, html.lg .lg-chip:active, html.lg .card-info-btn:active, html.lg .expand-btn:active { transform: none !important; }
+        }
+        /* =====================================================================
+           [v96] SADELEŞTİRME (html.lg): tekrarsız selamlama · cam kenar çubuğu · sakin etiketler · halka hareketi
+           ===================================================================== */
+        /* Tekrarlar: selamlama büyük başlıkta, tarih özet sekmesinin üstünde zaten var */
+        html.lg #headerGreeting, html.lg #todayCard .today-kicker { display: none !important; }
+        html.lg body:has(#content-dashboard:not(.hidden)) #headerDate { display: none !important; }
+        /* Bağlantı kurulunca yalnızca yeşil nokta kalır */
+        html.lg #syncStatus[data-mode="online"] { padding: 10px; }
+        html.lg #syncStatus[data-mode="online"] #syncLabel { display: none !important; }
+
+        /* Kenar çubuğu: içerikle aynı cam */
+        @media (min-width: 1024px) {
+            html.lg:not(.dark) body aside.lg\:flex { background: rgba(255,255,255,.46) !important; border-right: 0.5px solid rgba(255,255,255,.75) !important; box-shadow: inset -1px 0 0 rgba(60,72,110,.05); }
+            html.lg.dark body aside.lg\:flex { background: rgba(28,28,30,.55) !important; border-right: 0.5px solid rgba(255,255,255,.06) !important; }
+            html.lg body aside .side-tab-btn { transition: background-color .2s ease, color .2s ease, transform .12s var(--lg-ease-press, ease); }
+            html.lg body aside .side-tab-btn:hover { background: rgba(120,120,128,.07) !important; }
+            html.lg body aside .side-tab-btn.bg-brand { background: rgb(var(--brand-rgb) / .12) !important; color: rgb(var(--brand-rgb)) !important; }
+            html.lg.dark body aside .side-tab-btn.bg-brand { background: rgb(var(--brand-rgb) / .22) !important; color: #fff !important; }
+        }
+
+        /* Etiketler: büyük harf ve harf aralığı yerine normal yazım */
+        html.lg main .uppercase, html.lg .hero-kicker { text-transform: none !important; letter-spacing: -0.005em !important; }
+        html.lg .hero-kicker { font-size: 15px; font-weight: 600; color: var(--ios-label2); }
+
+        /* Bugün kartı: çizgisiz satırlar, tıklanabilir satırda hafif zemin */
+        html.lg .today-row + .today-row { border-top: 0 !important; }
+        html.lg .today-row { padding: 8px 10px; margin: 0 -10px; border-radius: 12px; transition: background-color .2s ease, transform .12s var(--lg-ease-press); }
+        @media (hover: hover) and (pointer: fine) { html.lg .today-row.cursor-pointer:hover { background: rgba(120,120,128,.08); } }
+        html.lg .today-row.cursor-pointer:active { background: rgba(120,120,128,.12); transform: scale(.99); }
+
+        /* Halkalar: sıfır değer nötr, hafta halkaları ve çubuklar okunur */
+        html.lg .ring-legend-val.is-zero { color: var(--ios-label2) !important; }
+        html.lg #ringsWeek .opacity-40 { opacity: .6 !important; }
+        html.lg #ringsWeekly .overflow-hidden { background: rgba(120,120,128,.16) !important; height: 8px; }
+        html.lg #ringsWeekly .overflow-hidden > div { height: 8px; transition: width .9s cubic-bezier(.3,1,.4,1); }
+        @keyframes lgRingPop { 0% { transform: scale(1); } 35% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        html.lg #ringsBig.lg-ring-pop { animation: lgRingPop .42s cubic-bezier(.3,1.4,.5,1); transform-origin: center; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html.lg #ringsBig.lg-ring-pop { animation: none; }
+            html.lg .today-row.cursor-pointer:active, html.lg body aside .side-tab-btn:active { transform: none; }
+        }
+        @media (prefers-reduced-transparency: reduce) {
+            html.lg body aside.lg\:flex { background: var(--ios-bg) !important; }
+        }
+
+        /* =====================================================================
+           [v97] İNCE AYAR (html.lg): tek düzenle düğmesi · rahat başlık · renk tonlu ikonlar · cam AI düğmesi · dengeli halka kartı
+           ===================================================================== */
+        /* Kart düzenleme sayfadaki "Düzenle" kapsülünde; başlıktaki kopya gizli */
+        html.lg #headerActions > #layoutEditBtn { display: none !important; }
+        html.lg #lgGreet:empty { display: none; }
+        /* Büyük başlık: biraz daha açık aralık, 700 kalınlık */
+        html.lg .hero-title { font-weight: 700 !important; letter-spacing: -0.028em !important; }
+
+        /* İkonlar: dolu renkli kare yerine renk tonlu zemin + renkli çizgi (Apple'ın "tinted" görünümü) */
+        html.lg .card-ic { background: color-mix(in srgb, var(--ic) 15%, transparent) !important; box-shadow: none !important; }
+        html.lg main .card-ic svg, html.lg main .card-ic i { color: var(--ic) !important; stroke: var(--ic) !important; }
+        html.lg .today-row .ti { background: color-mix(in srgb, var(--c) 15%, transparent) !important; color: var(--c) !important; }
+        html.lg.dark .card-ic, html.lg .dark .card-ic { background: color-mix(in srgb, var(--ic) 24%, transparent) !important; }
+        html.lg.dark .today-row .ti, html.lg .dark .today-row .ti { background: color-mix(in srgb, var(--c) 24%, transparent) !important; }
+
+        /* AI düğmesi (açık tema): koyu küre yerine cam daire + marka renginde ✦; düşünürken küre geri gelir */
+        html.lg:not(.dark) body:not(.ai-busy) .ai-fab-blob { background: var(--lg-btn-hover) !important; backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border-radius: 50% !important; animation: none !important; box-shadow: inset 0 1px 0 var(--lg-btn-edge), inset 0 0 0 0.5px rgba(60,72,110,.08), 0 10px 26px -12px rgba(60,72,110,.35) !important; }
+        html.lg:not(.dark) body:not(.ai-busy) .ai-fab-blob::before, html.lg:not(.dark) body:not(.ai-busy) .ai-fab-blob::after { display: none !important; }
+        html.lg:not(.dark) body:not(.ai-busy) .ai-fab .ai-fab-ic { display: block; color: rgb(var(--brand-rgb)); text-shadow: none; font-size: 24px; }
+        html.lg .ai-fab { transition: transform .2s var(--lg-ease-out), opacity .25s ease; }
+        @media (hover: hover) and (pointer: fine) { html.lg .ai-fab:hover { transform: translate3d(0, -2px, 0); } }
+        html.lg .ai-fab:active { transform: scale(.92); transition-duration: .12s; }
+
+        /* Günlük Halkalar: çizgisiz bölme, daha büyük halka, boş tekrar satırı sade */
+        html.lg #ringsCard .sm\:border-l { border-left: 0 !important; }
+        @media (min-width: 640px) { html.lg #ringsBig { width: 184px; height: 184px; } html.lg #ringsCard .sm\:border-l { padding-left: 16px !important; } }
+        html.lg #ringsLegend .is-none .ring-legend-val { display: none; }
+        html.lg #ringsLegend .is-none .text-\[11px\] { margin-top: 2px; }
+
+        /* Dark mode'da Bugün kartı: saat tonu yarı yoğunlukta, kahverengiye kaçmaz */
+        html.lg.dark #todayCard::before, html.lg .dark #todayCard::before { opacity: .45; }
+
+        @media (prefers-reduced-motion: reduce) { html.lg .ai-fab:hover, html.lg .ai-fab:active { transform: none; } }
+
+        /* ===== [v98] Sesli arama: sohbet başlığındaki düğme + tam ekran cam arama ekranı ===== */
+        .cv-call { justify-self: end; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgb(var(--brand-rgb)); transition: background-color .2s ease, transform .12s ease; }
+        .cv-call.hidden { display: none; }
+        @media (hover: hover) and (pointer: fine) { .cv-call:hover { background: rgb(var(--brand-rgb) / .1); } }
+        .cv-call:active { transform: scale(.9); }
+        #callView { position: fixed; inset: 0; z-index: 9700; display: flex; flex-direction: column; align-items: center; justify-content: space-between; color: #fff;
+            padding: calc(env(safe-area-inset-top, 0px) + 12vh) 24px calc(env(safe-area-inset-bottom, 0px) + 9vh);
+            background: rgba(18,18,22,.78); backdrop-filter: blur(40px) saturate(160%); -webkit-backdrop-filter: blur(40px) saturate(160%);
+            opacity: 0; transform: scale(.98); transition: opacity .18s ease-in, transform .18s ease-in; }
+        #callView.show { opacity: 1; transform: none; transition: opacity .28s cubic-bezier(.22,1,.36,1), transform .32s cubic-bezier(.22,1,.36,1); }
+        #callView.hidden { display: none; }
+        body.call-open { overflow: hidden; }
+        #callView .cl-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        #callView .cl-av { position: relative; display: inline-flex; }
+        #callView .cl-av .profile-avatar { width: 112px; height: 112px; font-size: 46px; box-shadow: 0 18px 40px -16px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.35); }
+        #callView .cl-av::after { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(255,255,255,.5); opacity: 0; pointer-events: none; }
+        #callView[data-state="incoming"] .cl-av::after, #callView[data-state="ringing"] .cl-av::after { animation: callRing 2s cubic-bezier(.22,1,.36,1) infinite; }
+        @keyframes callRing { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(1.45); opacity: 0; } }
+        #callView .cl-name { margin-top: 22px; font-size: 32px; font-weight: 700; letter-spacing: -0.022em; line-height: 1.1; }
+        #callView .cl-status { margin-top: 8px; font-size: 17px; color: rgba(255,255,255,.72); font-variant-numeric: tabular-nums; min-height: 22px; }
+        #callView .cl-btns { display: flex; gap: 56px; justify-content: center; min-height: 104px; }
+        #callView .cl-bw { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,.85); }
+        #callView .cl-btn { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff;
+            background: rgba(255,255,255,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.22); transition: transform .2s cubic-bezier(.22,1,.36,1), background-color .2s ease, filter .2s ease; }
+        #callView .cl-btn.on { background: #fff; color: #1c1c1e; }
+        #callView .cl-btn.end { background: #FF3B30; box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 10px 24px -10px rgba(255,59,48,.7); }
+        #callView .cl-btn.end svg { transform: rotate(135deg); }
+        #callView .cl-btn.ok { background: #34C759; box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 10px 24px -10px rgba(52,199,89,.7); }
+        @media (hover: hover) and (pointer: fine) { #callView .cl-btn:hover { filter: brightness(1.08); transform: translate3d(0, -2px, 0); } }
+        #callView .cl-btn:active { transform: scale(.92); transition-duration: .12s; }
+        #callView .cl-btn:focus-visible { outline: 3px solid rgba(255,255,255,.85); outline-offset: 3px; }
+        #callView[data-state="ended"] .cl-status { color: #fff; }
+        @media (prefers-reduced-motion: reduce) {
+            #callView, #callView.show { transition: opacity .2s linear; transform: none; }
+            #callView .cl-av::after { animation: none !important; }
+            #callView .cl-btn:hover, #callView .cl-btn:active { transform: none; }
+        }
+        @media (prefers-reduced-transparency: reduce) { #callView { background: #121216; backdrop-filter: none; -webkit-backdrop-filter: none; } }
+
+        /* ===== [v99] Grup sohbeti · grup araması · ortak tahta · göz/su hatırlatıcısı · formül defteri ===== */
+        .bub-from { font-size: 12px; font-weight: 600; color: var(--ios-label2); margin: 8px 0 2px 12px; }
+        #callView .cl-people { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; margin-top: 26px; }
+        #callView .cl-people:empty { display: none; }
+        #callView .cl-p { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,.85); transition: opacity .3s ease; }
+        #callView .cl-p .profile-avatar { width: 52px; height: 52px; font-size: 21px; }
+        #callView .cl-p.wait { opacity: .45; }
+        #callView .cl-btns { gap: 40px; }
+        #callView .cl-btn.dot { position: relative; }
+        #callView .cl-btn.dot::after { content: ''; position: absolute; top: 6px; right: 6px; width: 12px; height: 12px; border-radius: 50%; background: #0A84FF; box-shadow: 0 0 0 2px rgba(18,18,22,.9); }
+        #callView .profile-avatar svg { display: block; }
+        /* Ortak tahta: arama ekranının üstünde beyaz kâğıt */
+        .cl-board { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; gap: 12px; padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px calc(env(safe-area-inset-bottom, 0px) + 14px); background: rgba(18,18,22,.92); }
+        .cl-board.hidden { display: none; }
+        .cb-bar { display: flex; align-items: center; gap: 8px; }
+        .cb-colors { display: flex; gap: 8px; margin-right: auto; }
+        .cb-btn.cb-ic { width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; }
+        .cb-area { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; container-type: size; }
+        .cb-c { width: 30px; height: 30px; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 2px rgba(255,255,255,.25); transition: transform .15s ease, box-shadow .15s ease; }
+        .cb-c[aria-checked="true"] { box-shadow: 0 0 0 3px rgba(18,18,22,1), 0 0 0 5px #fff; transform: scale(1.06); }
+        .cb-btn { padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; color: #fff; background: rgba(255,255,255,.14); transition: background-color .2s ease, transform .12s ease; }
+        .cb-btn:active { transform: scale(.95); }
+        .cb-done { background: #0A84FF; }
+        .cb-wrap { width: min(100cqw, 75cqh); aspect-ratio: 3 / 4; border-radius: 18px; background: #fff; overflow: hidden; box-shadow: 0 20px 50px -24px rgba(0,0,0,.6); }
+        .cb-wrap canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
+        @media (min-width: 900px) { .cl-board { padding-left: 12vw; padding-right: 12vw; } }
+        /* Göz molası / su hatırlatıcısı kapsülü */
+        #wellRem { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 160; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; border-radius: 22px;
+            width: min(420px, calc(100vw - 24px)); color: var(--ios-label); background: rgba(255,255,255,.82); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 18px 40px -20px rgba(30,42,90,.4); opacity: 0; pointer-events: none; transform: translate(-50%, -12px); transition: opacity .2s ease-in, transform .2s ease-in; }
+        .dark #wellRem { background: rgba(40,40,44,.82); box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 18px 40px -20px rgba(0,0,0,.7); }
+        #wellRem.show { opacity: 1; pointer-events: auto; transform: translate(-50%, 0); transition: opacity .3s cubic-bezier(.22,1,.36,1), transform .4s cubic-bezier(.22,1,.36,1); }
+        body.island-on #wellRem { top: calc(env(safe-area-inset-top, 0px) + 58px); }
+        #wellRem .wr-ic { position: relative; width: 38px; height: 38px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+        #wellRem.water .wr-ic { background: rgba(0,122,255,.14); color: #007AFF; }
+        #wellRem .wr-ic svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+        #wellRem.water .wr-ic svg { position: static; width: 20px; height: 20px; transform: none; }
+        #wellRem .wr-tr { fill: none; stroke: rgba(52,199,89,.2); stroke-width: 3.5; }
+        #wellRem .wr-ring { fill: none; stroke: #34C759; stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 100; transition: stroke-dashoffset 1s linear; }
+        #wellRem .wr-ic b { position: relative; font-size: 13px; font-variant-numeric: tabular-nums; }
+        #wellRem .wr-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 13px; color: var(--ios-label2); line-height: 1.3; }
+        #wellRem .wr-tx b { font-size: 15px; color: var(--ios-label); }
+        #wellRem button { padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; color: rgb(var(--brand-rgb)); background: rgba(120,120,128,.12); flex-shrink: 0; }
+        /* Formül defteri */
+        .fm-chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+        .fm-chip { flex-shrink: 0; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ios-label2); background: rgba(120,120,128,.1); transition: background-color .2s ease, color .2s ease; }
+        .fm-chip.on { background: rgb(var(--brand-rgb)); color: #fff; }
+        .fm-search { width: 100%; margin: 10px 0 4px; padding: 9px 14px; border-radius: 12px; font-size: 15px; background: rgba(120,120,128,.1); color: var(--ios-label); border: 0; outline: none; }
+        .fm-search:focus-visible { box-shadow: 0 0 0 3px rgb(var(--brand-rgb) / .35); }
+        .fm-group + .fm-group { margin-top: 18px; }
+        .fm-gh { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; margin: 12px 0 8px; color: var(--ios-label); }
+        .fm-gh span { font-size: 12px; font-weight: 600; color: var(--ios-label2); }
+        .fm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+        .fm-item { text-align: left; display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 16px; background: rgba(120,120,128,.08); box-shadow: inset 0 1px 0 var(--lg-tile-edge, transparent); transition: transform .2s cubic-bezier(.22,1,.36,1), background-color .2s ease; }
+        @media (hover: hover) and (pointer: fine) { .fm-item:hover { transform: translate3d(0, -2px, 0); } }
+        .fm-item:active { transform: scale(.98); }
+        .fm-t { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ios-label); }
+        .fm-due { width: 7px; height: 7px; border-radius: 50%; background: #FF9500; flex-shrink: 0; }
+        .fm-tp { font-size: 12px; color: var(--ios-label2); }
+        .fm-b, .fm-cb, .fm-prev { font-size: 17px; line-height: 1.5; color: var(--ios-label); font-family: "Times New Roman", "STIX Two Text", Georgia, serif; font-style: italic; word-break: break-word; }
+        .fm-b sup, .fm-b sub, .fm-cb sup, .fm-cb sub, .fm-prev sup, .fm-prev sub { font-size: .7em; }
+        .fm-hint { font-size: 12px; color: var(--ios-label2); margin-top: 6px; }
+        .fm-prev { margin-top: 8px; padding: 10px 12px; border-radius: 12px; background: rgba(120,120,128,.08); min-height: 44px; }
+        .fm-card { text-align: center; padding: 18px 8px 8px; }
+        .fm-ct { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin-top: 4px; color: var(--ios-label); }
+        .fm-cb { margin-top: 16px; font-size: 22px; }
+        .fm-cq { margin-top: 16px; font-size: 14px; color: var(--ios-label2); }
+        .fm-no { background: rgba(255,59,48,.12); color: #FF3B30; }
+        @media (prefers-reduced-motion: reduce) {
+            #wellRem, #wellRem.show { transition: opacity .2s linear; transform: translate(-50%, 0); }
+            .fm-item:hover, .fm-item:active, .cb-btn:active { transform: none; }
+        }
+        /* Sohbet ekranı: Liquid Glass */
+        html.lg #chatView { background: color-mix(in srgb, var(--lg-base) 86%, transparent) !important; backdrop-filter: blur(30px) saturate(170%); -webkit-backdrop-filter: blur(30px) saturate(170%); }
+        @media (min-width: 1024px) { html.lg #chatView { border-radius: 28px; box-shadow: inset 0 1px 0 var(--lg-rim-top), var(--lg-shadow-hover); } }
+        html.lg .cv-msgs { background: transparent !important; }
+        html.lg .cv-head { background: var(--lg-card) !important; border-bottom-color: transparent !important; box-shadow: inset 0 -0.5px 0 var(--lg-edge2), 0 10px 24px -20px rgba(60,72,110,.3); }
+        html.lg .bub.me { background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0) 60%), rgb(var(--brand-rgb)); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 6px 14px -10px rgb(var(--brand-rgb) / .6); }
+        html.lg .bub.them { background: var(--lg-card-strong) !important; box-shadow: inset 0 1px 0 var(--lg-rim-top), inset 0 0 0 0.5px var(--lg-edge2), 0 6px 14px -12px rgba(60,72,110,.25); }
+        html.lg.dark .bub.them, html.lg .dark .bub.them { background: rgba(255,255,255,.1) !important; }
+        html.lg .cv-bar { background: transparent !important; border-top: 0 !important; backdrop-filter: none; -webkit-backdrop-filter: none; }
+        html.lg .cv-bar textarea { background: var(--lg-card-strong) !important; border-color: transparent !important; box-shadow: inset 0 1px 0 var(--lg-rim-top), inset 0 0 0 0.5px var(--lg-edge2), 0 8px 20px -14px rgba(60,72,110,.3); }
+        html.lg .cv-send { box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 6px 14px -8px rgb(var(--brand-rgb) / .7); }
+        html.lg .cv-day { background: var(--lg-tile); box-shadow: inset 0 1px 0 var(--lg-tile-edge); border-radius: 999px; padding: 3px 10px; align-self: center; }
+
+        /* Diğer sekmeler: segment seçicilerin zemini açık temada görünür; Ayarlar grupları cam, başlıkları normal yazım */
+        html.lg:not(.dark) .seg-track { background: rgba(118,118,128,.12) !important; box-shadow: inset 0 0 0 0.5px rgba(255,255,255,.6) !important; }
+        html.lg .ios-group-title { text-transform: none !important; letter-spacing: -0.005em !important; font-size: 14px; font-weight: 600; }
+        html.lg:not(.dark) main .ios-group { background: var(--lg-card-strong) !important; box-shadow: inset 0 1px 0 var(--lg-rim-top), var(--lg-shadow); }
+
+        @media (prefers-reduced-transparency: reduce) {
+            html.lg body main .soft-card, html.lg body .soft-card { background: var(--ios-card) !important; }
+            html.lg body #headerActions > button:not(#addBtn):not(#profileBtn), html.lg body #headerActions > div > button, html.lg .es-btn, html.lg .design-opt, html.lg .lg-chip {
+                background: var(--ios-card) !important; backdrop-filter: none; -webkit-backdrop-filter: none; }
+        }
+        /* Çalışma ekle: Çalışma | Deneme */
+        .act-mode { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 2px; border-radius: 10px; background: rgba(118,118,128,.12); }
+        .act-mode button { padding: 8px; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--ios-label2); transition: background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+        .act-mode button[aria-checked="true"] { background: var(--ios-card, #fff); color: var(--ios-label); box-shadow: 0 3px 8px rgba(0,0,0,.12), 0 0 0 .5px rgba(0,0,0,.04); }
+        .dark .act-mode button[aria-checked="true"] { background: #636366; }
+        .act-hint { font-size: 13px; line-height: 1.45; color: var(--ios-label2); padding: 10px 12px; border-radius: 12px; background: rgba(118,118,128,.08); }
+        #activityForm.is-deneme #actSubject, #activityForm.is-deneme #actType, #activityForm.is-deneme #playlistContainer { display: none !important; }
+        #activityForm.is-deneme div:has(> #actSubject), #activityForm.is-deneme div:has(> #actType) { display: none !important; }
+        #activityForm.is-deneme .grid.grid-cols-2:has(#actExamType) { grid-template-columns: 1fr; }
+        /* Deneme modunda yalnızca gerekenler: sınav türü, ad, soru, süre */
+        #activityForm.is-deneme .nl-box, #activityForm.is-deneme #actTplBox, #activityForm.is-deneme div:has(> #actQuick), #activityForm.is-deneme #actNetPreview { display: none !important; }
+        #activityForm.is-deneme .grid.grid-cols-4:has(#actQuestions) { grid-template-columns: 1fr; }
+        #activityForm.is-deneme .grid.grid-cols-4:has(#actQuestions) > div:not(:has(#actQuestions)) { display: none !important; }
+
     </style>
     <!-- [v30] HIZ: Tailwind stilleri önceden derlendi (Tailwind 3.4, sadece kullanılan sınıflar). Canlı CDN sürümü her açılışta telefonda stilleri yeniden hesaplıyordu. -->
     <style id="tw-build">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:-apple-system,BlinkMacSystemFont,SF Pro Display,SF Pro Text,Helvetica Neue,Inter,Arial,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.\!container{width:100%!important}.container{width:100%}@media (min-width:640px){.\!container{max-width:640px!important}.container{max-width:640px}}@media (min-width:768px){.\!container{max-width:768px!important}.container{max-width:768px}}@media (min-width:1024px){.\!container{max-width:1024px!important}.container{max-width:1024px}}@media (min-width:1280px){.\!container{max-width:1280px!important}.container{max-width:1280px}}@media (min-width:1536px){.\!container{max-width:1536px!important}.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}.visible{visibility:visible}.collapse{visibility:collapse}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.inset-x-0{left:0;right:0}.inset-y-0{top:0;bottom:0}.-right-1\.5{right:-.375rem}.-top-1\.5{top:-.375rem}.bottom-1{bottom:.25rem}.bottom-\[-160px\]{bottom:-160px}.left-0{left:0}.left-1\/2{left:50%}.left-3{left:.75rem}.left-4{left:1rem}.left-6{left:1.5rem}.left-\[-160px\]{left:-160px}.right-0{right:0}.right-1{right:.25rem}.right-3{right:.75rem}.right-4{right:1rem}.right-5{right:1.25rem}.right-6{right:1.5rem}.right-\[-120px\]{right:-120px}.right-\[-160px\]{right:-160px}.top-0{top:0}.top-1{top:.25rem}.top-1\/3{top:33.333333%}.top-5{top:1.25rem}.top-6{top:1.5rem}.top-\[-160px\]{top:-160px}.top-\[-3px\]{top:-3px}.top-\[73px\]{top:73px}.isolate{isolation:isolate}.z-10{z-index:10}.z-20{z-index:20}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[110\]{z-index:110}.z-\[120\]{z-index:120}.z-\[125\]{z-index:125}.z-\[128\]{z-index:128}.z-\[130\]{z-index:130}.z-\[140\]{z-index:140}.z-\[200\]{z-index:200}.z-\[86\]{z-index:86}.z-\[90\]{z-index:90}.z-\[95\]{z-index:95}.col-span-2{grid-column:span 2/span 2}.col-span-full{grid-column:1/-1}.m-auto{margin:auto}.mx-auto{margin-left:auto;margin-right:auto}.-mt-1\.5{margin-top:-.375rem}.-mt-2{margin-top:-.5rem}.mb-0\.5{margin-bottom:.125rem}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2{margin-bottom:.5rem}.mb-2\.5{margin-bottom:.625rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-0\.5{margin-left:.125rem}.ml-1{margin-left:.25rem}.ml-1\.5{margin-left:.375rem}.ml-4{margin-left:1rem}.ml-5{margin-left:1.25rem}.ml-auto{margin-left:auto}.mr-1{margin-right:.25rem}.mr-2{margin-right:.5rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-2{margin-top:.5rem}.mt-2\.5{margin-top:.625rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-auto{margin-top:auto}.\!block{display:block!important}.block{display:block}.inline-block{display:inline-block}.inline{display:inline}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.\!grid{display:grid!important}.grid{display:grid}.contents{display:contents}.hidden{display:none}.aspect-square{aspect-ratio:1/1}.h-1{height:.25rem}.h-1\.5{height:.375rem}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-2\.5{height:.625rem}.h-20{height:5rem}.h-24{height:6rem}.h-28{height:7rem}.h-3{height:.75rem}.h-3\.5{height:.875rem}.h-4{height:1rem}.h-40{height:10rem}.h-44{height:11rem}.h-5{height:1.25rem}.h-52{height:13rem}.h-56{height:14rem}.h-6{height:1.5rem}.h-60{height:15rem}.h-64{height:16rem}.h-7{height:1.75rem}.h-72{height:18rem}.h-8{height:2rem}.h-80{height:20rem}.h-9{height:2.25rem}.h-\[32rem\]{height:32rem}.h-\[42px\]{height:42px}.h-\[calc\(100vh-73px\)\]{height:calc(100vh - 73px)}.h-auto{height:auto}.h-full{height:100%}.max-h-44{max-height:11rem}.max-h-48{max-height:12rem}.max-h-56{max-height:14rem}.max-h-72{max-height:18rem}.max-h-80{max-height:20rem}.max-h-\[340px\]{max-height:340px}.max-h-\[46vh\]{max-height:46vh}.max-h-\[50vh\]{max-height:50vh}.max-h-\[55vh\]{max-height:55vh}.max-h-\[560px\]{max-height:560px}.max-h-\[88vh\]{max-height:88vh}.min-h-\[120px\]{min-height:120px}.min-h-\[280px\]{min-height:280px}.min-h-screen{min-height:100vh}.\!w-16{width:4rem!important}.w-0\.5{width:.125rem}.w-1\.5{width:.375rem}.w-1\/3{width:33.333333%}.w-10{width:2.5rem}.w-12{width:3rem}.w-14{width:3.5rem}.w-16{width:4rem}.w-2{width:.5rem}.w-2\.5{width:.625rem}.w-2\/3{width:66.666667%}.w-20{width:5rem}.w-24{width:6rem}.w-28{width:7rem}.w-3{width:.75rem}.w-3\.5{width:.875rem}.w-4{width:1rem}.w-40{width:10rem}.w-44{width:11rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-60{width:15rem}.w-64{width:16rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-80{width:20rem}.w-9{width:2.25rem}.w-\[108px\]{width:108px}.w-\[32rem\]{width:32rem}.w-\[60px\]{width:60px}.w-\[calc\(100\%-24px\)\]{width:calc(100% - 24px)}.w-full{width:100%}.min-w-0{min-width:0}.min-w-\[140px\]{min-width:140px}.min-w-\[160px\]{min-width:160px}.min-w-\[68px\]{min-width:68px}.min-w-\[74px\]{min-width:74px}.max-w-2xl{max-width:42rem}.max-w-7xl{max-width:80rem}.max-w-\[220px\]{max-width:220px}.max-w-\[240px\]{max-width:240px}.max-w-\[420px\]{max-width:420px}.max-w-\[44px\]{max-width:44px}.max-w-\[45\%\]{max-width:45%}.max-w-\[560px\]{max-width:560px}.max-w-\[640px\]{max-width:640px}.max-w-lg{max-width:32rem}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.max-w-xs{max-width:20rem}.flex-1{flex:1 1 0%}.flex-shrink{flex-shrink:1}.flex-shrink-0,.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.border-collapse{border-collapse:collapse}.border-separate{border-collapse:separate}.-translate-x-1\/2{--tw-translate-x:-50%}.-rotate-90,.-translate-x-1\/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-rotate-90{--tw-rotate:-90deg}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes float{0%,to{transform:translateY(0) scale(1)}50%{transform:translateY(-14px) scale(1.02)}}.animate-float{animation:float 8s cubic-bezier(.45,.05,.55,.95) infinite}@keyframes pop{0%{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}.animate-pop{animation:pop .35s cubic-bezier(.34,1.56,.64,1) both}@keyframes rise{0%{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}.animate-rise{animation:rise .7s cubic-bezier(.16,1,.3,1) both}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;-moz-user-select:none;user-select:none}.resize-none{resize:none}.resize-y{resize:vertical}.resize{resize:both}.list-decimal{list-style-type:decimal}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.grid-cols-\[auto_1fr\]{grid-template-columns:auto 1fr}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-0\.5{gap:.125rem}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-8{gap:2rem}.gap-\[3px\]{gap:3px}.gap-x-2{-moz-column-gap:.5rem;column-gap:.5rem}.gap-x-3{-moz-column-gap:.75rem;column-gap:.75rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-y-0\.5{row-gap:.125rem}.gap-y-2{row-gap:.5rem}.gap-y-4{row-gap:1rem}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.5rem*var(--tw-space-x-reverse));margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.75rem*var(--tw-space-x-reverse));margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)))}.space-y-0\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.125rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.125rem*var(--tw-space-y-reverse))}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-1\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-2\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.625rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.625rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-3\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.875rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.875rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.space-y-6>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem*var(--tw-space-y-reverse))}.space-y-8>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem*var(--tw-space-y-reverse))}.divide-y>:not([hidden])~:not([hidden]){--tw-divide-y-reverse:0;border-top-width:calc(1px*(1 - var(--tw-divide-y-reverse)));border-bottom-width:calc(1px*var(--tw-divide-y-reverse))}.divide-black\/5>:not([hidden])~:not([hidden]){border-color:rgba(0,0,0,.05)}.self-start{align-self:flex-start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.overflow-x-hidden{overflow-x:hidden}.truncate{overflow:hidden;text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.break-words{overflow-wrap:break-word}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-\[10px\]{border-radius:10px}.rounded-\[16px\]{border-radius:16px}.rounded-\[28px\]{border-radius:28px}.rounded-\[32px\]{border-radius:32px}.rounded-\[3px\]{border-radius:3px}.rounded-\[8px\]{border-radius:8px}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-sm{border-radius:.125rem}.rounded-xl{border-radius:.75rem}.rounded-l-xl{border-top-left-radius:.75rem;border-bottom-left-radius:.75rem}.rounded-r-xl{border-top-right-radius:.75rem;border-bottom-right-radius:.75rem}.rounded-t-\[28px\]{border-top-left-radius:28px;border-top-right-radius:28px}.border{border-width:1px}.border-2{border-width:2px}.border-x-0{border-left-width:0;border-right-width:0}.border-b{border-bottom-width:1px}.border-b-0{border-bottom-width:0}.border-l{border-left-width:1px}.border-l-2{border-left-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-t-0{border-top-width:0}.border-dashed{border-style:dashed}.border-none{border-style:none}.border-amber-200\/60{border-color:hsla(48,97%,77%,.6)}.border-amber-400\/25{border-color:rgba(251,191,36,.25)}.border-amber-400\/30{border-color:rgba(251,191,36,.3)}.border-black\/10{border-color:rgba(0,0,0,.1)}.border-black\/5{border-color:rgba(0,0,0,.05)}.border-blue-100\/70{border-color:rgba(219,234,254,.7)}.border-blue-200\/60{border-color:rgba(191,219,254,.6)}.border-brand{--tw-border-opacity:1;border-color:rgb(var(--brand-rgb)/var(--tw-border-opacity,1))}.border-brand\/15{border-color:rgb(var(--brand-rgb)/.15)}.border-brand\/25{border-color:rgb(var(--brand-rgb)/.25)}.border-brand\/40{border-color:rgb(var(--brand-rgb)/.4)}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129/var(--tw-border-opacity,1))}.border-emerald-500\/20{border-color:rgba(16,185,129,.2)}.border-emerald-500\/30{border-color:rgba(16,185,129,.3)}.border-purple-500\/20{border-color:rgba(168,85,247,.2)}.border-rose-200\/60{border-color:rgba(254,205,211,.6)}.border-rose-400\/40{border-color:rgba(251,113,133,.4)}.border-rose-500\/20{border-color:rgba(244,63,94,.2)}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-transparent{border-color:transparent}.bg-accentPurple{--tw-bg-opacity:1;background-color:rgb(138 63 252/var(--tw-bg-opacity,1))}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36/var(--tw-bg-opacity,1))}.bg-amber-400\/10{background-color:rgba(251,191,36,.1)}.bg-amber-400\/15{background-color:rgba(251,191,36,.15)}.bg-amber-400\/20{background-color:rgba(251,191,36,.2)}.bg-amber-400\/\[0\.06\]{background-color:rgba(251,191,36,.06)}.bg-amber-400\/\[0\.08\]{background-color:rgba(251,191,36,.08)}.bg-amber-400\/\[0\.1\]{background-color:rgba(251,191,36,.1)}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0/var(--tw-bg-opacity,1))}.bg-black\/10{background-color:rgba(0,0,0,.1)}.bg-black\/30{background-color:rgba(0,0,0,.3)}.bg-black\/40{background-color:rgba(0,0,0,.4)}.bg-black\/5{background-color:rgba(0,0,0,.05)}.bg-black\/\[0\.015\]{background-color:rgba(0,0,0,.015)}.bg-black\/\[0\.025\]{background-color:rgba(0,0,0,.025)}.bg-black\/\[0\.02\]{background-color:rgba(0,0,0,.02)}.bg-black\/\[0\.03\]{background-color:rgba(0,0,0,.03)}.bg-black\/\[0\.05\]{background-color:rgba(0,0,0,.05)}.bg-black\/\[0\.06\]{background-color:rgba(0,0,0,.06)}.bg-blue-200\/20{background-color:rgba(191,219,254,.2)}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255/var(--tw-bg-opacity,1))}.bg-brand{--tw-bg-opacity:1;background-color:rgb(var(--brand-rgb)/var(--tw-bg-opacity,1))}.bg-brand\/10{background-color:rgb(var(--brand-rgb)/.1)}.bg-brand\/25{background-color:rgb(var(--brand-rgb)/.25)}.bg-brand\/55{background-color:rgb(var(--brand-rgb)/.55)}.bg-brand\/\[0\.04\]{background-color:rgb(var(--brand-rgb)/.04)}.bg-brand\/\[0\.05\]{background-color:rgb(var(--brand-rgb)/.05)}.bg-brand\/\[0\.06\]{background-color:rgb(var(--brand-rgb)/.06)}.bg-brandLight{--tw-bg-opacity:1;background-color:rgb(var(--brand-light-rgb)/var(--tw-bg-opacity,1))}.bg-brandLight\/70{background-color:rgb(var(--brand-light-rgb)/.7)}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.bg-emerald-50\/60{background-color:rgba(236,253,245,.6)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129/var(--tw-bg-opacity,1))}.bg-emerald-500\/10{background-color:rgba(16,185,129,.1)}.bg-emerald-500\/20{background-color:rgba(16,185,129,.2)}.bg-emerald-500\/30{background-color:rgba(16,185,129,.3)}.bg-emerald-500\/60{background-color:rgba(16,185,129,.6)}.bg-emerald-500\/\[0\.04\]{background-color:rgba(16,185,129,.04)}.bg-emerald-500\/\[0\.06\]{background-color:rgba(16,185,129,.06)}.bg-emerald-500\/\[0\.07\]{background-color:rgba(16,185,129,.07)}.bg-emerald-500\/\[0\.08\]{background-color:rgba(16,185,129,.08)}.bg-orange-300{--tw-bg-opacity:1;background-color:rgb(253 186 116/var(--tw-bg-opacity,1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237/var(--tw-bg-opacity,1))}.bg-orange-500\/10{background-color:rgba(249,115,22,.1)}.bg-purple-200\/\[0\.15\]{background-color:rgba(233,213,255,.15)}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255/var(--tw-bg-opacity,1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247/var(--tw-bg-opacity,1))}.bg-purple-500\/10{background-color:rgba(168,85,247,.1)}.bg-purple-500\/\[0\.06\]{background-color:rgba(168,85,247,.06)}.bg-purple-500\/\[0\.07\]{background-color:rgba(168,85,247,.07)}.bg-rose-400{--tw-bg-opacity:1;background-color:rgb(251 113 133/var(--tw-bg-opacity,1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242/var(--tw-bg-opacity,1))}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94/var(--tw-bg-opacity,1))}.bg-rose-500\/10{background-color:rgba(244,63,94,.1)}.bg-rose-500\/95{background-color:rgba(244,63,94,.95)}.bg-rose-500\/\[0\.07\]{background-color:rgba(244,63,94,.07)}.bg-rose-500\/\[0\.08\]{background-color:rgba(244,63,94,.08)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72/var(--tw-bg-opacity,1))}.bg-slate-300{--tw-bg-opacity:1;background-color:rgb(203 213 225/var(--tw-bg-opacity,1))}.bg-slate-500\/70{background-color:rgba(100,116,139,.7)}.bg-slate-900\/30{background-color:rgba(15,23,42,.3)}.bg-slate-900\/95{background-color:rgba(15,23,42,.95)}.bg-softbg{--tw-bg-opacity:1;background-color:rgb(245 245 247/var(--tw-bg-opacity,1))}.bg-teal-200\/10{background-color:rgba(153,246,228,.1)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/15{background-color:hsla(0,0%,100%,.15)}.bg-white\/70{background-color:hsla(0,0%,100%,.7)}.bg-gradient-to-b{background-image:linear-gradient(to bottom,var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-brand{--tw-gradient-from:rgb(var(--brand-rgb)/1) var(--tw-gradient-from-position);--tw-gradient-to:rgb(var(--brand-rgb)/0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-emerald-500{--tw-gradient-from:#10b981 var(--tw-gradient-from-position);--tw-gradient-to:rgba(16,185,129,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#a855f7 var(--tw-gradient-from-position);--tw-gradient-to:rgba(168,85,247,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.from-teal-500{--tw-gradient-from:#14b8a6 var(--tw-gradient-from-position);--tw-gradient-to:rgba(20,184,166,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.to-brand{--tw-gradient-to:rgb(var(--brand-rgb)/1) var(--tw-gradient-to-position)}.to-cyan-400{--tw-gradient-to:#22d3ee var(--tw-gradient-to-position)}.to-fuchsia-400{--tw-gradient-to:#e879f9 var(--tw-gradient-to-position)}.to-purple-500{--tw-gradient-to:#a855f7 var(--tw-gradient-to-position)}.to-sky-400{--tw-gradient-to:#38bdf8 var(--tw-gradient-to-position)}.to-teal-400{--tw-gradient-to:#2dd4bf var(--tw-gradient-to-position)}.stroke-black\/5{stroke:rgba(0,0,0,.05)}.object-contain{-o-object-fit:contain;object-fit:contain}.object-cover{-o-object-fit:cover;object-fit:cover}.p-0{padding:0}.p-0\.5{padding:.125rem}.p-1{padding:.25rem}.p-1\.5{padding:.375rem}.p-2{padding:.5rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-7{padding:1.75rem}.p-8{padding:2rem}.p-\[3px\]{padding:3px}.px-1{padding-left:.25rem;padding-right:.25rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-1{padding-bottom:.25rem}.pb-2{padding-bottom:.5rem}.pb-28{padding-bottom:7rem}.pb-3{padding-bottom:.75rem}.pb-32{padding-bottom:8rem}.pb-4{padding-bottom:1rem}.pl-2{padding-left:.5rem}.pl-2\.5{padding-left:.625rem}.pl-3{padding-left:.75rem}.pl-4{padding-left:1rem}.pl-6{padding-left:1.5rem}.pl-\[3\.25rem\]{padding-left:3.25rem}.pr-1{padding-right:.25rem}.pr-2{padding-right:.5rem}.pt-1{padding-top:.25rem}.pt-2{padding-top:.5rem}.pt-24{padding-top:6rem}.pt-3{padding-top:.75rem}.pt-4{padding-top:1rem}.pt-5{padding-top:1.25rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.align-middle{vertical-align:middle}.align-\[-2px\]{vertical-align:-2px}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.font-sans{font-family:-apple-system,BlinkMacSystemFont,SF Pro Display,SF Pro Text,Helvetica Neue,Inter,Arial,sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-7xl{font-size:4.5rem;line-height:1}.text-\[10\.5px\]{font-size:10.5px}.text-\[10px\]{font-size:10px}.text-\[11\.5px\]{font-size:11.5px}.text-\[11px\]{font-size:11px}.text-\[12\.5px\]{font-size:12.5px}.text-\[12px\]{font-size:12px}.text-\[13px\]{font-size:13px}.text-\[14px\]{font-size:14px}.text-\[15px\]{font-size:15px}.text-\[16px\]{font-size:16px}.text-\[17px\]{font-size:17px}.text-\[18px\]{font-size:18px}.text-\[19px\]{font-size:19px}.text-\[20px\]{font-size:20px}.text-\[22px\]{font-size:22px}.text-\[24px\]{font-size:24px}.text-\[34px\]{font-size:34px}.text-\[44px\]{font-size:44px}.text-\[46px\]{font-size:46px}.text-\[52px\]{font-size:52px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.normal-case{text-transform:none}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-\[0\.12em\]{letter-spacing:.12em}.tracking-tight{letter-spacing:-.025em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.text-accentPurple{--tw-text-opacity:1;color:rgb(138 63 252/var(--tw-text-opacity,1))}.text-accentTeal{--tw-text-opacity:1;color:rgb(6 193 160/var(--tw-text-opacity,1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.text-amber-500{--tw-text-opacity:1;color:rgb(245 158 11/var(--tw-text-opacity,1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6/var(--tw-text-opacity,1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.text-brand{--tw-text-opacity:1;color:rgb(var(--brand-rgb)/var(--tw-text-opacity,1))}.text-brand\/70{color:rgb(var(--brand-rgb)/.7)}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129/var(--tw-text-opacity,1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22/var(--tw-text-opacity,1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12/var(--tw-text-opacity,1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247/var(--tw-text-opacity,1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234/var(--tw-text-opacity,1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94/var(--tw-text-opacity,1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72/var(--tw-text-opacity,1))}.text-rose-700{--tw-text-opacity:1;color:rgb(190 18 60/var(--tw-text-opacity,1))}.text-sky-600{--tw-text-opacity:1;color:rgb(2 132 199/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.text-white\/60{color:hsla(0,0%,100%,.6)}.text-white\/70{color:hsla(0,0%,100%,.7)}.underline{text-decoration-line:underline}.line-through{text-decoration-line:line-through}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-brand{accent-color:rgb(var(--brand-rgb)/1)}.opacity-0{opacity:0}.opacity-40{opacity:.4}.opacity-50{opacity:.5}.opacity-60{opacity:.6}.opacity-70{opacity:.7}.opacity-80{opacity:.8}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-lg{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-emerald-500\/10{--tw-shadow-color:rgba(16,185,129,.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-500\/10{--tw-shadow-color:rgba(168,85,247,.1);--tw-shadow:var(--tw-shadow-colored)}.outline{outline-style:solid}.ring{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring,.ring-2{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.ring-amber-400\/60{--tw-ring-color:rgba(251,191,36,.6)}.ring-brand{--tw-ring-opacity:1;--tw-ring-color:rgb(var(--brand-rgb)/var(--tw-ring-opacity,1))}.ring-offset-2{--tw-ring-offset-width:2px}.ring-offset-white{--tw-ring-offset-color:#fff}.blur{--tw-blur:blur(8px)}.blur,.blur-3xl{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-3xl{--tw-blur:blur(64px)}.drop-shadow{--tw-drop-shadow:drop-shadow(0 1px 2px rgba(0,0,0,.1)) drop-shadow(0 1px 1px rgba(0,0,0,.06))}.drop-shadow,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px)}.backdrop-blur,.backdrop-blur-\[2px\]{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-\[2px\]{--tw-backdrop-blur:blur(2px)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px)}.backdrop-blur-md,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px)}.backdrop-blur-xl,.backdrop-filter{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-300{transition-duration:.3s}.ease-in{transition-timing-function:cubic-bezier(.4,0,1,1)}.ease-in-out{transition-timing-function:cubic-bezier(.4,0,.2,1)}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-emerald-500:hover{--tw-border-opacity:1;border-color:rgb(16 185 129/var(--tw-border-opacity,1))}.hover\:bg-amber-400\/10:hover{background-color:rgba(251,191,36,.1)}.hover\:bg-black\/10:hover{background-color:rgba(0,0,0,.1)}.hover\:bg-black\/5:hover{background-color:rgba(0,0,0,.05)}.hover\:bg-black\/\[0\.02\]:hover{background-color:rgba(0,0,0,.02)}.hover\:bg-emerald-600:hover{--tw-bg-opacity:1;background-color:rgb(5 150 105/var(--tw-bg-opacity,1))}.hover\:bg-rose-50:hover{--tw-bg-opacity:1;background-color:rgb(255 241 242/var(--tw-bg-opacity,1))}.hover\:bg-rose-500\/20:hover{background-color:rgba(244,63,94,.2)}.hover\:text-amber-500:hover{--tw-text-opacity:1;color:rgb(245 158 11/var(--tw-text-opacity,1))}.hover\:text-brand:hover{--tw-text-opacity:1;color:rgb(var(--brand-rgb)/var(--tw-text-opacity,1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.hover\:opacity-90:hover{opacity:.9}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-brand\/40:focus{--tw-ring-color:rgb(var(--brand-rgb)/0.4)}.disabled\:opacity-30:disabled{opacity:.3}.disabled\:opacity-40:disabled{opacity:.4}.dark\:divide-white\/5:is(.dark *)>:not([hidden])~:not([hidden]){border-color:hsla(0,0%,100%,.05)}.dark\:border-amber-900\/40:is(.dark *){border-color:rgba(120,53,15,.4)}.dark\:border-blue-900\/40:is(.dark *){border-color:rgba(30,58,138,.4)}.dark\:border-rose-900\/40:is(.dark *){border-color:rgba(136,19,55,.4)}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105/var(--tw-border-opacity,1))}.dark\:border-white\/10:is(.dark *){border-color:hsla(0,0%,100%,.1)}.dark\:border-white\/5:is(.dark *){border-color:hsla(0,0%,100%,.05)}.dark\:bg-amber-500\/10:is(.dark *){background-color:rgba(245,158,11,.1)}.dark\:bg-black:is(.dark *){--tw-bg-opacity:1;background-color:rgb(0 0 0/var(--tw-bg-opacity,1))}.dark\:bg-black\/10:is(.dark *){background-color:rgba(0,0,0,.1)}.dark\:bg-blue-500\/10:is(.dark *){background-color:rgba(59,130,246,.1)}.dark\:bg-blue-500\/15:is(.dark *){background-color:rgba(59,130,246,.15)}.dark\:bg-blue-900\/\[0\.06\]:is(.dark *){background-color:rgba(30,58,138,.06)}.dark\:bg-emerald-500\/10:is(.dark *){background-color:rgba(16,185,129,.1)}.dark\:bg-neutral-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(23 23 23/var(--tw-bg-opacity,1))}.dark\:bg-orange-500\/10:is(.dark *){background-color:rgba(249,115,22,.1)}.dark\:bg-purple-500\/10:is(.dark *){background-color:rgba(168,85,247,.1)}.dark\:bg-purple-900\/\[0\.05\]:is(.dark *){background-color:rgba(88,28,135,.05)}.dark\:bg-rose-500\/10:is(.dark *){background-color:rgba(244,63,94,.1)}.dark\:bg-slate-300\/70:is(.dark *){background-color:rgba(203,213,225,.7)}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85/var(--tw-bg-opacity,1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.dark\:bg-teal-900\/\[0\.04\]:is(.dark *){background-color:rgba(19,78,74,.04)}.dark\:bg-white\/10:is(.dark *){background-color:hsla(0,0%,100%,.1)}.dark\:bg-white\/15:is(.dark *){background-color:hsla(0,0%,100%,.15)}.dark\:bg-white\/20:is(.dark *){background-color:hsla(0,0%,100%,.2)}.dark\:bg-white\/5:is(.dark *){background-color:hsla(0,0%,100%,.05)}.dark\:bg-white\/95:is(.dark *){background-color:hsla(0,0%,100%,.95)}.dark\:bg-white\/\[0\.02\]:is(.dark *){background-color:hsla(0,0%,100%,.02)}.dark\:bg-white\/\[0\.03\]:is(.dark *){background-color:hsla(0,0%,100%,.03)}.dark\:bg-white\/\[0\.04\]:is(.dark *){background-color:hsla(0,0%,100%,.04)}.dark\:bg-white\/\[0\.05\]:is(.dark *){background-color:hsla(0,0%,100%,.05)}.dark\:stroke-white\/10:is(.dark *){stroke:hsla(0,0%,100%,.1)}.dark\:text-amber-200:is(.dark *){--tw-text-opacity:1;color:rgb(253 230 138/var(--tw-text-opacity,1))}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77/var(--tw-text-opacity,1))}.dark\:text-amber-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 191 36/var(--tw-text-opacity,1))}.dark\:text-blue-300:is(.dark *){--tw-text-opacity:1;color:rgb(147 197 253/var(--tw-text-opacity,1))}.dark\:text-blue-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250/var(--tw-text-opacity,1))}.dark\:text-emerald-300:is(.dark *){--tw-text-opacity:1;color:rgb(110 231 183/var(--tw-text-opacity,1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153/var(--tw-text-opacity,1))}.dark\:text-orange-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 146 60/var(--tw-text-opacity,1))}.dark\:text-purple-400:is(.dark *){--tw-text-opacity:1;color:rgb(192 132 252/var(--tw-text-opacity,1))}.dark\:text-rose-300:is(.dark *){--tw-text-opacity:1;color:rgb(253 164 175/var(--tw-text-opacity,1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133/var(--tw-text-opacity,1))}.dark\:text-rose-400\/90:is(.dark *){color:rgba(251,113,133,.9)}.dark\:text-sky-400:is(.dark *){--tw-text-opacity:1;color:rgb(56 189 248/var(--tw-text-opacity,1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240/var(--tw-text-opacity,1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225/var(--tw-text-opacity,1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.dark\:text-slate-50:is(.dark *){--tw-text-opacity:1;color:rgb(248 250 252/var(--tw-text-opacity,1))}.dark\:text-slate-500:is(.dark *){--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.dark\:text-slate-600:is(.dark *){--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.dark\:text-slate-900:is(.dark *){--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.dark\:text-white:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.dark\:ring-offset-black:is(.dark *){--tw-ring-offset-color:#000}.dark\:hover\:bg-rose-500\/10:hover:is(.dark *){background-color:rgba(244,63,94,.1)}.dark\:hover\:bg-white\/10:hover:is(.dark *){background-color:hsla(0,0%,100%,.1)}.dark\:hover\:bg-white\/15:hover:is(.dark *){background-color:hsla(0,0%,100%,.15)}.dark\:hover\:bg-white\/\[0\.04\]:hover:is(.dark *){background-color:hsla(0,0%,100%,.04)}.dark\:hover\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:col-span-2{grid-column:span 2/span 2}.sm\:ml-auto{margin-left:auto}.sm\:block{display:block}.sm\:inline{display:inline}.sm\:h-14{height:3.5rem}.sm\:h-\[min\(88vh\2c 780px\)\]{height:min(88vh,780px)}.sm\:w-14{width:3.5rem}.sm\:w-48{width:12rem}.sm\:w-52{width:13rem}.sm\:w-\[420px\]{width:420px}.sm\:w-auto{width:auto}.sm\:max-w-2xl{max-width:42rem}.sm\:max-w-md{max-width:28rem}.sm\:flex-1{flex:1 1 0%}.sm\:flex-none{flex:none}.sm\:grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:gap-10{gap:2.5rem}.sm\:gap-2\.5{gap:.625rem}.sm\:gap-3{gap:.75rem}.sm\:self-auto{align-self:auto}.sm\:rounded-\[28px\]{border-radius:28px}.sm\:rounded-\[36px\]{border-radius:36px}.sm\:border-l{border-left-width:1px}.sm\:p-4{padding:1rem}.sm\:p-5{padding:1.25rem}.sm\:p-7{padding:1.75rem}.sm\:p-8{padding:2rem}.sm\:px-5{padding-left:1.25rem;padding-right:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pl-8{padding-left:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width:768px){.md\:col-span-2{grid-column:span 2/span 2}.md\:col-span-3{grid-column:span 3/span 3}.md\:flex{display:flex}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.md\:grid-cols-5{grid-template-columns:repeat(5,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}@media (min-width:1024px){.lg\:col-span-2{grid-column:span 2/span 2}.lg\:col-span-3{grid-column:span 3/span 3}.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}.lg\:flex-col{flex-direction:column}.lg\:items-start{align-items:flex-start}.lg\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.lg\:pb-4{padding-bottom:1rem}}</style>
@@ -2659,7 +2969,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         <div class="cv-head">
             <button type="button" class="cv-back" onclick="closeChat()" aria-label="Geri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg><span id="cvBackBadge" class="msg-badge hidden"></span></button>
             <div class="cv-who"><span id="chatAvatar" class="profile-avatar"></span><div class="min-w-0"><div id="chatName" class="cv-name"></div><div id="chatStatus" class="cv-status"></div></div></div>
-            <span></span>
+            <button type="button" id="chatCallBtn" class="cv-call press-scale" onclick="startCall()" aria-label="Sesli ara" title="Sesli ara"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
         </div>
         <button type="button" id="chatPinBar" class="cv-pin hidden" onclick="jumpToMsg(window.__pinId)"><span>📌</span><div class="min-w-0 flex-1 text-left"><div class="cp-n">Sabitlenmiş mesaj</div><div id="cpText" class="cp-t"></div></div><span class="cp-x ro-hide" onclick="event.stopPropagation(); unpinMsg()" aria-label="Sabitlemeyi kaldır">✕</span></button>
         <div id="chatMsgs" class="cv-msgs" role="log" aria-live="polite"></div>
@@ -2670,7 +2980,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             <label class="cv-icon press-scale" aria-label="Fotoğraf gönder"><input type="file" accept="image/*" class="hidden" onchange="sendChatPhoto(this)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></svg></label>
             <textarea id="chatInput" rows="1" maxlength="1000" placeholder="Mesaj" aria-label="Mesaj yaz" oninput="chatInputChanged(this)" onkeydown="if(event.key==='Enter'&&!event.shiftKey&&window.innerWidth>=1024){event.preventDefault();sendChatText()}"></textarea>
             <button type="button" id="chatMic" class="cv-icon press-scale" onclick="startVoice()" aria-label="Sesli mesaj kaydet"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 17v4"/></svg></button>
-            <button type="button" id="chatSend" class="cv-send press-scale" onclick="sendChatText()" aria-label="Gönder" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
+            <button type="button" id="chatSend" class="cv-send press-scale" onpointerdown="event.preventDefault()" onmousedown="event.preventDefault()" onclick="sendChatText()" aria-label="Gönder" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button>
         </div>
     </div>
     <div id="msgBanner" class="hidden" role="status" onclick="msgBannerTap()"><span id="mbAvatar" class="profile-avatar"></span><div class="min-w-0 flex-1"><div id="mbName" class="mb-name"></div><div id="mbText" class="mb-text"></div></div></div>
@@ -3190,6 +3500,8 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                         </div>
                     </div>
                     <form id="activityForm" onsubmit="handleActivitySubmit(event)" class="space-y-3.5">
+                        <div class="act-mode" role="radiogroup" aria-label="Kayıt türü"><button type="button" role="radio" data-m="calisma" aria-checked="true" onclick="setActMode('calisma')">Çalışma</button><button type="button" role="radio" data-m="deneme" aria-checked="false" onclick="setActMode('deneme')">Deneme</button></div>
+                        <div id="actDenemeHint" class="act-hint hidden">Bu denemede çözdüğün soru sayısını ve süreyi gir. Günlük soru ve süre hedeflerine eklenir. Netlerini ayrıca Denemeler sekmesinden kaydedebilirsin.</div>
                         <div class="nl-box ro-hide"><div class="text-[11px] font-semibold mb-1.5" style="color:#AF52DE">✦ Söyle ya da yaz, form dolsun</div>
                             <div class="flex gap-1.5"><input id="nlInput" class="input-soft flex-1 min-w-0 rounded-xl p-2.5 text-sm" placeholder="Örn: 40 matematik 32 doğru 50 dk türev" onkeydown="if(event.key==='Enter'){event.preventDefault(); nlFill();}">
                             <button type="button" class="nl-ic press-scale" onclick="nlListen()" aria-label="Sesle söyle">🎤</button><button type="button" id="nlGo" class="nl-ic go press-scale" onclick="nlFill()" aria-label="Doldur">✦</button></div>
@@ -3221,6 +3533,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                                 <option value="Video İzleme">Video İzleme</option>
                                 <option value="Konu Anlatımı">Konu Anlatımı</option>
                                 <option value="Fasikül Çözümü">Fasikül Çözümü</option>
+                                <option value="Deneme">Deneme</option>
                             </select>
                         </div>
 
@@ -4218,6 +4531,15 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight mb-1 flex items-center space-x-2"><i data-lucide="calendar-check" class="w-5 h-5 text-brand"></i><span>Tekrar Takvimi</span></h2>
                 <div id="srsCalBody"></div>
             </div>
+            <!-- [v99] Formül defteri -->
+            <div data-card="formulas" id="formulaCard" class="soft-card p-6 sm:p-7 rounded-[28px]">
+                <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50 tracking-tight flex items-center space-x-2"><span>Formül Defteri</span></h2>
+                    <div class="flex items-center gap-2"><button type="button" id="fmReviewBtn" class="press-scale hidden text-[13px] font-semibold text-brand px-3.5 py-2 rounded-full bg-black/5 dark:bg-white/10" onclick="startFormulaReview()">Tekrar et</button><button type="button" class="btn-primary press-scale ro-hide text-[13px] font-semibold text-white px-3.5 py-2 rounded-full" onclick="openFormulaEdit()">Formül ekle</button></div>
+                </div>
+                <div id="fmFilters"></div>
+                <div id="formulaBody"></div>
+            </div>
         </section>
 
         <!-- TAB: PLAYLIST / TOPIC PROGRESS -->
@@ -5024,6 +5346,8 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-orange))"><i data-lucide="vibrate"></i></span><span class="ios-row-body"><span>Titreşim (dokunsal geri bildirim)</span><input type="checkbox" id="hapticChk" onchange="setHaptic(this.checked)" aria-label="Titreşim"></span></div>
                         <button type="button" class="ios-row" onclick="previewIntro()"><span class="ios-icon" style="background:rgb(var(--ios-indigo))"><i data-lucide="play"></i></span><span class="ios-row-body"><span>Açılışı önizle</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-teal))"><i data-lucide="clock"></i></span><span class="ios-row-body"><span>Ana sayfada saat kartı</span><input type="checkbox" id="lockClockChk" onchange="setLockClock(this.checked)" aria-label="Ana sayfada saat kartı"></span></div>
+                        <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-green))"><i data-lucide="eye"></i></span><span class="ios-row-body"><span>Göz molası (20-20-20)</span><input type="checkbox" id="wrEyeChk" onchange="setWellRem('eye', this.checked)" aria-label="Göz molası hatırlatıcısı"></span></div>
+                        <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:#007AFF"><i data-lucide="glass-water"></i></span><span class="ios-row-body"><span>Su ve esneme hatırlatıcısı</span><input type="checkbox" id="wrWaterChk" onchange="setWellRem('water', this.checked)" aria-label="Su ve esneme hatırlatıcısı"></span></div>
                         <button type="button" class="ios-row" onclick="scrollToSettingsCard('Görünüm')"><span class="ios-icon" style="background:rgb(var(--ios-indigo))"><i data-lucide="palette"></i></span><span class="ios-row-body"><span>Tema Rengi</span><span class="ios-detail"><span id="iosAccentName"></span><i data-lucide="chevron-right" class="ios-chev"></i></span></span></button>
                         <button type="button" class="ios-row" onclick="openToolsMenu()"><span class="ios-icon" style="background:rgb(var(--ios-indigo))"><i data-lucide="layout-grid"></i></span><span class="ios-row-body"><span>Özetler ve araçlar</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
                         <button type="button" class="ios-row" onclick="openSimplify()"><span class="ios-icon" style="background:rgb(var(--ios-green))"><i data-lucide="sparkles"></i></span><span class="ios-row-body"><span>Ana sayfayı sadeleştir</span><i data-lucide="chevron-right" class="ios-chev"></i></span></button>
@@ -5408,8 +5732,8 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
          Yüklenince window.__firebaseSDK üzerinden aşağıdaki uygulama koduna aktarılır. -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getDatabase, ref, onValue, update, query, limitToLast, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-        window.__firebaseSDK = { initializeApp, getDatabase, ref, onValue, update, query, limitToLast, get };
+        import { getDatabase, ref, onValue, update, query, limitToLast, get, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        window.__firebaseSDK = { initializeApp, getDatabase, ref, onValue, update, query, limitToLast, get, onDisconnect };
         window.dispatchEvent(new Event('firebase-sdk-ready'));
     </script>
     <!-- [v65] Kimlik (anonim): ayrı modül — yüklenemezse veritabanı yine çalışır -->
@@ -5965,8 +6289,8 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         // Eski localStorage verisi — sadece ilk açılışta buluta taşımak için okunur.
         const LEGACY_STORAGE_KEY = 'yks_takip_data_v1';
 
-        const SYNC_KEYS = ['galSolved', 'actTemplates', 'dailyQuiz', 'aiWeekly', 'topicReviews', 'homework', 'galleryArchive', 'dailyGoals', 'shieldDays', 'kursNotlari', 'wellness', 'kursLog', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'planTemplates', 'pdfBooks', 'tercihler', 'activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'curriculumDates', 'dayReviews', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
-        const ARRAY_KEYS = ['actTemplates', 'topicReviews', 'homework', 'galleryArchive', 'kursNotlari', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'planTemplates', 'pdfBooks', 'tercihler', 'activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
+        const SYNC_KEYS = ['formulas', 'galSolved', 'actTemplates', 'dailyQuiz', 'aiWeekly', 'topicReviews', 'homework', 'galleryArchive', 'dailyGoals', 'shieldDays', 'kursNotlari', 'wellness', 'kursLog', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'planTemplates', 'pdfBooks', 'tercihler', 'activities', 'exams', 'settings', 'offDays', 'wrongNotes', 'curriculum', 'curriculumDates', 'dayReviews', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'watchedVideos', 'schools'];
+        const ARRAY_KEYS = ['formulas', 'actTemplates', 'topicReviews', 'homework', 'galleryArchive', 'kursNotlari', 'denemeTakvimi', 'flashcards', 'kursProgrami', 'planTemplates', 'pdfBooks', 'tercihler', 'activities', 'exams', 'wrongNotes', 'planBlocks', 'friends', 'quickNotes', 'topicGoals', 'resources', 'schools'];
         const OBJECT_KEYS = ['galSolved', 'offDays', 'curriculum', 'curriculumDates', 'dayReviews', 'watchedVideos', 'kursLog', 'wellness', 'dailyGoals', 'shieldDays', 'aiWeekly', 'dailyQuiz'];   // [v49] kursLog eksikti: buluttan okunurken boşalıyordu
         const DEFAULT_SETTINGS = JSON.parse(JSON.stringify(state.settings));
 
@@ -5977,7 +6301,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         let saveBlockedToastShown = false;
         let offlineMode = false, ackedCanon = {}, pendingUpdates = 0;   // [v90] çevrimdışı veri ekleme
         let storageFailureShown = false;
-        const APP_VERSION = 'firebase-v104';
+        const APP_VERSION = 'firebase-v106';
         const syncInfo = { connected: false, readError: null, writeError: null, lastReceived: null, lastSent: null };
 
         // index.html'e kod birden fazla kez yapıştırılmışsa (sayfa alt alta tekrar ediyorsa) uyarır.
@@ -6156,6 +6480,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             dot.className = `w-2 h-2 rounded-full ${cls}`;
             label.innerText = text || defText;
             document.getElementById('syncStatus').title = text || defText;
+            document.getElementById('syncStatus').dataset.mode = mode;
         }
 
         function showCloudWarning(title, text) {
@@ -6921,9 +7246,10 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             e.preventDefault();
             if (!validateActivityForm()) return;
             const actType = document.getElementById('actType').value;
-            const subject = document.getElementById('actSubject').value;
+            const isDeneme = actType === 'Deneme';     // [v100] deneme günleri: ders yerine 'Deneme', soru ve süre günlük hedeflere eklenir
+            const subject = isDeneme ? 'Deneme' : document.getElementById('actSubject').value;
 
-            let topicName = document.getElementById('actTopic').value || 'Genel Konu';
+            let topicName = document.getElementById('actTopic').value || (isDeneme ? `${document.getElementById('actExamType').value} denemesi` : 'Genel Konu');
             let selectedVideo = null;
 
             if (actType === 'Video İzleme' && PLAYLISTS[subject]) {
@@ -6939,7 +7265,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 id: Date.now(),
                 date: document.getElementById('actDate').value,
                 examType: document.getElementById('actExamType').value,
-                subject: document.getElementById('actSubject').value,
+                subject: subject,
                 topic: topicName,
                 video: selectedVideo,
                 type: actType,
@@ -9841,11 +10167,38 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 const pct = r.none ? 1 : (r.goal ? r.v / r.goal : 0);
                 const first = Math.min(1, pct), second = Math.min(1, Math.max(0, pct - 1));
                 const col = RING_COLORS[i][0];
-                const arc = (p, extra) => `<circle class="ring-arc" cx="${c}" cy="${c}" r="${rad}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ * (1 - p)}" transform="rotate(-90 ${c} ${c})" ${extra || ''}/>`;
+                const arc = (p, extra) => `<circle class="ring-arc" data-k="${i}${extra ? 'b' : 'a'}" cx="${c}" cy="${c}" r="${rad}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ * (1 - p)}" transform="rotate(-90 ${c} ${c})" ${extra || ''}/>`;
                 return `<circle class="ring-bg" cx="${c}" cy="${c}" r="${rad}" fill="none" stroke="${col}" stroke-width="${stroke}"/>`
                     + (first > 0.001 ? arc(first) : '')
                     + (second > 0.001 ? arc(second, 'style="filter: drop-shadow(0 0 2px rgba(0,0,0,.45))"') : '');
             }).join('');
+        }
+        // [v96] Liquid Glass: halkalar önceki değerden yeni değere akar, sayılar sayar, kapanan halka kısa bir 'pop' yapar
+        let lgRingPrev = null;
+        function lgRingMotion(big, vals) {
+            const arcs = [...big.querySelectorAll('.ring-arc')];
+            const next = { off: {}, v: vals.map(r => r.v), closed: vals.map(r => !r.none && r.v >= r.goal) };
+            arcs.forEach(a => { next.off[a.dataset.k] = +a.getAttribute('stroke-dashoffset'); });
+            const prev = lgRingPrev; lgRingPrev = next;
+            if (!document.documentElement.classList.contains('lg') || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            arcs.forEach(a => {
+                const full = +a.getAttribute('stroke-dasharray'), from = prev && prev.off[a.dataset.k] != null ? prev.off[a.dataset.k] : full;
+                if (Math.abs(from - next.off[a.dataset.k]) < .5) return;
+                a.style.transition = 'none'; a.style.strokeDashoffset = from + 'px';
+                a.getBoundingClientRect();
+                a.style.transition = ''; a.style.strokeDashoffset = next.off[a.dataset.k] + 'px';
+            });
+            document.querySelectorAll('#ringsLegend .rv').forEach(el => {
+                const i = +el.dataset.i, to = next.v[i], from = prev ? prev.v[i] : 0;
+                if (from === to) return;
+                const t0 = performance.now(), dur = 900;
+                const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = Math.round(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); };
+                el.textContent = from; requestAnimationFrame(step);
+            });
+            if (prev && next.closed.some((c, i) => c && !prev.closed[i])) {
+                big.classList.remove('lg-ring-pop'); void big.offsetWidth; big.classList.add('lg-ring-pop');
+                big.addEventListener('animationend', () => big.classList.remove('lg-ring-pop'), { once: true });
+            }
         }
         function renderRings() {
             const big = document.getElementById('ringsBig');
@@ -9855,9 +10208,9 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             big.innerHTML = ringSvg(vals, 140, 16, 2);
             const fmtV = (r, i) => `${r.v}`;
             const fmtG = (r, i) => i === 1 ? `${r.goal} dk` : `${r.goal}`;
-            document.getElementById('ringsLegend').innerHTML = vals.map((r, i) => `<div>
+            document.getElementById('ringsLegend').innerHTML = vals.map((r, i) => `<div${r.none ? ' class="is-none"' : ''}>
                 <div class="text-[12px] font-semibold text-slate-800 dark:text-slate-100">${RING_COLORS[i][1]}</div>
-                <div class="ring-legend-val" style="color:${ringTextColor(i)}">${r.none ? '—' : `${fmtV(r, i)}<span class="text-[15px] font-semibold">/${fmtG(r, i)}</span>`}</div>
+                <div class="ring-legend-val${!r.none && !r.v ? ' is-zero' : ''}" style="color:${ringTextColor(i)}">${r.none ? '—' : `<span class="rv" data-i="${i}">${fmtV(r, i)}</span><span class="text-[15px] font-semibold">/${fmtG(r, i)}</span>`}</div>
                 ${r.none ? '<div class="text-[11px] text-slate-400">bugün tekrar yok</div>' : ''}
             </div>`).join('');
             // [v31] Haftalık hedef (eski "Günlük & Haftalık Hedef" kartından)
@@ -9867,6 +10220,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             document.getElementById('ringsWeekly').innerHTML = bar('Haftalık soru', wk.q, wq, 'soru', '#FA114F') + bar('Haftalık süre', Math.round(wk.dur / 6) / 10, wh, 'sa', '#92E82A');
             const closed = vals.filter(r => r.none || r.v >= r.goal).length;
             document.getElementById('ringsStatus').textContent = closed === 3 ? 'Hepsi kapandı 🎉' : `${closed}/3 kapandı`;
+            lgRingMotion(big, vals);
             // Haftanın küçük halkaları
             const ws = weekStartStr(today);
             const names = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
@@ -10512,7 +10866,8 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             const next = blocks.find(b => !b.completed && (b.time || '99') >= nowHM) || blocks.find(b => !b.completed);
             const closed = v.filter(r => r.none || r.v >= r.goal).length;
             const icon = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
-            const row = (bg, ic, html, act) => `<div class="today-row ${act ? 'cursor-pointer' : ''}" ${act ? `onclick="${act}"` : ''}><span class="ti" style="background:${bg}">${icon(ic)}</span><span class="flex-1 min-w-0">${html}</span>${act ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ios-label3)" stroke-width="2.6" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>' : ''}</div>`;
+            const lgOn = document.documentElement.classList.contains('lg');
+            const row = (bg, ic, html, act) => (lgOn && (html = html.replace(/(?:⚡|🔥|🧠|🛡️?|✦)\s?/gu, '')), `<div class="today-row ${act ? 'cursor-pointer' : ''}" ${act ? `onclick="${act}"` : ''}><span class="ti" style="background:${bg};--c:${bg}">${icon(ic)}</span><span class="flex-1 min-w-0">${html}</span>${act ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ios-label3)" stroke-width="2.6" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>' : ''}</div>`);
             const IC = { plan: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>', rep: '<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>', target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/>', moon: '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>', check: '<path d="M20 6 9 17l-5-5"/>' };
             let kicker, title, tint, body = '', color;
             const planRow = next ? row('rgb(var(--ios-indigo))', IC.plan, `<b>${escHtml(next.time || '')}</b> · ${escHtml(subjectShort(next.subject))}${next.topic ? ' — ' + escHtml(next.topic) : ''}`, "switchTab('plan')") : '';
@@ -12137,12 +12492,20 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         const CHAT_PATH = 'yksTakip_chats', CHAT_KEEP = 300;
         const chatStore = {};          // cid → { msgs: [], read: {}, typing: {} }
         let chatsStarted = false, chatOpenId = null, chatNotified = {};
-        function chatIdWith(pid) { return [ACTIVE_PROFILE, pid].sort().join('__'); }
+        // [v99] Grup sohbeti: bütün profiller tek bir sohbette (yksTakip_chats/grup__hepsi)
+        const GROUP_ID = '__grup', GROUP_CID = 'grup__hepsi', GROUP_SVG = '<svg width="58%" height="58%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+        function isGroup(pid) { return pid === GROUP_ID; }
+        function chatIdWith(pid) { return isGroup(pid) ? GROUP_CID : [ACTIVE_PROFILE, pid].sort().join('__'); }
+        function chatThreads() { const f = chatFriends(); return f.length >= 2 ? [...f, GROUP_ID] : f; }
+        function threadName(pid) { return isGroup(pid) ? 'Çalışma Grubu' : ((PROFILES[pid] || {}).name || ''); }
+        function threadColors(pid) { return isGroup(pid) ? ['#5AC8FA', '#5856D6'] : profileColors(pid); }
+        function threadAvatarInner(pid) { return isGroup(pid) ? GROUP_SVG : escHtml(threadName(pid).charAt(0)); }
+        function threadAvatar(el, pid) { if (!isGroup(pid)) { profileAvatar(el, pid); return; } if (!el) return; const [c1, c2] = threadColors(pid); el.innerHTML = GROUP_SVG; el.style.setProperty('--pa1', c1); el.style.setProperty('--pa2', c2); }
         function chatFriends() { return Object.keys(PROFILES).filter(id => id !== ACTIVE_PROFILE); }
         async function startChats() {
             if (IS_VIEWER_URL || !PROFILE_CHOSEN) return;
             const f = await metaFb(); if (!f) return;
-            chatFriends().forEach(pid => {
+            chatThreads().forEach(pid => {
                 const cid = chatIdWith(pid);
                 if (chatStore[cid]) return;
                 chatStore[cid] = { msgs: [], read: {}, typing: {}, loaded: false };
@@ -12159,16 +12522,19 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 f.sdk.onValue(f.sdk.ref(f.db, `${CHAT_PATH}/${cid}/read`), snap => { chatStore[cid].read = snap.val() || {}; onChatChanged(pid); });
                 f.sdk.onValue(f.sdk.ref(f.db, `${CHAT_PATH}/${cid}/pinned`), snap => { chatStore[cid].pinned = snap.val() || null; if (chatOpenId === pid) renderPinBar(); });
                 f.sdk.onValue(f.sdk.ref(f.db, `${CHAT_PATH}/${cid}/typing`), snap => { chatStore[cid].typing = snap.val() || {}; if (chatOpenId === pid) renderChatMsgs(); });
+                if (isGroup(pid)) chatListen(`${cid}/gcall`, v => onGroupCallSnap(v));      // [v99] grup araması
+                else chatListen(`${cid}/call`, v => onCallSnap(pid, cid, v));              // [v98] sesli arama
             });
             chatsStarted = true;
         }
         function chatWrite(sub, obj) { return metaFb().then(f => f.sdk.update(f.sdk.ref(f.db, CHAT_PATH + '/' + sub), obj)); }
+        function chatListen(sub, cb) { return metaFb().then(f => f ? f.sdk.onValue(f.sdk.ref(f.db, CHAT_PATH + '/' + sub), snap => cb(snap.val())) : () => {}); }   // abonelikten çıkma fonksiyonu döner
         function unreadFrom(pid) {
             const st = chatStore[chatIdWith(pid)]; if (!st) return 0;
             const seen = numOr0((st.read || {})[ACTIVE_PROFILE]);
             return st.msgs.filter(m => m.from !== ACTIVE_PROFILE && m.createdAt > seen).length;
         }
-        function totalUnread() { return chatFriends().reduce((t, pid) => t + unreadFrom(pid), 0); }
+        function totalUnread() { return chatThreads().reduce((t, pid) => t + unreadFrom(pid), 0); }
         function updateMsgBadges() {
             const n = READONLY ? 0 : totalUnread();
             [['sideMsgBadge'], ['moreMsgBadge'], ['barMsgBadge'], ['cvBackBadge']].forEach(([id]) => { const el = document.getElementById(id); if (!el) return; const v = id === 'cvBackBadge' ? n - (chatOpenId ? unreadFrom(chatOpenId) : 0) : n; el.textContent = v > 99 ? '99+' : v; el.classList.toggle('hidden', !(v > 0)); });
@@ -12185,12 +12551,12 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             const known = new Set(prev.map(m => m.id));
             const fresh = next.filter(m => !known.has(m.id) && m.from !== ACTIVE_PROFILE && Date.now() - m.createdAt < 120000);
             if (!fresh.length || READONLY) return;
-            const last = fresh[fresh.length - 1], who = (PROFILES[pid] || {}).name || '';
+            const last = fresh[fresh.length - 1], who = isGroup(pid) ? `${(PROFILES[last.from] || {}).name || ''} · Çalışma Grubu` : (PROFILES[pid] || {}).name || '';
             const text = !msgUnlocked ? 'Yeni mesaj · açmak için dokun' : last.audio ? '🎤 Sesli mesaj' : last.card ? '📎 Soru kartı' : last.photo ? '📷 Fotoğraf' : String(last.text || '');
             if (chatOpenId === pid && document.visibilityState === 'visible') return;
             if (document.visibilityState !== 'visible') { try { sendAppNotification(who, text.slice(0, 120), 'chat-' + pid); } catch (e) {} return; }
             const b = document.getElementById('msgBanner');
-            profileAvatar(document.getElementById('mbAvatar'), pid);
+            threadAvatar(document.getElementById('mbAvatar'), pid);
             document.getElementById('mbName').textContent = who;
             document.getElementById('mbText').textContent = text;
             b.dataset.pid = pid; b.classList.remove('hidden');
@@ -12207,21 +12573,22 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
         function renderChatList() {
             const box = document.getElementById('chatList');
             if (!box) return;
-            const friends = chatFriends();
+            const friends = chatThreads();
             if (!friends.length) { box.innerHTML = emptyState('message-circle', 'Henüz kimse yok', 'Başka bir profil eklendiğinde onunla buradan yazışabilirsin.'); lucide.createIcons(); return; }
             const rows = friends.map(pid => { const st = chatStore[chatIdWith(pid)] || { msgs: [] }; const last = st.msgs[st.msgs.length - 1]; return { pid, last, un: unreadFrom(pid) }; })
                 .sort((a, b) => ((b.last || {}).createdAt || 0) - ((a.last || {}).createdAt || 0));
             box.innerHTML = rows.map(({ pid, last, un }) => {
-                const [c1, c2] = profileColors(pid), p = PROFILES[pid];
-                const preview = last ? `${last.from === ACTIVE_PROFILE ? 'Sen: ' : ''}${last.audio ? '🎤 Sesli mesaj' : last.card ? '📎 Soru kartı' : last.photo ? '📷 Fotoğraf' : last.text}` : 'Henüz mesaj yok · ilk mesajı sen gönder';
+                const [c1, c2] = threadColors(pid), p = { name: threadName(pid) };
+                const preview = last ? `${last.from === ACTIVE_PROFILE ? 'Sen: ' : isGroup(pid) ? ((PROFILES[last.from] || {}).name || '') + ': ' : ''}${last.audio ? '🎤 Sesli mesaj' : last.card ? '📎 Soru kartı' : last.photo ? '📷 Fotoğraf' : last.text}` : 'Henüz mesaj yok · ilk mesajı sen gönder';
                 const t = last ? (localDateStr(new Date(last.createdAt)) === localDateStr() ? chatTime(last.createdAt) : chatDayLabel(last.createdAt)) : '';
-                return `<button type="button" class="chat-row press-scale ${un ? 'unread' : ''}" onclick="openChat('${pid}')"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${escHtml(p.name.charAt(0))}</span>
+                return `<button type="button" class="chat-row press-scale ${un ? 'unread' : ''}" onclick="openChat('${pid}')"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${threadAvatarInner(pid)}</span>
                     <span class="flex-1 min-w-0"><span class="flex items-center justify-between gap-2"><span class="cr-name">${escHtml(p.name)}</span><span class="cr-time">${escHtml(t)}</span></span>
                     <span class="flex items-center gap-2"><span class="cr-last flex-1">${escHtml(preview)}</span>${un ? `<span class="msg-badge" style="margin-left:0">${un}</span>` : ''}</span></span></button>`;
             }).join('');
             updateMsgBadges();
         }
         function friendStatus(pid) {
+            if (isGroup(pid)) { const n = gcMembers(gcSnap).length; if (n && !gc) return `Grup araması sürüyor · ${n} kişi · katılmak için 📞`; return chatFriends().map(id => (PROFILES[id] || {}).name).filter(Boolean).join(', ') + ' ve sen'; }
             const m = PROFILE_META[pid] || {}, L = m.live, S = m.summary;
             if (liveActive(L)) return 'Şu an odak turunda çalışıyor';
             const ts = Math.max((S && S.updatedAt) || 0, (L && L.updatedAt) || 0);
@@ -12229,15 +12596,16 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             return Date.now() - ts < 5 * 60000 ? 'Uygulamada' : 'Son görülme ' + agoText(ts);
         }
         function openChat(pid) {
-            if (!PROFILES[pid]) return;
+            if (!PROFILES[pid] && !isGroup(pid)) return;
             if (!msgUnlocked) { requireMsgPin(() => openChat(pid)); return; }     // [v51]
             try { closeMoreSheet(); closeCtxMenu(); } catch (e) {}
             chatOpenId = pid;
             const v = document.getElementById('chatView');
-            profileAvatar(document.getElementById('chatAvatar'), pid);
-            document.getElementById('chatName').textContent = PROFILES[pid].name;
+            threadAvatar(document.getElementById('chatAvatar'), pid);
+            document.getElementById('chatName').textContent = threadName(pid);
             document.getElementById('chatStatus').textContent = friendStatus(pid);
             document.getElementById('chatRO').classList.toggle('hidden', !READONLY);
+            document.getElementById('chatCallBtn').classList.toggle('hidden', READONLY || !callSupported());
             v.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             renderChatMsgs(true); markChatRead(); updateMsgBadges(); renderPinBar();
@@ -12271,8 +12639,8 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             const nearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
             document.getElementById('chatStatus').textContent = friendStatus(pid);
             if (!st.msgs.length) {
-                const [c1, c2] = profileColors(pid);
-                box.innerHTML = `<div class="m-auto text-center px-8"><span class="profile-avatar" style="width:72px;height:72px;font-size:30px;--pa1:${c1};--pa2:${c2}">${escHtml(PROFILES[pid].name.charAt(0))}</span><div class="text-[17px] font-semibold mt-3 text-slate-900 dark:text-slate-50">${escHtml(PROFILES[pid].name)}</div><div class="text-[13px] text-slate-500 mt-1">${st.loaded === false ? 'Mesajlar yükleniyor…' : 'Henüz mesaj yok. Bir selam gönder 👋'}</div></div>`;
+                const [c1, c2] = threadColors(pid);
+                box.innerHTML = `<div class="m-auto text-center px-8"><span class="profile-avatar" style="width:72px;height:72px;font-size:30px;--pa1:${c1};--pa2:${c2}">${threadAvatarInner(pid)}</span><div class="text-[17px] font-semibold mt-3 text-slate-900 dark:text-slate-50">${escHtml(threadName(pid))}</div><div class="text-[13px] text-slate-500 mt-1">${st.loaded === false ? 'Mesajlar yükleniyor…' : 'Henüz mesaj yok. Bir selam gönder 👋'}</div></div>`;
                 return;
             }
             let html = '', lastDay = '';
@@ -12282,6 +12650,7 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
                 const me = m.from === ACTIVE_PROFILE, next = st.msgs[i + 1], prev = st.msgs[i - 1];
                 const tail = !next || next.from !== m.from || next.createdAt - m.createdAt > 5 * 60000;
                 const gap = prev && (prev.from !== m.from || m.createdAt - prev.createdAt > 5 * 60000);
+                if (isGroup(pid) && !me && (!prev || prev.from !== m.from || day !== localDateStr(new Date(prev.createdAt)))) html += `<div class="bub-from">${escHtml((PROFILES[m.from] || {}).name || '')}</div>`;
                 const cls = `bub ${me ? 'me' : 'them'} ${tail ? 'tail' : ''} ${gap ? 'gap' : ''} ${m.photo ? 'photo' : ''} ${m.card ? 'qcard' : ''}`;
                 const quote = m.replyTo ? `<div class="rq" onclick="event.stopPropagation(); jumpToMsg('${escHtml(m.replyTo.id)}')"><b>${escHtml(m.replyTo.from === ACTIVE_PROFILE ? 'Sen' : ((PROFILES[m.replyTo.from] || {}).name || ''))}</b><span>${escHtml(m.replyTo.text || '')}</span></div>` : '';
                 const inner = quote + (m.audio ? voiceHtml(m) : m.card ? chatCardHtml(m, me) : m.photo ? `<img src="${escHtml(m.photo)}" alt="Fotoğraf" onclick="openPhotoViewer(this.src)">` : `${escHtml(m.text || '')}${tail ? `<span class="bt">${chatTime(m.createdAt)}</span>` : ''}`);
@@ -12289,10 +12658,11 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             });
             const lastMine = st.msgs.filter(m => m.from === ACTIVE_PROFILE).pop();
             if (lastMine && st.msgs[st.msgs.length - 1] === lastMine) {
-                const readAt = numOr0((st.read || {})[pid]);
-                html += `<div class="cv-receipt">${readAt >= lastMine.createdAt ? 'Okundu ' + chatTime(readAt) : 'İletildi'}</div>`;
+                if (isGroup(pid)) { const seen = chatFriends().filter(id => numOr0((st.read || {})[id]) >= lastMine.createdAt).map(id => PROFILES[id].name); html += `<div class="cv-receipt">${seen.length ? 'Görüldü · ' + escHtml(seen.join(', ')) : 'İletildi'}</div>`; }
+                else { const readAt = numOr0((st.read || {})[pid]);
+                html += `<div class="cv-receipt">${readAt >= lastMine.createdAt ? 'Okundu ' + chatTime(readAt) : 'İletildi'}</div>`; }
             }
-            const ty = numOr0((st.typing || {})[pid]);
+            const ty = isGroup(pid) ? Math.max(0, ...chatFriends().map(id => numOr0((st.typing || {})[id]))) : numOr0((st.typing || {})[pid]);
             if (Date.now() - ty < 5000) { html += '<div class="cv-typing" aria-label="yazıyor"><span></span><span></span><span></span></div>'; clearTimeout(renderChatMsgs.t); renderChatMsgs.t = setTimeout(() => renderChatMsgs(), 5200); }
             box.innerHTML = html;
             if (scrollBottom || nearBottom) box.scrollTop = box.scrollHeight;
@@ -12328,15 +12698,590 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
             const inp = document.getElementById('chatInput'), text = inp.value.trim();
             if (!text) return;
             inp.value = ''; chatInputChanged(inp);
+            inp.focus({ preventScroll: true });     // [v100] klavye açık kalsın: odak dokunma anında, gönderimden önce geri verilir (iOS sonradan odaklamaya izin vermez)
             const ok = await postChatMessage({ text: text.slice(0, 1000) });
             if (!ok) { inp.value = text; chatInputChanged(inp); }
-            if (window.innerWidth >= 1024) inp.focus();
         }
         async function sendChatPhoto(input) {
             const file = input.files && input.files[0]; input.value = '';
             if (!file) return;
             try { const data = await compressImageFile(file); if (data) await postChatMessage({ photo: data }); } catch (e) { showToast('Fotoğraf gönderilemedi.', 'error'); }
         }
+
+        // ---------- [v98] SESLİ ARAMA (WebRTC) ----------
+        // Ses iki cihaz arasında doğrudan akar; bağlantı bilgileri sohbetin altında tutulur: yksTakip_chats/<a__b>/call
+        // { id, from, to, state: ringing|active|ended|declined|busy|missed, offer, answer, ice/<profil>/<anahtar>, createdAt, startedAt }
+        const CALL_ICE = [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }];
+        const CALL_RING_MS = 45000;
+        const callStore = {};          // cid → son arama kaydı
+        let call = null;               // { cid, pid, role, id, state, pc, stream, written, localQ, iceAdded, startedAt, muted, od }
+        function callSupported() { return !!(window.RTCPeerConnection && navigator.mediaDevices && navigator.mediaDevices.getUserMedia); }
+        function callWrite(cid, obj) { return chatWrite(cid + '/call', obj); }
+        function callKey() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+        function callFmt(sec) { return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0'); }
+        function callMic() { return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } }); }
+
+        function onCallSnap(pid, cid, c) {
+            callStore[cid] = c;
+            if (call && call.cid === cid) { syncCall(c).catch(() => {}); return; }
+            if (!c || c.state !== 'ringing' || c.to !== ACTIVE_PROFILE || READONLY || Date.now() - (c.createdAt || 0) > CALL_RING_MS) return;
+            if (call || gc) { callWrite(cid, { state: 'busy', endedAt: Date.now() }).catch(() => {}); return; }
+            call = { cid, pid, role: 'callee', id: c.id, state: 'incoming', written: true, localQ: [], iceAdded: new Set() };
+            showCallUI(); startRing('in');
+            if (document.visibilityState !== 'visible') { try { sendAppNotification((PROFILES[pid] || {}).name || '', 'Sesli arama · açmak için dokun', 'call-' + pid); } catch (e) {} }
+        }
+        async function syncCall(c) {
+            const me = call; if (!me) return;
+            if (!c || c.id !== me.id) { if (me.written) endCall('ended', true); return; }
+            if (['ended', 'declined', 'busy', 'missed'].includes(c.state)) { endCall(c.state, true); return; }
+            if (me.role === 'caller' && c.answer && me.pc && !me.pc.remoteDescription) { await me.pc.setRemoteDescription(c.answer); }
+            if (c.state === 'active' && me.state !== 'active' && me.role === 'caller') setCallActive(c.startedAt);
+            flushIce();
+        }
+        function flushIce() {
+            const me = call; if (!me || !me.pc || !me.pc.remoteDescription) return;
+            const c = callStore[me.cid]; if (!c || c.id !== me.id) return;
+            Object.entries((c.ice || {})[me.pid] || {}).forEach(([k, cand]) => { if (me.iceAdded.has(k)) return; me.iceAdded.add(k); me.pc.addIceCandidate(cand).catch(() => {}); });
+        }
+        function makeCallPc(me) {
+            const pc = me.pc = new RTCPeerConnection({ iceServers: CALL_ICE });
+            me.stream.getTracks().forEach(t => pc.addTrack(t, me.stream));
+            pc.onicecandidate = e => {
+                if (!e.candidate || call !== me) return;
+                const k = callKey(), cand = JSON.parse(JSON.stringify(e.candidate.toJSON()));
+                if (me.written) callWrite(me.cid, { [`ice/${ACTIVE_PROFILE}/${k}`]: cand }).catch(() => {}); else me.localQ.push([k, cand]);
+            };
+            pc.ontrack = e => { const a = document.getElementById('callAudio'); if (a) { a.srcObject = e.streams[0]; a.play().catch(() => {}); } };
+            pc.onconnectionstatechange = () => {
+                if (call !== me) return;
+                if (pc.connectionState === 'failed') { showToast('Bağlantı kurulamadı. Ağ bu aramaya izin vermiyor olabilir.', 'error'); hangUpCall(); }
+                else if (pc.connectionState === 'disconnected') setCallStatus('Bağlantı zayıf…');
+            };
+        }
+        async function startCall() {
+            const pid = chatOpenId; if (!pid || call) return;
+            if (isGroup(pid)) { startGroupCall(); return; }
+            if (gc) { showToast('Şu an grup aramasındasın.', 'error'); return; }
+            if (READONLY) { showToast('İzleme modunda arama yapılamaz.', 'error'); return; }
+            if (!callSupported()) { showToast('Bu tarayıcı sesli aramayı desteklemiyor.', 'error'); return; }
+            const f = await metaFb(); if (!f) { showToast('Bağlantı yok, internetini kontrol et.', 'error'); return; }
+            const cid = chatIdWith(pid);
+            const me = call = { cid, pid, role: 'caller', id: callKey(), state: 'setup', written: false, localQ: [], iceAdded: new Set() };
+            showCallUI();
+            try { me.stream = await callMic(); } catch (e) { showToast('Arama için mikrofon izni gerekiyor.', 'error'); endCall('ended', true); return; }
+            if (call !== me) { me.stream.getTracks().forEach(t => t.stop()); return; }
+            try {
+                makeCallPc(me);
+                const offer = await me.pc.createOffer(); await me.pc.setLocalDescription(offer);
+                if (call !== me) return;
+                const ice = {}; me.localQ.forEach(([k, c]) => { ice[k] = c; }); me.localQ = [];
+                await chatWrite(cid, { call: { id: me.id, from: ACTIVE_PROFILE, to: pid, state: 'ringing', createdAt: Date.now(), offer: { type: offer.type, sdp: offer.sdp }, ice: { [ACTIVE_PROFILE]: ice } }, board: null });
+                me.written = true; me.state = 'ringing';
+                if (f.sdk.onDisconnect) { me.od = f.sdk.onDisconnect(f.sdk.ref(f.db, `${CHAT_PATH}/${cid}/call`)); me.od.update({ state: 'ended' }).catch(() => {}); }
+                renderCallUI(); startRing('out');
+                me.ringT = setTimeout(() => { if (call === me && me.state === 'ringing') callWrite(cid, { state: 'missed', endedAt: Date.now() }).catch(() => endCall('missed', true)); }, CALL_RING_MS);
+            } catch (e) { showToast('Arama başlatılamadı.', 'error'); endCall('ended', false); }
+        }
+        async function acceptCall() {
+            const me = call; if (!me || me.role !== 'callee' || me.state !== 'incoming') return;
+            stopRing(); me.state = 'connecting'; renderCallUI();
+            try { me.stream = await callMic(); } catch (e) { showToast('Arama için mikrofon izni gerekiyor.', 'error'); endCall('declined', false); return; }
+            const c = callStore[me.cid];
+            if (call !== me || !c || c.id !== me.id || c.state !== 'ringing') { me.stream.getTracks().forEach(t => t.stop()); if (call === me) endCall('ended', true); return; }
+            try {
+                makeCallPc(me);
+                await me.pc.setRemoteDescription(c.offer);
+                const ans = await me.pc.createAnswer(); await me.pc.setLocalDescription(ans);
+                const startedAt = Date.now();
+                await callWrite(me.cid, { answer: { type: ans.type, sdp: ans.sdp }, state: 'active', startedAt });
+                const f = await metaFb();
+                if (f && f.sdk.onDisconnect) { me.od = f.sdk.onDisconnect(f.sdk.ref(f.db, `${CHAT_PATH}/${me.cid}/call`)); me.od.update({ state: 'ended' }).catch(() => {}); }
+                setCallActive(startedAt); flushIce();
+            } catch (e) { showToast('Arama bağlanamadı.', 'error'); endCall('ended', false); }
+        }
+        function declineCall() { endCall('declined', false); }
+        function hangUpCall() { endCall('ended', false); }
+        function toggleCallMute() {
+            if (!call || !call.stream) return;
+            call.muted = !call.muted;
+            call.stream.getAudioTracks().forEach(t => { t.enabled = !call.muted; });
+            renderCallUI();
+        }
+        function setCallActive(startedAt) {
+            const me = call; if (!me) return;
+            me.state = 'active'; me.startedAt = startedAt || Date.now();
+            clearTimeout(me.ringT); stopRing(); boardAttach(me.cid); renderCallUI();
+            clearInterval(me.timer);
+            me.timer = setInterval(() => { if (call === me && (!me.pc || me.pc.connectionState !== 'disconnected')) setCallStatus(callFmt(Math.max(0, Math.round((Date.now() - me.startedAt) / 1000)))); }, 1000);
+        }
+        function endCall(reason, remote) {
+            const me = call; if (!me) return;
+            call = null;
+            clearTimeout(me.ringT); clearInterval(me.timer); stopRing(); boardDetach();
+            try { me.pc && me.pc.close(); } catch (e) {}
+            try { me.stream && me.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+            try { me.od && me.od.cancel(); } catch (e) {}
+            const a = document.getElementById('callAudio'); if (a) a.srcObject = null;
+            if (!remote && me.written) callWrite(me.cid, { state: reason === 'declined' ? 'declined' : 'ended', endedAt: Date.now(), endedBy: ACTIVE_PROFILE }).catch(() => {});
+            const dur = me.startedAt ? Math.round((Date.now() - me.startedAt) / 1000) : 0;
+            if (me.role === 'caller' && me.written) {         // sohbete arama kaydı (yalnızca arayan yazar, çift kayıt olmaz)
+                const text = dur ? `📞 Sesli arama · ${callFmt(dur)}` : reason === 'declined' ? '📞 Arama reddedildi' : reason === 'busy' ? '📞 Meşguldü' : '📞 Cevapsız sesli arama';
+                chatWrite(me.cid + '/messages', { [callKey()]: { from: ACTIVE_PROFILE, createdAt: Date.now(), text, call: { dur } } }).catch(() => {});
+            }
+            const msg = dur ? 'Arama bitti · ' + callFmt(dur) : reason === 'declined' ? (me.role === 'caller' ? 'Arama reddedildi' : 'Reddedildi') : reason === 'busy' ? 'Meşgul' : reason === 'missed' ? (me.role === 'caller' ? 'Cevap yok' : 'Cevapsız arama') : 'Arama bitti';
+            setCallStatus(msg);
+            const v = document.getElementById('callView'); if (v) { v.dataset.state = 'ended'; v.querySelector('.cl-btns').innerHTML = ''; }
+            setTimeout(() => { if (!call && !gc) hideCallUI(); }, 1300);
+        }
+        window.addEventListener('pagehide', () => { if (call) endCall('ended', false); });
+
+        // Arama ekranı
+        function callView() {
+            let v = document.getElementById('callView');
+            if (v) return v;
+            v = document.createElement('div'); v.id = 'callView'; v.className = 'hidden';
+            v.setAttribute('role', 'dialog'); v.setAttribute('aria-modal', 'true'); v.setAttribute('aria-labelledby', 'callName');
+            v.innerHTML = `<div class="cl-top"><span class="cl-av"><span id="callAvatar" class="profile-avatar"></span></span><div id="callName" class="cl-name"></div><div id="callStatus" class="cl-status" aria-live="polite"></div><div id="callPeople" class="cl-people"></div></div>
+                <div class="cl-btns"></div><audio id="callAudio" autoplay playsinline></audio>`;
+            document.body.appendChild(v);
+            return v;
+        }
+        const CALL_IC = {
+            phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+            mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/>',
+            board: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+            micOff: '<path d="m2 2 20 20"/><path d="M9 9v2a3 3 0 0 0 5.12 2.12M15 9.34V5a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 11v-1m14 0v1a7 7 0 0 1-.11 1.23M12 18v4"/>'
+        };
+        function callBtn(cls, label, ic, fn, pressed) {
+            return `<div class="cl-bw"><button type="button" class="cl-btn ${cls}" onclick="${fn}" aria-label="${label}" ${pressed != null ? `aria-pressed="${pressed}"` : ''}><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></button><span>${label}</span></div>`;
+        }
+        function setCallStatus(t) { const el = document.getElementById('callStatus'); if (el) el.textContent = t; }
+        function renderCallUI() {
+            const me = call, v = callView(); if (!me) return;
+            v.dataset.state = me.state;
+            const btns = v.querySelector('.cl-btns');
+            if (me.state === 'incoming') {
+                setCallStatus('Sesli arama');
+                btns.innerHTML = callBtn('end', 'Reddet', CALL_IC.phone, 'declineCall()') + callBtn('ok', 'Kabul et', CALL_IC.phone, 'acceptCall()');
+            } else {
+                if (me.state !== 'active') setCallStatus(me.state === 'ringing' ? 'Çalıyor…' : 'Bağlanıyor…');
+                btns.innerHTML = callBtn(me.muted ? 'on' : '', me.muted ? 'Sesi aç' : 'Sessiz', me.muted ? CALL_IC.micOff : CALL_IC.mic, 'toggleCallMute()', !!me.muted)
+                    + (me.state === 'active' ? callBtn(boardHasNew() ? 'dot' : '', 'Tahta', CALL_IC.board, 'openBoard()') : '') + callBtn('end', 'Kapat', CALL_IC.phone, 'hangUpCall()');
+            }
+        }
+        function showCallUI() {
+            const me = call, v = callView(); if (!me) return;
+            profileAvatar(document.getElementById('callAvatar'), me.pid);
+            document.getElementById('callName').textContent = (PROFILES[me.pid] || {}).name || '';
+            document.getElementById('callPeople').innerHTML = '';
+            renderCallUI();
+            v.classList.remove('hidden'); void v.offsetWidth; v.classList.add('show');
+            document.body.classList.add('call-open');
+            setTimeout(() => { const b = v.querySelector('.cl-btn.ok, .cl-btn.end'); if (b) b.focus({ preventScroll: true }); }, 60);
+        }
+        function hideCallUI() {
+            const v = document.getElementById('callView'); if (!v) return;
+            v.classList.remove('show'); document.body.classList.remove('call-open');
+            setTimeout(() => { if (!call && !gc) v.classList.add('hidden'); }, 200);
+        }
+
+        // Zil sesi: gelen arama iki tonlu + titreşim, giden arama 450 Hz bekleme sesi
+        let ringCtx = null, ringLoop = null;
+        function startRing(kind) {
+            stopRing();
+            try { ringCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
+            const tone = (f, at, dur, vol) => { const o = ringCtx.createOscillator(), g = ringCtx.createGain(); o.type = 'sine'; o.frequency.value = f;
+                g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(vol, at + .02); g.gain.setValueAtTime(vol, at + dur - .03); g.gain.linearRampToValueAtTime(0, at + dur);
+                o.connect(g); g.connect(ringCtx.destination); o.start(at); o.stop(at + dur + .02); };
+            const play = () => {
+                if (!ringCtx) return;
+                if (ringCtx.resume) ringCtx.resume().catch(() => {});
+                const t = ringCtx.currentTime + .02;
+                if (kind === 'in') { [0, .25, .5, .75].forEach((d, i) => tone(i % 2 ? 660 : 880, t + d, .2, .12)); try { navigator.vibrate && navigator.vibrate([400, 200, 400]); } catch (e) {} }
+                else tone(450, t, 1, .05);
+            };
+            play(); ringLoop = setInterval(play, kind === 'in' ? 2500 : 4000);
+        }
+        function stopRing() {
+            clearInterval(ringLoop); ringLoop = null;
+            try { navigator.vibrate && navigator.vibrate(0); } catch (e) {}
+            if (ringCtx) { try { ringCtx.close(); } catch (e) {} ringCtx = null; }
+        }
+
+        // ---------- [v99] GRUP ARAMASI (mesh WebRTC: herkes herkese bağlanır, 3–4 kişi için) ----------
+        // yksTakip_chats/grup__hepsi/gcall: { id, by, startedAt, members/<profil>: katılma zamanı, sig/<teklif eden__cevaplayan>: { offer, answer, ice/<profil>/<anahtar> } }
+        let gc = null;                 // { id, stream, peers: { pid: { pc, key, iceAdded } }, joined, startedAt, muted, od, timer }
+        let gcSnap = null, gcRinging = '', gcDeclined = '', gcRingT = null;
+        function gcWrite(obj) { return chatWrite(GROUP_CID + '/gcall', obj); }
+        function gcMembers(v) { return Object.keys((v && v.members) || {}).filter(id => PROFILES[id]); }
+        function gcActive() { return gcMembers(gcSnap).length > 0; }
+        function onGroupCallSnap(v) {
+            gcSnap = v;
+            if (gc) { gcSync(v); return; }
+            const mem = gcMembers(v);
+            if (gcRinging && (!mem.length || !v || v.id !== gcRinging)) { gcRinging = ''; clearTimeout(gcRingT); stopRing(); if (!call) hideCallUI(); }
+            if (chatOpenId === GROUP_ID) { try { document.getElementById('chatStatus').textContent = friendStatus(GROUP_ID); } catch (e) {} }
+            if (!v || !mem.length || mem.includes(ACTIVE_PROFILE) || READONLY || call) return;
+            if (gcRinging === v.id || gcDeclined === v.id || Date.now() - (v.startedAt || 0) > CALL_RING_MS) return;
+            gcRinging = v.id;
+            gcShowIncoming(v); startRing('in');
+            clearTimeout(gcRingT); gcRingT = setTimeout(() => { if (!gc && gcRinging) { gcRinging = ''; stopRing(); if (!call) hideCallUI(); } }, CALL_RING_MS);
+            if (document.visibilityState !== 'visible') { try { sendAppNotification('Çalışma Grubu', `${(PROFILES[v.by] || {}).name || ''} grup araması başlattı`, 'gcall'); } catch (e) {} }
+        }
+        function startGroupCall() {
+            if (READONLY) { showToast('İzleme modunda arama yapılamaz.', 'error'); return; }
+            if (!callSupported()) { showToast('Bu tarayıcı sesli aramayı desteklemiyor.', 'error'); return; }
+            if (call) { showToast('Önce mevcut aramayı kapat.', 'error'); return; }
+            joinGroupCall();
+        }
+        function declineGroupCall() { gcDeclined = gcRinging; gcRinging = ''; clearTimeout(gcRingT); stopRing(); hideCallUI(); }
+        async function joinGroupCall() {
+            if (gc || call) return;
+            gcRinging = ''; clearTimeout(gcRingT); stopRing();
+            const f = await metaFb(); if (!f) { showToast('Bağlantı yok, internetini kontrol et.', 'error'); return; }
+            const live = gcActive() ? gcSnap : null;
+            const me = gc = { id: live ? live.id : callKey(), peers: {}, joined: false, startedAt: live ? live.startedAt : Date.now() };
+            gcShowActive();
+            try { me.stream = await callMic(); } catch (e) { showToast('Arama için mikrofon izni gerekiyor.', 'error'); gc = null; hideCallUI(); return; }
+            if (gc !== me) { me.stream.getTracks().forEach(t => t.stop()); return; }
+            try {
+                if (live && gcActive() && gcSnap.id === me.id) await gcWrite({ [`members/${ACTIVE_PROFILE}`]: Date.now() });
+                else { me.id = callKey(); me.startedAt = Date.now(); await chatWrite(GROUP_CID, { gcall: { id: me.id, by: ACTIVE_PROFILE, startedAt: me.startedAt, members: { [ACTIVE_PROFILE]: Date.now() } }, board: null }); }
+                me.joined = true;
+                if (f.sdk.onDisconnect) { me.od = f.sdk.onDisconnect(f.sdk.ref(f.db, `${CHAT_PATH}/${GROUP_CID}/gcall/members/${ACTIVE_PROFILE}`)); me.od.remove ? me.od.remove().catch(() => {}) : me.od.set(null).catch(() => {}); }
+                boardAttach(GROUP_CID);
+                me.timer = setInterval(() => { if (gc === me) gcStatus(); }, 1000);
+                gcSync(gcSnap); gcShowActive();
+            } catch (e) { showToast('Grup aramasına bağlanılamadı.', 'error'); gcLeave(false); }
+        }
+        function gcSync(v) {
+            const me = gc; if (!me || !me.joined) return;
+            if (!v || v.id !== me.id || !(v.members || {})[ACTIVE_PROFILE]) { if (me.confirmed) gcLeave(true); return; }   // kendi katılımımız henüz yansımadıysa bekle
+            me.confirmed = true;
+            const mem = v.members, sig = v.sig || {}, myJoin = mem[ACTIVE_PROFILE];
+            Object.keys(me.peers).forEach(pid => { if (!mem[pid]) gcDropPeer(pid); });
+            gcMembers(v).filter(id => id !== ACTIVE_PROFILE).forEach(pid => {
+                const offerer = myJoin > mem[pid] || (myJoin === mem[pid] && ACTIVE_PROFILE > pid);     // sonradan gelen teklif eder, eşitlikte ada göre
+                const key = offerer ? `${ACTIVE_PROFILE}__${pid}` : `${pid}__${ACTIVE_PROFILE}`, s = sig[key] || {};
+                const pr = me.peers[pid];
+                if (offerer) {
+                    if (!pr) gcOffer(pid, key);
+                    else if (s.answer && !pr.pc.remoteDescription && pr.pc.signalingState === 'have-local-offer') pr.pc.setRemoteDescription(s.answer).then(() => gcFlush(pid)).catch(() => {});
+                } else if (s.offer && !pr) gcAnswer(pid, key, s.offer);
+                gcFlush(pid);
+            });
+            gcRenderPeople();
+        }
+        function gcPeer(pid, key) {
+            const me = gc, pc = new RTCPeerConnection({ iceServers: CALL_ICE }), pr = me.peers[pid] = { pc, key, iceAdded: new Set() };
+            me.stream.getTracks().forEach(t => pc.addTrack(t, me.stream));
+            pc.onicecandidate = e => { if (!e.candidate || gc !== me) return; gcWrite({ [`sig/${key}/ice/${ACTIVE_PROFILE}/${callKey()}`]: JSON.parse(JSON.stringify(e.candidate.toJSON())) }).catch(() => {}); };
+            pc.ontrack = e => {
+                let a = document.querySelector(`#callView audio[data-pid="${pid}"]`);
+                if (!a) { a = document.createElement('audio'); a.autoplay = true; a.setAttribute('playsinline', ''); a.dataset.pid = pid; callView().appendChild(a); }
+                a.srcObject = e.streams[0]; a.play().catch(() => {});
+            };
+            pc.onconnectionstatechange = () => { if (gc !== me) return; gcRenderPeople(); if (pc.connectionState === 'failed') showToast(`${(PROFILES[pid] || {}).name || ''} ile bağlantı kurulamadı.`, 'error'); };
+            return pr;
+        }
+        async function gcOffer(pid, key) {
+            const me = gc, pr = gcPeer(pid, key);
+            try {
+                const offer = await pr.pc.createOffer();
+                await gcWrite({ [`sig/${key}`]: { offer: { type: offer.type, sdp: offer.sdp } } });     // önce eski kaydı sil, sonra ICE toplanmaya başlasın
+                if (gc !== me) return;
+                await pr.pc.setLocalDescription(offer);
+            } catch (e) { gcDropPeer(pid); }
+        }
+        async function gcAnswer(pid, key, offer) {
+            const me = gc, pr = gcPeer(pid, key);
+            try {
+                await pr.pc.setRemoteDescription(offer);
+                const ans = await pr.pc.createAnswer(); await pr.pc.setLocalDescription(ans);
+                if (gc !== me) return;
+                await gcWrite({ [`sig/${key}/answer`]: { type: ans.type, sdp: ans.sdp } });
+                gcFlush(pid);
+            } catch (e) { gcDropPeer(pid); }
+        }
+        function gcFlush(pid) {
+            const me = gc, pr = me && me.peers[pid]; if (!pr || !pr.pc.remoteDescription) return;
+            const ice = ((((gcSnap || {}).sig || {})[pr.key] || {}).ice || {})[pid] || {};
+            Object.entries(ice).forEach(([k, c]) => { if (pr.iceAdded.has(k)) return; pr.iceAdded.add(k); pr.pc.addIceCandidate(c).catch(() => {}); });
+        }
+        function gcDropPeer(pid) {
+            const me = gc, pr = me && me.peers[pid]; if (!pr) return;
+            try { pr.pc.close(); } catch (e) {}
+            delete me.peers[pid];
+            const a = document.querySelector(`#callView audio[data-pid="${pid}"]`); if (a) { a.srcObject = null; a.remove(); }
+        }
+        function leaveGroupCall() { gcLeave(false); }
+        function gcLeave(remote) {
+            const me = gc; if (!me) return;
+            gc = null; gcDeclined = me.id;          // ayrıldığımız arama bize tekrar çalmasın (📞 ile yeniden katılınabilir)
+            Object.keys(me.peers).forEach(pid => { try { me.peers[pid].pc.close(); } catch (e) {} });
+            document.querySelectorAll('#callView audio[data-pid]').forEach(a => { a.srcObject = null; a.remove(); });
+            try { me.stream && me.stream.getTracks().forEach(t => t.stop()); } catch (e) {}
+            try { me.od && me.od.cancel(); } catch (e) {}
+            clearInterval(me.timer); boardDetach();
+            const dur = me.joined ? Math.round((Date.now() - me.startedAt) / 1000) : 0;
+            if (!remote && me.joined) {
+                const v = gcSnap, others = gcMembers(v).filter(id => id !== ACTIVE_PROFILE);
+                if (!others.length) {          // son çıkan kapatır ve sohbete kaydı yazar
+                    chatWrite(GROUP_CID, { gcall: null }).catch(() => {});
+                    chatWrite(GROUP_CID + '/messages', { [callKey()]: { from: ACTIVE_PROFILE, createdAt: Date.now(), text: `📞 Grup araması · ${callFmt(dur)}`, call: { dur, group: true } } }).catch(() => {});
+                } else {
+                    const upd = { [`members/${ACTIVE_PROFILE}`]: null };
+                    Object.keys((v && v.sig) || {}).forEach(k => { if (k.split('__').includes(ACTIVE_PROFILE)) upd[`sig/${k}`] = null; });
+                    gcWrite(upd).catch(() => {});
+                }
+            }
+            setCallStatus(me.joined ? 'Aramadan ayrıldın · ' + callFmt(dur) : 'Arama bitti');
+            const v = document.getElementById('callView'); if (v) { v.dataset.state = 'ended'; v.querySelector('.cl-btns').innerHTML = ''; }
+            setTimeout(() => { if (!call && !gc) hideCallUI(); }, 1100);
+        }
+        function toggleGroupMute() {
+            if (!gc || !gc.stream) return;
+            gc.muted = !gc.muted; gc.stream.getAudioTracks().forEach(t => { t.enabled = !gc.muted; });
+            gcRenderButtons();
+        }
+        // Grup arama ekranı (tek kişilik aramayla aynı #callView'ı kullanır)
+        function gcPeopleHtml(ids, me) {
+            return ids.map(id => { const [c1, c2] = profileColors(id), pr = me && me.peers[id], on = !me || (pr && pr.pc.connectionState === 'connected');
+                return `<div class="cl-p ${on ? '' : 'wait'}"><span class="profile-avatar" style="--pa1:${c1};--pa2:${c2}">${escHtml(PROFILES[id].name.charAt(0))}</span><span>${escHtml(PROFILES[id].name)}</span></div>`; }).join('');
+        }
+        function gcHead() {
+            threadAvatar(document.getElementById('callAvatar'), GROUP_ID);
+            document.getElementById('callName').textContent = 'Çalışma Grubu';
+        }
+        function gcShowIncoming(v) {
+            const view = callView(); gcHead();
+            view.dataset.state = 'incoming';
+            setCallStatus(`${(PROFILES[v.by] || {}).name || ''} grup araması başlattı`);
+            document.getElementById('callPeople').innerHTML = gcPeopleHtml(gcMembers(v), null);
+            view.querySelector('.cl-btns').innerHTML = callBtn('end', 'Reddet', CALL_IC.phone, 'declineGroupCall()') + callBtn('ok', 'Katıl', CALL_IC.phone, 'joinGroupCall()');
+            gcOpenView();
+        }
+        function gcShowActive() { if (!gc) return; const view = callView(); gcHead(); view.dataset.state = 'group'; gcStatus(); gcRenderPeople(); gcRenderButtons(); gcOpenView(); }
+        function gcOpenView() {
+            const v = callView(); if (!v.classList.contains('hidden') && v.classList.contains('show')) return;
+            v.classList.remove('hidden'); void v.offsetWidth; v.classList.add('show'); document.body.classList.add('call-open');
+        }
+        function gcStatus() {
+            const me = gc; if (!me) return;
+            if (!me.joined) { setCallStatus('Bağlanıyor…'); return; }
+            const n = gcMembers(gcSnap).length;
+            setCallStatus(n > 1 ? `${n} kişi · ${callFmt(Math.max(0, Math.round((Date.now() - me.startedAt) / 1000)))}` : 'Diğerleri bekleniyor…');
+        }
+        function gcRenderPeople() { const el = document.getElementById('callPeople'); if (el && gc) el.innerHTML = gcPeopleHtml(gcMembers(gcSnap).filter(id => id !== ACTIVE_PROFILE), gc); }
+        function gcRenderButtons() {
+            const me = gc, v = document.getElementById('callView'); if (!me || !v) return;
+            v.querySelector('.cl-btns').innerHTML = callBtn(me.muted ? 'on' : '', me.muted ? 'Sesi aç' : 'Sessiz', me.muted ? CALL_IC.micOff : CALL_IC.mic, 'toggleGroupMute()', !!me.muted)
+                + (me.joined ? callBtn(boardHasNew() ? 'dot' : '', 'Tahta', CALL_IC.board, 'openBoard()') : '') + callBtn('end', 'Ayrıl', CALL_IC.phone, 'leaveGroupCall()');
+        }
+        window.addEventListener('pagehide', () => { if (gc) gcLeave(false); });
+
+        // ---------- [v99] ORTAK BEYAZ TAHTA (arama sırasında) ----------
+        // yksTakip_chats/<cid>/board/strokes/<anahtar>: { by, c: renk, w: kalınlık (genişliğe oranla), p: "x,y x,y …" (0–1 arası) }
+        let board = null;              // { cid, strokes, unsub, open, seen, mine: [], cur }
+        const BOARD_COLORS = ['#1d1d1f', '#0A84FF', '#FF3B30', '#34C759'];
+        let boardColor = BOARD_COLORS[0];
+        function boardAttach(cid) {
+            boardDetach();
+            const b = board = { cid, strokes: {}, open: false, seen: 0, mine: [], cur: null };
+            chatListen(cid + '/board/strokes', v => { if (board !== b) return; b.strokes = v || {}; if (b.open) { b.seen = boardOthers(); boardDraw(); } else boardBadge(); })
+                .then(u => { if (board === b) b.unsub = u; else if (typeof u === 'function') u(); });
+        }
+        function boardDetach() { if (!board) return; try { board.unsub && board.unsub(); } catch (e) {} board = null; closeBoard(); }
+        function boardOthers() { return board ? Object.values(board.strokes).filter(s => s && s.by !== ACTIVE_PROFILE).length : 0; }
+        function boardHasNew() { return !!board && !board.open && boardOthers() > board.seen; }
+        function boardBadge() { if (call && call.state === 'active') renderCallUI(); else if (gc) gcRenderButtons(); }
+        function boardEl() {
+            const v = callView(); let el = document.getElementById('callBoard');
+            if (el) return el;
+            el = document.createElement('div'); el.id = 'callBoard'; el.className = 'cl-board hidden';
+            el.innerHTML = `<div class="cb-bar"><div class="cb-colors" role="radiogroup" aria-label="Kalem rengi">${BOARD_COLORS.map(c => `<button type="button" role="radio" class="cb-c" style="--c:${c}" data-c="${c}" aria-label="Renk ${c}" onclick="setBoardColor('${c}')"></button>`).join('')}</div>
+                <button type="button" class="cb-btn cb-ic" onclick="undoBoard()" aria-label="Geri al" title="Geri al"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button type="button" class="cb-btn cb-ic" onclick="clearBoard()" aria-label="Tahtayı temizle" title="Temizle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button><button type="button" class="cb-btn cb-done" onclick="closeBoard()">Bitti</button></div>
+                <div class="cb-area"><div class="cb-wrap"><canvas id="cbCanvas" aria-label="Ortak beyaz tahta"></canvas></div></div>`;
+            v.appendChild(el);
+            const cv = el.querySelector('canvas');
+            const pt = e => { const r = cv.getBoundingClientRect(); return [Math.round(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)) * 1000) / 1000, Math.round(Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) * 1000) / 1000]; };
+            const push = final => { const b = board; if (!b || !b.cur) return; const s = b.cur; s.dirty = false;
+                chatWrite(b.cid + '/board/strokes', { [s.k]: { by: ACTIVE_PROFILE, c: s.c, w: s.w, p: s.pts.map(q => q.join(',')).join(' ') } }).catch(() => {});
+                if (final) { b.mine.push(s.k); b.cur = null; } };
+            cv.addEventListener('pointerdown', e => { if (!board || READONLY) return; e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+                board.cur = { k: callKey(), c: boardColor, w: .006, pts: [pt(e)], t: Date.now() }; boardDraw(); });
+            cv.addEventListener('pointermove', e => { const b = board; if (!b || !b.cur) return; b.cur.pts.push(pt(e)); boardDraw();
+                if (b.cur.pts.length > 500) { push(true); return; }
+                if (Date.now() - b.cur.t > 120) { b.cur.t = Date.now(); push(false); } });
+            const up = () => { if (board && board.cur) push(true); };
+            cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+            window.addEventListener('resize', () => { if (board && board.open) boardDraw(); });
+            return el;
+        }
+        function openBoard() {
+            if (!board) return;
+            const el = boardEl(); el.classList.remove('hidden'); board.open = true; board.seen = boardOthers();
+            setBoardColor(boardColor);
+            requestAnimationFrame(boardDraw);
+            if (call) renderCallUI(); else gcRenderButtons();
+        }
+        function closeBoard() { const el = document.getElementById('callBoard'); if (el) el.classList.add('hidden'); if (board) board.open = false; }
+        function setBoardColor(c) { boardColor = c; document.querySelectorAll('#callBoard .cb-c').forEach(b => b.setAttribute('aria-checked', b.dataset.c === c ? 'true' : 'false')); }
+        function undoBoard() { const b = board; if (!b || !b.mine.length) return; const k = b.mine.pop(); delete b.strokes[k]; boardDraw(); chatWrite(b.cid + '/board/strokes', { [k]: null }).catch(() => {}); }
+        function clearBoard() { const b = board; if (!b) return; b.strokes = {}; b.mine = []; boardDraw(); chatWrite(b.cid + '/board', { strokes: null }).catch(() => {}); }
+        function boardDraw() {
+            const b = board, cv = document.getElementById('cbCanvas'); if (!b || !cv) return;
+            const wrap = cv.parentElement, W = wrap.clientWidth, H = wrap.clientHeight, dpr = window.devicePixelRatio || 1;
+            if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+            const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+            ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            const line = (pts, c, w) => {
+                if (!pts.length) return;
+                ctx.strokeStyle = c; ctx.lineWidth = Math.max(1.5, w * W); ctx.beginPath();
+                ctx.moveTo(pts[0][0] * W, pts[0][1] * H);
+                if (pts.length === 1) ctx.lineTo(pts[0][0] * W + .1, pts[0][1] * H);
+                for (let i = 1; i < pts.length - 1; i++) { const mx = (pts[i][0] + pts[i + 1][0]) / 2, my = (pts[i][1] + pts[i + 1][1]) / 2; ctx.quadraticCurveTo(pts[i][0] * W, pts[i][1] * H, mx * W, my * H); }
+                if (pts.length > 1) ctx.lineTo(pts[pts.length - 1][0] * W, pts[pts.length - 1][1] * H);
+                ctx.stroke();
+            };
+            Object.keys(b.strokes).sort().forEach(k => { const s = b.strokes[k]; if (!s || (b.cur && k === b.cur.k)) return; line(String(s.p || '').split(' ').filter(Boolean).map(q => q.split(',').map(Number)), s.c || '#1d1d1f', s.w || .006); });
+            if (b.cur) line(b.cur.pts, b.cur.c, b.cur.w);
+        }
+
+        // ---------- [v99] GÖZ MOLASI (20-20-20) ve SU/ESNEME HATIRLATICISI ----------
+        // Yalnızca pomodoro çalışma turu ya da kronometre çalışırken ve uygulama ekrandayken sayar; 2 dk ara verilince göz sayacı sıfırlanır.
+        function wellRemPrefs() { try { return { eye: true, water: true, ...(JSON.parse(localStorage.getItem('yks_wellrem@' + ACTIVE_PROFILE) || '{}') || {}) }; } catch (e) { return { eye: true, water: true }; } }
+        function setWellRem(k, on) { const p = wellRemPrefs(); p[k] = !!on; try { localStorage.setItem('yks_wellrem@' + ACTIVE_PROFILE, JSON.stringify(p)); } catch (e) {} }
+        let wrEye = 0, wrWater = 0, wrIdle = 0, wrLast = Date.now(), wrT = null;
+        setInterval(() => {
+            const now = Date.now(), dt = Math.min(60, (now - wrLast) / 1000); wrLast = now;
+            let on = false; try { on = focusActive() && document.visibilityState === 'visible' && !call && !gc; } catch (e) {}
+            if (!on) { wrIdle += dt; if (wrIdle >= 120) wrEye = 0; return; }
+            wrIdle = 0; wrEye += dt; wrWater += dt;
+            const p = wellRemPrefs();
+            if (p.eye && wrEye >= 20 * 60) { wrEye = 0; showWellRem('eye'); }
+            else if (p.water && wrWater >= 60 * 60) { wrWater = 0; showWellRem('water'); }
+        }, 15000);
+        function showWellRem(kind) {
+            let el = document.getElementById('wellRem');
+            if (!el) { el = document.createElement('div'); el.id = 'wellRem'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); document.body.appendChild(el); }
+            clearInterval(wrT);
+            const eye = kind === 'eye';
+            el.innerHTML = `<span class="wr-ic">${eye ? '<svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" class="wr-tr"/><circle cx="18" cy="18" r="15" class="wr-ring" pathLength="100"/></svg><b id="wrNum">20</b>' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2h14l-1.5 18.5A2 2 0 0 1 15.5 22h-7a2 2 0 0 1-2-1.5z"/><path d="M5.5 8h13"/></svg>'}</span>
+                <span class="wr-tx"><b>${eye ? 'Göz molası' : 'Su iç, esne'}</b><span id="wrSub">${eye ? '20 saniye boyunca 6 metre uzağa bak' : 'Bir bardak su, omuzlarını ve boynunu esnet'}</span></span>
+                <button type="button" onclick="hideWellRem()">${eye ? 'Atla' : 'Tamam'}</button>`;
+            el.className = 'show ' + kind; try { haptic(); } catch (e) {}
+            if (eye) {
+                let left = 20; const ring = el.querySelector('.wr-ring'); ring.style.strokeDashoffset = '0';
+                wrT = setInterval(() => {
+                    left--; const n = document.getElementById('wrNum'); if (n) n.textContent = Math.max(0, left);
+                    ring.style.strokeDashoffset = String(100 - left / 20 * 100);
+                    if (left <= 0) { clearInterval(wrT); document.getElementById('wrSub').textContent = 'Tamam, çalışmaya devam'; setTimeout(hideWellRem, 2200); }
+                }, 1000);
+            } else wrT = setTimeout(hideWellRem, 12000);
+        }
+        function hideWellRem() { clearInterval(wrT); clearTimeout(wrT); const el = document.getElementById('wellRem'); if (el) el.classList.remove('show'); }
+
+        // ---------- [v99] FORMÜL DEFTERİ ----------
+        // state.formulas: { id, subject, topic, title, body, box (0–4), due } · Leitner aralıkları 1-3-7-14-30 gün
+        const FM_SUBJECTS = ['Matematik', 'Geometri', 'Fizik', 'Kimya', 'Biyoloji', 'Diğer'];
+        const FM_GAPS = [1, 3, 7, 14, 30];
+        let fmFilter = 'Hepsi', fmQuery = '', fmQueue = [], fmDone = 0;
+        // Güvenli biçim: önce HTML kaçışı, sonra x^2 → üst simge, a_n → alt simge, sqrt( → √(
+        function fmText(s) {
+            return escHtml(String(s || '')).replace(/sqrt\(/g, '√(').replace(/\^\{([^}]{1,24})\}/g, '<sup>$1</sup>').replace(/\^(-?[\wçğıöşüÇĞİÖŞÜ.]+)/g, '<sup>$1</sup>')
+                .replace(/_\{([^}]{1,24})\}/g, '<sub>$1</sub>').replace(/_([\wçğıöşüÇĞİÖŞÜ]+)/g, '<sub>$1</sub>').replace(/\n/g, '<br>');
+        }
+        function fmDue() { const t = localDateStr(); return (state.formulas || []).filter(f => !f.due || f.due <= t); }
+        function renderFormulas() {
+            const box = document.getElementById('formulaBody'); if (!box) return;
+            const all = state.formulas || [], due = fmDue().length;
+            const rb = document.getElementById('fmReviewBtn'); if (rb) { rb.textContent = due ? `Tekrar et · ${due}` : 'Tekrar et'; rb.classList.toggle('hidden', !all.length); }
+            const subs = ['Hepsi', ...FM_SUBJECTS.filter(s => all.some(f => f.subject === s))];
+            if (!subs.includes(fmFilter)) fmFilter = 'Hepsi';
+            document.getElementById('fmFilters').innerHTML = all.length > 3 ? `<div class="fm-chips">${subs.map(s => `<button type="button" class="fm-chip ${s === fmFilter ? 'on' : ''}" onclick="fmFilter='${s}'; renderFormulas()">${s}</button>`).join('')}</div><input type="search" class="fm-search" placeholder="Formül ara" aria-label="Formül ara" value="${escHtml(fmQuery)}" oninput="fmQuery=this.value; renderFormulaList()">` : '';
+            renderFormulaList();
+        }
+        function renderFormulaList() {
+            const box = document.getElementById('formulaBody'); if (!box) return;
+            const all = state.formulas || [], today = localDateStr();
+            if (!all.length) { box.innerHTML = emptyState('sigma', 'Henüz formül yok', 'Matematik, fizik ve kimya formüllerini buraya yaz; aralıklı tekrarla unutmazsın.'); lucide.createIcons(); return; }
+            const q = fmQuery.trim().toLocaleLowerCase('tr');
+            const list = all.filter(f => (fmFilter === 'Hepsi' || f.subject === fmFilter) && (!q || `${f.title} ${f.topic || ''} ${f.body}`.toLocaleLowerCase('tr').includes(q)));
+            if (!list.length) { box.innerHTML = '<div class="text-center text-[14px] text-slate-500 py-6">Eşleşen formül yok.</div>'; return; }
+            box.innerHTML = FM_SUBJECTS.map(s => {
+                const items = list.filter(f => f.subject === s); if (!items.length) return '';
+                return `<div class="fm-group"><div class="fm-gh">${s}<span>${items.length}</span></div><div class="fm-grid">${items.map(f => `<button type="button" class="fm-item" onclick="openFormulaEdit('${f.id}')">
+                    <span class="fm-t">${escHtml(f.title)}${!f.due || f.due <= today ? '<i class="fm-due" aria-label="Tekrar zamanı geldi"></i>' : ''}</span>${f.topic ? `<span class="fm-tp">${escHtml(f.topic)}</span>` : ''}<span class="fm-b">${fmText(f.body)}</span></button>`).join('')}</div></div>`;
+            }).join('');
+        }
+        function fmPreview() { const b = document.getElementById('fmBody'), p = document.getElementById('fmPrev'); if (b && p) p.innerHTML = b.value.trim() ? fmText(b.value) : '<span class="text-slate-400">Önizleme</span>'; }
+        function openFormulaEdit(id) {
+            if (READONLY) return;
+            const f = id ? (state.formulas || []).find(x => x.id === id) : null, def = f ? f.subject : (fmFilter !== 'Hepsi' ? fmFilter : 'Matematik');
+            openMiniModal(_mHead(f ? '✏️ Formülü düzenle' : 'Formül ekle') + `<div class="qf-grid"><div><span class="qf-lbl">Ders</span><select id="fmSubj" class="${_mi}">${FM_SUBJECTS.map(s => `<option ${s === def ? 'selected' : ''}>${s}</option>`).join('')}</select></div>
+                <div><span class="qf-lbl">Konu</span><input id="fmTopic" class="${_mi}" maxlength="50" placeholder="Örn: Türev" value="${f ? escHtml(f.topic || '') : ''}"></div></div>
+                <span class="qf-lbl">Ad</span><input id="fmTitle" class="${_mi}" maxlength="70" placeholder="Örn: Çarpımın türevi" value="${f ? escHtml(f.title) : ''}">
+                <span class="qf-lbl">Formül</span><textarea id="fmBody" rows="4" maxlength="400" class="${_mi}" placeholder="(f·g)' = f'·g + f·g'" oninput="fmPreview()">${f ? escHtml(f.body) : ''}</textarea>
+                <div class="fm-hint">x^2 → üst simge · a_n → alt simge · sqrt(x) → √(x)</div><div id="fmPrev" class="fm-prev"></div>
+                <button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="saveFormula('${f ? f.id : ''}')">Kaydet</button>
+                ${f ? `<button type="button" class="w-full mt-2 py-2.5 rounded-xl text-[15px] font-semibold text-rose-500 press-scale" onclick="deleteFormula('${f.id}')">Sil</button>` : ''}`);
+            fmPreview();
+        }
+        function saveFormula(id) {
+            const g = k => (document.getElementById(k) || {}).value || '';
+            const title = g('fmTitle').trim(), body = g('fmBody').trim();
+            if (!title || !body) { showToast('Formülün adını ve kendisini yaz.', 'error'); return; }
+            state.formulas = state.formulas || [];
+            const data = { subject: g('fmSubj') || 'Diğer', topic: g('fmTopic').trim().slice(0, 50), title: title.slice(0, 70), body: body.slice(0, 400) };
+            const f = id && state.formulas.find(x => x.id === id);
+            if (f) Object.assign(f, data); else state.formulas.push({ id: 'f' + callKey(), ...data, box: 0, due: localDateStr(), createdAt: Date.now() });
+            saveState(); closeMiniModal(); renderFormulas(); showToast(f ? 'Formül güncellendi' : 'Formül eklendi');
+        }
+        function deleteFormula(id) {
+            if (!confirm('Bu formül silinsin mi?')) return;
+            state.formulas = (state.formulas || []).filter(x => x.id !== id);
+            saveState(); closeMiniModal(); renderFormulas(); showToast('Formül silindi');
+        }
+        function startFormulaReview() {
+            const all = state.formulas || []; if (!all.length) return;
+            const due = fmDue();
+            fmQueue = (due.length ? due : [...all].sort((a, b) => String(a.due || '').localeCompare(String(b.due || ''))).slice(0, 10)).map(f => f.id).sort(() => Math.random() - .5);
+            fmDone = 0; fmNext();
+        }
+        function fmNext(reveal) {
+            const f = (state.formulas || []).find(x => x.id === fmQueue[0]);
+            if (!f) { openMiniModal(_mHead('Tekrar bitti') + `<div class="text-center py-4"><div class="text-[40px] font-bold tabular-nums">${fmDone}</div><div class="text-[14px] text-slate-500">formül tekrar edildi</div></div><button type="button" class="btn-primary press-scale w-full mt-2 py-3 rounded-xl text-white font-semibold" onclick="closeMiniModal()">Tamam</button>`); renderFormulas(); return; }
+            openMiniModal(_mHead(`Formül tekrarı · ${fmDone + 1}/${fmDone + fmQueue.length}`) + `<div class="fm-card"><div class="fm-tp">${escHtml(f.subject)}${f.topic ? ' · ' + escHtml(f.topic) : ''}</div><div class="fm-ct">${escHtml(f.title)}</div>
+                ${reveal ? `<div class="fm-cb">${fmText(f.body)}</div>` : '<div class="fm-cq">Formülü aklından söyle, sonra kontrol et</div>'}</div>
+                ${reveal ? `<div class="grid grid-cols-2 gap-2 mt-3"><button type="button" class="press-scale py-3 rounded-xl font-semibold fm-no" onclick="fmAnswer(false)">Bilemedim</button><button type="button" class="btn-primary press-scale py-3 rounded-xl text-white font-semibold" onclick="fmAnswer(true)">Bildim</button></div>`
+                    : `<button type="button" class="btn-primary press-scale w-full mt-3 py-3 rounded-xl text-white font-semibold" onclick="fmNext(true)">Göster</button>`}`);
+        }
+        function fmAnswer(ok) {
+            const f = (state.formulas || []).find(x => x.id === fmQueue[0]); fmQueue.shift();
+            if (f) { f.box = ok ? Math.min(4, (f.box || 0) + 1) : 0; f.due = addDaysStr(localDateStr(), FM_GAPS[f.box]); fmDone++; saveState(); }
+            fmNext();
+        }
+        { const _rfd = renderFlashDecks; renderFlashDecks = function () { const r = _rfd.apply(this, arguments); try { renderFormulas(); } catch (e) {} return r; }; }
+
+        // ---------- [v100] ÇALIŞMA EKLE: Çalışma | Deneme ----------
+        function setActMode(m) {
+            const den = m === 'deneme', f = document.getElementById('activityForm'); if (!f) return;
+            f.querySelectorAll('.act-mode button').forEach(b => b.setAttribute('aria-checked', b.dataset.m === m ? 'true' : 'false'));
+            f.classList.toggle('is-deneme', den);
+            document.getElementById('actDenemeHint').classList.toggle('hidden', !den);
+            const type = document.getElementById('actType'), topic = document.getElementById('actTopic');
+            if (den) { type.value = 'Deneme'; topic.placeholder = 'Örn: 3D TYT Genel Deneme 4'; ['actCorrect', 'actWrong'].forEach(id => { const el = document.getElementById(id); if (el) el.value = 0; }); }
+            else { if (type.value === 'Deneme') type.value = 'Soru Çözümü'; topic.placeholder = 'Örn: Türev / Paragraf'; }
+            const lbl = topic.previousElementSibling; if (lbl && lbl.tagName === 'LABEL') lbl.textContent = den ? 'Deneme adı (isteğe bağlı)' : 'Konu Başlığı';
+            const dur = document.getElementById('actDuration'); if (den && numOr0(dur.value) === 45) dur.value = 135;
+            { let el = dur, lab = null; for (let i = 0; i < 3 && el && !lab; i++) { el = el.parentElement; lab = el && el.querySelector(':scope > label'); } if (lab) { lab.dataset.orig = lab.dataset.orig || lab.textContent; lab.textContent = den ? 'Deneme süresi (dakika)' : lab.dataset.orig; } }
+            if (!den && numOr0(dur.value) === 135) dur.value = 45;
+            try { handleActivityTypeChange(); } catch (e) {}
+        }
+        // Tür listesinden "Deneme" seçilirse de aynı moda geç
+        { const _hat = handleActivityTypeChange; handleActivityTypeChange = function () { const r = _hat.apply(this, arguments); try { const den = document.getElementById('actType').value === 'Deneme', f = document.getElementById('activityForm'); if (f && den !== f.classList.contains('is-deneme')) setActMode(den ? 'deneme' : 'calisma'); } catch (e) {} return r; }; }
+
         // Mesaja basılı tut / sağ tık: kopyala, (kendi mesajınsa) sil
         function chatMsgMenu(el, x, y) {
             const mid = el.dataset.mid, me = el.dataset.me === '1', pid = chatOpenId;
@@ -14455,12 +15400,12 @@ function listeRowToKeys(groups, vals) {
             const ed = state.settings.examDate;
             if (ed) { const d = Math.max(0, Math.ceil((new Date(ed + 'T09:00:00') - new Date()) / 86400000)); chips.push(`<span class="lg-chip"><span class="ic" style="background:linear-gradient(160deg,#5AC8FA,#007AFF)">🎯</span>${d} gün kaldı</span>`); }
             const st = computeStreak(); if (st > 0) chips.push(`<span class="lg-chip"><span class="ic" style="background:linear-gradient(160deg,#FFB340,#FF6A00)">🔥</span>${st} gün seri</span>`);
-            try { const rings = ringValues(localDateStr()), closed = rings.filter(r => r.goal > 0 ? r.v >= r.goal : true).length; chips.push(`<span class="lg-chip">${miniRingsSvg(rings)}${closed}/3 halka</span>`); } catch (e) {}
+            // [v97] "x/3 halka" çipi kaldırıldı: aynı bilgi Günlük Halkalar kartında var
             box.innerHTML = chips.join('');
         }
 
         // ---------- [v58] Kart başlıklarına renkli kare ikon ----------
-        const CARD_IC_MAP = [[/3 Hedef/, 'target', '#FF3B30'], [/Uyku/, 'moon', '#5856D6'], [/Arkadaş/, 'users', '#34C759'], [/Halka/, 'activity', '#FF2D55'], [/^Çalışma$/, 'timer', '#FF9500'],
+        const CARD_IC_MAP = [[/Formül Defteri/, 'sigma', '#AF52DE'], [/3 Hedef/, 'target', '#FF3B30'], [/Uyku/, 'moon', '#5856D6'], [/Arkadaş/, 'users', '#34C759'], [/Halka/, 'activity', '#FF2D55'], [/^Çalışma$/, 'timer', '#FF9500'],
             [/Deneme Takvimi/, 'calendar-days', '#AF52DE'], [/Projeksiyon/, 'trending-up', '#007AFF'], [/Strateji/, 'crosshair', '#FF9500'], [/En Çok Yanlış/, 'list-x', '#FF3B30'], [/Hata Analizi/, 'search-x', '#FF9500'],
             [/Gelen Soru/, 'inbox', '#30B0C7'], [/Ezber/, 'layers', '#AF52DE'], [/Ortak/, 'handshake', '#34C759'], [/Meydan/, 'swords', '#FF3B30'], [/Düello/, 'zap', '#FF9500'], [/Aylık Rapor/, 'file-text', '#007AFF'],
             [/Ders Programı/, 'school', '#007AFF'], [/Ders Renkleri/, 'palette', '#AF52DE'], [/PDF/, 'book-open-text', '#FF3B30']];
@@ -15158,6 +16103,7 @@ function listeRowToKeys(groups, vals) {
             document.querySelectorAll('[data-intro-btn]').forEach(b => b.classList.toggle('on', b.dataset.introBtn === m));
             const c = document.getElementById('introSoundChk'); if (c) c.checked = introSoundOn();
             const lc = document.getElementById('lockClockChk'); if (lc) lc.checked = lockClockOn();
+            { const wp = wellRemPrefs(), we = document.getElementById('wrEyeChk'), ww = document.getElementById('wrWaterChk'); if (we) we.checked = wp.eye; if (ww) ww.checked = wp.water; }
         }
         function setIntroMode(m) { try { localStorage.setItem('yks_intro', m); } catch (e) {} introRefresh(); showToast(m === 'off' ? 'Açılış animasyonu kapatıldı.' : m === 'short' ? 'Kısa açılış seçildi.' : 'Tam açılış seçildi.'); }
         function setIntroSound(on) { try { localStorage.setItem('yks_intro_snd', on ? '1' : '0'); } catch (e) {} if (on) playChime(); }
@@ -18446,7 +19392,8 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             ] },
             tekrar: { def: 'defter', segs: [
                 ['defter', 'Yanlış Defteri', ['Gelen Sorular', 'Yanlış Soru Defteri', 'Tekrar Takvimi', 'AKBİM']],
-                ['ezber', 'Ezber Kartları', ['Ezber Kartları']]
+                ['ezber', 'Ezber Kartları', ['Ezber Kartları']],
+                ['formul', 'Formüller', ['Formül Defteri']]
             ] },
             mufredat: { def: 'konular', segs: [
                 ['konular', 'Konular', ['Müfredat Takibi', 'mufredatGrid', 'examWeakTopicsCard', 'Zorlandığın Konular']],
