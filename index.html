@@ -3355,6 +3355,14 @@ html body .empty-state .es-btn, html.lg body .empty-state .es-btn { background: 
 .plan-more[open] summary::before { content: '− '; }
 .plan-more summary span { font-weight: 500; color: var(--ios-label2); }
 .plan-more input { margin-top: 8px; }
+/* [v125] Sayfa geçişinde yüzen ada ve üst çubuk sabit kalır: kendi katmanlarında, animasyonsuz (önceden geçişte bir an kayboluyordu) */
+html.lg.vt-nav #mobileTabBar { view-transition-name: tabbar; }
+html.lg.vt-nav header.glass-nav { view-transition-name: tophdr; }
+::view-transition-group(tabbar), ::view-transition-group(tophdr) { animation: none !important; z-index: 10; }
+::view-transition-old(tabbar), ::view-transition-old(tophdr) { display: none; }
+::view-transition-new(tabbar), ::view-transition-new(tophdr) { animation: none !important; opacity: 1 !important; }
+html.vt-run #tabBarInner, html.vt-run #tabMoreBtn { background: rgba(246,246,248,.94) !important; }
+html.vt-run.dark #tabBarInner, html.vt-run.dark #tabMoreBtn, html.vt-run .dark #tabBarInner, html.vt-run .dark #tabMoreBtn { background: rgba(30,30,32,.94) !important; }
 /* [v124] Mesajlar: arkadaşların bugünkü durumu */
 #chatToday:empty { display: none; }
 .ct-head { font-size: 13px; font-weight: 600; color: var(--ios-label2); margin: 0 4px 8px; }
@@ -27382,6 +27390,39 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             }).join('')}</div>`;
         }
         { const _rcl = renderChatList; renderChatList = function () { const r = _rcl.apply(this, arguments); try { renderChatToday(); } catch (e) {} return r; }; }
+        // ---------- [v125] Sayfa geçişi sürerken ada camı koyulaşır (geçiş görüntüsünde bulanıklık çalışmıyor) ----------
+        if (document.startViewTransition) {
+            const _svt = document.startViewTransition.bind(document);
+            document.startViewTransition = function (cb) {
+                const root = document.documentElement; root.classList.add('vt-run');
+                let tr; try { tr = _svt(cb); } catch (e) { root.classList.remove('vt-run'); throw e; }
+                const done = () => root.classList.remove('vt-run');
+                try { tr.finished.then(done, done); } catch (e) { setTimeout(done, 600); }
+                return tr;
+            };
+        }
+        // ---------- [v125] Özet girişi (telefon): fotoğraf ekranın en altına kadar, düğmeler yüzen adanın hemen üstünde ----------
+        // iPhone'da ana ekrandan açılınca 100vh/svh durum çubuğu kadar kısa hesaplanıyor; yükseklik ve boşluk ölçülerek verilir.
+        function tsHeroFit() {
+            const hero = document.querySelector('#content-dashboard > .ts-hero'), nav = document.getElementById('mobileTabBar');
+            if (!hero) return;
+            if (!document.documentElement.classList.contains('lg') || window.innerWidth >= 768 || !nav || getComputedStyle(nav).display === 'none' || hero.offsetParent === null) { hero.style.removeProperty('min-height'); hero.style.removeProperty('padding-bottom'); return; }
+            const standalone = navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
+            const nr = nav.getBoundingClientRect();
+            const H = Math.max(window.innerHeight, document.documentElement.clientHeight, standalone ? screen.height : 0, nr.bottom);
+            if (!document.body.classList.contains('tabbar-min')) tsHeroFit.navTop = nr.top;
+            const navTop = tsHeroFit.navTop || nr.top;
+            const heroTop = hero.getBoundingClientRect().top + window.scrollY;
+            hero.style.setProperty('min-height', Math.ceil(H - heroTop) + 'px', 'important');
+            hero.style.setProperty('padding-bottom', Math.round(H - navTop + 12) + 'px', 'important');   // düğmeler ile ada arası 12 px
+        }
+        window.addEventListener('resize', () => { try { tsHeroFit(); } catch (e) {} });
+        window.addEventListener('orientationchange', () => setTimeout(() => { try { tsHeroFit(); } catch (e) {} }, 300));
+        { const _st2 = switchTab; switchTab = function () { const r = _st2.apply(this, arguments); try { tsHeroFit(); } catch (e) {} return r; }; }
+        { const _rth = renderTsHero; renderTsHero = function () { const r = _rth.apply(this, arguments); try { tsHeroFit(); } catch (e) {} return r; }; }
+        setTimeout(() => { try { tsHeroFit(); } catch (e) {} }, 60);
+        setTimeout(() => { try { tsHeroFit(); } catch (e) {} }, 800);
+        setInterval(() => { try { tsHeroFit(); } catch (e) {} }, 1500);
 
 </script>
 <script>setTimeout(function(){var l=document.getElementById('launchScreen');if(l){l.classList.add('hide');setTimeout(function(){l.remove()},800)}},6000)</script></body>
