@@ -8,7 +8,7 @@
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="127">
+    <meta name="yks-version" content="129">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -3020,8 +3020,9 @@
         /* =====================================================================
            [v103] YÖNLÜ SAYFA GEÇİŞİ · EKRAN PAYLAŞIMI
            ===================================================================== */
-        html.lg.vt-nav main { view-transition-name: lgpage; }
-        html.lg.vt-nav #niCur { view-transition-name: nicur; }
+        /* [v129] isimler sadece geçiş sürerken verilir; kalıcı isim cam efektinin (backdrop-filter) arkayı görmesini engelliyordu */
+        html.lg.vt-nav.vt-run main { view-transition-name: lgpage; }
+        html.lg.vt-nav.vt-run #niCur { view-transition-name: nicur; }
         html.lg.vt-nav .tab-fade > *, html.lg.vt-nav .tab-back > * { animation: none !important; }
         @media (prefers-reduced-motion: reduce) { ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; } }
         ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .2s; }
@@ -3347,8 +3348,8 @@ html body .empty-state .es-btn, html.lg body .empty-state .es-btn { background: 
 .plan-more summary span { font-weight: 500; color: var(--ios-label2); }
 .plan-more input { margin-top: 8px; }
 /* [v125] Sayfa geçişinde yüzen ada ve üst çubuk sabit kalır: kendi katmanlarında, animasyonsuz (önceden geçişte bir an kayboluyordu) */
-html.lg.vt-nav #mobileTabBar { view-transition-name: tabbar; }
-html.lg.vt-nav header.glass-nav { view-transition-name: tophdr; }
+html.lg.vt-nav.vt-run #mobileTabBar { view-transition-name: tabbar; }
+html.lg.vt-nav.vt-run header.glass-nav { view-transition-name: tophdr; }
 ::view-transition-group(tabbar), ::view-transition-group(tophdr) { animation: none !important; z-index: 10; }
 ::view-transition-old(tabbar), ::view-transition-old(tophdr) { display: none; }
 ::view-transition-new(tabbar), ::view-transition-new(tophdr) { animation: none !important; opacity: 1 !important; }
@@ -3426,6 +3427,21 @@ html.lg #syncStatus #syncLabel { display: none !important; }
 html.lg #syncStatus #syncDot { width: 9px; height: 9px; }
 html.lg body #headerActions > button:not(#addBtn):not(#profileBtn) { border-radius: 999px !important; }
 html.lg body #headerActions > button:not(#addBtn):not(#profileBtn):has(> svg:only-child), html.lg body #headerActions > button#themeBtn { width: 36px; height: 36px; padding: 0 !important; display: flex; align-items: center; justify-content: center; }
+/* [v129] KÖŞELER YUMUŞATILDI: düz stilin 4-6 px köşeleri çok dikdörtgen duruyordu; boyuta orantılı yuvarlaklık */
+html.lg body .btn-primary, html.lg #welcomeSheet .wl-btn, html.lg main .ai-report-btn, html.lg body .empty-state .es-btn, html.lg .design-opt, html.lg body .ts-btn { border-radius: 12px !important; }
+html.lg main input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]), html.lg main select, html.lg main textarea { border-radius: 12px !important; }
+html.lg .sec-seg .seg-track, html.lg .ts-segrow .seg-control { border-radius: 12px !important; }
+html.lg .sec-seg button, html.lg .sec-seg .seg-track button, html.lg .ts-segrow .seg-pill, html.lg .ts-segrow .seg-btn { border-radius: 9px !important; }
+html.lg .ts-segrow > button { border-radius: 10px !important; }
+html.lg #niBtn { border-radius: 12px !important; }
+html.lg .ni-ic, html.lg .sp-item .ni-ic { border-radius: 9px !important; }
+html.lg #headerActions > div:not(#syncStatus) { border-radius: 999px !important; }
+/* [v129] Üst menü paneli (Özet ⌄): düz gri yerine Liquid Glass; arkadaki fotoğraf bulanık görünür */
+html.lg body #niPanel { background: rgba(255,255,255,.5) !important; -webkit-backdrop-filter: blur(26px) saturate(1.7) !important; backdrop-filter: blur(26px) saturate(1.7) !important; border-radius: 22px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 0 0 .5px rgba(255,255,255,.4), 0 30px 60px -24px rgba(0,0,0,.45) !important; }
+html.lg.dark body #niPanel, html.lg body .dark #niPanel, html.lg .dark body #niPanel { background: rgba(24,24,28,.48) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 0 0 .5px rgba(255,255,255,.1), 0 30px 60px -24px rgba(0,0,0,.8) !important; }
+@media (prefers-reduced-transparency: reduce) { html.lg body #niPanel { background: var(--ios-card) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
 /* [v124] Mesajlar: arkadaşların bugünkü durumu */
 #chatToday:empty { display: none; }
 .ct-head { font-size: 13px; font-weight: 600; color: var(--ios-label2); margin: 0 4px 8px; }
