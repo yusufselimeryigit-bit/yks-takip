@@ -8,7 +8,7 @@
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="129">
+    <meta name="yks-version" content="131">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -6795,6 +6795,8 @@ html.lg.dark body #niPanel, html.lg body .dark #niPanel, html.lg .dark body #niP
         const VIEW_ALL = IS_VIEWER_URL && /[?&]p=hepsi\b/i.test(location.search);
         const PROFILE_CHOSEN = !!resolveProfile() || IS_VIEWER_URL;   // izleme bağlantısı profil sormaz
         const ACTIVE_PROFILE = resolveProfile() || 'yusuf';
+        // [v130] Çağan'ın bilgisayar kapak fotoğrafı: İstanbul Üniversitesi (Yusuf'unki değişmez)
+        if (ACTIVE_PROFILE === 'cagan') document.documentElement.style.setProperty('--ts-hero-img-d', 'url("yks-hero-cagan-desktop.jpg")');
         // Kişiye özel yerel anahtarlar (net hesaplayıcı, pomodoro vb.): Yusuf'unkiler eski adlarıyla kalır
         function pk(k) { return ACTIVE_PROFILE === 'yusuf' ? k : k + '@' + ACTIVE_PROFILE; }
         const DB_ROOT_PATH = PROFILES[ACTIVE_PROFILE].path;
