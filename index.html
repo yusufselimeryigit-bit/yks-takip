@@ -8,7 +8,7 @@
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="135">
+    <meta name="yks-version" content="137">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -3266,7 +3266,13 @@ body.ai-busy .ai-fab-blob { animation: capBob 1.1s ease-in-out infinite !importa
 @keyframes ksFill { 0% { stroke-dashoffset: 1080.7; opacity: 0; } 3% { opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 1; } }
 @keyframes ksGlow { to { opacity: .8; } }
 @keyframes ksPop { 0%, 100% { transform: scale(1); } 45% { transform: scale(1.05); } }
-html body .ai-avatar { background: url(icon-192.png?v=132) center / cover no-repeat !important; border-radius: 26% !important; box-shadow: 0 0 0 .5px rgba(255,255,255,.18), 0 8px 20px -8px rgba(255,159,10,.45) !important; }
+/* [v137] AI Koç: tüm simgeler (boş sohbet, mesaj, düşünürken, AI düğmesi) kum saati logosu; eski küre kuralları daha güçlüydü */
+html body .ai-avatar, html body .ai-avatar.big, html body .ai-avatar.sm, html body .ai-avatar.spin, html body .ai-avatar.sm.spin,
+html body .ai-fab-blob, html body.ai-busy .ai-fab-blob { background: url(icon-192.png?v=132) center / cover no-repeat !important; border-radius: 26% !important; filter: none !important; box-shadow: 0 0 0 .5px rgba(255,255,255,.18), 0 8px 20px -8px rgba(255,159,10,.45) !important; }
+html body .ai-avatar::before, html body .ai-avatar::after, html body .ai-fab-blob::before, html body .ai-fab-blob::after { display: none !important; content: none !important; }
+html body .ai-avatar.spin, html body .ai-avatar.sm.spin, html body.ai-busy .ai-fab-blob { animation: ksThink 1.2s ease-in-out infinite !important; }
+@keyframes ksThink { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 .5px rgba(255,255,255,.18), 0 6px 16px -8px rgba(255,159,10,.4); } 50% { transform: scale(1.06); box-shadow: 0 0 0 .5px rgba(255,255,255,.25), 0 0 18px 2px rgba(255,159,10,.55); } }
+@media (prefers-reduced-motion: reduce) { html body .ai-avatar.spin, html body .ai-avatar.sm.spin, html body.ai-busy .ai-fab-blob { animation: none !important; } }
 @media (prefers-reduced-motion: reduce) { #launchScreen .ks-ring { animation: none; stroke-dashoffset: 0; opacity: 1; } #launchScreen .ks-logo { animation: none; } }
 </style>
 <style id="v103-style">
@@ -12121,8 +12127,14 @@ html.lg.dark body #niPanel, html.lg body .dark #niPanel, html.lg .dark body #niP
         function paBg(id) { const ph = profilePhoto(id); return ph ? `;background:url('${ph}') center / cover no-repeat;color:transparent` : ''; }
         function pickProfilePhoto() {
             if (READONLY) return;
-            const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
-            inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) saveProfilePhoto(f); };
+            // [v136] Seçim kutusu sayfada durmalı: iPhone Safari, sayfaya eklenmemiş kutudan gelen seçimi bazen hiç iletmiyor
+            let inp = document.getElementById('profilePhotoInput');
+            if (!inp) {
+                inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.id = 'profilePhotoInput';
+                inp.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0';
+                inp.addEventListener('change', () => { const f = inp.files && inp.files[0]; inp.value = ''; if (f) saveProfilePhoto(f); });
+                document.body.appendChild(inp);
+            }
             inp.click();
         }
         function saveProfilePhoto(file) {
