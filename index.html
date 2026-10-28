@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="tr" class="light">
 <head>
-    <script>try { if (localStorage.getItem('yks_design') !== 'classic') document.documentElement.classList.add('lg'); } catch (e) { document.documentElement.classList.add('lg'); }</script>
+    <script>try { if (localStorage.getItem('yks_design') !== 'classic') document.documentElement.classList.add('lg'); if (localStorage.getItem('yks_design') !== 'classic' && localStorage.getItem('yks_gs') !== 'off') document.documentElement.classList.add('gs'); } catch (e) { document.documentElement.classList.add('lg', 'gs'); }</script>
     <!--
         YKS Takip & Performans Portalı — Firebase Realtime Database sürümü
         Kurulum adımları ve firebaseConfig alanı: sayfanın altındaki
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="137">
+    <meta name="yks-version" content="138">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -41,7 +41,7 @@
     <meta name="apple-mobile-web-app-title" content="YKS Takip">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- [YENİ] Tema rengi: sayfa çizilmeden önce uygulanır (titreme olmasın) -->
     <script>
         window.YKS_ACCENTS = {
@@ -51,11 +51,12 @@
             green:  { name: 'Yeşil',   rgb: '22 163 74',  light: '234 250 240' },
             orange: { name: 'Turuncu', rgb: '234 88 12',  light: '255 240 230' },
             pink:   { name: 'Pembe',   rgb: '219 39 119', light: '253 236 245' },
-            teal:   { name: 'Turkuaz', rgb: '8 145 178',  light: '230 247 251' }
+            teal:   { name: 'Turkuaz', rgb: '8 145 178',  light: '230 247 251' },
+            gold:   { name: 'Altın',   rgb: '176 124 30', light: '250 242 226' }
         };
         (function () {
             var key = 'blue';
-            try { key = localStorage.getItem('yks_accent') || 'blue'; } catch (e) {}
+            try { key = localStorage.getItem('yks_accent') || (document.documentElement.classList.contains('gs') ? 'gold' : 'blue'); } catch (e) {}
             var a = window.YKS_ACCENTS[key] || window.YKS_ACCENTS.blue;
             document.documentElement.style.setProperty('--brand-rgb', a.rgb);
             document.documentElement.style.setProperty('--brand-light-rgb', a.light);
@@ -3483,6 +3484,154 @@ html.lg.dark body #niPanel, html.lg body .dark #niPanel, html.lg .dark body #niP
 .cd-logo .cd-ring { transition: stroke-dashoffset 1.4s cubic-bezier(.65,0,.35,1) .2s; }
 @media (max-width: 639px) { .cd-logo { width: 72px; height: 72px; } }
 </style>
+<style id="v138-altin-saat">
+/* =====================================================================
+   [v138] ALTIN SAAT tasarımı (html.lg.gs)
+   Fikir: logodaki kum saati — gece moru zemin, altın kum ışığı, buzlu cam katmanlar.
+   ui-ux-pro-max: Liquid Glass + siyah/altın premium palet, serif başlık; 4.5:1 kontrast.
+   design-taste (app, editorial-greeting): selamlamayla açılan ekran, sakin ağırlıkta rakamlar, tek vurgu.
+   design-motion: Jakub ağırlıklı; tek seferlik yükselme, basınca küçülme, döngü yok, azaltılmış harekete saygı.
+   ===================================================================== */
+html.gs { --gs-serif: "Cormorant Garamond", "Cormorant", Georgia, serif; --gs-r: 26px; --gs-r-sm: 16px;
+  --gs-ease: cubic-bezier(.22, 1, .36, 1); --gs-press: cubic-bezier(.3, .7, .4, 1); }
+html.lg.gs:not(.dark) {
+  --ios-bg: #f3eee6; --ios-label: #1e1a15; --ios-label2: #463f35; --ios-label3: #6f6656;
+  --ios-sep: rgba(70,50,20,.10); --ios-fill: rgba(70,50,20,.055);
+  --ts-tile: rgba(255,252,247,.62); --ts-on-tile: rgba(255,255,255,.62); --lg-btn-hover: rgba(255,255,255,.85);
+  --gs-gold: #9a6a12; --gs-gold-soft: rgba(190,140,50,.14); --gs-edge: rgba(255,255,255,.9); --gs-line: rgba(90,65,25,.10);
+  --gs-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 18px 40px -24px rgba(70,45,10,.28), 0 2px 6px -2px rgba(70,45,10,.08);
+  --gs-ink-glass: rgba(255,252,247,.7);
+}
+html.lg.gs.dark {
+  --ios-bg: #0b0a11; --ios-label: #f5efe4; --ios-label2: #d8cfbf; --ios-label3: #a39986;
+  --ios-sep: rgba(255,235,200,.09); --ios-fill: rgba(255,235,200,.06);
+  --ts-tile: rgba(36,30,56,.52); --ts-on-tile: rgba(255,240,215,.06); --lg-btn-hover: rgba(255,240,215,.12);
+  --gs-gold: #e3b964; --gs-gold-soft: rgba(227,185,100,.14); --gs-edge: rgba(255,240,215,.14); --gs-line: rgba(255,235,200,.08);
+  --gs-shadow: 0 1px 0 rgba(255,240,215,.08) inset, 0 24px 50px -28px rgba(0,0,0,.8), 0 2px 8px -2px rgba(0,0,0,.4);
+  --gs-ink-glass: rgba(18,16,26,.62);
+}
+html.lg.gs { --ts-accent: rgb(var(--brand-rgb)); --ts-accent-hover: color-mix(in oklab, rgb(var(--brand-rgb)) 88%, #000); }
+
+/* ---------- Zemin: sabit, kıpırdamayan altın ve mor ışık ---------- */
+html.lg.gs body { background: var(--ios-bg) !important; }
+html.lg.gs body::before { content: ''; position: fixed; inset: -10vh -10vw; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(42vw 38vh at 12% 8%, rgba(226,176,84,.30), transparent 70%),
+    radial-gradient(46vw 44vh at 92% 22%, rgba(150,110,230,.18), transparent 70%),
+    radial-gradient(60vw 50vh at 70% 100%, rgba(240,140,120,.14), transparent 70%),
+    radial-gradient(50vw 40vh at 0% 90%, rgba(120,150,230,.12), transparent 70%); }
+html.lg.gs.dark body::before { background:
+    radial-gradient(46vw 42vh at 10% 4%, rgba(226,170,70,.34), transparent 70%),
+    radial-gradient(50vw 48vh at 96% 24%, rgba(124,80,230,.40), transparent 70%),
+    radial-gradient(64vw 54vh at 66% 106%, rgba(210,90,130,.26), transparent 70%),
+    radial-gradient(54vw 44vh at -6% 86%, rgba(60,100,220,.28), transparent 70%), #0b0a11; }
+
+/* ---------- Yazı: zarif serif başlıklar, Inter metin ---------- */
+html.lg.gs .hero-title, html.lg.gs main .soft-card h2, html.lg.gs .today-title, html.lg.gs .stat-num, html.lg.gs #stkBig, html.lg.gs .today-big { font-family: var(--gs-serif) !important; }
+html.lg.gs .hero-title { font-weight: 500 !important; letter-spacing: -.01em !important; line-height: 1.02 !important; font-size: clamp(40px, 1.6rem + 2.6vw, 64px) !important; }
+html.lg.gs main .soft-card h2, html.lg.gs .today-title { font-weight: 600 !important; font-size: clamp(24px, 1.2rem + .5vw, 29px) !important; letter-spacing: 0 !important; line-height: 1.1 !important; }
+html.lg.gs .stat-num, html.lg.gs #stkBig, html.lg.gs .today-big { font-weight: 500 !important; font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.01em !important; }
+html.lg.gs [data-card="insights"] .stat-num { font-size: clamp(44px, 3.4vw, 60px) !important; }
+html.lg.gs .op-wordmark { font-family: var(--gs-serif) !important; text-transform: none !important; letter-spacing: .02em !important; font-size: 21px !important; font-weight: 600 !important; }
+html.lg.gs .op-wordmark::first-letter { color: var(--gs-gold); }
+@media (max-width: 640px) { html.lg.gs .op-wordmark { font-size: 18px !important; letter-spacing: 0 !important; } }
+
+/* ---------- Bütün yazılar (yalnızca Altın Saat; Sade'ye geçince eski Inter geri gelir) ----------
+   ui-ux-pro-max eşleşmesi: Cormorant (başlık) + Montserrat (metin). 19px ve üstü her yazı serif olur;
+   sonradan çizilen içerikler JS ile işaretlenir (data-gsd). Çok kalın yazılar zarif yarı kalına iner. */
+html.lg.gs body, html.lg.gs button, html.lg.gs input, html.lg.gs select, html.lg.gs textarea, html.lg.gs body .font-sans { font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif !important; letter-spacing: -.012em; }
+html.lg.gs :is(h1, h2, h3, h4, .hero-title, .today-title, .es-title, .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl, .text-7xl, [data-gsd], [style*="font-size:2"], [style*="font-size: 2"], [style*="font-size:3"], [style*="font-size: 3"], [style*="font-size:4"], [style*="font-size: 4"], [style*="font-size:5"], [style*="font-size: 5"], [style*="font-size:6"], [style*="font-size: 6"]):not(svg *):not(input):not(textarea):not(select):not(.no-gsd) {
+  font-family: var(--gs-serif) !important; font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.005em !important; }
+html.lg.gs :is(h1, h2, h3, h4, .text-xl, .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl, [data-gsd]):not(.no-gsd) { font-weight: 600 !important; }
+html.lg.gs :is(.font-bold, .font-extrabold, .font-black, b, strong, [style*="font-weight:7"], [style*="font-weight: 7"], [style*="font-weight:8"], [style*="font-weight: 8"], [style*="font-weight:9"], [style*="font-weight: 9"]) { font-weight: 600 !important; }
+html.lg.gs .font-semibold { font-weight: 600 !important; }
+/* Apple'ın yuvarlak rakamlarını kullanan sayaçlar, halkalar ve özet sayıları da serif olsun */
+html.lg.gs :is(.ring-legend-val, .wsm-big, #stkBig, #hcBig, #pomoTime, #swTime, #focusTime, .li-big, #liTime, #cdDays, #cdHours, #cdMinutes, .today-big, #xpLevel, .ah-big, .pp-stat .v, .va-stats b, .ty-counts b, .ni-time, .nl-time, .focus-clock, .glass-stat .text-lg, .glass-stat .text-xl, .glass-stat .text-2xl, .glass-stat .text-3xl) {
+  font-family: var(--gs-serif) !important; font-weight: 600 !important; font-variant-numeric: lining-nums tabular-nums; }
+html.lg.gs [data-gsw] { font-weight: 600 !important; }
+html.lg.gs :is(.uppercase, .tracking-wider, .tracking-widest) { letter-spacing: .08em !important; }
+html.lg.gs #tabBarInner, html.lg.gs #tabBarInner * { letter-spacing: -.02em !important; }
+
+/* ---------- Cam yüzeyler ---------- */
+html.lg.gs body main .soft-card, html.lg.gs body .soft-card, html.lg.gs #todayCard, html.lg.gs [data-card="insights"] > .glass-stat {
+  background: var(--ts-tile) !important; border-radius: var(--gs-r) !important;
+  border: 1px solid var(--gs-edge) !important; box-shadow: var(--gs-shadow) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(170%) !important; backdrop-filter: blur(28px) saturate(170%) !important; }
+html.lg.gs.dark body main .soft-card, html.lg.gs.dark body .soft-card, html.lg.gs.dark #todayCard, html.lg.gs.dark [data-card="insights"] > .glass-stat { border-color: var(--gs-edge) !important; }
+html.lg.gs main .soft-card .glass-stat, html.lg.gs main .soft-card .kurs-block:not(.ozel), html.lg.gs main .soft-card div[style*="background:var(--ios-fill)"] {
+  background: var(--ts-on-tile) !important; border-radius: var(--gs-r-sm) !important; border: 1px solid var(--gs-line) !important; }
+html.lg.gs .card-ic { width: 34px !important; height: 34px !important; border-radius: 11px !important; margin-right: 10px !important;
+  background: color-mix(in srgb, var(--ic, var(--gs-gold)) 14%, transparent) !important; display: inline-flex !important; align-items: center; justify-content: center; }
+html.lg.gs .card-ic svg, html.lg.gs .card-ic i { width: 18px !important; height: 18px !important; }
+html.lg.gs main .soft-card hr, html.lg.gs main [class*="divide-"] > * { border-color: var(--gs-line) !important; }
+
+/* ---------- Üst çubuk ve menüler: koyu cam ---------- */
+html.lg.gs header.glass-nav { background: var(--gs-ink-glass) !important; border-bottom: 1px solid var(--gs-line) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important; backdrop-filter: blur(24px) saturate(180%) !important; }
+html.lg.gs body.ts-over header.glass-nav { background: linear-gradient(to bottom, rgba(8,7,14,.45), rgba(8,7,14,0)) !important; border-bottom-color: transparent !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+html.lg.gs #niPanel, html.lg.gs .sheet, html.lg.gs [role="dialog"].glass { background: var(--gs-ink-glass) !important; border: 1px solid var(--gs-edge) !important; border-radius: 22px !important;
+  -webkit-backdrop-filter: blur(30px) saturate(180%) !important; backdrop-filter: blur(30px) saturate(180%) !important; box-shadow: 0 30px 70px -30px rgba(0,0,0,.5) !important; }
+html.lg.gs body #tabBarInner.glass, html.lg.gs body #tabMoreBtn.glass { background: var(--gs-ink-glass) !important; border: 1px solid var(--gs-edge) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(180%) !important; backdrop-filter: blur(26px) saturate(180%) !important; box-shadow: 0 16px 40px -18px rgba(0,0,0,.45) !important; }
+
+/* ---------- Giriş fotoğrafı: altın saat ışığı ---------- */
+html.lg.gs #content-dashboard > .ts-hero::after { background:
+    radial-gradient(ellipse 50% 40% at 50% 36%, rgba(10,8,18,.55), rgba(10,8,18,0) 100%),
+    linear-gradient(to bottom, rgba(10,8,18,.35) 0%, rgba(10,8,18,0) 30%, rgba(40,22,6,.10) 60%, var(--ios-bg) 100%),
+    linear-gradient(120deg, rgba(226,170,70,.22), rgba(120,80,220,.18)) !important; }
+html.lg.gs .ts-hero h1.hero-title { color: #fff8ec !important; font-weight: 500 !important; font-size: clamp(46px, 1.8rem + 3.2vw, 78px) !important; text-shadow: 0 2px 30px rgba(0,0,0,.35) !important; }
+html.lg.gs #tsLine { color: rgba(255,248,236,.9); font-size: 17px; }
+html.lg.gs .ts-btn { border-radius: 999px !important; height: 46px !important; font-weight: 600 !important; font-size: 15px !important; transition: transform .15s var(--gs-press), filter .2s, background-color .2s !important; }
+html.lg.gs .ts-btn.pri { background: linear-gradient(180deg, color-mix(in oklab, rgb(var(--brand-rgb)) 80%, #fff), rgb(var(--brand-rgb))) !important; color: #fff !important; box-shadow: 0 1px 0 rgba(255,255,255,.35) inset, 0 12px 30px -12px rgb(var(--brand-rgb) / .8) !important; }
+html.lg.gs .ts-btn.sec { background: rgba(255,250,240,.16) !important; color: #fff !important; border: 1px solid rgba(255,250,240,.35) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) !important; backdrop-filter: blur(18px) saturate(160%) !important; }
+html.lg.gs .ts-btn:active { transform: scale(.97) !important; }
+
+/* Girişte fotoğrafın altında ince bir selamlama ve geri sayım */
+html.lg.gs #content-dashboard > .ts-hero #dashKicker { display: block !important; margin-top: auto; font: 600 12px/1 Montserrat, sans-serif; letter-spacing: .22em; text-transform: uppercase; color: #f1cf8a; }
+html.lg.gs #content-dashboard > .ts-hero h1.hero-title { display: block !important; margin-top: 14px !important; }
+html.lg.gs #content-dashboard > .ts-hero #tsLine { display: block !important; margin-top: 10px; font-family: var(--gs-serif); font-style: italic; font-size: 24px; color: rgba(255,244,224,.92); }
+html.lg.gs #content-dashboard > .ts-hero .ts-btns { margin-top: 30px !important; }
+html.lg.gs #content-dashboard > .ts-hero::before { content: ''; position: absolute; left: 50%; bottom: 0; width: min(760px, 92vw); height: 62%; transform: translateX(-50%); z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse 50% 55% at 50% 70%, rgba(10,8,18,.55), rgba(10,8,18,0) 75%); }
+@media (max-width: 767px) { html.lg.gs #content-dashboard > .ts-hero h1.hero-title { font-size: 44px !important; } html.lg.gs #content-dashboard > .ts-hero #tsLine { font-size: 21px; } }
+
+/* ---------- Düğmeler ve girdiler ---------- */
+html.lg.gs body .btn-primary, html.lg.gs #welcomeSheet .wl-btn, html.lg.gs main .ai-report-btn, html.lg.gs body #headerActions > #addBtn {
+  background: linear-gradient(180deg, color-mix(in oklab, rgb(var(--brand-rgb)) 82%, #fff), rgb(var(--brand-rgb))) !important; color: #fff !important; border-radius: 999px !important; font-weight: 600 !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,.3) inset, 0 10px 24px -14px rgb(var(--brand-rgb) / .9) !important; }
+html.lg.gs body .btn-primary:hover { filter: brightness(1.06); }
+html.lg.gs body .empty-state .es-btn, html.lg.gs .design-opt, html.lg.gs .lg-chip { background: var(--ts-on-tile) !important; border: 1px solid var(--gs-line) !important; border-radius: 999px !important; }
+html.lg.gs .design-opt { border-radius: 18px !important; }
+html.lg.gs main input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]), html.lg.gs main select, html.lg.gs main textarea {
+  background-color: var(--ts-on-tile) !important; border: 1px solid var(--gs-line) !important; border-radius: 14px !important; }
+html.lg.gs main input:focus-visible, html.lg.gs main select:focus-visible, html.lg.gs main textarea:focus-visible { outline: 2px solid rgb(var(--brand-rgb) / .7) !important; outline-offset: 2px; }
+html.lg.gs #headerActions > button:not(#addBtn):not(#profileBtn), html.lg.gs #niBtn { border-radius: 999px !important; }
+
+/* ---------- Bölüm seçicileri: cam ray, parlayan kapsül ---------- */
+html.lg.gs .sec-seg .seg-track, html.lg.gs .ts-segrow .seg-control { background: var(--ts-tile) !important; border: 1px solid var(--gs-edge) !important; border-radius: 999px !important; padding: 4px !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important; backdrop-filter: blur(20px) saturate(160%) !important; }
+html.lg.gs .sec-seg button, html.lg.gs .sec-seg .seg-track button, html.lg.gs .ts-segrow .seg-btn { border-radius: 999px !important; }
+html.lg.gs .sec-seg .seg-track button.on, html.lg.gs .sec-seg button.on, html.lg.gs .ts-segrow .seg-pill { background: var(--lg-btn-hover) !important; border-radius: 999px !important; box-shadow: 0 1px 0 var(--gs-edge) inset, 0 4px 12px -6px rgba(0,0,0,.25) !important; }
+html.lg.gs .ts-segrow > button { border-radius: 999px !important; background: var(--ts-tile) !important; border: 1px solid var(--gs-edge) !important; }
+
+/* ---------- AI Koç düğmesi ---------- */
+html.lg.gs .ai-fab { background: var(--gs-ink-glass) !important; border: 1px solid var(--gs-edge) !important; box-shadow: 0 14px 34px -16px rgba(0,0,0,.5) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(170%) !important; backdrop-filter: blur(22px) saturate(170%) !important; }
+@media (min-width: 1024px) { html.lg.gs .ai-fab:not(.hidden) { border-radius: 999px !important; height: 44px !important; } }
+
+/* ---------- Hareket ---------- */
+@media (hover: hover) { html.lg.gs main .soft-card { transition: transform .5s var(--gs-ease), box-shadow .5s var(--gs-ease) !important; }
+  html.lg.gs main .soft-card:hover { transform: translateY(-2px) !important; } }
+html.lg.gs main .soft-card.gs-in { animation: gsRise .6s var(--gs-ease) both; animation-delay: var(--gs-d, 0ms); }
+@keyframes gsRise { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
+@media (prefers-reduced-motion: reduce) { html.lg.gs main .soft-card, html.lg.gs .ts-btn { transition: none !important; animation: none !important; } }
+
+/* ---------- Ayarlar: tasarım önizlemesi ---------- */
+.design-prev.gsp { background: radial-gradient(circle at 18% 20%, rgba(226,176,84,.75), transparent 60%), radial-gradient(circle at 85% 40%, rgba(130,90,230,.6), transparent 60%), #15121f; }
+.design-prev.gsp span { background: rgba(255,250,240,.16); border: 1px solid rgba(255,250,240,.35); box-shadow: inset 0 1px 0 rgba(255,255,255,.3); }
+</style>
+
 </head>
 <body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden is-loading">
     <div id="launchScreen" aria-hidden="true"><svg class="ks-logo" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><filter id="ksBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="38"/></filter><linearGradient id="ksBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A1B4A"/><stop offset="1" stop-color="#0D0B16"/></linearGradient><linearGradient id="ksGl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".2"/></linearGradient><linearGradient id="ksGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE066"/><stop offset="1" stop-color="#FF9F0A"/></linearGradient><linearGradient id="ksSheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".45" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><clipPath id="ksClip"><rect width="512" height="512" rx="114"/></clipPath></defs><g clip-path="url(#ksClip)"><rect width="512" height="512" fill="url(#ksBg)"/><circle class="ks-glow" cx="256" cy="300" r="110" fill="#FF9F0A" opacity=".5" filter="url(#ksBlur)"/><circle cx="256" cy="256" r="172" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="20"/><circle class="ks-ring" cx="256" cy="256" r="172" fill="none" stroke="url(#ksGold)" stroke-width="20" stroke-linecap="round" stroke-dasharray="1080.7" stroke-dashoffset="1080.7" transform="rotate(-90 256 256)"/><g transform="translate(256 256) scale(.6) translate(-256 -256)"><path d="M188 132 C188 212 244 228 244 256 C244 284 188 300 188 380 H324 C324 300 268 284 268 256 C268 228 324 212 324 132 Z" fill="url(#ksGl)" stroke="#fff" stroke-opacity=".65" stroke-width="3" stroke-linejoin="round"/><path d="M212 196 C228 226 248 238 256 248 C264 238 284 226 300 196 Z" fill="url(#ksGold)"/><line x1="256" y1="248" x2="256" y2="320" stroke="url(#ksGold)" stroke-width="4" stroke-linecap="round"/><path d="M206 376 C222 334 244 322 256 320 C268 322 290 334 306 376 Z" fill="url(#ksGold)"/><path d="M204 150 C206 196 226 214 238 228" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round"/><rect x="160" y="104" width="192" height="30" rx="15" fill="#fff" fill-opacity=".9"/><rect x="160" y="378" width="192" height="30" rx="15" fill="#fff" fill-opacity=".9"/></g><path d="M0 0H512V250Q256 300 0 250Z" fill="url(#ksSheen)"/><rect x="1.5" y="1.5" width="509" height="509" rx="113" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="3"/></g></svg><div class="sp-name">YKS Takip</div><div class="ks-days" id="ksDays"></div></div><script>(function(){try{var l=document.getElementById('launchScreen');if(!l)return;window.__ksHTML=l.innerHTML;var m=localStorage.getItem('yks_intro')||'full';try{if(sessionStorage.getItem('yks_skip_intro')){sessionStorage.removeItem('yks_skip_intro');m='off'}}catch(e){}if(m==='off'){l.remove();return}window.__introMin=m==='short'?750:1900;if(m==='short')l.classList.add('short');window.__ksShowDays=function(ex,late){var el=document.getElementById('ksDays'),ls=document.getElementById('launchScreen');if(!el||!ls||!ex||el.getAttribute('data-done'))return;var n=Math.max(0,Math.ceil((new Date(ex+'T09:00:00')-new Date())/86400000));el.setAttribute('data-done','1');el.innerHTML=n>0?'YKS\'ye <b>0</b> g\u00fcn':'<b>S\u0131nav g\u00fcn\u00fc!</b>';requestAnimationFrame(function(){el.classList.add('on')});if(n<=0)return;var b=el.querySelector('b'),sh=ls.classList.contains('short'),dur=late?700:(sh?600:1300),t0=performance.now()+(late||sh?0:300);function ez(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}(function tk(now){var t=Math.min(1,Math.max(0,(now-t0)/dur));b.textContent=Math.round(n*ez(t));if(t<1)requestAnimationFrame(tk)})(performance.now())};try{var pf=localStorage.getItem('yks_profile')||'yusuf';window.__ksShowDays(localStorage.getItem('yks_exam_cache@'+pf))}catch(x){}var h=new Date().getHours(),c,e2;if(h>=5&&h<11){c='225,240,255';e2='130,185,255'}else if(h>=11&&h<17){c='255,250,240';e2='190,215,255'}else if(h>=17&&h<22){c='255,226,190';e2='255,150,80'}else{c='215,222,255';e2='110,130,225'}l.style.setProperty('--sl-core',c);l.style.setProperty('--sl-edge',e2)}catch(x){}})()</script>
@@ -5886,6 +6035,7 @@ html.lg.dark body #niPanel, html.lg body .dark #niPanel, html.lg .dark body #niP
                     <div class="ios-group">
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:#1c1c1e"><i data-lucide="moon"></i></span><span class="ios-row-body"><span>Görünüm</span><span class="sec-seg theme-seg"><span class="seg-track"><button type="button" data-theme-btn="light" onclick="setThemeMode('light')">Açık</button><button type="button" data-theme-btn="dark" onclick="setThemeMode('dark')">Koyu</button><button type="button" data-theme-btn="system" onclick="setThemeMode('system')">Otomatik</button></span></span></span></div>
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-gray));font-weight:700;font-size:13px">Aa</span><span class="ios-row-body"><span>Metin Boyutu</span><span class="ios-detail"><span style="font-size:12px">A</span><input type="range" id="textSizeRange" min="0" max="4" step="1" oninput="setTextSize(this.value)" aria-label="Metin boyutu"><span style="font-size:20px">A</span></span></span></div>
+                        <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:linear-gradient(135deg,#b07c1e,#6b4fd8)"><i data-lucide="gem"></i></span><span class="ios-row-body"><span>Tasarım</span><span class="sec-seg theme-seg"><span class="seg-track"><button type="button" data-design-btn="altin" onclick="setDesign('altin')">Altın Saat</button><button type="button" data-design-btn="lg" onclick="setDesign('lg')">Sade</button><button type="button" data-design-btn="classic" onclick="setDesign('classic')">Klasik</button></span></span></span></div>
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:#1c1c1e"><i data-lucide="sparkles"></i></span><span class="ios-row-body"><span>Açılış animasyonu</span><span class="sec-seg theme-seg"><span class="seg-track"><button type="button" data-intro-btn="full" onclick="setIntroMode('full')">Tam</button><button type="button" data-intro-btn="short" onclick="setIntroMode('short')">Kısa</button><button type="button" data-intro-btn="off" onclick="setIntroMode('off')">Kapalı</button></span></span></span></div>
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-pink))"><i data-lucide="volume-2"></i></span><span class="ios-row-body"><span>Açılış sesi</span><input type="checkbox" id="introSoundChk" onchange="setIntroSound(this.checked)" aria-label="Açılış sesi"></span></div>
                         <div class="ios-row" style="cursor:default"><span class="ios-icon" style="background:rgb(var(--ios-orange))"><i data-lucide="vibrate"></i></span><span class="ios-row-body"><span>Titreşim (dokunsal geri bildirim)</span><input type="checkbox" id="hapticChk" onchange="setHaptic(this.checked)" aria-label="Titreşim"></span></div>
@@ -9974,7 +10124,7 @@ html.lg.dark body #niPanel, html.lg body .dark #niPanel, html.lg .dark body #niP
         }
         function brandColor() { const [r, g, b] = brandTriplet(); return `rgb(${r},${g},${b})`; }
         function brandRgba(a) { const [r, g, b] = brandTriplet(); return `rgba(${r},${g},${b},${a})`; }
-        function currentAccent() { try { return localStorage.getItem('yks_accent') || 'blue'; } catch (e) { return 'blue'; } }
+        function currentAccent() { try { return localStorage.getItem('yks_accent') || (document.documentElement.classList.contains('gs') ? 'gold' : 'blue'); } catch (e) { return 'blue'; } }
         function setAccent(key) {
             const a = window.YKS_ACCENTS[key];
             if (!a) return;
@@ -16270,9 +16420,12 @@ function listeRowToKeys(groups, vals) {
 
         // ---------- [v57] Tasarım seçimi: Liquid Glass / Klasik ----------
         function setDesign(d) {
-            try { localStorage.setItem('yks_design', d); } catch (e) {}
+            const gs = d === 'altin';
+            try { localStorage.setItem('yks_design', d === 'classic' ? 'classic' : 'lg'); localStorage.setItem('yks_gs', gs ? 'on' : 'off'); } catch (e) {}
             document.documentElement.classList.toggle('lg', d !== 'classic');
-            try { renderDesignPicker(); renderGreeting(); decorateCardHeaders(); } catch (e) {} haptic();
+            document.documentElement.classList.toggle('gs', gs);
+            try { if (!localStorage.getItem('yks_accent')) { const a = window.YKS_ACCENTS[gs ? 'gold' : 'blue']; document.documentElement.style.setProperty('--brand-rgb', a.rgb); document.documentElement.style.setProperty('--brand-light-rgb', a.light); brandCache = null; updateUI(); } } catch (e) {}
+            try { renderDesignPicker(); renderGreeting(); decorateCardHeaders(); markDesignBtns(); if (window.gsTagBig) gsTagBig(); } catch (e) {} haptic();
         }
         function renderDesignPicker() {
             let box = document.getElementById('designPicker');
@@ -16284,9 +16437,10 @@ function listeRowToKeys(groups, vals) {
                 let row = card.querySelector('h2'); while (row && row.parentElement !== card) row = row.parentElement;
                 if (row) row.after(box); else card.appendChild(box);
             }
-            const lg = document.documentElement.classList.contains('lg');
+            const lg = document.documentElement.classList.contains('lg'), gs = document.documentElement.classList.contains('gs');
             box.innerHTML = `<div class="text-[13px] font-semibold text-slate-500 mb-2">Tasarım</div><div class="design-seg">
-                <button type="button" class="design-opt press-scale ${lg ? 'on' : ''}" onclick="setDesign('lg')"><div class="design-prev lgp"><span></span></div>Liquid Glass</button>
+                <button type="button" class="design-opt press-scale ${gs ? 'on' : ''}" onclick="setDesign('altin')"><div class="design-prev gsp"><span></span></div>Altın Saat</button>
+                <button type="button" class="design-opt press-scale ${lg && !gs ? 'on' : ''}" onclick="setDesign('lg')"><div class="design-prev lgp"><span></span></div>Sade</button>
                 <button type="button" class="design-opt press-scale ${!lg ? 'on' : ''}" onclick="setDesign('classic')"><div class="design-prev clp"><span></span></div>Klasik</button></div>`;
         }
 
@@ -27719,6 +27873,44 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
     }
     const oFL = finishLoading; finishLoading = function () { try { sync(); } catch (e) {} return oFL.apply(this, arguments); };
     const oIC = initCountdown; initCountdown = function () { const r = oIC.apply(this, arguments); try { sync(); updateMini(); } catch (e) {} return r; };
+})();
+</script>
+<script>
+/* [v138] Ayarlar'daki Tasarım satırında seçili olanı işaretle */
+function markDesignBtns() { const h = document.documentElement, k = !h.classList.contains('lg') ? 'classic' : h.classList.contains('gs') ? 'altin' : 'lg';
+  document.querySelectorAll('[data-design-btn]').forEach(b => { const on = b.dataset.designBtn === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); }); }
+document.addEventListener('DOMContentLoaded', markDesignBtns); setTimeout(markDesignBtns, 1500);
+/* [v138] Altın Saat: sekme ilk açıldığında görünen kartlar sırayla bir kez yükselir */
+(function () {
+  const seen = new Set(), reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rise(t) {
+    if (!document.documentElement.classList.contains('gs') || reduce() || seen.has(t)) return; seen.add(t);
+    const sec = document.getElementById('content-' + t); if (!sec) return;
+    [...sec.querySelectorAll('.soft-card')].filter(c => { const r = c.getBoundingClientRect(); return r.height && r.top < innerHeight; }).slice(0, 8)
+      .forEach((c, i) => { c.style.setProperty('--gs-d', (i * 60) + 'ms'); c.classList.remove('gs-in'); void c.offsetWidth; c.classList.add('gs-in'); setTimeout(() => c.classList.remove('gs-in'), 900 + i * 60); });
+  }
+  // 19px ve üstündeki yazıları işaretle (CSS bunları serif yapar); sonradan gelen içerik için de çalışır
+  function tagBig(root) {
+    if (!document.documentElement.classList.contains('gs') || !root || !root.querySelectorAll) return;
+    const els = root.nodeType === 1 ? [root, ...root.querySelectorAll('*')] : [];
+    for (const e of els) {
+      if ((e.hasAttribute('data-gsd') && e.hasAttribute('data-gsw')) || /^(SVG|PATH|INPUT|TEXTAREA|SELECT|OPTION|SCRIPT|STYLE|CANVAS|IMG|I)$/i.test(e.tagName) || e.closest('svg')) continue;
+      let own = false; for (const n of e.childNodes) if (n.nodeType === 3 && n.textContent.trim()) { own = true; break; }
+      if (!own) continue;
+      const t = e.textContent.trim(), emo = /^\p{Extended_Pictographic}/u.test(t);   // emoji ile başlayan yazı serif olmasın
+      const cs = getComputedStyle(e);
+      if (!emo && parseFloat(cs.fontSize) >= 19) e.setAttribute('data-gsd', '');
+      if (+cs.fontWeight >= 700) e.setAttribute('data-gsw', '');
+    }
+  }
+  let pend = new Set(), tmr = 0;
+  const mo = new MutationObserver(ms => { if (!document.documentElement.classList.contains('gs')) return; for (const m of ms) for (const n of m.addedNodes) if (n.nodeType === 1) pend.add(n);
+    clearTimeout(tmr); tmr = setTimeout(() => { const list = [...pend]; pend = new Set(); (window.requestIdleCallback || setTimeout)(() => list.forEach(n => n.isConnected && tagBig(n))); }, 250); });
+  const start = () => { const m = document.querySelector('main'); if (m) { mo.observe(document.body, { childList: true, subtree: true }); tagBig(m); tagBig(document.querySelector('header')); } };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+  window.gsTagBig = () => tagBig(document.body);
+  const _st = window.switchTab;
+  if (typeof _st === 'function') window.switchTab = switchTab = function (t) { const r = _st.apply(this, arguments); try { requestAnimationFrame(() => { rise(t); tagBig(document.getElementById('content-' + t)); }); } catch (e) {} return r; };
 })();
 </script>
 </body>
