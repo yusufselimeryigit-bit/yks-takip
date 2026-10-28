@@ -8,7 +8,7 @@
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="138">
+    <meta name="yks-version" content="139">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -1179,7 +1179,8 @@
         #profileChooser .pc-item.current .profile-avatar { box-shadow: 0 0 0 4px var(--ios-bg), 0 0 0 7px rgb(var(--brand-rgb)), 0 14px 30px -12px rgba(0,0,0,.35); }
         #profileChooser .pc-name { font-size: 18px; font-weight: 600; color: var(--ios-label); }
         #profileChooser .pc-cancel { margin-top: 34px; color: rgb(var(--brand-rgb)); font-size: 17px; }
-        @media (max-width: 1023px) { html body #headerActions > #profileBtn { background: linear-gradient(135deg, var(--pa1), var(--pa2)) !important; } }
+        @media (max-width: 1023px) { html body #headerActions > #profileBtn:not(.has-photo) { background: linear-gradient(135deg, var(--pa1), var(--pa2)) !important; } } /* [v139] fotoğraf varsa telefonda da fotoğraf görünsün */
+        @media (max-width: 1023px) { html body #headerActions > #profileBtn.has-photo, html.lg body #headerActions > #profileBtn.has-photo { background: var(--pa-photo) center / cover no-repeat !important; color: transparent !important; } }
 
         /* ===== [v38] Şifre, izleme modu, arkadaşlar, düello ===== */
         html body #miniModal { z-index: 145 !important; }   /* [v39] detay sayfalarından (profil, deneme) açılan pencereler üstte görünsün */
@@ -12271,6 +12272,8 @@ html.lg.gs main .soft-card.gs-in { animation: gsRise .6s var(--gs-ease) both; an
             const ph = profilePhoto(id);
             el.style.background = ph ? `url('${ph}') center / cover no-repeat` : '';
             el.style.color = ph ? 'transparent' : '';
+            el.classList.toggle('has-photo', !!ph);
+            if (ph) el.style.setProperty('--pa-photo', `url('${ph}')`); else el.style.removeProperty('--pa-photo');
         }
         // [v107] Profil fotoğrafı: küçültülmüş JPEG olarak ortak alanda (PROFILE_META[id].photo) saklanır
         function profilePhoto(id) { const m = PROFILE_META[id]; const ph = m && m.photo; return typeof ph === 'string' && ph.startsWith('data:image/') ? ph : ''; }
