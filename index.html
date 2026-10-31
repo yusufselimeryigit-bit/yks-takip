@@ -8,7 +8,7 @@
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="139">
+    <meta name="yks-version" content="140">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -14433,7 +14433,14 @@ html.lg.gs main .soft-card.gs-in { animation: gsRise .6s var(--gs-ease) both; an
         const PDFJS_BASE = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/legacy/build/';   // legacy: eski iOS/Safari sürümleriyle de uyumlu
         let pdfjsPromise = null;
         function loadPdfJs() {
-            if (!pdfjsPromise) pdfjsPromise = import(PDFJS_BASE + 'pdf.min.mjs').then(m => { m.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.mjs'; return m; }).catch(e => { pdfjsPromise = null; throw e; });
+            // [v140] Yeni okuyucu yüklenemezse (eski iOS, modül hatası) klasik pdf.js 3.11'e geç
+            const classic = () => new Promise((res, rej) => {
+                if (window.pdfjsLib) return res(window.pdfjsLib);
+                const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
+                s.onload = () => { if (!window.pdfjsLib) return rej(new Error('pdf.js yüklenemedi')); window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js'; res(window.pdfjsLib); };
+                s.onerror = () => rej(new Error('pdf.js indirilemedi')); document.head.appendChild(s);
+            });
+            if (!pdfjsPromise) pdfjsPromise = import(PDFJS_BASE + 'pdf.min.mjs').then(m => { m.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.mjs'; return m; }).catch(classic).catch(e => { pdfjsPromise = null; throw e; });
             return pdfjsPromise;
         }
 
@@ -14982,15 +14989,23 @@ function listeRowToKeys(groups, vals) {
         }
         function openKarneImport() {
             if (READONLY) return;
-            const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/pdf,.pdf';
-            inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) readKarnePdf(f); };
+            // [v140] iPhone'da sayfaya eklenmemiş dosya seçicinin "change" olayı bazen hiç gelmez: önce sayfaya ekle
+            const old = document.getElementById('karneFileIn'); if (old) old.remove();
+            const inp = document.createElement('input'); inp.type = 'file'; inp.id = 'karneFileIn'; inp.accept = 'application/pdf,.pdf';
+            inp.style.cssText = 'position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0';
+            document.body.appendChild(inp);
+            const pick = () => { const f = inp.files && inp.files[0]; if (f) { readKarnePdf(f); setTimeout(() => inp.remove(), 1000); } };
+            inp.addEventListener('change', pick); inp.addEventListener('input', pick, { once: true });
             inp.click();
         }
         async function readKarnePdf(file) {
+            if (readKarnePdf.busy) return; readKarnePdf.busy = true; setTimeout(() => { readKarnePdf.busy = false; }, 1500);
             showToast('Karne okunuyor…');
+            let step = 'okuyucu';
             try {
-                const pdfjs = await loadPdfJs();
-                const doc = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+                const pdfjs = await loadPdfJs(); step = 'dosya';
+                const buf = file.arrayBuffer ? await file.arrayBuffer() : await new Response(file).arrayBuffer(); step = 'pdf';
+                const doc = await pdfjs.getDocument({ data: new Uint8Array(buf) }).promise;
                 const pages = [];
                 for (let p = 1; p <= Math.min(doc.numPages, 6); p++) {
                     const tc = await (await doc.getPage(p)).getTextContent();
@@ -15002,7 +15017,7 @@ function listeRowToKeys(groups, vals) {
                 if (!Object.keys(r.rows).length) { showToast('Bu PDF\'te ders tablosu bulunamadı. Karne biçimi desteklenmiyor olabilir.', 'error'); return; }
                 karneDraft = { ...r, file: file.name, liste: null };
                 openKarneReview();
-            } catch (e) { console.error(e); showToast('PDF okunamadı. İnternet bağlantını kontrol et (okuyucu ilk seferde indirilir).', 'error'); }
+            } catch (e) { console.error(e); showToast(step === 'okuyucu' ? 'PDF okuyucu indirilemedi. İnternet bağlantını kontrol edip tekrar dene.' : step === 'dosya' ? 'Dosya açılamadı. PDF\'i önce Dosyalar uygulamasına kaydedip oradan seç.' : 'PDF okunamadı: ' + (e && e.message || e), 'error'); }
         }
         function karneWrongByKey(r, type) {
             const out = {};
