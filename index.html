@@ -8,7 +8,7 @@
         ana script bloğunda "FIREBASE KURULUM REHBERİ" başlığını ara.
     -->
     <meta charset="UTF-8">
-    <meta name="yks-version" content="140">
+    <meta name="yks-version" content="142">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>YKS Takip & Performans Portalı</title>
     <link rel="manifest" href="manifest.json">
@@ -3633,6 +3633,8 @@ html.lg.gs main .soft-card.gs-in { animation: gsRise .6s var(--gs-ease) both; an
 .design-prev.gsp span { background: rgba(255,250,240,.16); border: 1px solid rgba(255,250,240,.35); box-shadow: inset 0 1px 0 rgba(255,255,255,.3); }
 </style>
 
+<style id="v141-fix">/* [v141] Altın Saat: boş durum düğmesinde açık zemin üstünde beyaz yazı okunmuyordu, yazı altın rengi */
+html.lg.gs body .empty-state button.es-btn { color: rgb(var(--brand-rgb)) !important; font-weight: 600; }</style>
 </head>
 <body class="font-sans min-h-screen flex flex-col relative overflow-x-hidden is-loading">
     <div id="launchScreen" aria-hidden="true"><svg class="ks-logo" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><filter id="ksBlur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="38"/></filter><linearGradient id="ksBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A1B4A"/><stop offset="1" stop-color="#0D0B16"/></linearGradient><linearGradient id="ksGl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity=".2"/></linearGradient><linearGradient id="ksGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE066"/><stop offset="1" stop-color="#FF9F0A"/></linearGradient><linearGradient id="ksSheen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset=".45" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><clipPath id="ksClip"><rect width="512" height="512" rx="114"/></clipPath></defs><g clip-path="url(#ksClip)"><rect width="512" height="512" fill="url(#ksBg)"/><circle class="ks-glow" cx="256" cy="300" r="110" fill="#FF9F0A" opacity=".5" filter="url(#ksBlur)"/><circle cx="256" cy="256" r="172" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="20"/><circle class="ks-ring" cx="256" cy="256" r="172" fill="none" stroke="url(#ksGold)" stroke-width="20" stroke-linecap="round" stroke-dasharray="1080.7" stroke-dashoffset="1080.7" transform="rotate(-90 256 256)"/><g transform="translate(256 256) scale(.6) translate(-256 -256)"><path d="M188 132 C188 212 244 228 244 256 C244 284 188 300 188 380 H324 C324 300 268 284 268 256 C268 228 324 212 324 132 Z" fill="url(#ksGl)" stroke="#fff" stroke-opacity=".65" stroke-width="3" stroke-linejoin="round"/><path d="M212 196 C228 226 248 238 256 248 C264 238 284 226 300 196 Z" fill="url(#ksGold)"/><line x1="256" y1="248" x2="256" y2="320" stroke="url(#ksGold)" stroke-width="4" stroke-linecap="round"/><path d="M206 376 C222 334 244 322 256 320 C268 322 290 334 306 376 Z" fill="url(#ksGold)"/><path d="M204 150 C206 196 226 214 238 228" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="5" stroke-linecap="round"/><rect x="160" y="104" width="192" height="30" rx="15" fill="#fff" fill-opacity=".9"/><rect x="160" y="378" width="192" height="30" rx="15" fill="#fff" fill-opacity=".9"/></g><path d="M0 0H512V250Q256 300 0 250Z" fill="url(#ksSheen)"/><rect x="1.5" y="1.5" width="509" height="509" rx="113" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="3"/></g></svg><div class="sp-name">YKS Takip</div><div class="ks-days" id="ksDays"></div></div><script>(function(){try{var l=document.getElementById('launchScreen');if(!l)return;window.__ksHTML=l.innerHTML;var m=localStorage.getItem('yks_intro')||'full';try{if(sessionStorage.getItem('yks_skip_intro')){sessionStorage.removeItem('yks_skip_intro');m='off'}}catch(e){}if(m==='off'){l.remove();return}window.__introMin=m==='short'?750:1900;if(m==='short')l.classList.add('short');window.__ksShowDays=function(ex,late){var el=document.getElementById('ksDays'),ls=document.getElementById('launchScreen');if(!el||!ls||!ex||el.getAttribute('data-done'))return;var n=Math.max(0,Math.ceil((new Date(ex+'T09:00:00')-new Date())/86400000));el.setAttribute('data-done','1');el.innerHTML=n>0?'YKS\'ye <b>0</b> g\u00fcn':'<b>S\u0131nav g\u00fcn\u00fc!</b>';requestAnimationFrame(function(){el.classList.add('on')});if(n<=0)return;var b=el.querySelector('b'),sh=ls.classList.contains('short'),dur=late?700:(sh?600:1300),t0=performance.now()+(late||sh?0:300);function ez(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}(function tk(now){var t=Math.min(1,Math.max(0,(now-t0)/dur));b.textContent=Math.round(n*ez(t));if(t<1)requestAnimationFrame(tk)})(performance.now())};try{var pf=localStorage.getItem('yks_profile')||'yusuf';window.__ksShowDays(localStorage.getItem('yks_exam_cache@'+pf))}catch(x){}var h=new Date().getHours(),c,e2;if(h>=5&&h<11){c='225,240,255';e2='130,185,255'}else if(h>=11&&h<17){c='255,250,240';e2='190,215,255'}else if(h>=17&&h<22){c='255,226,190';e2='255,150,80'}else{c='215,222,255';e2='110,130,225'}l.style.setProperty('--sl-core',c);l.style.setProperty('--sl-edge',e2)}catch(x){}})()</script>
@@ -10179,8 +10181,7 @@ html.lg.gs main .soft-card.gs-in { animation: gsRise .6s var(--gs-ease) both; an
                 const h2 = card.querySelector('h2');
                 h2.dataset.collapsible = '1';
                 h2.setAttribute('title', 'Daraltmak / açmak için tıkla');
-                h2.insertAdjacentHTML('beforeend', '<i data-lucide="chevron-down" class="card-chev w-4 h-4 ml-1 flex-shrink-0"></i>');
-                card.dataset.ckey = cardKey(card);
+                h2.insertAdjacentHTML('beforeend', '<i data-lucide="chevron-down" class="card-chev w-4 h-4 ml-1 flex-shrink-0"></i>');   // [v142] anahtar yukarıda okundu; burada yeniden okumak her kartta düzeni baştan hesaplatıyordu
                 if (collapsedCards.has(card.dataset.ckey)) setCardCollapsed(card, true);
             });
             lucide.createIcons();
@@ -11145,8 +11146,9 @@ html.lg.gs main .soft-card.gs-in { animation: gsRise .6s var(--gs-ease) both; an
             const y = window.scrollY;
             if (window.innerWidth >= 1024 || document.getElementById('moreSheet').classList.contains('open')) { tbLastY = y; return; }
             const wasMin = document.body.classList.contains('tabbar-min');
-            if (y > tbLastY + 6 && y > 140) document.body.classList.add('nav-hide');
-            else if (y < tbLastY - 6 || y < 80) document.body.classList.remove('nav-hide');
+            const bc = document.body.classList;   // [v142] classList.add/remove her çağrıda değişiklik bildirir: sadece durum değişince yaz
+            if (y > tbLastY + 6 && y > 140) { if (!bc.contains('nav-hide')) bc.add('nav-hide'); }
+            else if ((y < tbLastY - 6 || y < 80) && bc.contains('nav-hide')) bc.remove('nav-hide');
             if (y > tbLastY + 6 && y > 140 && !wasMin) document.body.classList.add('tabbar-min');
             else if ((y < tbLastY - 6 || y < 80) && wasMin) { document.body.classList.remove('tabbar-min'); setTimeout(() => updateTabBar(false), 380); }
             if (Math.abs(y - tbLastY) > 6) tbLastY = y;
@@ -16499,14 +16501,15 @@ function listeRowToKeys(groups, vals) {
         let decoT = null, decoNeedIcons = false;
         function decorateCardHeaders() {
             if (!document.documentElement.classList.contains('lg')) return;
-            document.querySelectorAll('.soft-card h2:not([data-deco])').forEach(h => {
-                const first = h.firstElementChild;
-                if (first && (first.matches('svg') || first.matches('i[data-lucide]'))) {
-                    const col = getComputedStyle(first).color || 'rgb(0,122,255)';
-                    const w = document.createElement('span'); w.className = 'card-ic'; w.style.setProperty('--ic', col);
-                    first.before(w); w.appendChild(first);
-                } else if (!h.querySelector('.card-ic')) {
-                    const t = h.textContent.trim(), m = CARD_IC_MAP.find(([re]) => re.test(t)) || [0, 'sparkles', 'rgb(var(--brand-rgb))'];
+            // [v142] önce bütün renkleri ve yazıları oku, sonra DOM'a yaz (eskiden her başlıkta düzen baştan hesaplanıyordu)
+            const jobs = [...document.querySelectorAll('.soft-card h2:not([data-deco])')].map(h => {
+                const first = h.firstElementChild, ic = first && (first.matches('svg') || first.matches('i[data-lucide]'));
+                return { h, first, ic, col: ic ? (getComputedStyle(first).color || 'rgb(0,122,255)') : '', has: !ic && !!h.querySelector('.card-ic'), t: ic ? '' : h.textContent.trim() };
+            });
+            jobs.forEach(({ h, first, ic, col, has, t }) => {
+                if (ic) { const w = document.createElement('span'); w.className = 'card-ic'; w.style.setProperty('--ic', col); first.before(w); w.appendChild(first); }
+                else if (!has) {
+                    const m = CARD_IC_MAP.find(([re]) => re.test(t)) || [0, 'sparkles', 'rgb(var(--brand-rgb))'];
                     const w = document.createElement('span'); w.className = 'card-ic added'; w.style.setProperty('--ic', m[2]); w.innerHTML = `<i data-lucide="${m[1]}"></i>`;
                     h.prepend(w); decoNeedIcons = true;
                 }
@@ -27589,7 +27592,8 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
             const cont = document.getElementById('planBlocksContainer'), sec = document.getElementById('content-plan'); if (!cont || !sec) return;
             const cd = document.querySelector('#content-plan button[onclick="openDayCopy()"]');
             if (cd && !document.getElementById('plSelBtn') && !READONLY) cd.insertAdjacentHTML('beforebegin', `<button type="button" id="plSelBtn" onclick="plSelToggleMode()" class="press-scale text-[11px] font-semibold text-brand px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10">☑ Seç</button>`);
-            const sb = document.getElementById('plSelBtn'); if (sb) { sb.textContent = plSel.on ? '✕ Bitti' : '☑ Seç'; sb.style.background = plSel.on ? 'rgb(var(--brand-rgb))' : ''; sb.style.color = plSel.on ? '#fff' : ''; }
+            // [v142] yalnızca değiştiyse yaz: aynı yazıyı her seferinde yazmak gözlemciyi tetikleyip saniyede 60 kez dönen bir döngü yaratıyordu
+            const sb = document.getElementById('plSelBtn'); if (sb) { const tx = plSel.on ? '✕ Bitti' : '☑ Seç', bg = plSel.on ? 'rgb(var(--brand-rgb))' : '', fg = plSel.on ? '#fff' : ''; if (sb.textContent !== tx) sb.textContent = tx; if (sb.style.background !== bg) sb.style.background = bg; if (sb.style.color !== fg) sb.style.color = fg; }
             const rows = [...cont.querySelectorAll('[ondrop^="handlePlanDrop("]')];
             const live = new Set(rows.map(r => +(r.getAttribute('ondrop').match(/,\s*(\d+)/) || [0, 0])[1]));
             [...plSel.ids].forEach(i => { if (!state.planBlocks.some(b => b.id === i)) plSel.ids.delete(i); });
@@ -27642,11 +27646,11 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
         function tsHeaderOver() {
             const hdr = document.querySelector('header.glass-nav'), hero = document.querySelector('#content-dashboard > .ts-hero');
             if (!hdr) return;
-            const h = Math.round(hdr.getBoundingClientRect().height); document.documentElement.style.setProperty('--ts-hdr-h', h + 'px');
+            const h = Math.round(hdr.getBoundingClientRect().height); if (tsHeaderOver.h !== h) { tsHeaderOver.h = h; document.documentElement.style.setProperty('--ts-hdr-h', h + 'px'); }
             const on = document.documentElement.classList.contains('lg') && !!hero && currentTabId === 'dashboard' && hero.offsetParent !== null && hero.getBoundingClientRect().top < h && hero.getBoundingClientRect().bottom > h + 8;   // fotoğraf çubuğun altına uzanıyorsa (tablette kart olduğu için uzanmaz)
             document.body.classList.toggle('ts-over', on);
         }
-        window.addEventListener('scroll', () => { try { tsHeaderOver(); } catch (e) {} }, { passive: true });
+        { let tho = 0; window.addEventListener('scroll', () => { if (tho) return; tho = requestAnimationFrame(() => { tho = 0; try { tsHeaderOver(); } catch (e) {} }); }, { passive: true }); }   // [v142] karede bir
         window.addEventListener('resize', () => { try { tsHeaderOver(); } catch (e) {} });
         { const _st = switchTab; switchTab = function () { const r = _st.apply(this, arguments); try { tsHeaderOver(); setTimeout(tsHeaderOver, 400); } catch (e) {} return r; }; }
         setTimeout(() => { try { tsHeaderOver(); } catch (e) {} }, 50);
@@ -27860,7 +27864,7 @@ SADECE JSON: {"puan":72,"dogru":["..."],"eksik":["..."],"yanlis":["..."],"oneri"
         window.addEventListener('load', () => { try { tsHeroFit(); } catch (e) {} });
         window.addEventListener('pageshow', () => setTimeout(() => { try { tsHeroFit(); } catch (e) {} }, 60));
         document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(() => { try { tsHeroFit(); } catch (e) {} }, 60); });
-        new MutationObserver(() => { if (!document.body.classList.contains('tabbar-min')) try { tsHeroFit(); } catch (e) {} }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        { let lastCls = document.body.className; new MutationObserver(() => { const c = document.body.className; if (c === lastCls) return; lastCls = c; if (!document.body.classList.contains('tabbar-min')) try { tsHeroFit(); } catch (e) {} }).observe(document.body, { attributes: true, attributeFilter: ['class'] }); }   // [v142] aynı sınıf yeniden yazılınca hesaplama yok
 
 </script>
 <script>setTimeout(function(){var l=document.getElementById('launchScreen');if(l){l.classList.add('hide');setTimeout(function(){l.remove()},800)}},6000)</script><script>
